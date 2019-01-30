@@ -2,87 +2,65 @@
 {% block content %}
 
     {% if table.fileExist %}
-        {# Warning message
-        <div class="row mt-5">
-            <div class="col">
 
-                {% if table.nonexistentProperties|length != 0 %}
-                    <div class="alert alert-info d-flex justify-content-between">
-                        <i class="fa fa-info mr-3 my-auto"></i>
-                        <p class="my-auto mb-0">
-                            <strong>{{ table.nonexistentProperties|length }} champ(s)</strong>
-                            manquant(s).
-                        </p>
-                        <a class="btn btn-info ml-auto" href="{{ path('w3com_update_view', {filename : filename}) }}">
-                            <i class="fa fa-plus-circle mr-2"></i>
-                            Générer les champs
-                        </a>
-                    </div>
-                {% endif %}
-            </div>
-        </div>#}
+        {# Warning message #}
+        {% include '@W3comHulk/error/missing_fields.html.twig' %}
 
-        {# Filters for table #}
-        <div class="row mt-5">
-            <div class="col">
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <label class="input-group-text" for="#searchBar">
-                            Recherche générale :
-                        </label>
-                    </div>
-                    <input type="text" class="form-control" id="searchBar">
-                </div>
-                <div id="filters">
-                    <div class="input-group mb-3">
-                        {% for filter in table.filters if filter.active == 'Y' %}
-                            <div class="input-group-prepend">
-                                <label class="input-group-text" for="select{{ filter.field }}">{{ filter.label }}
-                                    : </label>
-                            </div>
-                            <select class="custom-select" id="select{{ filter.field }}" colIndex="{{ filter.index }}">
-                                {% for value in filter.values %}
-                                    <option value="{{ value }}">{{ value }}</option>
-                                {% endfor %}
-                            </select>
-                        {% endfor %}
-                    </div>
-                </div>
+        {# Global search bar #}
+        {% include '@W3comHulk/filter/search_bar.html.twig' %}
 
-                {# Table #}
-                <table class="table table-bordered table-hover bg-white">
-                    <thead>
-                    <tr role="row">
-                        {% for column in table.columns if column.active == 'Y' %}
-                            <th>{{ column.viewName }}</th>
-                        {% endfor %}
-                    </tr>
-                    </thead>
-                    <tbody>
+        {# Single filters to search in table #}
+        {% include '@W3comHulk/filter/single_filter.html.twig' %}
 
-                    </tbody>
-                </table>
-            </div>
-        </div>
+        {# Multiple filters to search in table #}
+        {% include '@W3comHulk/filter/multiple_filter.html.twig' %}
+
+        {# Html table #}
+        {% include '@W3comHulk/table/table.html.twig' %}
+
     {% else %}
-        <div class="row mt-5">
-            <div class="col">
-                <div class="alert alert-danger d-flex">
-                    <i class="fa fa-exclamation-triangle mr-3 my-auto"></i>
-                    <p class="my-auto mb-0 text-center">
-                        <strong>Attention</strong>
-                        le fichier {{ filename }} est introuvable. Impossible de générer le tableau.
-                    </p>
-                </div>
-            </div>
-        </div>
+
+        {% include '@W3comHulk/error/missing_file.html.twig' %}
+
     {% endif %}
+
 {% endblock %}
+
 {% block javascripts %}
-
     <script>
-        $(document).ready(function () {
 
+        $.fn.dataTable.ext.search.push(
+            function (settings, data, dataIndex) {
+
+
+                {# Trie les data à chaque "réinitialisation" du tableau #}
+                {% for filter in table.filters if filter.active == 'Y' and filter.type == 'multiple' %}
+
+                var minId = '#min'+'{{ filter.field }}';
+                var maxId = '#max'+'{{ filter.field }}';
+
+                var min = parseInt($(minId).val(), 10);
+
+                var max = parseInt($(maxId).val(), 10);
+
+                var age = parseFloat(data[{{ filter.index }}]) || 0; // use data for the age column
+
+                if ((isNaN(min) && isNaN(max)) ||
+                    (isNaN(min) && age <= max) ||
+                    (min <= age && isNaN(max)) ||
+                    (min <= age && age <= max)) {
+                    return true;
+                }
+
+                {% endfor %}
+
+                return false;
+
+            }
+        );
+
+
+        $(document).ready(function () {
             var data = [
                 {% for object in table.data %}
 
@@ -95,27 +73,26 @@
                 },
                 {% endfor %}
             ];
-
             var table = $('table').DataTable({
                 language: {
-                    processing:     "Traitement en cours...",
-                    search:         "Rechercher&nbsp;:",
-                    lengthMenu:    "Afficher _MENU_ &eacute;l&eacute;ments",
-                    info:           "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
-                    infoEmpty:      "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
-                    infoFiltered:   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
-                    infoPostFix:    "",
+                    processing: "Traitement en cours...",
+                    search: "Rechercher&nbsp;:",
+                    lengthMenu: "Afficher _MENU_ &eacute;l&eacute;ments",
+                    info: "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+                    infoEmpty: "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
+                    infoFiltered: "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+                    infoPostFix: "",
                     loadingRecords: "Chargement en cours...",
-                    zeroRecords:    "Aucun &eacute;l&eacute;ment &agrave; afficher",
-                    emptyTable:     "Aucune donnée disponible dans le tableau",
+                    zeroRecords: "Aucun &eacute;l&eacute;ment &agrave; afficher",
+                    emptyTable: "Aucune donnée disponible dans le tableau",
                     paginate: {
-                        first:      "Premier",
-                        previous:   "Pr&eacute;c&eacute;dent",
-                        next:       "Suivant",
-                        last:       "Dernier"
+                        first: "Premier",
+                        previous: "Pr&eacute;c&eacute;dent",
+                        next: "Suivant",
+                        last: "Dernier"
                     },
                     aria: {
-                        sortAscending:  ": activer pour trier la colonne par ordre croissant",
+                        sortAscending: ": activer pour trier la colonne par ordre croissant",
                         sortDescending: ": activer pour trier la colonne par ordre décroissant"
                     }
                 },
@@ -123,7 +100,9 @@
                 data: data,
                 columns: [
                     {% for column in table.columns if column.active == 'Y' %}
+
                     {"data": "{{ column.fieldName }}"},
+
                     {% endfor %}
                 ],
 
@@ -132,7 +111,7 @@
                 {% endif %}
 
                 columnDefs: [
-                    {% for column in table.columns if column.hidden == 'Y' %}
+                    {% for column in table.columns if column.hidden %}
                     {
                         "targets": [ {{ column.index }} ],
                         "visible": false,
@@ -149,11 +128,15 @@
                     .search(this.value)
                     .draw()
             });
-            $('.form-control').on('keyup change', function () {
+            $('#searchBar').on('keyup change', function () {
                 table
                     .search(this.value)
                     .draw()
-            })
+            });
+
+            $('.multiple-filter').on('keyup change', function () {
+                table.draw();
+            });
         })
     </script>
 {% endblock %}

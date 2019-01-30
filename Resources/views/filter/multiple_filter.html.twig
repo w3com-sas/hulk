@@ -1,0 +1,9 @@
+{% for filter in table.filters if filter.active == 'Y' and filter.type == 'multiple' %}
+<div class="input-group">
+    <div class="input-group-prepend">
+        <span class="input-group-text">{{ filter.label }}</span>
+    </div>
+    <input type="text" class="form-control multiple-filter" id="min{{ filter.field }}">
+    <input type="text" class="form-control multiple-filter" id="max{{ filter.field }}">
+</div>
+{% endfor %}

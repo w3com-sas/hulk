@@ -75,19 +75,16 @@ class QueryManager
 
         /** @var Filter $filter */
         foreach ($dataTable->getFilters() as $filter) {
-            if (!$filter->isColumnExist()) {
 
-                if ($entity->getProperty($filter->getField()) === null) {
-                    $filter->setActive('N');
-                } else {
-                    $filter->setActive('Y');
-                    $parameters->addSelect($entity->getProperty($filter->getField())->getName());
-                }
+            if ($entity->getProperty($filter->getField()) === null) {
+                $filter->setActive('N');
+                $filter->addError($filter->getField(). 'n\'éxiste pas.');
+            } else {
+                $filter->setActive('Y');
+                $parameters->addSelect($entity->getProperty($filter->getField())->getName());
             }
         }
     }
-
-
 
 
 }

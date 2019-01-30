@@ -2,18 +2,33 @@
 
 namespace W3com\HulkBundle\Model;
 
+
 use W3com\BoomBundle\Generator\Model\Property;
 
 class DataTable extends AbstractDataTable
 {
-
+    /**
+     * @var array
+     */
     private $columns;
 
+    /**
+     * @var array
+     */
     private $filters;
 
-    private $orders;
-
+    /**
+     * @var array
+     */
     private $data;
+
+    /**
+     * @param Column $column
+     */
+    public function addColumn(Column $column)
+    {
+        $this->columns[] = $column;
+    }
 
     /**
      * @param $columns
@@ -23,11 +38,6 @@ class DataTable extends AbstractDataTable
         foreach ($columns as $column){
             $this->columns[] = new Column($column);
         }
-    }
-
-    public function addColumn(Column $column)
-    {
-        $this->columns[] = $column;
     }
 
     /**
@@ -44,7 +54,7 @@ class DataTable extends AbstractDataTable
     public function setFilters(array $filters): void
     {
         foreach ($filters as $filter){
-            $this->filters[] = new Filter($filter, $this);
+            $this->filters[] = new Filter($filter);
         }
     }
 
@@ -57,20 +67,26 @@ class DataTable extends AbstractDataTable
     }
 
     /**
-     * @param mixed $orders
+     * @param mixed $data
      */
-    public function setOrders(array $orders): void
+    public function setData($data): void
     {
-        $this->orders = $orders;
+        $this->data = $data;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
 
     /**
      * @param $entityFields
      * @return mixed
      *
      * Return fields who exist in entity and in Json File
-     *
      */
     public function getAvailableFields($entityFields)
     {
@@ -97,22 +113,6 @@ class DataTable extends AbstractDataTable
         }
 
         return $fields;
-    }
-
-    /**
-     * @param mixed $data
-     */
-    public function setData($data): void
-    {
-        $this->data = $data;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getData()
-    {
-        return $this->data;
     }
 
 

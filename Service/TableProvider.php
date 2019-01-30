@@ -7,13 +7,12 @@ use W3com\HulkBundle\Filter\FilterManager;
 use W3com\HulkBundle\Finder\JsonFinder;
 use W3com\HulkBundle\Finder\ModelFinder;
 use W3com\HulkBundle\Model\AbstractDataTable;
-use W3com\HulkBundle\Model\Column;
 use W3com\HulkBundle\Model\DataTable;
-use W3com\HulkBundle\Model\Filter;
 use W3com\HulkBundle\Query\QueryManager;
 use W3com\BoomBundle\Generator\Model\Property;
 use W3com\BoomBundle\HanaEntity\AbstractEntity;
 use W3com\BoomBundle\Service\BoomManager;
+use W3com\HulkBundle\Util\Indexor;
 
 class TableProvider
 {
@@ -54,6 +53,11 @@ class TableProvider
     private $jsonFinder;
 
     /**
+     * @var Indexor
+     */
+    private $indexor;
+
+    /**
      * TableProvider constructor.
      * @param BoomManager $boom
      * @param $config
@@ -61,6 +65,7 @@ class TableProvider
     public function __construct($config, BoomManager $boom)
     {
         $this->config = $config;
+        $this->indexor = new Indexor();
         $this->filterManager = new FilterManager();
         $this->dataTable = new DataTable();
         $this->columnManager = new ColumnManager();
@@ -92,17 +97,15 @@ class TableProvider
 
             $this->dataTable->setData($this->retrieveData($data));
 
-            $this->columnManager->adaptColumns($this->dataTable, $data);
+            $this->columnManager->initColumns($this->dataTable, $data);
 
             $this->filterManager->initFilters($this->dataTable, $data);
 
-            $this->dataTable->setNonexistentProperties($this->dataTable);
+            $this->indexor->addIndex($this->dataTable);
+            //$this->dataTable->setNonexistentProperties($this->dataTable);
 
-            $this->determineColumnIndex($this->dataTable);
-
-            $this->determineFilterIndex($this->dataTable);
         }
-
+        dump($this->dataTable);
         return $this->dataTable;
     }
 
@@ -119,9 +122,6 @@ class TableProvider
                     case 'CalculationView':
                         $this->dataTable->setCalcView($value);
                         break;
-                    case 'orders':
-                        $this->dataTable->setOrders($value);
-                        break;
                     case 'Columns':
                         $this->dataTable->setColumns($value);
                         break;
@@ -131,7 +131,6 @@ class TableProvider
                 }
             }
         }
-
         return $this->dataTable;
     }
 
@@ -172,35 +171,5 @@ class TableProvider
             $newData[] = $data;
         }
         return $newData;
-    }
-
-    private function determineColumnIndex(DataTable $dataTable)
-    {
-        /** @var Column $column */
-        foreach ($dataTable->getColumns() as $column){
-            if ($column->getActive() == 'Y'){
-
-                if(!isset($i)){
-                    $i = 0;
-                }
-                $column->setIndex($i);
-                $i++;
-            }
-        }
-    }
-
-    private function determineFilterIndex(DataTable $dataTable)
-    {
-        /** @var Column $column */
-        foreach ($dataTable->getColumns() as $column){
-
-            /** @var Filter $filter */
-            foreach ($dataTable->getFilters() as $filter){
-
-                if ($filter->getField() == $column->getFieldName()){
-                    $filter->setIndex($column->getIndex());
-                }
-            }
-        }
     }
 }

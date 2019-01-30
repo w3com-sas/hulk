@@ -1,0 +1,37 @@
+{
+  "CalculationView" : "TDBCommerciaux",
+  "Fonctions": [
+    {
+      "type": "create",
+      "name": ""
+    }
+  ],
+  "filters":  [
+    {"FieldName": "U_W3C_PROF", "Label": "Profil", "Type": "single", "data": "field"},
+    {"FieldName": "U_W3C_MRQ1", "Label": "Marque", "Type": "single", "data": "field"},
+    {"FieldName": "U_W3C_MQPF", "Label": "Profil Marque", "Type": "single", "data": "field"},
+    {"FieldName": "U_W3C_SPEC", "Label": "Spécialité", "Type": "single", "data": "field"},
+    {"FieldName": "U_W3C_DATE", "Type": "multiple", "data": "date", "min": "", "max": ""}
+  ],
+  "Columns":[
+    {
+      "ColumnName"       : "Préférence",
+      "FieldName"        : "DOC_ENTRY",
+      "Label"            : "Id",
+      "isKey"            : true
+    },
+    {
+      "ColumnName" : "Nom Client",
+      "FieldName"  : "CardName"
+    },
+    {
+      "ColumnName"       : "VH achetés",
+      "FieldName"        : "Ref2"
+    },
+    {
+      "ColumnName"       : "Appel visite",
+      "Action"           : "OpenForm(OCLG,ClgCode)",
+      "FieldName"        : "ClgCode"
+    }
+  ]
+}

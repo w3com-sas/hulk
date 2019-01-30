@@ -9,7 +9,7 @@ use W3com\HulkBundle\Model\DataTable;
 class ColumnManager
 {
 
-    public function adaptColumns(DataTable $dataTable, $data)
+    public function initColumns(DataTable $dataTable, $data)
     {
         $this->adaptColumnsWithData($dataTable, $data);
         return $dataTable;
@@ -36,4 +36,6 @@ class ColumnManager
             }
         }
     }
+
+
 }

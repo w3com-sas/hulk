@@ -1,0 +1,12 @@
+<table class="table table-bordered table-hover bg-white">
+    <thead>
+    <tr role="row">
+        {% for column in table.columns if column.active == 'Y' %}
+            <th>{{ column.viewName }}</th>
+        {% endfor %}
+    </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+</table>

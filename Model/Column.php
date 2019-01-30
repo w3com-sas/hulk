@@ -4,21 +4,21 @@ namespace W3com\HulkBundle\Model;
 
 class Column
 {
-    const TPL_TEXT = 'Text';
 
-    const TPL_ICON = 'Icon';
+    private $viewName;
 
-    const TPL_COMBO = 'Combo';
+    private $fieldName;
 
-    public function __construct($column)
+    private $hidden;
+
+    private $index;
+
+
+    public function __construct($column = [])
     {
         foreach ($column as $field => $value) {
 
             switch ($field) {
-
-                case 'Template':
-                    $this->setTemplate($value);
-                    break;
 
                 case 'ColumnName':
                     $this->setViewName($value);
@@ -27,32 +27,11 @@ class Column
                 case 'FieldName':
                     $this->setFieldName($value);
                     break;
-
-                case 'Action':
-                    $this->setAction($value);
-                    break;
             }
         }
     }
 
-    private $order;
 
-    private $template;
-
-    private $viewName;
-
-    private $fieldName;
-
-    /**
-     * @var boolean
-     */
-    private $hidden;
-
-    private $index;
-
-    private $action;
-
-    private $icon;
 
     /**
      * @var string
@@ -60,19 +39,10 @@ class Column
      */
     private $active;
 
-    public function setOrder($order)
-    {
-        $this->order = $order;
-    }
 
     public function setViewName($viewName)
     {
         return $this->viewName = $viewName;
-    }
-
-    public function setTemplate($template)
-    {
-        return $this->template = $template;
     }
 
     public function setFieldName($fieldName)
@@ -80,19 +50,7 @@ class Column
         $this->fieldName = $fieldName;
     }
 
-    public function setAction($action)
-    {
-        return $this->action = $action;
-    }
 
-    public function setIcon($icon)
-    {
-        return $this->icon = $icon;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getFieldName()
     {
         return $this->fieldName;

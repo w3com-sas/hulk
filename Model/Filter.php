@@ -5,11 +5,13 @@ namespace W3com\HulkBundle\Model;
 
 class Filter
 {
+    const TYPE_SINGLE = 'single';
+
+    const TYPE_MULTIPLE = 'multiple';
+
     private $field;
 
     private $label;
-
-    private $order;
 
     private $values;
 
@@ -17,10 +19,9 @@ class Filter
 
     private $index;
 
-    /** @var bool */
-    private $columnExist;
+    private $type;
 
-    private $property;
+    private $errors = [];
 
     public function __construct($jsonFilter)
     {
@@ -32,29 +33,15 @@ class Filter
                 case 'Label':
                     $this->setLabel($value);
                     break;
-                case 'OrderBy':
-                    $this->setOrder($value);
+                case 'Type':
+                    $this->setType($value);
+                    break;
+                case 'data':
+                    $this->values[] = $value;
                     break;
             }
         }
     }
-
-    /**
-     * @return mixed
-     */
-    public function getOrder()
-    {
-        return $this->order;
-    }
-
-    /**
-     * @param mixed $order
-     */
-    public function setOrder($order): void
-    {
-        $this->order = $order;
-    }
-
 
     /**
      * @return mixed
@@ -136,38 +123,38 @@ class Filter
         $this->index = $index;
     }
 
-    /**
-     * @return bool
-     */
-    public function isColumnExist(): ?bool
-    {
-        return $this->columnExist;
-    }
-
-    /**
-     * @param bool $columnExist
-     */
-    public function setColumnExist(bool $columnExist): void
-    {
-        $this->columnExist = $columnExist;
-    }
 
     /**
      * @return mixed
      */
-    public function getProperty()
+    public function getType()
     {
-        return $this->property;
+        return $this->type;
     }
 
     /**
-     * @param mixed $property
+     * @param mixed $type
      */
-    public function setProperty($property): void
+    public function setType($type): void
     {
-        $this->property = $property;
+        switch ($type) {
+            case $this::TYPE_SINGLE:
+                $this->type = $type;
+                break;
+            case $this::TYPE_MULTIPLE;
+                $this->type = $type;
+                break;
+            default:
+                $this->errors[] = 'Le type de filtre suivant n\'est pas supporté :' . $type;
+        }
     }
 
-
-
+    /**
+     * @param $error
+     * @return Filter
+     */
+    public function addError($error)
+    {
+        return $this->errors[] = $error;
+    }
 }

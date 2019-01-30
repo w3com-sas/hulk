@@ -24,8 +24,7 @@ abstract class AbstractDataTable
 
     public function setCalcView($calcView)
     {
-        $formatedView = str_replace('/', '', $calcView);
-        return $this->calcView = $formatedView;
+        return $this->calcView = $calcView;
     }
 
     /**
@@ -109,5 +108,7 @@ abstract class AbstractDataTable
     {
         $this->entity = $entity;
     }
+
+
 
 }
