@@ -2,9 +2,10 @@
 {% block content %}
 
     {% if table.fileExist %}
-        {# Warning message #}
+        {# Warning message
         <div class="row mt-5">
             <div class="col">
+
                 {% if table.nonexistentProperties|length != 0 %}
                     <div class="alert alert-info d-flex justify-content-between">
                         <i class="fa fa-info mr-3 my-auto"></i>
@@ -19,7 +20,7 @@
                     </div>
                 {% endif %}
             </div>
-        </div>
+        </div>#}
 
         {# Filters for table #}
         <div class="row">
@@ -79,9 +80,6 @@
 {% endblock %}
 {% block javascripts %}
 
-    <script>
-        alert($('table').html());
-    </script>
     <script>
         $(document).ready(function () {
 
