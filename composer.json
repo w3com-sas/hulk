@@ -23,8 +23,7 @@
     "nette/php-generator": "^3.2",
     "symfony/console": "*",
     "symfony/serializer-pack": "*",
-    "doctrine/annotations": "1.6.0",
-    "ext-http": "*"
+    "doctrine/annotations": "1.6.0"
   },
   "require-dev": {
     "symfony/phpunit-bridge": "~3.0"
