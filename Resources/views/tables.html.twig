@@ -1,0 +1,136 @@
+{% extends '@W3comHulk/base.html.twig' %}
+{% block content %}
+
+    {% if table.fileExist %}
+        {# Warning message #}
+        <div class="row mt-5">
+            <div class="col">
+                {% if table.nonexistentProperties|length != 0 %}
+                    <div class="alert alert-info d-flex justify-content-between">
+                        <i class="fa fa-info mr-3 my-auto"></i>
+                        <p class="my-auto mb-0">
+                            <strong>{{ table.nonexistentProperties|length }} champ(s)</strong>
+                            manquant(s).
+                        </p>
+                        <a class="btn btn-info ml-auto" href="{{ path('w3com_update_view', {filename : filename}) }}">
+                            <i class="fa fa-plus-circle mr-2"></i>
+                            Générer les champs
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        {# Filters for table #}
+        <div class="row">
+            <div class="col">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="#searchBar">
+                            Recherche générale :
+                        </label>
+                    </div>
+                    <input type="text" class="form-control" id="searchBar">
+                </div>
+                <div id="filters">
+                    <div class="input-group mb-3">
+                        {% for filter in table.filters if filter.active == 'Y' %}
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="select{{ filter.field }}">{{ filter.label }}
+                                    : </label>
+                            </div>
+                            <select class="custom-select" id="select{{ filter.field }}" colIndex="{{ filter.index }}">
+                                {% for value in filter.values %}
+                                    <option value="{{ value }}">{{ value }}</option>
+                                {% endfor %}
+                            </select>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                {# Table #}
+                <table class="table table-bordered table-hover bg-white">
+                    <thead>
+                    <tr role="row">
+                        {% for column in table.columns if column.active == 'Y' %}
+                            <th>{{ column.viewName }}</th>
+                        {% endfor %}
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% else %}
+        <div class="row mt-5">
+            <div class="col">
+                <div class="alert alert-danger d-flex">
+                    <i class="fa fa-exclamation-triangle mr-3 my-auto"></i>
+                    <p class="my-auto mb-0 text-center">
+                        <strong>Attention</strong>
+                        le fichier {{ filename }} est introuvable. Impossible de générer le tableau.
+                    </p>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+{% block javascripts %}
+    <script>
+        $(document).ready(function () {
+
+            let data = [
+                {% for object in table.data %}
+
+                {
+                    {% for col, value in object %}
+
+                    '{{ col }}': '{{ value }}',
+
+                    {% endfor %}
+                },
+                {% endfor %}
+            ];
+
+            let table = $('table').DataTable({
+                dom: 'tp',
+                data: data,
+                columns: [
+                    {% for column in table.columns if column.active == 'Y' %}
+                    {"data": "{{ column.fieldName }}"},
+                    {% endfor %}
+                ],
+
+                {% if table.filters is not empty %}
+                colReorder: true,
+                {% endif %}
+
+                columnDefs: [
+                    {% for column in table.columns if column.hidden == 'Y' %}
+                    {
+                        "targets": [ {{ column.index }} ],
+                        "visible": false,
+                        "searchable": true
+                    },
+                    {% endfor %}
+                ]
+            });
+
+            $('.custom-select').on('change', function () {
+                console.log('yo bro');
+                console.log(this.value);
+                table
+                    .column($(this).attr('colIndex'))
+                    .search(this.value)
+                    .draw()
+            });
+            $('.form-control').on('keyup change', function () {
+                table
+                    .search(this.value)
+                    .draw()
+            })
+        })
+    </script>
+{% endblock %}

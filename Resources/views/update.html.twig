@@ -1,0 +1,71 @@
+{% extends '@W3comHulk/base.html.twig' %}
+
+{% if updatedEntities is defined %}
+    {% set entities = updatedEntities %}
+    {% set title = 'Les tables suivantes ont été mises à jour' %}
+    {% set alert = 'aucune table n\'a été mise à jour, si des champs sont manquants dans le tableau,
+    c\'est qu\'ils n\'existent pas ou que leurs noms sont écorchés dans le fichier Json.' %}
+    {% set btn = 'Recharger le tableau' %}
+{% else %}
+    {% set entities = createdEntities %}
+    {% set title = 'Les tables suivantes ont été créées' %}
+    {% set alert = 'aucune table n\'a été créée, merci de vérifier l\'éxistence
+        de la table dans le fichier Json.' %}
+    {% set btn = 'Charger le tableau' %}
+{% endif %}
+
+{% block content %}
+    <div class="row">
+        <div class="col">
+            {% if entities is empty %}
+                <div class="alert alert-danger d-flex my-5">
+                    <i class="fa fa-exclamation-triangle mr-3 my-auto"></i>
+                    <p class="my-auto mb-0">
+                        <strong>Attention</strong>
+                        {{ alert }}
+                    </p>
+                </div>
+            {% else %}
+                <h2 class="mt-5 text-center text-gray">
+                    {{ title }}
+                </h2>
+                <div class="row my-5">
+                    <div class="col-md-6 mx-auto">
+                        <div class="accordion" id="accordion">
+                            {% for entity in entities %}
+                                <div class="card">
+                                    <div class="card-header d-flex justify-content-between" id="headingOne">
+                                        <h2 class="mb-0">
+                                            <button class="btn btn-link" type="button" data-toggle="collapse"
+                                                    data-target="#collapse{{ entity.name }}">
+                                                {{ entity.name }}
+                                            </button>
+                                        </h2>
+                                        <button class="badge badge-primary badge-pill my-auto btn my-auto text-white"
+                                                data-toggle="collapse" data-target="#collapse{{ entity.name }}">
+                                            {{ entity.properties|length }} champ(s)
+                                        </button>
+                                    </div>
+
+                                    <div id="collapse{{ entity.name }}" class="collapse" data-parent="#accordion">
+                                        <div class="card-body">
+                                            {% for property in entity.properties %}
+                                                {{ property.field }} ,
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            <a class="btn btn-block btn-success font-weight-bold mb-5"
+               href="{{ path('w3com_json_table_view', { filename : filename }) }}">
+                <i class="fa fa-arrow-circle-left float-left mt-1"></i>
+                {{ btn }}
+            </a>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{
+  "name": "W3com/HulkBundle",
+  "description": ".",
+  "type": "symfony-bundle",
+  "keywords": [
+    "SAP",
+    "Datatables"
+  ],
+  "authors": [
+    {
+      "name": "Corentin Gillet",
+      "email": "cgillet@w3com.fr"
+    }
+  ],
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://satis.w3cloud.fr"
+    }
+  ],
+  "require": {
+    "php": ">=7.1",
+    "nette/php-generator": "^3.2",
+    "symfony/console": "*",
+    "symfony/serializer-pack": "*",
+    "doctrine/annotations": "1.6.0",
+    "ext-http": "*"
+  },
+  "require-dev": {
+    "symfony/phpunit-bridge": "~3.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "W3com\\HulkBundle\\": ""
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "W3com\\HulkBundle\\": ""
+    }
+  }
+}
