@@ -78,10 +78,14 @@
     {% endif %}
 {% endblock %}
 {% block javascripts %}
+
+    <script>
+        alert($('table').html());
+    </script>
     <script>
         $(document).ready(function () {
 
-            let data = [
+            var data = [
                 {% for object in table.data %}
 
                 {
@@ -94,7 +98,7 @@
                 {% endfor %}
             ];
 
-            let table = $('table').DataTable({
+            var table = $('table').DataTable({
                 language: {
                     processing:     "Traitement en cours...",
                     search:         "Rechercher&nbsp;:",
