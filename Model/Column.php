@@ -4,34 +4,45 @@ namespace W3com\HulkBundle\Model;
 
 class Column
 {
+    const FIELD_LABEL = 'Label';
+    const FIELD_FIELDNAME = 'FieldName';
+    const FIELD_TYPE = 'Type';
+    const FIELD_CELL_ACTION = 'CellAction';
 
-    private $viewName;
-
-    private $fieldName;
-
-    private $hidden;
-
+    /**
+     * @var integer
+     */
     private $index;
 
+    /**
+     * @var bool
+     */
+    private $hidden;
 
-    public function __construct($column = [])
-    {
-        foreach ($column as $field => $value) {
+    /**
+     * @var string
+     */
+    private $label;
 
-            switch ($field) {
+    /**
+     * @var string
+     */
+    private $fieldName;
 
-                case 'ColumnName':
-                    $this->setViewName($value);
-                    break;
+    /**
+     * @var string
+     */
+    private $type;
 
-                case 'FieldName':
-                    $this->setFieldName($value);
-                    break;
-            }
-        }
-    }
+    /**
+     * @var array
+     */
+    private $icons;
 
-
+    /**
+     * @var CellAction
+     */
+    private $cellAction;
 
     /**
      * @var string
@@ -40,9 +51,9 @@ class Column
     private $active;
 
 
-    public function setViewName($viewName)
+    public function setLabel($label)
     {
-        return $this->viewName = $viewName;
+        return $this->label = $label;
     }
 
     public function setFieldName($fieldName)
@@ -69,9 +80,9 @@ class Column
     /**
      * @return mixed
      */
-    public function getViewName()
+    public function getLabel()
     {
-        return $this->viewName;
+        return $this->label;
     }
 
     /**
@@ -106,4 +117,60 @@ class Column
         $this->index = $index;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param mixed $type
+     */
+    public function setType($type): void
+    {
+        $this->type = $type;
+    }
+
+
+    /**
+     * @param mixed $icon
+     */
+    public function setIcon($icon): void
+    {
+        $this->icon = $icon;
+    }
+
+    /**
+     * @return CellAction
+     */
+    public function getCellAction(): ?CellAction
+    {
+        return $this->cellAction;
+    }
+
+    /**
+     * @param CellAction $cellAction
+     */
+    public function setCellAction(CellAction $cellAction): void
+    {
+        $this->cellAction = $cellAction;
+    }
+
+    /**
+     * @return array
+     */
+    public function getIcons(): array
+    {
+        return $this->icons;
+    }
+
+    /**
+     * @param array $icons
+     */
+    public function setIcons(array $icons): void
+    {
+        $this->icons = $icons;
+    }
 }

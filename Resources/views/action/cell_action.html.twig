@@ -1,0 +1,22 @@
+{% for column in table.columns if column.active == 'Y' %}
+
+    {% if column.type == 'action' %}
+
+        <template id="{{ column.cellAction.functionName }}{{ column.cellAction.targetEntity }}">
+            <button class="btn btn-primary"
+                    onclick="{{ column.cellAction.functionName }}({{ column.cellAction.targetEntity }}, [[data]])">
+                {% if column.cellAction.icon != null %}
+                    <i class="fa fa-{{ column.cellAction.icon }}"></i>
+                {% endif %}
+            </button>
+        </template>
+
+    {% elseif column.cellAction == 'icon' %}
+
+        <template id="{{ column.cellAction.name }}{{ column.action.target }}">
+            <i class="fa fa-{{ column.icon.name }} text-{{ column.icon.color }}"></i>
+        </template>
+
+    {% endif %}
+
+{% endfor %}

@@ -38,12 +38,12 @@ class QueryManager
     public function createDataTableQuery(DataTable $dataTable)
     {
         $this->modelFinder->checkProjectEntities($dataTable);
-        $dataTable->setClassExist(true);
+        $dataTable->getError()->setClassExist(true);
 
         try {
             $repo = $this->boom->getRepository($dataTable->getEntity());
         } catch (EntityNotFoundException $e) {
-            $dataTable->setClassExist(false);
+            $dataTable->getError()->setClassExist(false);
             return null;
         }
 

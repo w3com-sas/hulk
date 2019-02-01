@@ -1,0 +1,28 @@
+{# Global search bar #}
+{% include '@W3comHulk/filter/search_bar.html.twig' %}
+<p>
+    <a class="text-gray" type="button" data-toggle="collapse" href="#globalActions">
+        <i class="far fa-hand-paper mr-2"></i>
+        Actions
+    </a>
+
+    <a class="text-gray mx-3" type="button" data-toggle="collapse" href="#filters">
+        <i class="fas fa-filter mr-2"></i>
+        Filtres
+    </a>
+</p>
+<div class="row">
+    <div class="col">
+        <div class="collapse multi-collapse" id="filters">
+            {% include '@W3comHulk/filter/single_filter.html.twig' %}
+            {% include '@W3comHulk/filter/multiple_filter.html.twig' %}
+        </div>
+    </div>
+</div>
+<div class="row mt-2">
+    <div class="col">
+        <div class="collapse multi-collapse" id="globalActions">
+            {% include '@W3comHulk/action/global_action.html.twig' %}
+        </div>
+    </div>
+</div>

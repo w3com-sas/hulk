@@ -13,7 +13,7 @@ abstract class AbstractFilterManager
         $newCol = new Column([]);
         $newCol->setActive('Y');
         $newCol->setHidden(true);
-        $newCol->setViewName($filter->getLabel());
+        $newCol->setLabel($filter->getLabel());
         $newCol->setFieldName($filter->getField());
         $dataTable->addColumn($newCol);
     }

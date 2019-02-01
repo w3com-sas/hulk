@@ -1,8 +1,8 @@
-{% if table.nonexistentProperties|length != 0 %}
+{% if table.error.nonexistentProperties|length != 0 %}
     <div class="alert alert-info d-flex justify-content-between">
         <i class="fa fa-info mr-3 my-auto"></i>
         <p class="my-auto mb-0">
-            <strong>{{ table.nonexistentProperties|length }} champ(s)</strong>
+            <strong>{{ table.error.nonexistentProperties|length }} champ(s)</strong>
             manquant(s).
         </p>
         <a class="btn btn-info ml-auto" href="{{ path('w3com_update_view', {filename : filename}) }}">

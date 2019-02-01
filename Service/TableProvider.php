@@ -9,9 +9,9 @@ use W3com\HulkBundle\Finder\ModelFinder;
 use W3com\HulkBundle\Model\AbstractDataTable;
 use W3com\HulkBundle\Model\DataTable;
 use W3com\HulkBundle\Query\QueryManager;
-use W3com\BoomBundle\Generator\Model\Property;
-use W3com\BoomBundle\HanaEntity\AbstractEntity;
 use W3com\BoomBundle\Service\BoomManager;
+use W3com\HulkBundle\Util\DataTablesConstructor;
+use W3com\HulkBundle\Util\DataTransformer;
 use W3com\HulkBundle\Util\Indexor;
 
 class TableProvider
@@ -58,118 +58,55 @@ class TableProvider
     private $indexor;
 
     /**
+     * @var DataTransformer
+     */
+    private $dataTransformer;
+
+    /**
+     * @var DataTablesConstructor
+     */
+    private $constructor;
+
+    /**
      * TableProvider constructor.
      * @param BoomManager $boom
      * @param $config
      */
     public function __construct($config, BoomManager $boom)
     {
+        $this->dataTable = new DataTable();
         $this->config = $config;
+        $this->constructor = new DataTablesConstructor();
         $this->indexor = new Indexor();
         $this->filterManager = new FilterManager();
-        $this->dataTable = new DataTable();
         $this->columnManager = new ColumnManager();
         $this->modelFinder = new ModelFinder($boom);
+        $this->dataTransformer = new DataTransformer($this->modelFinder);
         $this->queryManager = new QueryManager($this->modelFinder, $boom);
         $this->jsonFinder = new JsonFinder($boom, $config);
     }
 
     /**
      * @param $filename
-     * @return AbstractDataTable
+     * @return DataTable
      * @throws \Exception
      */
     public function getDataTable($filename)
     {
         $json = $this->jsonFinder->getOnlineJson($filename, $this->dataTable);
 
-        $this->hydrateDataTable($json);
+        $this->constructor->hydrateDataTable($json, $this->dataTable);
 
-        // Find concerned data
         $data = $this->queryManager->createDataTableQuery($this->dataTable);
 
+        $this->dataTransformer->addData($this->dataTable, $data);
 
-        // Retrieve data
-        // Adapt Columns/Orders with Data (Need data)
-        // If dataTable can't find project entity
-        if ($this->dataTable->isClassExist()) {
+        $this->columnManager->initColumns($this->dataTable, $data);
 
+        $this->filterManager->initFilters($this->dataTable, $data);
 
-            $this->dataTable->setData($this->retrieveData($data));
+        $this->indexor->addIndex($this->dataTable);
 
-            $this->columnManager->initColumns($this->dataTable, $data);
-
-            $this->filterManager->initFilters($this->dataTable, $data);
-
-            $this->indexor->addIndex($this->dataTable);
-            //$this->dataTable->setNonexistentProperties($this->dataTable);
-
-        }
-        dump($this->dataTable);
         return $this->dataTable;
-    }
-
-    private function hydrateDataTable($file)
-    {
-
-        if ($this->dataTable->isFileExist()){
-            foreach (json_decode($file) as $key => $value) {
-
-                switch ($key) {
-                    case 'DisplayName':
-                        $this->dataTable->setDisplayName($value);
-                        break;
-                    case 'CalculationView':
-                        $this->dataTable->setCalcView($value);
-                        break;
-                    case 'Columns':
-                        $this->dataTable->setColumns($value);
-                        break;
-                    case 'filters':
-                        $this->dataTable->setFilters($value);
-                        break;
-                }
-            }
-        }
-        return $this->dataTable;
-    }
-
-    /**
-     * @param $data
-     * @return array
-     */
-    private function retrieveData($data)
-    {
-        // Boom return all fields of object, even if their selects
-
-        $requiredFields = $this->modelFinder->getAvailableProperties($this->dataTable);
-
-        $newData = [];
-        /** @var AbstractEntity $boomObj */
-        foreach ($data as $boomObj) {
-            $data = [];
-
-            // Cast entity
-            foreach ((array)$boomObj as $property => $value) {
-
-                // Cast add /00* (Because entity have protected property)
-                // Need to remove it
-                $realProperty = substr($property, 3);
-
-                /**
-                 * @var string $field
-                 * @var Property $requiredProperty
-                 */
-                foreach ($requiredFields as $field => $requiredProperty) {
-
-                    // Match with json Required property
-                    if ($realProperty == $requiredProperty->getName()) {
-                        $data[$field] = $value;
-                    }
-                }
-            }
-            $newData[] = $data;
-        }
-        return $newData;
     }
 }

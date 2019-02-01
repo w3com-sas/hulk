@@ -1,12 +1,11 @@
-<table class="table table-bordered table-hover bg-white">
+<table class="table bg-white" id="dataTable">
     <thead>
     <tr role="row">
-        {% for column in table.columns if column.active == 'Y' %}
-            <th>{{ column.viewName }}</th>
+        {% for column in table.columns if column.active == 'Y' and column.hidden is null %}
+            <th>{{ column.label }}</th>
         {% endfor %}
     </tr>
     </thead>
     <tbody>
-
     </tbody>
 </table>

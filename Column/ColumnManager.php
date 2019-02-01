@@ -11,6 +11,11 @@ class ColumnManager
 
     public function initColumns(DataTable $dataTable, $data)
     {
+
+        $test = 'yo';
+        $$test = 'test';
+
+
         $this->adaptColumnsWithData($dataTable, $data);
         return $dataTable;
     }

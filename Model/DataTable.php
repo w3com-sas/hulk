@@ -5,8 +5,33 @@ namespace W3com\HulkBundle\Model;
 
 use W3com\BoomBundle\Generator\Model\Property;
 
-class DataTable extends AbstractDataTable
+class DataTable
 {
+    const FIELD_CALCVIEW = 'CalculationView';
+    const FIELD_GLOBAL_ACTION = 'GlobalActions';
+    const FIELD_FILTERS = 'Filters';
+    const FIELD_COLUMNS = 'Columns';
+
+    public function __construct()
+    {
+        $this->error = new Error();
+    }
+
+    /**
+     * @var string
+     */
+    private $calcView;
+
+    /**
+     * @var mixed
+     */
+    private $entity;
+
+    /**
+     * @var array
+     */
+    private $globalActions;
+
     /**
      * @var array
      */
@@ -23,21 +48,16 @@ class DataTable extends AbstractDataTable
     private $data;
 
     /**
+     * @var Error
+     */
+    private $error;
+
+    /**
      * @param Column $column
      */
     public function addColumn(Column $column)
     {
         $this->columns[] = $column;
-    }
-
-    /**
-     * @param $columns
-     */
-    public function setColumns($columns)
-    {
-        foreach ($columns as $column){
-            $this->columns[] = new Column($column);
-        }
     }
 
     /**
@@ -49,13 +69,11 @@ class DataTable extends AbstractDataTable
     }
 
     /**
-     * @param mixed $filters
+     * @param Filter $filter
      */
-    public function setFilters(array $filters): void
+    public function addFilter(Filter $filter)
     {
-        foreach ($filters as $filter){
-            $this->filters[] = new Filter($filter);
-        }
+        $this->filters[] = $filter;
     }
 
     /**
@@ -82,6 +100,36 @@ class DataTable extends AbstractDataTable
         return $this->data;
     }
 
+    public function setCalcView($calcView)
+    {
+        return $this->calcView = $calcView;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCalcView()
+    {
+        return $this->calcView;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEntity()
+    {
+        return $this->entity;
+    }
+
+    /**
+     * @param mixed $entity
+     */
+    public function setEntity($entity): void
+    {
+        $this->entity = $entity;
+    }
+
+
     /**
      * @param $entityFields
      * @return mixed
@@ -92,21 +140,21 @@ class DataTable extends AbstractDataTable
     {
         $fields = [];
         /** @var Column $column */
-        foreach ($this->columns as $column){
+        foreach ($this->columns as $column) {
 
             // Need to get property name to check it in entity
             /** @var Property $property */
-            foreach ($entityFields as $property){
-                if ($property->getField() == $column->getFieldName()){
+            foreach ($entityFields as $property) {
+                if ($property->getField() == $column->getFieldName()) {
                     $fields[$column->getFieldName()] = $property;
                 }
             }
         }
 
         /** @var Filter $filter */
-        foreach ($this->filters as $filter){
-            foreach ($entityFields as $property){
-                if ($property->getField() == $filter->getField()){
+        foreach ($this->filters as $filter) {
+            foreach ($entityFields as $property) {
+                if ($property->getField() == $filter->getField()) {
                     $fields[$filter->getField()] = $property;
                 }
             }
@@ -115,5 +163,28 @@ class DataTable extends AbstractDataTable
         return $fields;
     }
 
+    /**
+     * @return array
+     */
+    public function getGlobalActions(): array
+    {
+        return $this->globalActions;
+    }
+
+    /**
+     * @param GlobalAction $globalAction
+     */
+    public function addGlobalAction(GlobalAction $globalAction)
+    {
+        $this->globalActions[] = $globalAction;
+    }
+
+    /**
+     * @return Error
+     */
+    public function getError(): Error
+    {
+        return $this->error;
+    }
 
 }

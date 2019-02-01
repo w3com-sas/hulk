@@ -1,22 +1,18 @@
 {% extends '@W3comHulk/base.html.twig' %}
 {% block content %}
 
-    {% if table.fileExist %}
+    {% if table.error.fileExist %}
 
         {# Warning message #}
         {% include '@W3comHulk/error/missing_fields.html.twig' %}
 
-        {# Global search bar #}
-        {% include '@W3comHulk/filter/search_bar.html.twig' %}
-
-        {# Single filters to search in table #}
-        {% include '@W3comHulk/filter/single_filter.html.twig' %}
-
-        {# Multiple filters to search in table #}
-        {% include '@W3comHulk/filter/multiple_filter.html.twig' %}
+        {% include '@W3comHulk/include/header.html.twig' %}
 
         {# Html table #}
         {% include '@W3comHulk/table/table.html.twig' %}
+
+        {# CellAction template #}
+        {% include '@W3comHulk/action/cell_action.html.twig' %}
 
     {% else %}
 
@@ -28,33 +24,32 @@
 
 {% block javascripts %}
     <script>
-
         $.fn.dataTable.ext.search.push(
-            function (settings, data, dataIndex) {
+            function (settings, data, dataIndex, object, int) {
 
 
-                {# Trie les data à chaque "réinitialisation" du tableau #}
+                {# Trie les data à chaque "draw()" du tableau #}
+                {# data = ligne du tableau #}
                 {% for filter in table.filters if filter.active == 'Y' and filter.type == 'multiple' %}
 
-                var minId = '#min'+'{{ filter.field }}';
-                var maxId = '#max'+'{{ filter.field }}';
+                var minId = '#min' + '{{ filter.field }}';
+                var maxId = '#max' + '{{ filter.field }}';
+                // var typeFilter = $(minId).attributes.type;
 
                 var min = parseInt($(minId).val(), 10);
-
                 var max = parseInt($(maxId).val(), 10);
-
-                var age = parseFloat(data[{{ filter.index }}]) || 0; // use data for the age column
+                var dataCol = parseFloat(data[{{ filter.index }}]);
 
                 if ((isNaN(min) && isNaN(max)) ||
                     (isNaN(min) && age <= max) ||
-                    (min <= age && isNaN(max)) ||
-                    (min <= age && age <= max)) {
+                    (min <= dataCol && isNaN(max)) ||
+                    (min <= dataCol && dataCol <= max)) {
                     return true;
+                } else {
+                    return false;
                 }
 
                 {% endfor %}
-
-                return false;
 
             }
         );
@@ -73,7 +68,7 @@
                 },
                 {% endfor %}
             ];
-            var table = $('table').DataTable({
+            var table = $('#dataTable').DataTable({
                 language: {
                     processing: "Traitement en cours...",
                     search: "Rechercher&nbsp;:",
@@ -99,9 +94,25 @@
                 dom: 'tp',
                 data: data,
                 columns: [
+
                     {% for column in table.columns if column.active == 'Y' %}
 
-                    {"data": "{{ column.fieldName }}"},
+                    {% if column.type == 'text' or column.hidden %}
+
+                    {data: "{{ column.fieldName }}"},
+
+                    {% else %}
+                    {
+                        data: "{{ column.fieldName }}",
+
+                        render: function (data, type, row) {
+                            var idTpl = '#'+'{{ column.cellAction.functionName }}{{ column.cellAction.targetEntity }}';
+                            var tpl = $(idTpl).html();
+                            return tpl.replace('[[data]]', data);
+                        }
+                    },
+
+                    {% endif %}
 
                     {% endfor %}
                 ],
@@ -118,7 +129,7 @@
                         "searchable": true
                     },
                     {% endfor %}
-                ]
+                ],
             });
 
             $('.custom-select').on('change', function () {
@@ -137,6 +148,15 @@
             $('.multiple-filter').on('keyup change', function () {
                 table.draw();
             });
+
+            $('#dataTable tbody').on( 'click', 'tr', function () {
+                $(this).toggleClass('selected');
+            } );
+
+            $('#buttonTest').click( function () {
+                console.log(table.rows('.selected').data());
+                alert( table.rows('.selected').data().length +' row(s) selected' );
+            } );
         })
     </script>
 {% endblock %}

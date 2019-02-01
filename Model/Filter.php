@@ -5,8 +5,11 @@ namespace W3com\HulkBundle\Model;
 
 class Filter
 {
-    const TYPE_SINGLE = 'single';
+    const FIELD_FIELDNAME = 'FieldName';
+    const FIELD_LABEL = 'Label';
+    const FIELD_TYPE = 'Type';
 
+    const TYPE_SINGLE = 'single';
     const TYPE_MULTIPLE = 'multiple';
 
     private $field;
@@ -22,26 +25,6 @@ class Filter
     private $type;
 
     private $errors = [];
-
-    public function __construct($jsonFilter)
-    {
-        foreach ($jsonFilter as $field => $value) {
-            switch ($field) {
-                case 'FieldName':
-                    $this->setField($value);
-                    break;
-                case 'Label':
-                    $this->setLabel($value);
-                    break;
-                case 'Type':
-                    $this->setType($value);
-                    break;
-                case 'data':
-                    $this->values[] = $value;
-                    break;
-            }
-        }
-    }
 
     /**
      * @return mixed

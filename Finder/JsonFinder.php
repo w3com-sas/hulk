@@ -48,12 +48,12 @@ class JsonFinder
 
         $context = stream_context_create($opts);
 
-        $dataTable->setFileExist(true);
+        $dataTable->getError()->setFileExist(true);
 
         try {
             $file = file_get_contents($baseUri . $jsonUri . $filename . '.json', false, $context);
         } catch (\Exception $e){
-            $dataTable->setFileExist(false);
+            $dataTable->getError()->setFileExist(false);
             return null;
         }
         return $file;

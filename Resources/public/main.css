@@ -1,1 +1,15 @@
+body {
+    background: #E1F2F3;
+}
 
+.selected {
+    background: #acbab5;
+}
+
+tr .even .selected:hover {
+    background: #acbab5;
+}
+
+.text-gray {
+    color: #6D8082;
+}

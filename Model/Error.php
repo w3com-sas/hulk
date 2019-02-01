@@ -2,51 +2,17 @@
 
 namespace W3com\HulkBundle\Model;
 
-
-abstract class AbstractDataTable
+class Error
 {
-    protected $displayName;
-
-    protected $calcView;
-
-    protected $entity;
-
     protected $nonexistentProperties;
 
     protected $classExist;
 
     protected $fileExist;
 
-    public function setDisplayName($displayName)
-    {
-        return $this->displayName = $displayName;
-    }
-
-    public function setCalcView($calcView)
-    {
-        return $this->calcView = $calcView;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCalcView()
-    {
-        return $this->calcView;
-    }
-
-
-    /**
-     * @return mixed
-     */
-    public function getEntity()
-    {
-        return $this->entity;
-    }
-
     /**
      * @param bool $fileExist
-     * @return AbstractDataTable
+     * @return Error
      */
     public function setFileExist(bool $fileExist)
     {
@@ -99,16 +65,4 @@ abstract class AbstractDataTable
     {
         $this->classExist = $classExist;
     }
-
-
-    /**
-     * @param mixed $entity
-     */
-    public function setEntity($entity): void
-    {
-        $this->entity = $entity;
-    }
-
-
-
 }
