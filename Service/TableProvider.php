@@ -96,15 +96,25 @@ class TableProvider
 
         $this->constructor->hydrateDataTable($json, $this->dataTable);
 
-        $data = $this->queryManager->createDataTableQuery($this->dataTable);
 
-        $this->dataTransformer->addData($this->dataTable, $data);
+        if ($this->dataTable->getError()->isFileExist()){
 
-        $this->columnManager->initColumns($this->dataTable, $data);
+            $data = $this->queryManager->createDataTableQuery($this->dataTable);
 
-        $this->filterManager->initFilters($this->dataTable, $data);
+            if ($this->dataTable->getError()->isClassExist()){
 
-        $this->indexor->addIndex($this->dataTable);
+                $this->dataTransformer->addData($this->dataTable, $data);
+
+                $this->columnManager->initColumns($this->dataTable, $data);
+
+                $this->filterManager->initFilters($this->dataTable, $data);
+
+                $this->indexor->addIndex($this->dataTable);
+
+            }
+
+        }
+
 
         return $this->dataTable;
     }

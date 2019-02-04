@@ -4,11 +4,13 @@ namespace W3com\HulkBundle\Model;
 
 class Error
 {
-    protected $nonexistentProperties;
+    private $nonexistentProperties;
 
-    protected $classExist;
+    private $classExist;
 
-    protected $fileExist;
+    private $fileExist;
+
+    private $viewExist;
 
     /**
      * @param bool $fileExist
@@ -64,5 +66,21 @@ class Error
     public function setClassExist(bool $classExist): void
     {
         $this->classExist = $classExist;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isViewExist(): ?bool
+    {
+        return $this->viewExist;
+    }
+
+    /**
+     * @param bool $viewExist
+     */
+    public function setViewExist(bool $viewExist): void
+    {
+        $this->viewExist = $viewExist;
     }
 }

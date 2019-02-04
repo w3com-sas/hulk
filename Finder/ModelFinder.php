@@ -36,6 +36,11 @@ class ModelFinder
     public function getAvailableProperties(DataTable $dataTable)
     {
         $entity = $this->boom->getGenerator()->getAppInspector()->getProjectEntity($dataTable->getEntity());
+
+        if ($entity === null){
+            $dataTable->getError()->setClassExist(false);
+            return $dataTable;
+        }
         // Return only concerned fields
         return $dataTable->getAvailableFields($entity->getProperties());
     }

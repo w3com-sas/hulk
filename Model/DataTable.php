@@ -166,7 +166,7 @@ class DataTable
     /**
      * @return array
      */
-    public function getGlobalActions(): array
+    public function getGlobalActions(): ?array
     {
         return $this->globalActions;
     }
