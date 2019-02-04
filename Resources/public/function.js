@@ -18,7 +18,7 @@ function formatDataToCsv(rows){
 }
 
 function openForm(obj, id) {
-    sap.openForm(obj, id);
+    sap.sbo.webbridge.openForm(obj, id)
 }
 
 function exportToCsv(filename, rows) {
