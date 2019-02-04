@@ -17,10 +17,9 @@ function formatDataToCsv(rows){
     return formatedData;
 }
 
-function openForm(obj, id){
+function openForm(obj, id) {
     sap.openForm(obj, id);
 }
-
 
 function exportToCsv(filename, rows) {
     var processRow = function (row) {
