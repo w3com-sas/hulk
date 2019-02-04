@@ -1,3 +1,7 @@
+function openForm(obj, id) {
+    sap.sbo.webbridge.openForm(obj, id)
+}
+
 function formatDataToCsv(rows){
 
     var formatedData = [];
@@ -15,10 +19,6 @@ function formatDataToCsv(rows){
     });
 
     return formatedData;
-}
-
-function openForm(obj, id) {
-    sap.sbo.webbridge.openForm(obj, id)
 }
 
 function exportToCsv(filename, rows) {
