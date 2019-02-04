@@ -6,7 +6,6 @@ use W3com\HulkBundle\Column\ColumnManager;
 use W3com\HulkBundle\Filter\FilterManager;
 use W3com\HulkBundle\Finder\JsonFinder;
 use W3com\HulkBundle\Finder\ModelFinder;
-use W3com\HulkBundle\Model\AbstractDataTable;
 use W3com\HulkBundle\Model\DataTable;
 use W3com\HulkBundle\Query\QueryManager;
 use W3com\BoomBundle\Service\BoomManager;

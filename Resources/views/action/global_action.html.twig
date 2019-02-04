@@ -1,1 +1,7 @@
-<button class="btn btn-secondary" id="buttonTest">Hello</button>
+{% for globalAction in table.globalActions %}
+    {% if globalAction.type == 'export-csv' %}
+        <button class="btn btn-primary" id="{{ globalAction.type }}">
+            {{ globalAction.label }}
+        </button>
+    {% endif %}
+{% endfor %}

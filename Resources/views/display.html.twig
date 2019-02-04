@@ -99,19 +99,28 @@
 
                     {% if column.type == 'text' or column.hidden %}
 
-                    {data: "{{ column.fieldName }}"},
+                    {
+                        data: "{{ column.fieldName }}"
+                    },
 
-                    {% else %}
+                    {% elseif column.type == 'action' %}
                     {
                         data: "{{ column.fieldName }}",
 
                         render: function (data, type, row) {
-                            var idTpl = '#'+'{{ column.cellAction.functionName }}{{ column.cellAction.targetEntity }}';
+                            var idTpl = '#' + '{{ column.cellAction.functionName }}{{ column.cellAction.targetEntity }}';
                             var tpl = $(idTpl).html();
                             return tpl.replace('[[data]]', data);
                         }
                     },
+                    {% elseif column.type == 'checkBox' %}
+                    {
+                        data: null,
+                        render: function (data, type, row) {
 
+                            return '<input type="checkBox">';
+                        }
+                    },
                     {% endif %}
 
                     {% endfor %}
@@ -129,7 +138,7 @@
                         "searchable": true
                     },
                     {% endfor %}
-                ],
+                ]
             });
 
             $('.custom-select').on('change', function () {
@@ -149,14 +158,27 @@
                 table.draw();
             });
 
-            $('#dataTable tbody').on( 'click', 'tr', function () {
-                $(this).toggleClass('selected');
-            } );
+            $('#dataTable tbody').on('click', 'tr td input[type=checkBox]', function () {
 
-            $('#buttonTest').click( function () {
-                console.log(table.rows('.selected').data());
-                alert( table.rows('.selected').data().length +' row(s) selected' );
-            } );
+                var row = this.parentNode.parentNode;
+                if ($(row).hasClass('selected')) {
+                    $(row).removeClass('selected');
+                } else {
+                    $(row).addClass('selected');
+                }
+
+            });
+
+
+            {% for globalAction in table.globalActions %}
+            {% if globalAction.type == 'export-csv' %}
+            $('#{{ globalAction.type }}').click(function () {
+                var data = table.rows('.selected').data();
+                var formatedData = formatDataToCsv(data);
+                exportToCsv('unknow.csv', formatedData)
+            });
+            {% endif %}
+            {% endfor %}
         })
     </script>
 {% endblock %}

@@ -11,12 +11,8 @@ class ColumnManager
 
     public function initColumns(DataTable $dataTable, $data)
     {
-
-        $test = 'yo';
-        $$test = 'test';
-
-
         $this->adaptColumnsWithData($dataTable, $data);
+        $this->addCheckboxColumn($dataTable);
         return $dataTable;
     }
 
@@ -40,6 +36,21 @@ class ColumnManager
                 }
             }
         }
+    }
+
+    private function addCheckboxColumn(DataTable $dataTable)
+    {
+        // If global action, need to add column with checkbox for selected table.
+        if (!empty($dataTable->getGlobalActions())){
+            $column = new Column();
+            $column->setType('checkBox');
+            $column->setLabel(null);
+            $column->setActive('Y');
+            $column->setFieldName(null);
+            $dataTable->addColumn($column);
+        }
+        return $dataTable;
+
     }
 
 
