@@ -17,16 +17,20 @@
 </p>
 <div class="row">
     <div class="col">
-        <div class="collapse multi-collapse" id="filters">
-            {% include '@W3comHulk/filter/single_filter.html.twig' %}
-            {% include '@W3comHulk/filter/multiple_filter.html.twig' %}
+        <div class="collapse" id="filters">
+            <div class="mt-3">
+                {% include '@W3comHulk/filter/single_filter.html.twig' %}
+                {% include '@W3comHulk/filter/multiple_filter.html.twig' %}
+            </div>
         </div>
     </div>
 </div>
-<div class="row mt-2">
+<div class="row">
     <div class="col">
-        <div class="collapse multi-collapse" id="globalActions">
-            {% include '@W3comHulk/action/global_action.html.twig' %}
+        <div class="collapse" id="globalActions">
+            <div class="mt-3">
+                {% include '@W3comHulk/action/global_action.html.twig' %}
+            </div>
         </div>
     </div>
 </div>
