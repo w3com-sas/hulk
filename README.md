@@ -25,13 +25,34 @@ Also add the dependency :
 ```json
 {
 "require": {
-        "w3com-sas/HanaUtilsKit": "^1.0"
+        "w3com-sas/gulk": "^1.0"
     }
 }
 ```
 
 #### Configure the bundle
 
+Add the directory of json files in config/package/hulk.yaml
 
-````php
+````yaml
+w3com_hulk:
+  json_display:
+    url_files: '/project/Display/'
+````
+
+Declare routes in config/route.yaml
+ 
+````yaml
+display_table:
+  resource: '@W3comHulkBundle/Resources/config/routing/display_table_view.xml'
+
+create_view:
+  resource: '@W3comHulkBundle/Resources/config/routing/create_view.xml'
+
+update_view:
+  resource: '@W3comHulkBundle/Resources/config/routing/update_view.xml'
+```` 
+
+
+
 
