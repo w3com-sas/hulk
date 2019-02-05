@@ -5,10 +5,11 @@ A) Calculation view
 -------------------
 
 .. code-block:: json
-{
-  "CalculationView" : "ExempleView",
-}
+  {
+  "CalculationView" : "ExempleView"
+  }
 ..
+
 The bundle find all calculation views that they're exposed in "service.xsodata" file.
 
 
@@ -36,7 +37,7 @@ The global actions section must look like the following code :
 }
 ..
 
-Next, we're going to see different #type# who exist.
+Next, we're going to see different ##type who exist.
 
 Excel export
 ~~~~~~~~~~~~
@@ -62,7 +63,7 @@ and the "multiple" type who is not related to the data. It's also an array in th
 The filters section must look like the following code :
 
 .. code-block:: json
-{
+
   "Filters":  [
     {
       "FieldName": "U_W3C_EXEMPLE",
@@ -70,7 +71,7 @@ The filters section must look like the following code :
       "Type": "exemple-type"
     }
   ]
-}
+
 ..
 
 Single type
