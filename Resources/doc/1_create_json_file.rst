@@ -101,7 +101,7 @@ Multiple type
 ~~~~~~~~~~~~~
 
 The multiple type must be related to integer or float field. Actually he can't find an date interval.
-Actually the system can support only one multiple filter. Soon it will be possible to add more multiple
+And the system can support only one multiple filter. Soon it will be possible to add more multiple
 filter.
 
 .. code:: json
