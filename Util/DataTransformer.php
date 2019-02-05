@@ -63,6 +63,7 @@ class DataTransformer
                     // Match with json Required property
                     if ($realProperty == $requiredProperty->getName()) {
 
+                        $value = $this->checkDataFormat($value);
                         $data[$field] = $value;
                     }
                 }
@@ -72,4 +73,15 @@ class DataTransformer
         return $newData;
     }
 
+    public function checkDataFormat($value)
+    {
+        $dateTime = \DateTime::createFromFormat('Y-m-d H:i:s',
+            str_replace('T', ' ', $value));
+
+        if (false === $dateTime){
+            return $value;
+        }
+        $date = $dateTime->format('H:m d/m/Y');
+        return str_replace(':', 'h', $date);
+    }
 }

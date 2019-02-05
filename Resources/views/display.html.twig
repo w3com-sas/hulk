@@ -34,13 +34,21 @@
                 {# data = ligne du tableau #}
                 {% for filter in table.filters if filter.active == 'Y' and filter.type == 'multiple' %}
 
-                var minId = '#min' + '{{ filter.field }}';
-                var maxId = '#max' + '{{ filter.field }}';
+                var minId = '#min' + '{{ filter.field }}',
+                    maxId = '#max' + '{{ filter.field }}';
+
+               // window['{{ filter.field }}'] = minId;
                 // var typeFilter = $(minId).attributes.type;
 
-                var min = parseInt($(minId).val(), 10);
-                var max = parseInt($(maxId).val(), 10);
-                var dataCol = parseFloat(data[{{ filter.index }}]);
+
+
+
+                var min = parseInt($(minId).val(), 10),
+                    max = parseInt($(maxId).val(), 10),
+                    dataCol = parseFloat(data[{{ filter.index }}]);
+
+                {% endfor %}
+
 
                 if ((isNaN(min) && isNaN(max)) ||
                     (isNaN(min) && age <= max) ||
@@ -48,10 +56,9 @@
                     (min <= dataCol && dataCol <= max)) {
                     return true;
                 } else {
-                    return false;
+                    return false
                 }
 
-                {% endfor %}
 
             }
         );
