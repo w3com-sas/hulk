@@ -22,7 +22,6 @@ lot of actions. In the front of the application, these appear when user click on
 
 The global actions section must look like the following code :
 
-
 .. code:: json
     {
         "GlobalActions": [
