@@ -1,4 +1,4 @@
-Step 1: Create the json file
+Create the json file
 =============================
 
 A) Calculation view
@@ -45,14 +45,12 @@ Excel export
 
 .. code:: json
 
+
     {
-        "GlobalActions": [
-            {
-                "Label": "Export excel",
-                "Type": "export-csv"
-            }
-        ],
+        "Label": "Export excel",
+        "Type": "export-csv"
     }
+
 
 
 C) Filters
@@ -72,6 +70,11 @@ The filters section must look like the following code :
                 "FieldName": "U_W3C_EXEMPLE",
                 "Label": "Exemple de nom :",
                 "Type": "exemple-type"
+            },
+            {
+                "FieldName": "U_W3C_EXEMPLE2",
+                "Label": "Exemple de nom 2 :",
+                "Type": "exemple-type-2"
             }
         ]
     }
@@ -86,15 +89,13 @@ will be automatically done.
 
 .. code:: json
 
+
     {
-        "Filters":  [
-            {
-            "FieldName": "U_W3C_FIELD_STATUS",
-            "Label": "Exemple de nom :",
-            "Type": "single"
-            }
-        ]
+        "FieldName": "U_W3C_FIELD_STATUS",
+        "Label": "Exemple de nom :",
+        "Type": "single"
     }
+
 
 
 Multiple type
@@ -107,13 +108,9 @@ filter.
 .. code:: json
 
     {
-        "Filters":  [
-            {
-                "FieldName": "U_W3C_PRICE",
-                "Label": "Interval de prix :",
-                "Type": "multiple"
-            }
-        ]
+        "FieldName": "U_W3C_PRICE",
+        "Label": "Interval de prix :",
+        "Type": "multiple"
     }
 
 
@@ -122,14 +119,6 @@ C) Columns
 
 Columns are defined to see them in the final table of the application. Columns can contain action related to the
 cell or the lines of the table. Actually it exists 3 types of column.
-
-
-Text type
-~~~~~~~~~~
-
-Text is the most simple type of column. Is just the raw data in the view.
-
-It look like this :
 
 .. code:: json
 
@@ -144,7 +133,46 @@ It look like this :
     }
 
 
+Text type
+~~~~~~~~~~
+
+Text is the most simple type of column. Is just the raw data in the view.
+
+It look like this :
+
+.. code:: json
+
+
+    {
+        "Label" : "Nom partenaire : ",
+        "FieldName" : "CardName",
+        "Type" : "text"
+    }
+
+
+
 Action type
 ~~~~~~~~~~~
 
-The action's column is call "CellAction", because it is related to the cell.
+The action's column is call "CellAction", because it is related to the cell. The main of the cell action
+it's to provide a bridge between SAP and the application. They're several function related to the CellAction.
+
+Action type : open form in SAP
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+It's important to know the "FieldName" of the column must be the ID of the "TargetEntity". In this exemple,
+the "CardCode" is the id of the entity "OCRD". The icon will appear on the button related to this action.
+
+.. code:: json
+
+    {
+        "Label" : "Préférence",
+        "FieldName" : "CardCode",
+        "Type" : "action",
+        "CellAction" : {
+            "FunctionName": "openForm",
+            "TargetEntity": "OCRD",
+            "Icon" : "user-alt"
+        }
+    }
+
