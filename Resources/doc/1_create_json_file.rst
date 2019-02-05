@@ -23,6 +23,7 @@ lot of actions. In the front of the application, these appear when user click on
 The global actions section must look like the following code :
 
 .. code:: json
+
     {
         "GlobalActions": [
             {
@@ -43,6 +44,7 @@ Excel export
 ~~~~~~~~~~~~
 
 .. code:: json
+
     {
         "GlobalActions": [
             {
@@ -83,6 +85,7 @@ Nothing, or one of the 3 status. You don't need to add a columns related to the 
 will be automatically done.
 
 .. code:: json
+
     {
         "Filters":  [
             {
@@ -102,6 +105,7 @@ Actually the system can support only one multiple filter. Soon it will be possib
 filter.
 
 .. code:: json
+
     {
         "Filters":  [
             {
@@ -128,6 +132,7 @@ Text is the most simple type of column. Is just the raw data in the view.
 It look like this :
 
 .. code:: json
+
     {
         "Columns":[
             {
