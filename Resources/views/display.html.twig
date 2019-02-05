@@ -20,6 +20,8 @@
 
     {% endif %}
 
+    {% include '@W3comHulk/include/template.html.twig' %}
+
 {% endblock %}
 
 {% block javascripts %}
@@ -118,8 +120,7 @@
                     {
                         data: null,
                         render: function (data, type, row) {
-
-                            return '<input type="checkBox">';
+                            return $('#checkboxTpl').html();
                         }
                     },
                     {% endif %}
@@ -159,9 +160,10 @@
                 table.draw();
             });
 
-            $('#dataTable tbody').on('click', 'tr td input[type=checkBox]', function () {
+            $('#dataTable tbody').on('click', 'tr td label input', function () {
 
-                var row = this.parentNode.parentNode;
+                console.log('yo');
+                var row = this.parentNode.parentNode.parentNode;
                 if ($(row).hasClass('selected')) {
                     $(row).removeClass('selected');
                 } else {
