@@ -26,6 +26,11 @@
 
 {% block javascripts %}
     <script>
+
+        const hulkUrls = {
+            updateEntity : '{{ path('w3com_update_entity') }}'
+        };
+
         $.fn.dataTable.ext.search.push(
             function (settings, data, dataIndex, object, int) {
 
@@ -54,7 +59,7 @@
                 // Si les champs ne sont pas remplis osef
                 if (!isNaN(minVal) && !isNaN(maxVal)){
 
-                    // Si la data n'a pas de date on l'exclu
+                    // Si la data est vide on l'exclu
                     if (!isNaN(dataToCompare)) {
                         // Si la data n'est pas dans l'interval on l'exclu
                         if (dataToCompare < minVal || dataToCompare > maxVal) {
@@ -194,6 +199,15 @@
                 var data = table.rows('.selected').data();
                 var formatedData = formatDataToCsv(data);
                 exportToCsv('unknow.csv', formatedData)
+            });
+            {% elseif globalAction.type == 'update-sap' %}
+            $('#{{ globalAction.type }}').click(function () {
+                var data = table.rows('.selected').data();
+                var targetEntity = $(this).attr('targetEntity');
+                var targetField = $(this).attr('targetField');
+                var entityKey = $(this).attr('entityKey');
+                var targetData = $(this).attr('targetData');
+                updatesSap(data, targetEntity, targetField, entityKey, targetData);
             });
             {% endif %}
             {% endfor %}

@@ -21,6 +21,55 @@ function formatDataToCsv(rows){
     return formatedData;
 }
 
+function formatDataToUpdate(data){
+    var obj = {};
+
+    $.each(data, function (index, value) {
+        obj[String(index)] = value
+    });
+    return obj;
+}
+
+function updatesSap(data, targetEntity, targetField, entityKey, targetData){
+
+    var rows = this.formatDataToUpdate(data);
+    var url = hulkUrls.updateEntity;
+    var postData = {
+        "data" : rows,
+        "targetEntity": targetEntity,
+        "targetField": targetField,
+        "entityKey": entityKey,
+        "targetData": targetData
+    };
+
+   // console.log(postData);
+    $.ajax({
+        method: 'POST',
+        url: url,
+        data: postData,
+        dataType: 'json',
+        success: function (data) {
+            console.log(data);
+        }
+    })
+}
+
+function updateSap(entity, key, targetField, targetValue){
+
+    var data = [entity, key, targetField, targetValue];
+    var url = hulkUrls.updateEntity;
+
+    $.ajax({
+        method: 'POST',
+        url: url,
+        data: data,
+        success: function (data) {
+            console.log(data);
+        }
+    })
+
+}
+
 function exportToCsv(filename, rows) {
     var processRow = function (row) {
 

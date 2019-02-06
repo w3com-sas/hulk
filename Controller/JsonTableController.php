@@ -28,7 +28,6 @@ class JsonTableController extends AbstractController
         if(!$table->getError()->isClassExist() && $table->getError()->isFileExist()){
             return $this->redirectToRoute('w3com_create_view', ['filename' => $filename]);
         }
-
         return $this->render('@W3comHulk/display.html.twig', ['table' => $table, 'filename' => $filename]);
     }
 

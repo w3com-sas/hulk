@@ -3,8 +3,7 @@
 <routes xmlns="http://symfony.com/schema/routing"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
-
-    <route id="w3com_json_table_view" path="/display/{filename}" methods="GET">
-        <default key="_controller">w3com_hulk.controller.json_table_controller::jsonTableView</default>
+    <route id="w3com_update_entity" path="/update-entity" methods="POST">
+        <default key="_controller">w3com_hulk.controller.update_entity_controller::updateEntity</default>
     </route>
 </routes>

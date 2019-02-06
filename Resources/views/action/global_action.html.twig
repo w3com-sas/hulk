@@ -3,5 +3,13 @@
         <button class="btn btn-primary" id="{{ globalAction.type }}">
             {{ globalAction.label }}
         </button>
+    {% elseif globalAction.type == 'update-sap' %}
+        <button class="btn btn-info" id="{{ globalAction.type }}"
+                targetEntity="{{ globalAction.config.entity }}"
+                targetField="{{ globalAction.config.targetField }}"
+                targetData="{{ globalAction.config.targetData }}"
+                entityKey="{{ globalAction.config.entityKey }}">
+            {{ globalAction.label }}
+        </button>
     {% endif %}
 {% endfor %}

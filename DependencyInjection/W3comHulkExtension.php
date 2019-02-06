@@ -28,6 +28,8 @@ class W3comHulkExtension extends Extension
         $loader->load('json_table.xml');
         $loader->load('create_view.xml');
         $loader->load('update_view.xml');
+        $loader->load('update_entity.xml');
+
     }
 
 }
