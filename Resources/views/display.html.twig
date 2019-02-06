@@ -3,6 +3,7 @@
 
     {% if table.error.fileExist %}
 
+        {% dump table %}
         {# Warning message #}
         {% include '@W3comHulk/error/missing_fields.html.twig' %}
 
@@ -29,36 +30,28 @@
         $.fn.dataTable.ext.search.push(
             function (settings, data, dataIndex, object, int) {
 
-
                 {# Trie les data à chaque "draw()" du tableau #}
                 {# data = ligne du tableau #}
                 {% for filter in table.filters if filter.active == 'Y' and filter.type == 'multiple' %}
 
-                var minId = '#min' + '{{ filter.field }}',
-                    maxId = '#max' + '{{ filter.field }}';
+                window['minId{{ filter.field }}'] = '#min' + '{{ filter.field }}';
+                window['maxId{{ filter.field }}'] = '#max' + '{{ filter.field }}';
 
-                window['{{ filter.field }}'] = minId;
-                var typeFilter = $(minId).attributes.type;
+                {% if filter.type == 'multiple' %}
+                var minVal = $(window['minId{{ filter.field }}']).val();
+                var maxVal = $(window['maxId{{ filter.field }}']).val();
+                var dataToCompare = data[{{ filter.index }}];
+                {% elseif filter.type == 'multiple-date' %}
+
+                {% endif %}
 
 
-
-
-                var min = parseInt($(minId).val(), 10),
-                    max = parseInt($(maxId).val(), 10),
-                    dataCol = parseFloat(data[{{ filter.index }}]);
-
+                if ((minVal <= dataToCompare && dataToCompare <= maxVal)) {
+                    return false;
+                }
                 {% endfor %}
 
-
-                if ((isNaN(min) && isNaN(max)) ||
-                    (isNaN(min) && age <= max) ||
-                    (min <= dataCol && isNaN(max)) ||
-                    (min <= dataCol && dataCol <= max)) {
-                    return true;
-                } else {
-                    return false
-                }
-
+                return true;
 
             }
         );

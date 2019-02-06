@@ -162,7 +162,7 @@ Action type : open form in SAP
 
 It's important to know the "FieldName" of the column must be the ID of the "TargetEntity". In this exemple,
 the "CardCode" is the id of the entity "OCRD". The icon will appear on the button related to this action. For
-icons, the library used to run it is _`fontawesome`
+icons, the library used to run it is https://fontawesome.com/
 
 .. code:: json
 
@@ -177,4 +177,4 @@ icons, the library used to run it is _`fontawesome`
         }
     }
 
-.. _`fontawesome`: https://fontawesome.com/
+.. _`fontawesome`:
