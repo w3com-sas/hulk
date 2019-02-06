@@ -25,7 +25,7 @@ Also add the dependency :
 ```json
 {
 "require": {
-        "w3com-sas/gulk": "^1.0"
+        "w3com-sas/hulk": "^1.0"
     }
 }
 ```
