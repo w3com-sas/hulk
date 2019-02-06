@@ -31,7 +31,8 @@
 
                 {# Trie les data à chaque "draw()" du tableau #}
                 {# data = ligne du tableau #}
-                {% for filter in table.filters if filter.active == 'Y' and filter.type == 'multiple' %}
+                {% for filter in table.filters if filter.active == 'Y' and filter.type == 'multiple'
+                 or filter.type == 'multiple-date' %}
 
                 window['minId{{ filter.field }}'] = '#min' + '{{ filter.field }}';
                 window['maxId{{ filter.field }}'] = '#max' + '{{ filter.field }}';
@@ -40,14 +41,31 @@
                 var minVal = parseInt($(window['minId{{ filter.field }}']).val(), 10);
                 var maxVal = parseInt($(window['maxId{{ filter.field }}']).val(), 10);
                 var dataToCompare = parseInt(data[{{ filter.index }}], 10);
+
+
                 {% elseif filter.type == 'multiple-date' %}
+                var minVal = parseInt(new Date($(window['minId{{ filter.field }}']).val()).getTime());
+                var maxVal = parseInt(new Date($(window['maxId{{ filter.field }}']).val()).getTime());
+                var dataToCompare = parseInt(new Date(data[{{ filter.index }}]).getTime());
 
                 {% endif %}
 
 
-                if ((minVal <= dataToCompare && dataToCompare <= maxVal)) {
-                    return false;
+                // Si les champs ne sont pas remplis osef
+                if (!isNaN(minVal) && !isNaN(maxVal)){
+
+                    // Si la data n'a pas de date on l'exclu
+                    if (!isNaN(dataToCompare)) {
+                        // Si la data n'est pas dans l'interval on l'exclu
+                        if (dataToCompare < minVal || dataToCompare > maxVal) {
+                            return false;
+                        }
+                    } else {
+                        return false;
+                    }
+
                 }
+
                 {% endfor %}
 
                 return true;
@@ -161,14 +179,12 @@
 
             $('#dataTable tbody').on('click', 'tr td label input', function () {
 
-                console.log('yo');
                 var row = this.parentNode.parentNode.parentNode;
                 if ($(row).hasClass('selected')) {
                     $(row).removeClass('selected');
                 } else {
                     $(row).addClass('selected');
                 }
-
             });
 
 

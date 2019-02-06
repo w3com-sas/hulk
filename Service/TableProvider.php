@@ -114,8 +114,7 @@ class TableProvider
             }
 
         }
-
-
+        dump($this->dataTable);
         return $this->dataTable;
     }
 }

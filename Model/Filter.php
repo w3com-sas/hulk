@@ -11,6 +11,7 @@ class Filter
 
     const TYPE_SINGLE = 'single';
     const TYPE_MULTIPLE = 'multiple';
+    const TYPE_MULTIPLE_DATE = 'multiple-date';
 
     private $field;
 
@@ -125,6 +126,9 @@ class Filter
                 $this->type = $type;
                 break;
             case $this::TYPE_MULTIPLE;
+                $this->type = $type;
+                break;
+            case $this::TYPE_MULTIPLE_DATE:
                 $this->type = $type;
                 break;
             default:

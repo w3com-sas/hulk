@@ -75,13 +75,13 @@ class DataTransformer
 
     public function checkDataFormat($value)
     {
-        $dateTime = \DateTime::createFromFormat('Y-m-d H:i:s',
+       /* $dateTime = \DateTime::createFromFormat('Y-m-d H:i:s',
             str_replace('T', ' ', $value));
 
         if (false === $dateTime){
             return $value;
         }
-        $date = $dateTime->format('H:m d/m/Y');
-        return str_replace(':', 'h', $date);
+        return $dateTime->format('d/m/Y');*/
+       return $value;
     }
 }
