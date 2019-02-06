@@ -3,7 +3,6 @@
 
     {% if table.error.fileExist %}
 
-        {% dump table %}
         {# Warning message #}
         {% include '@W3comHulk/error/missing_fields.html.twig' %}
 
@@ -38,9 +37,9 @@
                 window['maxId{{ filter.field }}'] = '#max' + '{{ filter.field }}';
 
                 {% if filter.type == 'multiple' %}
-                var minVal = $(window['minId{{ filter.field }}']).val();
-                var maxVal = $(window['maxId{{ filter.field }}']).val();
-                var dataToCompare = data[{{ filter.index }}];
+                var minVal = parseInt($(window['minId{{ filter.field }}']).val(), 10);
+                var maxVal = parseInt($(window['maxId{{ filter.field }}']).val(), 10);
+                var dataToCompare = parseInt(data[{{ filter.index }}], 10);
                 {% elseif filter.type == 'multiple-date' %}
 
                 {% endif %}
