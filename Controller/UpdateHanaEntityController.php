@@ -32,36 +32,38 @@ class UpdateHanaEntityController extends AbstractController
         $data['targetField'] = $this->request->getCurrentRequest()->request->get('targetField');
         $data['entityKey'] = $this->request->getCurrentRequest()->request->get('entityKey');
         $data['targetData'] = $this->request->getCurrentRequest()->request->get('targetData');
-        $this->boomUpdateEntities($data);
+
+        if ($data['rows'] === null){
+            return new JsonResponse(['error' => 'missing data'], 422);
+        } else {
+            foreach ($data['rows'] as $row){
+                foreach ($row as $field => $value){
+                    if ($field === $data['entityKey']){
+                        $entityKey = $value;
+                    }
+                    if (isset($entityKey)){
+                        $obj = $this->boom->getRepository($data['targetEntity'])->find($entityKey);
+                        $obj->set($data['targetField'], $data['targetData']);
+                        $this->boom->getRepository($data['targetEntity'])->update($obj);
+                        break;
+                    }
+                }
+                if (!isset($entityKey)){
+                    return new JsonResponse(['error' => 'Missing mandatory ID key to update'], 400);
+                }
+            }
+        }
+
         return new JsonResponse(['valid' => true], 200);
     }
 
-    /**
-     * @param array $data
-     * @throws \Exception
-     */
-    private function boomUpdateEntities(array $data)
-    {
-        foreach ($data['rows'] as $row){
-            foreach ($row as $field => $value){
-                if ($field === $data['entityKey']){
-                    $entityKey = $value;
-                }
-                if (isset($entityKey)){
-                    $obj = $this->boom->getRepository($data['targetEntity'])->find($entityKey);
-                    $obj->set($data['targetField'], $data['targetData']);
-                    $this->boom->getRepository($data['targetEntity'])->update($obj);
-                    break;
-                }
-            }
-
-        }
-    }
-
-
     private function manageRequest()
     {
-        if (!$this->request->getCurrentRequest()->request->has('data')) {
+        if (!$this->request->getCurrentRequest()->request->has('data') ||
+            !$this->request->getCurrentRequest()->request->get('targetEntity')||
+            !$this->request->getCurrentRequest()->request->get('targetField') ||
+            !$this->request->getCurrentRequest()->request->get('entityKey') ||
+            !$this->request->getCurrentRequest()->request->get('targetData')) {
             return new JsonResponse(['valid' => false], 400);
         }
     }

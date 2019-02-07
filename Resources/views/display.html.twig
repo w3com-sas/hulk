@@ -20,6 +20,8 @@
 
     {% endif %}
 
+    {% include '@W3comHulk/include/modal.html.twig' %}
+
     {% include '@W3comHulk/include/template.html.twig' %}
 
 {% endblock %}
@@ -194,22 +196,25 @@
 
 
             {% for globalAction in table.globalActions %}
-            {% if globalAction.type == 'export-csv' %}
-            $('#{{ globalAction.type }}').click(function () {
-                var data = table.rows('.selected').data();
-                var formatedData = formatDataToCsv(data);
-                exportToCsv('unknow.csv', formatedData)
-            });
-            {% elseif globalAction.type == 'update-sap' %}
-            $('#{{ globalAction.type }}').click(function () {
-                var data = table.rows('.selected').data();
-                var targetEntity = $(this).attr('targetEntity');
-                var targetField = $(this).attr('targetField');
-                var entityKey = $(this).attr('entityKey');
-                var targetData = $(this).attr('targetData');
-                updatesSap(data, targetEntity, targetField, entityKey, targetData);
-            });
-            {% endif %}
+                {% if globalAction.type == 'export-csv' %}
+                    $('#{{ globalAction.type }}').click(function () {
+                        var data = table.rows('.selected').data();
+                        var formatedData = formatDataToCsv(data);
+                        exportToCsv('export.csv', formatedData)
+                    });
+                {% elseif globalAction.type == 'update-sap' %}
+                    $('#{{ globalAction.type }}').click(function () {
+                        var modal = $('#{{ globalAction.type }}{{ globalAction.config.entity }}');
+                        modal.find('.modal-body').html($('#loader').html());
+                        modal.modal('show');
+                        var data = table.rows('.selected').data();
+                        var targetEntity = $(this).attr('targetEntity');
+                        var targetField = $(this).attr('targetField');
+                        var entityKey = $(this).attr('entityKey');
+                        var targetData = $(this).attr('targetData');
+                        updatesSap(data, targetEntity, targetField, entityKey, targetData, modal);
+                    });
+                {% endif %}
             {% endfor %}
         })
     </script>

@@ -2,7 +2,7 @@ function openForm(obj, id) {
     sap.sbo.webbridge.openForm(obj, id)
 }
 
-function formatDataToCsv(rows){
+function formatDataToCsv(rows) {
 
     var formatedData = [];
 
@@ -21,7 +21,7 @@ function formatDataToCsv(rows){
     return formatedData;
 }
 
-function formatDataToUpdate(data){
+function formatDataToUpdate(data) {
     var obj = {};
 
     $.each(data, function (index, value) {
@@ -30,31 +30,49 @@ function formatDataToUpdate(data){
     return obj;
 }
 
-function updatesSap(data, targetEntity, targetField, entityKey, targetData){
+function updatesSap(data, targetEntity, targetField, entityKey, targetData, modal) {
 
     var rows = this.formatDataToUpdate(data);
     var url = hulkUrls.updateEntity;
     var postData = {
-        "data" : rows,
+        "data": rows,
         "targetEntity": targetEntity,
         "targetField": targetField,
         "entityKey": entityKey,
         "targetData": targetData
     };
 
-   // console.log(postData);
     $.ajax({
         method: 'POST',
         url: url,
         data: postData,
         dataType: 'json',
         success: function (data) {
-            console.log(data);
+            modal.find('.modal-body').html('' +
+                '<p class="text-success text-center">' +
+                '<i class="fas fa-thumbs-up mr-2"></i>' +
+                'Mis à jour avec succès</p>' +
+                '');
+        },
+        error: function (xhr) {
+            if (xhr.status === 422) {
+                modal.find('.modal-body').html('' +
+                    '<p class="text-danger text-center">' +
+                    '<i class="fas fa-exclamation-triangle mr-2"></i>' +
+                    'Aucune ligne n\'a été sélectionnée</p>' +
+                    '');
+            } else  {
+                modal.find('.modal-body').html('' +
+                    '<p class="text-danger text-center">' +
+                    '<i class="fas fa-exclamation-triangle mr-2"></i>' +
+                    'Une erreur inconnue est survenue, contactez le support</p>' +
+                    '');
+            }
         }
     })
 }
 
-function updateSap(entity, key, targetField, targetValue){
+function updateSap(entity, key, targetField, targetValue) {
 
     var data = [entity, key, targetField, targetValue];
     var url = hulkUrls.updateEntity;
@@ -82,7 +100,8 @@ function exportToCsv(filename, rows) {
             // Si la donnée est un objet date on la convertie
             if (row[j] instanceof Date) {
                 innerValue = row[j].toLocaleString();
-            };
+            }
+            ;
             // Traitement des retours ligne
             var result = innerValue.replace(/"/g, '""');
             // Caractère interdit
@@ -100,7 +119,7 @@ function exportToCsv(filename, rows) {
         csvFile += processRow(rows[i]);
     }
 
-    var blob = new Blob([csvFile], { type: 'text/csv;charset=utf-8;' });
+    var blob = new Blob([csvFile], {type: 'text/csv;charset=utf-8;'});
     if (navigator.msSaveBlob) { // IE 10+
         navigator.msSaveBlob(blob, filename);
     } else {

@@ -26,6 +26,8 @@ class SingleFilterManager extends AbstractFilterManager
                     $this->addHidenColumn($filter, $dataTable);
                 }
 
+                // Can remove choice
+                $filter->addValue(null);
                 foreach ($boomObjs as $boomObj) {
 
                     foreach ((array)$boomObj as $property => $value) {

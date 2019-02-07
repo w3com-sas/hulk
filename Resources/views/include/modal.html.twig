@@ -1,0 +1,33 @@
+{% for globalAction in table.globalActions if globalAction.type == 'update-sap' %}
+    <div class="modal fade" id="{{ globalAction.type }}{{ globalAction.config.entity }}" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header flex-column">
+                    <h5 class="modal-title">
+                        Mise à jour SAP : {{ globalAction.config.entity }}
+                    </h5>
+                    <div class="alert alert-light mt-3">
+                        <p class="mb-0">
+                            <i class="fa fa-info mr-2"></i>
+                            Pour que le tableau soit à jour, vous devez actualiser la page
+                            après le traitement.
+                        </p>
+                    </div>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer w-100 justify-content-between">
+                    <button type="button" class="btn btn-secondary float-left" data-dismiss="modal">
+                        <i class="fas fa-times mr-2"></i>
+                        Fermer
+                    </button>
+                    <button type="button" class="btn btn-success" onclick="window.location.reload()">
+                        <i class="fas fa-sync-alt mr-2"></i>
+                        Actualiser
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
