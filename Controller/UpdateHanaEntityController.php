@@ -5,6 +5,7 @@ namespace W3com\HulkBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
+use W3com\BoomBundle\Exception\EntityNotFoundException;
 use W3com\BoomBundle\Service\BoomManager;
 
 class UpdateHanaEntityController extends AbstractController
@@ -42,7 +43,14 @@ class UpdateHanaEntityController extends AbstractController
                         $entityKey = $value;
                     }
                     if (isset($entityKey)){
-                        $obj = $this->boom->getRepository($data['targetEntity'])->find($entityKey);
+
+                        try {
+                            $obj = $this->boom->getRepository($data['targetEntity'])->find($entityKey);
+                        } catch (EntityNotFoundException $exception){
+                            return new JsonResponse(['error' => 'Unexistent entity '.$data['targetEntity']],
+                                400);
+                        }
+
                         $obj->set($data['targetField'], $data['targetData']);
                         $this->boom->getRepository($data['targetEntity'])->update($obj);
                         break;
@@ -53,7 +61,6 @@ class UpdateHanaEntityController extends AbstractController
                 }
             }
         }
-
         return new JsonResponse(['valid' => true], 200);
     }
 

@@ -1,4 +1,4 @@
-<div class="input-group mb-3">
+<div class="input-group mb-3 single-filter">
     {% for filter in table.filters if filter.active == 'Y' and filter.type == 'single' %}
         <div class="input-group-prepend">
             <label class="input-group-text" for="select{{ filter.field }}">{{ filter.label }}

@@ -3,11 +3,21 @@
         <button class="btn btn-primary" id="{{ globalAction.type }}">
             {{ globalAction.label }}
         </button>
-    {% elseif globalAction.type == 'update-sap' %}
-        <button class="btn btn-info" id="{{ globalAction.type }}"
+    {% elseif globalAction.type == 'update-sap' and globalAction.config.targetDataType == 'static' or
+        globalAction.config.targetDataType == 'text' %}
+        <button class="btn btn-info"
+                id="{{ globalAction.type }}{{ globalAction.config.targetDataType }}{{ globalAction.config.entity }}"
                 targetEntity="{{ globalAction.config.entity }}"
                 targetField="{{ globalAction.config.targetField }}"
                 targetData="{{ globalAction.config.targetData }}"
+                entityKey="{{ globalAction.config.entityKey }}">
+            {{ globalAction.label }}
+        </button>
+    {% elseif globalAction.config.targetDataType == 'array' %}
+        <button class="btn btn-info"
+                id="{{ globalAction.type }}{{ globalAction.config.targetDataType }}{{ globalAction.config.entity }}"
+                targetEntity="{{ globalAction.config.entity }}"
+                targetField="{{ globalAction.config.targetField }}"
                 entityKey="{{ globalAction.config.entityKey }}">
             {{ globalAction.label }}
         </button>

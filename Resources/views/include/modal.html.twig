@@ -1,9 +1,11 @@
 {% for globalAction in table.globalActions if globalAction.type == 'update-sap' %}
-    <div class="modal fade" id="{{ globalAction.type }}{{ globalAction.config.entity }}" tabindex="-1" role="dialog">
+    <div class="modal fade"
+         id="{{ globalAction.type }}{{ globalAction.config.entity }}{{ globalAction.config.targetDataType }}"
+         tabindex="-1" role="dialog">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header flex-column">
-                    <h5 class="modal-title">
+                    <h5 class="modal-title text-center">
                         Mise à jour SAP : {{ globalAction.config.entity }}
                     </h5>
                     <div class="alert alert-light mt-3">
@@ -15,17 +17,53 @@
                     </div>
                 </div>
                 <div class="modal-body">
-
+                    {% if globalAction.config.targetDataType == 'text' %}
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                {{ globalAction.config.targetField }} :
+                            </span>
+                            </div>
+                            <input type="text" class="form-control"
+                                   id="input{{ globalAction.type }}{{ globalAction.config.targetField }}{{ globalAction.config.targetDataType }}">
+                        </div>
+                    {% elseif globalAction.config.targetDataType == 'array' %}
+                        <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <label class="input-group-text">
+                                        {{ globalAction.config.targetField }}
+                                        : </label>
+                                </div>
+                                <select class="custom-select"
+                                        id="input{{ globalAction.type }}{{ globalAction.config.targetField }}{{ globalAction.config.targetDataType }}">
+                                    {% for key, value in globalAction.config.targetData %}
+                                    <option value="{{ key }}">{{ value }}</option>
+                                    {% endfor %}
+                                </select>
+                        </div>
+                    {% endif %}
                 </div>
                 <div class="modal-footer w-100 justify-content-between">
                     <button type="button" class="btn btn-secondary float-left" data-dismiss="modal">
                         <i class="fas fa-times mr-2"></i>
                         Fermer
                     </button>
-                    <button type="button" class="btn btn-success" onclick="window.location.reload()">
-                        <i class="fas fa-sync-alt mr-2"></i>
-                        Actualiser
-                    </button>
+                    {% if globalAction.config.targetDatatype == 'static' %}
+                        <button type="button" class="btn btn-success" onclick="window.location.reload()">
+                            <i class="far fa-paper-plane mr-2"></i>
+                            Valider
+                        </button>
+                    {% elseif globalAction.config.targetDatatype == 'text'
+                        or globalAction.config.targetDatatype == 'array'  %}
+                        <button type="button" class="btn btn-success"
+                                id="form{{ globalAction.config.entity }}{{ globalAction.config.targetField }}{{ globalAction.config.entityKey }}{{ globalAction.config.targetDataType }}"
+                                targetEntity="{{ globalAction.config.entity }}"
+                                targetField="{{ globalAction.config.targetField }}"
+                                entityKey="{{ globalAction.config.entityKey }}">
+                            <i class="far fa-paper-plane mr-2"></i>
+                            Valider
+                        </button>
+                    {% endif %}
                 </div>
             </div>
         </div>

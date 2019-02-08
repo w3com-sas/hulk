@@ -1,4 +1,4 @@
-<table class="table bg-white" id="dataTable" style="max-height: 500px;">
+<table class="table bg-white" id="dataTable">
     <thead>
     <tr role="row">
         {% for column in table.columns if column.active == 'Y' and column.hidden is null %}
@@ -7,5 +7,6 @@
     </tr>
     </thead>
     <tbody>
+
     </tbody>
 </table>

@@ -30,7 +30,7 @@
     <script>
 
         const hulkUrls = {
-            updateEntity : '{{ path('w3com_update_entity') }}'
+            updateEntity: '{{ path('w3com_update_entity') }}'
         };
 
         $.fn.dataTable.ext.search.push(
@@ -39,7 +39,7 @@
                 {# Trie les data à chaque "draw()" du tableau #}
                 {# data = ligne du tableau #}
                 {% for filter in table.filters if filter.active == 'Y' and filter.type == 'multiple'
-                 or filter.type == 'multiple-date' %}
+                    or filter.type == 'multiple-date' %}
 
                 window['minId{{ filter.field }}'] = '#min' + '{{ filter.field }}';
                 window['maxId{{ filter.field }}'] = '#max' + '{{ filter.field }}';
@@ -59,7 +59,7 @@
 
 
                 // Si les champs ne sont pas remplis osef
-                if (!isNaN(minVal) && !isNaN(maxVal)){
+                if (!isNaN(minVal) && !isNaN(maxVal)) {
 
                     // Si la data est vide on l'exclu
                     if (!isNaN(dataToCompare)) {
@@ -167,8 +167,10 @@
                 ]
             });
 
-            $('.custom-select').on('change', function () {
+            $('.single-filter .custom-select').on('change', function () {
                 console.log(this.value);
+                console.log($(this).attr('colIndex'));
+
                 table
                     .column($(this).attr('colIndex'))
                     .search(this.value)
@@ -196,25 +198,50 @@
 
 
             {% for globalAction in table.globalActions %}
-                {% if globalAction.type == 'export-csv' %}
-                    $('#{{ globalAction.type }}').click(function () {
-                        var data = table.rows('.selected').data();
-                        var formatedData = formatDataToCsv(data);
-                        exportToCsv('export.csv', formatedData)
-                    });
-                {% elseif globalAction.type == 'update-sap' %}
-                    $('#{{ globalAction.type }}').click(function () {
-                        var modal = $('#{{ globalAction.type }}{{ globalAction.config.entity }}');
-                        modal.find('.modal-body').html($('#loader').html());
-                        modal.modal('show');
-                        var data = table.rows('.selected').data();
-                        var targetEntity = $(this).attr('targetEntity');
-                        var targetField = $(this).attr('targetField');
-                        var entityKey = $(this).attr('entityKey');
-                        var targetData = $(this).attr('targetData');
-                        updatesSap(data, targetEntity, targetField, entityKey, targetData, modal);
-                    });
+
+            {% if globalAction.type == 'export-csv' %}
+
+            $('#{{ globalAction.type }}').click(function () {
+                var data = table.rows('.selected').data();
+                var formatedData = formatDataToCsv(data);
+                exportToCsv('export.csv', formatedData)
+            });
+
+            {% elseif globalAction.type == 'update-sap' %}
+            $('#{{ globalAction.type }}{{ globalAction.config.targetDataType }}{{ globalAction.config.entity }}').click(function () {
+
+                var modal =
+                    $('#{{ globalAction.type }}{{ globalAction.config.entity }}{{ globalAction.config.targetDataType }}');
+                modal.modal('show');
+
+                {# Global action static desn't need form, so we sent data directly #}
+                {% if globalAction.config.targetDataType == 'static' %}
+                modal.find('.modal-body').html($('#loader').html());
+                var data = table.rows('.selected').data();
+                var targetEntity = $(this).attr('targetEntity');
+                var targetField = $(this).attr('targetField');
+                var entityKey = $(this).attr('entityKey');
+                var targetData = $(this).attr('targetData');
+                updateSap(data, targetEntity, targetField, entityKey, targetData, modal, 'static');
                 {% endif %}
+            });
+            {% if globalAction.config.targetDataType == 'text'
+            or globalAction.config.targetDataType == 'array' %}
+
+            $('#form{{ globalAction.config.entity }}{{ globalAction.config.targetField }}{{ globalAction.config.entityKey }}{{ globalAction.config.targetDataType }}').click(function (other) {
+                var modal =
+                    $('#{{ globalAction.type }}{{ globalAction.config.entity }}{{ globalAction.config.targetDataType }}');
+
+                var data = table.rows('.selected').data();
+                var targetEntity = $(this).attr('targetEntity');
+                var targetField = $(this).attr('targetField');
+                var entityKey = $(this).attr('entityKey');
+                var targetData = $('#input{{ globalAction.type }}{{ globalAction.config.targetField }}{{ globalAction.config.targetDataType }}').val();
+                updateSap(data, targetEntity, targetField, entityKey, targetData, modal, 'text');
+            });
+
+            {% endif %}
+            {% endif %}
             {% endfor %}
         })
     </script>

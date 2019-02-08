@@ -21,6 +21,7 @@ function formatDataToCsv(rows) {
     return formatedData;
 }
 
+
 function formatDataToUpdate(data) {
     var obj = {};
 
@@ -30,7 +31,7 @@ function formatDataToUpdate(data) {
     return obj;
 }
 
-function updatesSap(data, targetEntity, targetField, entityKey, targetData, modal) {
+function updateSap(data, targetEntity, targetField, entityKey, targetData, modal, type) {
 
     var rows = this.formatDataToUpdate(data);
     var url = hulkUrls.updateEntity;
@@ -47,45 +48,50 @@ function updatesSap(data, targetEntity, targetField, entityKey, targetData, moda
         url: url,
         data: postData,
         dataType: 'json',
-        success: function (data) {
-            modal.find('.modal-body').html('' +
-                '<p class="text-success text-center">' +
+        success: function () {
+
+            var tpl = '<p class="text-success text-center">' +
                 '<i class="fas fa-thumbs-up mr-2"></i>' +
-                'Mis à jour avec succès</p>' +
-                '');
+                'Mis à jour avec succès</p>';
+
+            if (type === 'static'){
+                modal.find('.modal-body').html(tpl);
+            } else if (type === 'text'){
+
+                if (modal.find('.modal-body').has('p').length >= 1){
+                    modal.find('.modal-body').find('p').remove();
+                }
+                modal.find('.modal-body').append(tpl);
+            }
+
         },
         error: function (xhr) {
+
             if (xhr.status === 422) {
-                modal.find('.modal-body').html('' +
-                    '<p class="text-danger text-center">' +
-                    '<i class="fas fa-exclamation-triangle mr-2"></i>' +
-                    'Aucune ligne n\'a été sélectionnée</p>' +
-                    '');
-            } else  {
-                modal.find('.modal-body').html('' +
-                    '<p class="text-danger text-center">' +
-                    '<i class="fas fa-exclamation-triangle mr-2"></i>' +
-                    'Une erreur inconnue est survenue, contactez le support</p>' +
-                    '');
+                var message = 'Aucune ligne n\'a été sélectionnée';
+            } else {
+                var message = 'Une erreur inconnue est survenue, contactez le support';
             }
+
+            var tpl = '' +
+                '<p class="text-danger text-center">' +
+                '<i class="fas fa-exclamation-triangle mr-2"></i>' +
+                message+'</p>';
+
+            if (type === 'static'){
+
+                modal.find('.modal-body').html(tpl);
+
+            } else if (type === 'text'){
+
+                if (modal.find('.modal-body').has('p').length >= 1){
+                    modal.find('.modal-body').find('p').remove();
+                }
+                modal.find('.modal-body').append(tpl);
+            }
+
         }
     })
-}
-
-function updateSap(entity, key, targetField, targetValue) {
-
-    var data = [entity, key, targetField, targetValue];
-    var url = hulkUrls.updateEntity;
-
-    $.ajax({
-        method: 'POST',
-        url: url,
-        data: data,
-        success: function (data) {
-            console.log(data);
-        }
-    })
-
 }
 
 function exportToCsv(filename, rows) {
@@ -101,7 +107,7 @@ function exportToCsv(filename, rows) {
             if (row[j] instanceof Date) {
                 innerValue = row[j].toLocaleString();
             }
-            ;
+
             // Traitement des retours ligne
             var result = innerValue.replace(/"/g, '""');
             // Caractère interdit

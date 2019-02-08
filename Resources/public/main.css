@@ -31,6 +31,10 @@ tr .even .selected:hover {
     background-color: #60B9FF;
 }
 
+thead tr {
+    background: #ECF0F1;
+}
+
 /* Styling Checkbox Starts */
 .checkbox-label {
     display: block;
@@ -65,7 +69,6 @@ tr .even .selected:hover {
     -o-transition: all 0.3s ease-out;
     border: 2px solid #C9C9C9;
 }
-
 
 .checkbox-label input:checked ~ .checkbox-custom {
     background-color: #6D8082;
