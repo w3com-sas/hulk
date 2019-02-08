@@ -21,6 +21,11 @@ function formatDataToCsv(rows) {
     return formatedData;
 }
 
+function disableSubmitButton(obj){
+    $(obj).attr('disabled', true);
+    $(obj).html('<i class="fas fa-spinner fa-spin"></i>');
+}
+
 
 function formatDataToUpdate(data) {
     var obj = {};
@@ -31,7 +36,7 @@ function formatDataToUpdate(data) {
     return obj;
 }
 
-function updateSap(data, targetEntity, targetField, entityKey, targetData, modal, type) {
+function updateSap(data, targetEntity, targetField, entityKey, targetData, modal) {
 
     var rows = this.formatDataToUpdate(data);
     var url = hulkUrls.updateEntity;
@@ -42,6 +47,7 @@ function updateSap(data, targetEntity, targetField, entityKey, targetData, modal
         "entityKey": entityKey,
         "targetData": targetData
     };
+
 
     $.ajax({
         method: 'POST',
@@ -54,15 +60,14 @@ function updateSap(data, targetEntity, targetField, entityKey, targetData, modal
                 '<i class="fas fa-thumbs-up mr-2"></i>' +
                 'Mis à jour avec succès</p>';
 
-            if (type === 'static'){
-                modal.find('.modal-body').html(tpl);
-            } else if (type === 'text'){
-
-                if (modal.find('.modal-body').has('p').length >= 1){
-                    modal.find('.modal-body').find('p').remove();
-                }
-                modal.find('.modal-body').append(tpl);
+            if (modal.find('.modal-body').has('p').length >= 1) {
+                modal.find('.modal-body').find('p').remove();
             }
+            modal.find('.modal-body').append(tpl);
+            modal.find('.btn-success')
+                .html('<i class="far fa-paper-plane mr-2"></i>Valider').removeAttr('disabled');
+            setTimeout(window.location.reload(), 1500)
+
 
         },
         error: function (xhr) {
@@ -76,20 +81,14 @@ function updateSap(data, targetEntity, targetField, entityKey, targetData, modal
             var tpl = '' +
                 '<p class="text-danger text-center">' +
                 '<i class="fas fa-exclamation-triangle mr-2"></i>' +
-                message+'</p>';
+                message + '</p>';
 
-            if (type === 'static'){
 
-                modal.find('.modal-body').html(tpl);
-
-            } else if (type === 'text'){
-
-                if (modal.find('.modal-body').has('p').length >= 1){
-                    modal.find('.modal-body').find('p').remove();
-                }
-                modal.find('.modal-body').append(tpl);
+            if (modal.find('.modal-body').has('p').length >= 1) {
+                modal.find('.modal-body').find('p').remove();
             }
-
+            modal.find('.modal-body').append(tpl);
+            modal.find('.btn-success').html('<i class="far fa-paper-plane mr-2"></i>Valider').removeAttr('disabled');;
         }
     })
 }

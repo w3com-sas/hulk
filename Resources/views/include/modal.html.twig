@@ -29,17 +29,17 @@
                         </div>
                     {% elseif globalAction.config.targetDataType == 'array' %}
                         <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <label class="input-group-text">
-                                        {{ globalAction.config.targetField }}
-                                        : </label>
-                                </div>
-                                <select class="custom-select"
-                                        id="input{{ globalAction.type }}{{ globalAction.config.targetField }}{{ globalAction.config.targetDataType }}">
-                                    {% for key, value in globalAction.config.targetData %}
+                            <div class="input-group-prepend">
+                                <label class="input-group-text">
+                                    {{ globalAction.config.targetField }}
+                                    : </label>
+                            </div>
+                            <select class="custom-select"
+                                    id="input{{ globalAction.type }}{{ globalAction.config.targetField }}{{ globalAction.config.targetDataType }}">
+                                {% for key, value in globalAction.config.targetData %}
                                     <option value="{{ key }}">{{ value }}</option>
-                                    {% endfor %}
-                                </select>
+                                {% endfor %}
+                            </select>
                         </div>
                     {% endif %}
                 </div>
@@ -48,22 +48,17 @@
                         <i class="fas fa-times mr-2"></i>
                         Fermer
                     </button>
-                    {% if globalAction.config.targetDatatype == 'static' %}
-                        <button type="button" class="btn btn-success" onclick="window.location.reload()">
-                            <i class="far fa-paper-plane mr-2"></i>
-                            Valider
-                        </button>
-                    {% elseif globalAction.config.targetDatatype == 'text'
-                        or globalAction.config.targetDatatype == 'array'  %}
-                        <button type="button" class="btn btn-success"
-                                id="form{{ globalAction.config.entity }}{{ globalAction.config.targetField }}{{ globalAction.config.entityKey }}{{ globalAction.config.targetDataType }}"
-                                targetEntity="{{ globalAction.config.entity }}"
-                                targetField="{{ globalAction.config.targetField }}"
-                                entityKey="{{ globalAction.config.entityKey }}">
-                            <i class="far fa-paper-plane mr-2"></i>
-                            Valider
-                        </button>
-                    {% endif %}
+                    <button type="button" class="btn btn-success" onclick="disableSubmitButton(this)"
+                            id="form{{ globalAction.config.entity }}{{ globalAction.config.targetField }}{{ globalAction.config.entityKey }}{{ globalAction.config.targetDataType }}"
+                            targetEntity="{{ globalAction.config.entity }}"
+                            targetField="{{ globalAction.config.targetField }}"
+                            entityKey="{{ globalAction.config.entityKey }}"
+                            {% if globalAction.config.targetDataType == 'static' %}
+                                targetData="{{ globalAction.config.targetData }}"
+                            {% endif %}>
+                        <i class="far fa-paper-plane mr-2"></i>
+                        Valider
+                    </button>
                 </div>
             </div>
         </div>

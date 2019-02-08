@@ -214,19 +214,14 @@
                     $('#{{ globalAction.type }}{{ globalAction.config.entity }}{{ globalAction.config.targetDataType }}');
                 modal.modal('show');
 
-                {# Global action static desn't need form, so we sent data directly #}
                 {% if globalAction.config.targetDataType == 'static' %}
-                modal.find('.modal-body').html($('#loader').html());
-                var data = table.rows('.selected').data();
-                var targetEntity = $(this).attr('targetEntity');
-                var targetField = $(this).attr('targetField');
-                var entityKey = $(this).attr('entityKey');
-                var targetData = $(this).attr('targetData');
-                updateSap(data, targetEntity, targetField, entityKey, targetData, modal, 'static');
+                var rows = table.rows('.selected').data();
+                modal.find('.modal-body').html(
+                    '<p class="text-gray text-center"><i class="fas fa-info-circle mr-2"></i>' + rows.length + ' ligne(s) sélectionnée(s)</p>');
                 {% endif %}
+
             });
-            {% if globalAction.config.targetDataType == 'text'
-            or globalAction.config.targetDataType == 'array' %}
+
 
             $('#form{{ globalAction.config.entity }}{{ globalAction.config.targetField }}{{ globalAction.config.entityKey }}{{ globalAction.config.targetDataType }}').click(function (other) {
                 var modal =
@@ -236,11 +231,15 @@
                 var targetEntity = $(this).attr('targetEntity');
                 var targetField = $(this).attr('targetField');
                 var entityKey = $(this).attr('entityKey');
-                var targetData = $('#input{{ globalAction.type }}{{ globalAction.config.targetField }}{{ globalAction.config.targetDataType }}').val();
-                updateSap(data, targetEntity, targetField, entityKey, targetData, modal, 'text');
-            });
 
-            {% endif %}
+                {% if globalAction.config.targetDataType == 'static' %}
+                var targetData = $(this).attr('targetData');
+                updateSap(data, targetEntity, targetField, entityKey, targetData, modal, true);
+                {% else %}
+                var targetData = $('#input{{ globalAction.type }}{{ globalAction.config.targetField }}{{ globalAction.config.targetDataType }}').val();
+                updateSap(data, targetEntity, targetField, entityKey, targetData, modal);
+                {% endif %}
+            });
             {% endif %}
             {% endfor %}
         })
