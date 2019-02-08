@@ -38,7 +38,7 @@ The global actions section must look like the following code :
     }
 
 
-Next, we're going to see different ##type who exist.
+Different type who exist :
 
 Excel export
 ~~~~~~~~~~~~
@@ -51,6 +51,73 @@ Excel export
         "Type": "export-csv"
     }
 
+Update SAP
+~~~~~~~~~~
+
+The aim of this function is to update many data in SAP in one time. It's possible to manage the type of the target data.
+For exemple, some lines need to pass under the "ARCHIVE" status, so you can create a global action who the targetData
+is "ARCHIVE". So we give a type for the target data. You can see code below.
+
+.. code:: json
+
+
+    {
+        "Label": "Static",
+        "Type": "update-sap",
+        "Config" : {
+            "Entity": "BusinessPartner",
+            "EntityColumnKey": "CardCode",
+            "TargetField": "CardName",
+            "TargetDataType": "static",
+            "TargetData": "NewCardName"
+        }
+    }
+
+
+The others fields help the app to find concerned entities and update them. We just saw the STATIC type,
+now we will see the TEXT type.
+The TEXT type allow the user of the web-app to type what he want. It generate an basic input text. So
+it doesn't need a targetData because the user chose it. See the code below
+
+.. code:: json
+
+
+    {
+        "Label": "Static",
+        "Type": "update-sap",
+        "Config" : {
+            "Entity": "BusinessPartner",
+            "EntityColumnKey": "CardCode",
+            "TargetField": "CardName",
+            "TargetDataType": "text",
+        }
+    }
+
+
+The last type of targetDataType is the array. The array provide list of choice and the web-app user
+can choice one of them. We need you to provid a list of choices, give us an array with list of choices
+key-value.
+
+.. code:: json
+
+
+    {
+        "Label": "Array",
+        "Type": "update-sap",
+        "Config" : {
+        "Entity": "BusinessPartner",
+            "EntityColumnKey": "CardCode",
+            "TargetField": "CardName",
+            "TargetDataType": "array",
+            "TargetData": {
+                "forSale" : "À vendre",
+                "sold" : "Vendu"
+            }
+        }
+    }
+
+
+In this exemple, the web-app user see in the screen "À vendre" and the data that will be sent is "forSale".
 
 
 C) Filters
@@ -111,6 +178,20 @@ filter.
         "FieldName": "U_W3C_PRICE",
         "Label": "Interval de prix :",
         "Type": "multiple"
+    }
+
+
+Multiple type date
+~~~~~~~~~~~~~~~~~~
+
+If we need to provid date interval filter
+
+.. code:: json
+
+    {
+        "FieldName": "U_W3C_DATE",
+        "Label": "Interval des dates :",
+        "Type": "multiple-data"
     }
 
 
