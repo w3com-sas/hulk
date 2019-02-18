@@ -51,6 +51,9 @@ create_view:
 
 update_view:
   resource: '@W3comHulkBundle/Resources/config/routing/update_view.xml'
+  
+update_entity:
+  resource: '@W3comHulkBundle/Resources/config/routing/update_entity.xml'
 ```` 
 
 [Next step, create the json file](Resources/doc/1_create_json_file.rst)
