@@ -1,7 +1,7 @@
 # W3COM  : Hulk - Hana Utils Kit 
 
-This bundle provides ways to generate advanced DataTables from Json file. Json give or
-Compatible with Symfony 3.3.\*, 4.0.\* and 4.1.\*.
+This bundle provides ways to generate DataTables from Json file,
+with function for several or single data and with filters signle or multiple.
 
 ## Installation
 
@@ -52,6 +52,10 @@ create_view:
 update_view:
   resource: '@W3comHulkBundle/Resources/config/routing/update_view.xml'
 ```` 
+
+#### Json file
+
+[Contribution guidelines for this project](Resources/doc/1_create_json_file.rst)
 
 
 
