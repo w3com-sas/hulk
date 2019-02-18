@@ -3,11 +3,11 @@ body {
 }
 
 .selected {
-    background: #cedcd7;
+    background: #c1cfd0;
 }
 
-tr .even .selected:hover {
-    background: #acbab5;
+.selected td {
+    border-bottom: 1px solid #2C3E50;
 }
 
 .text-gray {
@@ -58,26 +58,6 @@ table thead tr th {
     -webkit-box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.75);
     -moz-box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.75);
     box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.75);
-}
-
-.dropdown-menu {
-    position: absolute;
-    top: 15%;
-    left: 5%;
-    z-index: 1000;
-    display: none;
-    float: left;
-    min-width: 10rem;
-    padding: 0.5rem 0;
-    margin: 0.125rem 0 0;
-    font-size: 0.9375rem;
-    color: #212529;
-    text-align: left;
-    list-style: none;
-    background-color: #fff;
-    background-clip: padding-box;
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    border-radius: 0.25rem;
 }
 
 table th:nth-child(1) {
