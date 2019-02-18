@@ -21,6 +21,12 @@ function formatDataToCsv(rows) {
     return formatedData;
 }
 
+function countSelectedRows(rows) {
+    var node = document.getElementById('countSelectedRows');
+    node.innerText = rows.length + ' ligne(s) sélectionnée(s)';
+    node.style.display = 'block';
+}
+
 function disableSubmitButton(obj){
     $(obj).attr('disabled', true);
     $(obj).html('<i class="fas fa-spinner fa-spin"></i>');

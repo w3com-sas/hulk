@@ -41,18 +41,18 @@
                 {% for filter in table.filters if filter.active == 'Y' and filter.type == 'multiple'
                     or filter.type == 'multiple-date' %}
 
-                window['minId{{ filter.field }}'] = '#min' + '{{ filter.field }}';
-                window['maxId{{ filter.field }}'] = '#max' + '{{ filter.field }}';
+                window['minId{{ filter.fieldName }}'] = '#min' + '{{ filter.fieldName }}';
+                window['maxId{{ filter.fieldName }}'] = '#max' + '{{ filter.fieldName }}';
 
                 {% if filter.type == 'multiple' %}
-                var minVal = parseInt($(window['minId{{ filter.field }}']).val(), 10);
-                var maxVal = parseInt($(window['maxId{{ filter.field }}']).val(), 10);
+                var minVal = parseInt($(window['minId{{ filter.fieldName }}']).val(), 10);
+                var maxVal = parseInt($(window['maxId{{ filter.fieldName }}']).val(), 10);
                 var dataToCompare = parseInt(data[{{ filter.index }}], 10);
 
 
                 {% elseif filter.type == 'multiple-date' %}
-                var minVal = parseInt(new Date($(window['minId{{ filter.field }}']).val()).getTime());
-                var maxVal = parseInt(new Date($(window['maxId{{ filter.field }}']).val()).getTime());
+                var minVal = parseInt(new Date($(window['minId{{ filter.fieldName }}']).val()).getTime());
+                var maxVal = parseInt(new Date($(window['maxId{{ filter.fieldName }}']).val()).getTime());
                 var dataToCompare = parseInt(new Date(data[{{ filter.index }}]).getTime());
 
                 {% endif %}
@@ -194,6 +194,8 @@
                 } else {
                     $(row).addClass('selected');
                 }
+                var rows = table.rows('.selected').data();
+                countSelectedRows(rows);
             });
 
 

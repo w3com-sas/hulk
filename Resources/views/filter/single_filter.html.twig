@@ -1,10 +1,10 @@
 <div class="input-group mb-3 single-filter">
     {% for filter in table.filters if filter.active == 'Y' and filter.type == 'single' %}
         <div class="input-group-prepend">
-            <label class="input-group-text" for="select{{ filter.field }}">{{ filter.label }}
+            <label class="input-group-text" for="select{{ filter.fieldName }}">{{ filter.label }}
                 : </label>
         </div>
-        <select class="custom-select" id="select{{ filter.field }}" colIndex="{{ filter.index }}">
+        <select class="custom-select" id="select{{ filter.fieldName }}" colIndex="{{ filter.index }}">
             {% for value in filter.values %}
                 <option value="{{ value }}">{{ value }}</option>
             {% endfor %}

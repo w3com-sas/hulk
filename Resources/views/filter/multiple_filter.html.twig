@@ -4,14 +4,14 @@
             <div class="input-group-prepend">
                 <span class="input-group-text">{{ filter.label }}</span>
             </div>
-            <input type="text" class="form-control multiple-filter" id="min{{ filter.field }}">
-            <input type="text" class="form-control multiple-filter" id="max{{ filter.field }}">
+            <input type="text" class="form-control multiple-filter" id="min{{ filter.fieldName }}">
+            <input type="text" class="form-control multiple-filter" id="max{{ filter.fieldName }}">
         {% elseif filter.type == 'multiple-date' %}
             <div class="input-group-prepend">
                 <span class="input-group-text">{{ filter.label }}</span>
             </div>
-            <input type="date" class="form-control multiple-filter" id="min{{ filter.field }}">
-            <input type="date" class="form-control multiple-filter" id="max{{ filter.field }}">
+            <input type="date" class="form-control multiple-filter" id="min{{ filter.fieldName }}">
+            <input type="date" class="form-control multiple-filter" id="max{{ filter.fieldName }}">
         {% endif %}
     {% endfor %}
 </div>
