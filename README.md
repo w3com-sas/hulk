@@ -53,9 +53,7 @@ update_view:
   resource: '@W3comHulkBundle/Resources/config/routing/update_view.xml'
 ```` 
 
-#### Json file
-
-[Contribution guidelines for this project](Resources/doc/1_create_json_file.rst)
+[Next step, create the json file](Resources/doc/1_create_json_file.rst)
 
 
 
