@@ -31,6 +31,8 @@ class SingleFilterManager extends AbstractFilterManager
                 foreach ($boomObjs as $boomObj) {
 
                     foreach ((array)$boomObj as $property => $value) {
+
+                        // Need to substring because the cast add characters (proteted property)
                         $realProperty = substr($property, 3);
 
                         if ($realProperty == strtolower($filter->getField())) {

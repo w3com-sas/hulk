@@ -1,6 +1,6 @@
 {# Global search bar #}
 {% include '@W3comHulk/filter/search_bar.html.twig' %}
-<p class="m-0">
+<div class="my-2">
     <a class="text-gray" data-toggle="collapse" href="#globalActions">
         <i class="far fa-hand-paper mr-2"></i>
         Actions
@@ -10,26 +10,26 @@
         <i class="fas fa-filter mr-2"></i>
         Filtres
     </a>
-    <button class="btn btn-success" onclick="window.location.reload(true)" type="button">
+    <a class="text-gray" href="">
         <i class="fas fa-sync mr-2"></i>
         Actualiser
-    </button>
-</p>
-<div class="row">
-    <div class="col">
-        <div class="collapse" id="filters">
-            <div class="mt-3">
-                {% include '@W3comHulk/filter/single_filter.html.twig' %}
-                {% include '@W3comHulk/filter/multiple_filter.html.twig' %}
+    </a>
+    <div class="row">
+        <div class="col">
+            <div class="collapse" id="filters">
+                <div class="mt-3">
+                    {% include '@W3comHulk/filter/single_filter.html.twig' %}
+                    {% include '@W3comHulk/filter/multiple_filter.html.twig' %}
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div class="row">
-    <div class="col">
-        <div class="collapse" id="globalActions">
-            <div class="mt-3">
-                {% include '@W3comHulk/action/global_action.html.twig' %}
+    <div class="row">
+        <div class="col">
+            <div class="collapse" id="globalActions">
+                <div class="mt-3">
+                    {% include '@W3comHulk/action/global_action.html.twig' %}
+                </div>
             </div>
         </div>
     </div>

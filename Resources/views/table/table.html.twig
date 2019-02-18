@@ -1,4 +1,4 @@
-<table class="table bg-white" id="dataTable">
+<table class="table" id="dataTable">
     <thead>
     <tr role="row">
         {% for column in table.columns if column.active == 'Y' and column.hidden is null %}
@@ -6,7 +6,7 @@
         {% endfor %}
     </tr>
     </thead>
-    <tbody>
+    <tbody class="mt-3">
 
     </tbody>
 </table>
