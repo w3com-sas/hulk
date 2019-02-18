@@ -30,8 +30,10 @@ class ModelFinder
     }
 
     /**
-     * @param $dataTable
+     * @param DataTable $dataTable
      * @return array|mixed
+     * @throws \Doctrine\Common\Annotations\AnnotationException
+     * @throws \ReflectionException
      */
     public function getAvailableProperties(DataTable $dataTable)
     {

@@ -140,7 +140,7 @@
                             return tpl.replace('[[data]]', data);
                         }
                     },
-                    {% elseif column.type == 'checkBox' %}
+                    {% elseif column.type == 'checkbox' %}
                     {
                         data: null,
                         render: function (data, type, row) {

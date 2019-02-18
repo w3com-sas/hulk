@@ -24,15 +24,22 @@ class ColumnManager
     {
 
         /** @var Column $column */
-        foreach ($dataTable->getColumns() as $column) {
+        if (!empty($dataTable->getColumns())){
+            foreach ($dataTable->getColumns() as $column) {
 
-            // if column is linked to property of entity
-            foreach ((array)$data[0] as $property => $value) {
+                // if column is linked to property of entity
+                foreach ((array)$data[0] as $property => $value) {
 
-                $realProperty = substr($property, 3);
+                    $realProperty = substr($property, 3);
 
-                if ($realProperty == strtolower($column->getFieldName())) {
-                    $column->setActive('Y');
+
+                    if ($realProperty == strtolower($column->getFieldName())) {
+                        $column->setActive('Y');
+                    }
+
+                    if ($column->getActive() !== 'Y') {
+                        $column->setActive('N');
+                    }
                 }
             }
         }
@@ -41,16 +48,15 @@ class ColumnManager
     private function addCheckboxColumn(DataTable $dataTable)
     {
         // If global action, need to add column with checkbox for selected table.
-        if (!empty($dataTable->getGlobalActions())){
+        if (!empty($dataTable->getGlobalActions())) {
             $column = new Column();
-            $column->setType('checkBox');
+            $column->setType(Column::COL_TYPE_CHECKBOX);
             $column->setLabel(null);
             $column->setActive('Y');
             $column->setFieldName(null);
             $dataTable->addColumn($column);
         }
         return $dataTable;
-
     }
 
 

@@ -21,12 +21,14 @@ abstract class AbstractFilterManager
     protected function isColumnExist(Filter $filter, DataTable $dataTable)
     {
         /** @var Column $column */
-        foreach ($dataTable->getColumns() as $column){
+        if (!empty($dataTable->getColumns())){
+            foreach ($dataTable->getColumns() as $column){
 
-            if ($filter->getField() === $column->getFieldName()){
-                return true;
+                if ($filter->getField() === $column->getFieldName()){
+                    return true;
+                }
+
             }
-
         }
         return false;
     }

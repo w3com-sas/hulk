@@ -9,6 +9,8 @@ class Column
     const FIELD_TYPE = 'Type';
     const FIELD_CELL_ACTION = 'CellAction';
 
+    const COL_TYPE_CHECKBOX = 'checkbox';
+
     /**
      * @var integer
      */
