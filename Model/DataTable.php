@@ -154,8 +154,8 @@ class DataTable
         /** @var Filter $filter */
         foreach ($this->filters as $filter) {
             foreach ($entityFields as $property) {
-                if ($property->getField() == $filter->getField()) {
-                    $fields[$filter->getField()] = $property;
+                if ($property->getField() == $filter->getFieldName()) {
+                    $fields[$filter->getFieldName()] = $property;
                 }
             }
         }
@@ -185,6 +185,30 @@ class DataTable
     public function getError(): Error
     {
         return $this->error;
+    }
+
+    public function getFilterByFieldName($fieldName)
+    {
+        /** @var Filter $filter */
+        foreach ($this->filters as $filter){
+
+            if ($filter->getFieldName() == $fieldName){
+                return $filter;
+            }
+        }
+        return false;
+    }
+
+    public function getColumnByFieldName($fieldName)
+    {
+        /** @var Column $column */
+        foreach ($this->filters as $column){
+
+            if ($column->getFieldName() == $fieldName){
+                return $column;
+            }
+        }
+        return false;
     }
 
 }

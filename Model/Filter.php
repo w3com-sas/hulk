@@ -13,7 +13,7 @@ class Filter
     const TYPE_MULTIPLE = 'multiple';
     const TYPE_MULTIPLE_DATE = 'multiple-date';
 
-    private $field;
+    private $fieldName;
 
     private $label;
 
@@ -46,17 +46,17 @@ class Filter
     /**
      * @return mixed
      */
-    public function getField()
+    public function getFieldName()
     {
-        return $this->field;
+        return $this->fieldName;
     }
 
     /**
-     * @param mixed $field
+     * @param mixed $fieldName
      */
-    public function setField($field): void
+    public function setFieldName($fieldName): void
     {
-        $this->field = $field;
+        $this->fieldName = $fieldName;
     }
 
     /**

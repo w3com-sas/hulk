@@ -14,7 +14,7 @@ abstract class AbstractFilterManager
         $newCol->setActive('Y');
         $newCol->setHidden(true);
         $newCol->setLabel($filter->getLabel());
-        $newCol->setFieldName($filter->getField());
+        $newCol->setFieldName($filter->getFieldName());
         $dataTable->addColumn($newCol);
     }
 
@@ -24,7 +24,7 @@ abstract class AbstractFilterManager
         if (!empty($dataTable->getColumns())){
             foreach ($dataTable->getColumns() as $column){
 
-                if ($filter->getField() === $column->getFieldName()){
+                if ($filter->getFieldName() === $column->getFieldName()){
                     return true;
                 }
 

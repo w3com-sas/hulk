@@ -76,12 +76,12 @@ class QueryManager
         /** @var Filter $filter */
         foreach ($dataTable->getFilters() as $filter) {
 
-            if ($entity->getProperty($filter->getField()) === null) {
+            if ($entity->getProperty($filter->getFieldName()) === null) {
                 $filter->setActive('N');
-                $filter->addError($filter->getField(). 'n\'éxiste pas.');
+                $filter->addError($filter->getFieldName(). 'n\'éxiste pas.');
             } else {
                 $filter->setActive('Y');
-                $parameters->addSelect($entity->getProperty($filter->getField())->getName());
+                $parameters->addSelect($entity->getProperty($filter->getFieldName())->getName());
             }
         }
     }

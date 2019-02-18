@@ -64,7 +64,7 @@ class DataTablesConstructor
             foreach ($jsonFilter as $field => $value) {
                 switch ($field) {
                     case Filter::FIELD_FIELDNAME:
-                        $filter->setField($value);
+                        $filter->setFieldName($value);
                         break;
                     case Filter::FIELD_LABEL:
                         $filter->setLabel($value);

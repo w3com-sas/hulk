@@ -21,8 +21,8 @@ class ColumnManagerTest extends TestCase
         $col = new Column();
         $data = [];
         $boomObj = new AbstractEntity();
-        // Need to add 3 characters because boom obj have protected properties, and not with
-        // set method..
+        // Need to add 3 characters because cast boom obj with protected properties add 3 characs,
+        // but not with the set method..
         $boomObj->set('azefield', 'value');
         $data[] = $boomObj;
         $col->setFieldName('field');
@@ -38,8 +38,8 @@ class ColumnManagerTest extends TestCase
         $col = new Column();
         $data = [];
         $boomObj = new AbstractEntity();
-        // Need to add 3 characters because boom obj have protected properties, and not with
-        // set method..
+        // Need to add 3 characters because cast boom obj with protected properties add 3 characs,
+        // but not with the set method..
         $boomObj->set('azefield', 'value');
         $data[] = $boomObj;
         $col->setFieldName('unknowField');

@@ -37,7 +37,7 @@ class Indexor
             /** @var Filter $filter */
             foreach ($dataTable->getFilters() as $filter){
 
-                if ($filter->getField() == $column->getFieldName()){
+                if ($filter->getFieldName() == $column->getFieldName()){
                     $filter->setIndex($column->getIndex());
                 }
             }

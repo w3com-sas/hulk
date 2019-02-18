@@ -35,7 +35,7 @@ class SingleFilterManager extends AbstractFilterManager
                         // Need to substring because the cast add characters (proteted property)
                         $realProperty = substr($property, 3);
 
-                        if ($realProperty == strtolower($filter->getField())) {
+                        if ($realProperty == strtolower($filter->getFieldName())) {
                             $filter->addValue($value);
                         }
                     }

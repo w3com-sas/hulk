@@ -25,7 +25,7 @@ class FilterManagerTest extends TestCase
         $dataTable = new DataTable();
         $filter = new Filter();
         $filter->setActive('Y');
-        $filter->setField('field');
+        $filter->setFieldName('field');
         $filter->setType(Filter::TYPE_SINGLE);
         $dataTable->addFilter($filter);
         $newDt = $filterManager->initFilters($dataTable, $data);
@@ -46,7 +46,7 @@ class FilterManagerTest extends TestCase
         $dataTable = new DataTable();
         $filter = new Filter();
         $filter->setActive('Y');
-        $filter->setField('field');
+        $filter->setFieldName('field');
         $filter->setType(Filter::TYPE_SINGLE);
         $dataTable->addFilter($filter);
         $newDt = $filterManager->initFilters($dataTable, $data);
