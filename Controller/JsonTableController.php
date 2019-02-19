@@ -29,8 +29,6 @@ class JsonTableController extends AbstractController
 
         $table = $this->tableProvider->getDataTable($filename);
 
-        $this->logger->error('hey ho', ['q' => 'ça va ?']);
-
         if(!$table->getError()->isClassExist() && $table->getError()->isFileExist()){
             return $this->redirectToRoute('w3com_create_view', ['filename' => $filename]);
         }
