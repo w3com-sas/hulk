@@ -4,6 +4,7 @@ namespace W3com\HulkBundle\Finder;
 
 use W3com\BoomBundle\Service\BoomManager;
 use W3com\HulkBundle\Model\DataTable;
+use W3com\HulkBundle\Util\JsonInspector;
 
 class JsonFinder
 {
@@ -11,27 +12,26 @@ class JsonFinder
 
     private $config;
 
+    private $baseUri;
+
+    private $jsonUri;
+
     public function __construct(BoomManager $boom, $config)
     {
         $this->boom = $boom;
         $this->config = $config;
+        $this->baseUri = $this->boom->config['odata_service']['base_uri'];
+        $this->jsonUri = $this->config['json_display']['url_files'];
+
 
     }
 
-    public function getOnlineJson($filename, DataTable $dataTable)
+    private function createContext()
     {
-
-        $baseUri = $this->boom->config['odata_service']['base_uri'];
-        $jsonUri = $this->config['json_display']['url_files'];
-
-        $login =
-            $this->boom->config['odata_service']['login']['username']
-            . ':' .
-            $this->boom->config['odata_service']['login']['password'];
+        $login = $this->boom->config['odata_service']['login']['username']
+            . ':' . $this->boom->config['odata_service']['login']['password'];
 
         $encodedLogin = base64_encode($login);
-
-
         $opts = array(
             'http' => array(
                 'method' => "GET",
@@ -43,20 +43,37 @@ class JsonFinder
                 'verify_peer' => false,
                 'verify_peer_name' => false,
             )
-
         );
+        return stream_context_create($opts);
+    }
 
-        $context = stream_context_create($opts);
-
+    public function getOnlineJson($filename, DataTable $dataTable)
+    {
+        $context = $this->createContext();
         $dataTable->getError()->setFileExist(true);
-
         try {
-            $file = file_get_contents($baseUri . $jsonUri . $filename . '.json', false, $context);
+            $file = file_get_contents($this->baseUri . $this->jsonUri . $filename . '.json', false, $context);
         } catch (\Exception $e){
             $dataTable->getError()->setFileExist(false);
             return null;
         }
         return $file;
+    }
+
+    public function getAllFiles(JsonInspector $inspector)
+    {
+        $context = $this->createContext();
+
+        $files = scandir($this->baseUri.$this->jsonUri,null, $context);
+
+        dump($files);
+
+        foreach ($files as $file){
+            if ($file !== '.'||$file !== '..'){
+                $inspector->addFile($file);
+            }
+        }
+        return $inspector;
     }
 
 }

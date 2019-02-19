@@ -29,6 +29,8 @@ class W3comHulkExtension extends Extension
         $loader->load('create_view.xml');
         $loader->load('update_view.xml');
         $loader->load('update_entity.xml');
+        $loader->load('json_file_manager.xml');
+        $loader->load('admin.xml');
 
     }
 
