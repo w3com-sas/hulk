@@ -3,7 +3,7 @@
     {% if column.type == 'action' %}
 
         <template id="{{ column.cellAction.functionName }}{{ column.cellAction.targetEntity }}">
-            <button class="btn btn-primary"
+            <button class="btn btn-primary btn-sm"
                     onclick="{{ column.cellAction.functionName }}('{{ column.cellAction.targetEntity }}', '[[data]]')">
                 {% if column.cellAction.icon != null %}
                     <i class="fa fa-{{ column.cellAction.icon }}"></i>
