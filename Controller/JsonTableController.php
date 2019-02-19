@@ -2,6 +2,7 @@
 
 namespace W3com\HulkBundle\Controller;
 
+use Psr\Log\LoggerInterface;
 use W3com\HulkBundle\Service\TableProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -10,9 +11,12 @@ class JsonTableController extends AbstractController
 
     private $tableProvider;
 
-    public function __construct(TableProvider $provider)
+    private $logger;
+
+    public function __construct(TableProvider $provider, LoggerInterface $logger)
     {
         $this->tableProvider = $provider;
+        $this->logger = $logger;
     }
 
     /**
@@ -24,6 +28,8 @@ class JsonTableController extends AbstractController
     {
 
         $table = $this->tableProvider->getDataTable($filename);
+
+        $this->logger->error('hey ho', ['q' => 'ça va ?']);
 
         if(!$table->getError()->isClassExist() && $table->getError()->isFileExist()){
             return $this->redirectToRoute('w3com_create_view', ['filename' => $filename]);

@@ -2,6 +2,7 @@
 
 namespace W3com\HulkBundle\Controller;
 
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -14,10 +15,13 @@ class UpdateHanaEntityController extends AbstractController
 
     private $request;
 
-    public function __construct(BoomManager $boom, RequestStack $request)
+    private $logger;
+
+    public function __construct(BoomManager $boom, RequestStack $request, LoggerInterface $logger)
     {
         $this->boom = $boom;
         $this->request = $request;
+        $this->logger = $logger;
     }
 
 
@@ -35,28 +39,43 @@ class UpdateHanaEntityController extends AbstractController
         $data['targetData'] = $this->request->getCurrentRequest()->request->get('targetData');
 
         if ($data['rows'] === null){
-            return new JsonResponse(['error' => 'missing data'], 422);
+            return new JsonResponse(['error' => 'no lines selected'], 422);
         } else {
             foreach ($data['rows'] as $row){
                 foreach ($row as $field => $value){
+
                     if ($field === $data['entityKey']){
                         $entityKey = $value;
                     }
+
                     if (isset($entityKey)){
 
+                        // Get
                         try {
                             $obj = $this->boom->getRepository($data['targetEntity'])->find($entityKey);
                         } catch (EntityNotFoundException $exception){
+                            $this->logger->error('Error when try to get '.$data['targetEntity'].
+                                ' : '.$entityKey,
+                                $exception->getTrace());
                             return new JsonResponse(['error' => 'Unexistent entity '.$data['targetEntity']],
                                 400);
                         }
 
                         $obj->set($data['targetField'], $data['targetData']);
-                        $this->boom->getRepository($data['targetEntity'])->update($obj);
+
+                        // Update
+                        try {
+                            $this->boom->getRepository($data['targetEntity'])->update($obj);
+                        } catch (\Exception $e){
+                            $this->logger->error('Failed to update : '.$e->getMessage(),
+                                $e->getTrace());
+                        }
                         break;
                     }
                 }
                 if (!isset($entityKey)){
+                    $this->logger->error('Error : missing ID of '.$data['targetEntity'].'in 
+                    the lines of the table.');
                     return new JsonResponse(['error' => 'Missing mandatory ID key to update'], 400);
                 }
             }
@@ -67,10 +86,11 @@ class UpdateHanaEntityController extends AbstractController
     private function manageRequest()
     {
         if (!$this->request->getCurrentRequest()->request->has('data') ||
-            !$this->request->getCurrentRequest()->request->get('targetEntity')||
-            !$this->request->getCurrentRequest()->request->get('targetField') ||
-            !$this->request->getCurrentRequest()->request->get('entityKey') ||
-            !$this->request->getCurrentRequest()->request->get('targetData')) {
+            !$this->request->getCurrentRequest()->request->has('targetEntity')||
+            !$this->request->getCurrentRequest()->request->has('targetField') ||
+            !$this->request->getCurrentRequest()->request->has('entityKey') ||
+            !$this->request->getCurrentRequest()->request->has('targetData')) {
+            $this->logger->error('Missing data to update in the Json file.');
             return new JsonResponse(['valid' => false], 400);
         }
     }
