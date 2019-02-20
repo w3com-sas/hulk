@@ -38,19 +38,19 @@
 
                 {# Trie les data à chaque "draw()" du tableau #}
                 {# data = ligne du tableau #}
-                {% for filter in table.filters if filter.active == 'Y' and filter.type == 'multiple'
-                    or filter.type == 'multiple-date' %}
+                {% for filter in table.filters if filter.active == 'Y' and (filter.type == 'multiple'
+                    or filter.type == 'multiple-date') %}
 
                 window['minId{{ filter.fieldName }}'] = '#min' + '{{ filter.fieldName }}';
                 window['maxId{{ filter.fieldName }}'] = '#max' + '{{ filter.fieldName }}';
 
-                {% if filter.type == 'multiple' %}
+                {% if filter.type == 'multiple' and filter.active == 'Y' %}
 
                 var minVal = parseInt($(window['minId{{ filter.fieldName }}']).val(), 10);
                 var maxVal = parseInt($(window['maxId{{ filter.fieldName }}']).val(), 10);
                 var dataToCompare = parseInt(data[{{ filter.index }}], 10);
 
-                {% elseif filter.type == 'multiple-date' %}
+                {% elseif filter.type == 'multiple-date' and filter.active == 'Y' %}
 
                 var minVal = parseInt(new Date($(window['minId{{ filter.fieldName }}']).val()).getTime());
                 var maxVal = parseInt(new Date($(window['maxId{{ filter.fieldName }}']).val()).getTime());
