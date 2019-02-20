@@ -60,12 +60,19 @@ table thead tr th {
     box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.75);
 }
 
+table.dataTable td, table.dataTable th {
+    font-size: 14px;
+}
+.table th, .table td {
+    padding: 0.4rem;
+}
+
 table th:nth-child(1) {
-    border-radius: 15px 0px 0px 15px;
+    border-radius: 5px 0px 0px 5px;
 }
 
 table th:nth-last-child(1) {
-    border-radius: 0px 15px 15px 0px;
+    border-radius: 0px 5px 5px 0px;
 }
 
 

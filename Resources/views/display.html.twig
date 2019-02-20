@@ -119,8 +119,13 @@
                     }
                 },
                 dom: 'tp',
-                pageLength: 7,
+                {% if table.pageLenght != null %}
+                pageLength: {{ table.pageLenght }},
+                {% else %}
+                pageLength: 10,
+                {% endif %}
                 data: data,
+                //   order: [[3, "asc"]],
                 columns: [
 
                     {% for column in table.columns if column.active == 'Y' %}

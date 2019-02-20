@@ -97,11 +97,11 @@ class TableProvider
         $this->constructor->hydrateDataTable($json, $this->dataTable);
 
 
-        if ($this->dataTable->getError()->isFileExist()){
+        if ($this->dataTable->getError()->isFileExist()) {
 
             $data = $this->queryManager->createDataTableQuery($this->dataTable);
 
-            if ($this->dataTable->getError()->isClassExist()){
+            if ($this->dataTable->getError()->isClassExist()) {
 
                 $this->dataTransformer->addData($this->dataTable, $data);
 
@@ -110,9 +110,7 @@ class TableProvider
                 $this->filterManager->initFilters($this->dataTable, $data);
 
                 $this->indexor->addIndex($this->dataTable);
-
             }
-
         }
         return $this->dataTable;
     }

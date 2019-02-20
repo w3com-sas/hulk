@@ -32,17 +32,20 @@ class Indexor
 
     private function addFiltersIndex(DataTable $dataTable)
     {
-        /** @var Column $column */
-        foreach ($dataTable->getColumns() as $column){
+        if (!empty($dataTable->getFilters())){
+            /** @var Column $column */
+            foreach ($dataTable->getColumns() as $column){
 
-            /** @var Filter $filter */
-            foreach ($dataTable->getFilters() as $filter){
+                /** @var Filter $filter */
+                foreach ($dataTable->getFilters() as $filter){
 
-                if ($filter->getFieldName() == $column->getFieldName()){
-                    $filter->setIndex($column->getIndex());
+                    if ($filter->getFieldName() == $column->getFieldName()){
+                        $filter->setIndex($column->getIndex());
+                    }
                 }
             }
         }
+
     }
 
     private function addGlobalActionIndex(DataTable $dataTable)

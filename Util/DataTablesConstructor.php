@@ -2,6 +2,7 @@
 
 namespace W3com\HulkBundle\Util;
 
+use phpDocumentor\Reflection\Element;
 use W3com\HulkBundle\Model\CellAction;
 use W3com\HulkBundle\Model\Column;
 use W3com\HulkBundle\Model\Config;
@@ -27,6 +28,9 @@ class DataTablesConstructor
                         break;
                     case DataTable::FIELD_FILTERS:
                         $this->hydrateFilters($dataTable, $value);
+                        break;
+                    case DataTable::FIELD_PAGE_LENGHT:
+                        $dataTable->setPageLenght(intval($value));
                         break;
                 }
             }

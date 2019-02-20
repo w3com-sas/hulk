@@ -18,29 +18,32 @@ class SingleFilterManager extends AbstractFilterManager
     public function addValues(DataTable $dataTable, $boomObjs)
     {
 
-        /** @var Filter $filter */
-        foreach ($dataTable->getFilters() as $filter) {
+        if (!empty($dataTable->getFilters())){
+            /** @var Filter $filter */
+            foreach ($dataTable->getFilters() as $filter) {
 
-            if ($filter->getType() === Filter::TYPE_SINGLE) {
-                if ($filter->getActive() == 'Y' && !$this->isColumnExist($filter, $dataTable)) {
-                    $this->addHidenColumn($filter, $dataTable);
-                }
+                if ($filter->getType() === Filter::TYPE_SINGLE) {
+                    if ($filter->getActive() == 'Y' && !$this->isColumnExist($filter, $dataTable)) {
+                        $this->addHidenColumn($filter, $dataTable);
+                    }
 
-                // Can remove choice
-                $filter->addValue(null);
-                foreach ($boomObjs as $boomObj) {
+                    // Can remove choice
+                    $filter->addValue(null);
+                    foreach ($boomObjs as $boomObj) {
 
-                    foreach ((array)$boomObj as $property => $value) {
+                        foreach ((array)$boomObj as $property => $value) {
 
-                        // Need to substring because the cast add characters (proteted property)
-                        $realProperty = substr($property, 3);
+                            // Need to substring because the cast add characters (proteted property)
+                            $realProperty = substr($property, 3);
 
-                        if ($realProperty == strtolower($filter->getFieldName())) {
-                            $filter->addValue($value);
+                            if ($realProperty == strtolower($filter->getFieldName())) {
+                                $filter->addValue($value);
+                            }
                         }
                     }
                 }
             }
         }
+
     }
 }

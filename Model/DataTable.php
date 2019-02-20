@@ -11,6 +11,7 @@ class DataTable
     const FIELD_GLOBAL_ACTION = 'GlobalActions';
     const FIELD_FILTERS = 'Filters';
     const FIELD_COLUMNS = 'Columns';
+    const FIELD_PAGE_LENGHT = 'PageLenght';
 
     public function __construct()
     {
@@ -46,6 +47,11 @@ class DataTable
      * @var array
      */
     private $data;
+
+    /**
+     * @var integer
+     */
+    private $pageLenght;
 
     /**
      * @var Error
@@ -151,14 +157,17 @@ class DataTable
             }
         }
 
-        /** @var Filter $filter */
-        foreach ($this->filters as $filter) {
-            foreach ($entityFields as $property) {
-                if ($property->getField() == $filter->getFieldName()) {
-                    $fields[$filter->getFieldName()] = $property;
+        if (!empty($this->filters)){
+            /** @var Filter $filter */
+            foreach ($this->filters as $filter) {
+                foreach ($entityFields as $property) {
+                    if ($property->getField() == $filter->getFieldName()) {
+                        $fields[$filter->getFieldName()] = $property;
+                    }
                 }
             }
         }
+
 
         return $fields;
     }
@@ -209,6 +218,22 @@ class DataTable
             }
         }
         return false;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPageLenght()
+    {
+        return $this->pageLenght;
+    }
+
+    /**
+     * @param mixed $pageLenght
+     */
+    public function setPageLenght($pageLenght): void
+    {
+        $this->pageLenght = $pageLenght;
     }
 
 }

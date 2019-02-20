@@ -73,17 +73,20 @@ class QueryManager
         /** @var Entity $entity */
         $entity = $this->boom->getGenerator()->getAppInspector()->getProjectEntity($dataTable->getCalcView());
 
-        /** @var Filter $filter */
-        foreach ($dataTable->getFilters() as $filter) {
+        if (!empty($dataTable->getFilters())){
+            /** @var Filter $filter */
+            foreach ($dataTable->getFilters() as $filter) {
 
-            if ($entity->getProperty($filter->getFieldName()) === null) {
-                $filter->setActive('N');
-                $filter->addError($filter->getFieldName(). 'n\'éxiste pas.');
-            } else {
-                $filter->setActive('Y');
-                $parameters->addSelect($entity->getProperty($filter->getFieldName())->getName());
+                if ($entity->getProperty($filter->getFieldName()) === null) {
+                    $filter->setActive('N');
+                    $filter->addError($filter->getFieldName(). 'n\'éxiste pas.');
+                } else {
+                    $filter->setActive('Y');
+                    $parameters->addSelect($entity->getProperty($filter->getFieldName())->getName());
+                }
             }
         }
+
     }
 
 
