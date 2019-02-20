@@ -5,6 +5,7 @@ namespace W3com\HulkBundle\Util;
 use W3com\HulkBundle\Model\Column;
 use W3com\HulkBundle\Model\DataTable;
 use W3com\HulkBundle\Model\Filter;
+use W3com\HulkBundle\Model\GlobalAction;
 
 class Indexor
 {
@@ -12,17 +13,17 @@ class Indexor
     {
         $this->addColumnsIndex($dataTable);
         $this->addFiltersIndex($dataTable);
+        $this->addGlobalActionIndex($dataTable);
         return $dataTable;
     }
 
     private function addColumnsIndex(DataTable $dataTable)
     {
         /** @var Column $column */
+        $i = 0;
+
         foreach ($dataTable->getColumns() as $column) {
             if ($column->getActive() == 'Y') {
-                if (!isset($i)) {
-                    $i = 0;
-                }
                 $column->setIndex($i);
                 $i++;
             }
@@ -41,6 +42,16 @@ class Indexor
                     $filter->setIndex($column->getIndex());
                 }
             }
+        }
+    }
+
+    private function addGlobalActionIndex(DataTable $dataTable)
+    {
+        $i=1;
+        /** @var GlobalAction $globalAction */
+        foreach ($dataTable->getGlobalActions() as $globalAction){
+            $globalAction->setIndex($i);
+            $i++;
         }
     }
 }

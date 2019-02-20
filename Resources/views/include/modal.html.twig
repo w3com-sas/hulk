@@ -1,6 +1,6 @@
 {% for globalAction in table.globalActions if globalAction.type == 'update-sap' %}
     <div class="modal fade"
-         id="{{ globalAction.type }}{{ globalAction.config.entity }}{{ globalAction.config.targetDataType }}"
+         id="{{ globalAction.type }}{{ globalAction.config.entity }}{{ globalAction.config.targetDataType }}{{ globalAction.index }}"
          tabindex="-1" role="dialog">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -43,7 +43,7 @@
                         Fermer
                     </button>
                     <button type="button" class="btn btn-success" onclick="disableSubmitButton(this)"
-                            id="form{{ globalAction.config.entity }}{{ globalAction.config.targetField }}{{ globalAction.config.entityKey }}{{ globalAction.config.targetDataType }}"
+                            id="form{{ globalAction.config.entity }}{{ globalAction.config.targetField }}{{ globalAction.config.entityKey }}{{ globalAction.config.targetDataType }}{{ globalAction.index }}"
                             targetEntity="{{ globalAction.config.entity }}"
                             targetField="{{ globalAction.config.targetField }}"
                             entityKey="{{ globalAction.config.entityKey }}"

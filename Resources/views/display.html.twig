@@ -148,6 +148,15 @@
                             return $('#checkboxTpl').html();
                         }
                     },
+                    {% elseif column.type == 'icon' %}
+                    {
+                        data: "{{ column.fieldName }}",
+                        render: function (data, type, row) {
+                            var tpl = $('#icon').html();
+                            return tpl.replace('[[data]]', data);
+
+                        }
+                    },
                     {% endif %}
 
                     {% endfor %}
@@ -211,10 +220,10 @@
             });
 
             {% elseif globalAction.type == 'update-sap' %}
-            $('#{{ globalAction.type }}{{ globalAction.config.targetDataType }}{{ globalAction.config.entity }}').click(function () {
+            $('#{{ globalAction.type }}{{ globalAction.config.targetDataType }}{{ globalAction.config.entity }}{{ globalAction.index }}').click(function () {
 
                 var modal =
-                    $('#{{ globalAction.type }}{{ globalAction.config.entity }}{{ globalAction.config.targetDataType }}');
+                    $('#{{ globalAction.type }}{{ globalAction.config.entity }}{{ globalAction.config.targetDataType }}{{ globalAction.index }}');
                 modal.modal('show');
 
                 {% if globalAction.config.targetDataType == 'static' %}
@@ -226,9 +235,9 @@
             });
 
 
-            $('#form{{ globalAction.config.entity }}{{ globalAction.config.targetField }}{{ globalAction.config.entityKey }}{{ globalAction.config.targetDataType }}').click(function (other) {
+            $('#form{{ globalAction.config.entity }}{{ globalAction.config.targetField }}{{ globalAction.config.entityKey }}{{ globalAction.config.targetDataType }}{{ globalAction.index }}').click(function (other) {
                 var modal =
-                    $('#{{ globalAction.type }}{{ globalAction.config.entity }}{{ globalAction.config.targetDataType }}');
+                    $('#{{ globalAction.type }}{{ globalAction.config.entity }}{{ globalAction.config.targetDataType }}{{ globalAction.index }}');
 
                 var data = table.rows('.selected').data();
                 var targetEntity = $(this).attr('targetEntity');

@@ -42,13 +42,15 @@ class UpdateHanaEntityController extends AbstractController
             return new JsonResponse(['error' => 'no lines selected'], 422);
         } else {
             foreach ($data['rows'] as $row){
+
+                $entityKey = null;
                 foreach ($row as $field => $value){
 
                     if ($field === $data['entityKey']){
                         $entityKey = $value;
                     }
 
-                    if (isset($entityKey)){
+                    if ($entityKey !== null){
 
                         // Get
                         try {

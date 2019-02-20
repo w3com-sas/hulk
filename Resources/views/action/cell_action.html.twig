@@ -11,12 +11,6 @@
             </button>
         </template>
 
-    {% elseif column.type == 'icon' %}
-
-        <template id="{{ column.cellAction.name }}{{ column.action.target }}">
-            <i class="fa fa-{{ column.icon.name }} text-[[data]]"></i>
-        </template>
-
     {% endif %}
 
 {% endfor %}

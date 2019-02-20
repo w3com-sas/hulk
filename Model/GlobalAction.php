@@ -16,6 +16,11 @@ class GlobalAction
     /**
      * @var string
      */
+    private $index;
+
+    /**
+     * @var string
+     */
     private $label;
 
     /**
@@ -74,6 +79,22 @@ class GlobalAction
     public function setConfig(Config $config): void
     {
         $this->config = $config;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIndex(): string
+    {
+        return $this->index;
+    }
+
+    /**
+     * @param string $index
+     */
+    public function setIndex(string $index): void
+    {
+        $this->index = $index;
     }
 
 }
