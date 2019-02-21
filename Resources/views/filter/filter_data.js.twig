@@ -1,0 +1,47 @@
+$.fn.dataTable.ext.search.push(
+    function (settings, data) {
+
+        {# Trie les data à chaque "draw()" du tableau #}
+        {# data = ligne du tableau #}
+        {% for filter in table.filters if filter.active == 'Y' and (filter.type == 'multiple'
+            or filter.type == 'multiple-date') %}
+
+        window['minId{{ filter.fieldName }}'] = '#min' + '{{ filter.fieldName }}';
+        window['maxId{{ filter.fieldName }}'] = '#max' + '{{ filter.fieldName }}';
+
+        {% if filter.type == 'multiple' and filter.active == 'Y' %}
+
+        var minVal = parseInt($(window['minId{{ filter.fieldName }}']).val(), 10);
+        var maxVal = parseInt($(window['maxId{{ filter.fieldName }}']).val(), 10);
+        var dataToCompare = parseInt(data[{{ filter.index }}], 10);
+
+        {% elseif filter.type == 'multiple-date' and filter.active == 'Y' %}
+
+        var minVal = parseInt(new Date($(window['minId{{ filter.fieldName }}']).val()).getTime());
+        var maxVal = parseInt(new Date($(window['maxId{{ filter.fieldName }}']).val()).getTime());
+        var dataToCompare = parseInt(new Date(data[{{ filter.index }}]).getTime());
+
+        {% endif %}
+
+
+        // Si les champs ne sont pas remplis osef
+        if (!isNaN(minVal) && !isNaN(maxVal)) {
+
+            // Si la data est vide on l'exclu
+            if (!isNaN(dataToCompare)) {
+                // Si la data n'est pas dans l'interval on l'exclu
+                if (dataToCompare <= minVal || dataToCompare >= maxVal) {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+
+        }
+
+        {% endfor %}
+
+        return true;
+
+    }
+);

@@ -70,10 +70,7 @@ function updateSap(data, targetEntity, targetField, entityKey, targetData, modal
                 modal.find('.modal-body').find('p').remove();
             }
             modal.find('.modal-body').append(tpl);
-            modal.find('.btn-success')
-                .html('<i class="far fa-paper-plane mr-2"></i>Valider').removeAttr('disabled');
-            setTimeout(window.location.reload(), 1500)
-
+            setTimeout(window.location.reload(), 1500);
 
         },
         error: function (xhr) {
@@ -101,8 +98,6 @@ function updateSap(data, targetEntity, targetField, entityKey, targetData, modal
 
 function exportToCsv(filename, rows) {
     var processRow = function (row) {
-
-        console.log(row);
 
         var finalVal = '';
         for (var j = 0; j < row.length; j++) {

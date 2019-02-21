@@ -1,0 +1,50 @@
+{% for globalAction in table.globalActions %}
+
+{% if globalAction.type == 'export-csv' %}
+
+$('#{{ globalAction.type }}').click(function () {
+    var data = table.rows('.selected').data();
+    var formatedData = formatDataToCsv(data);
+    exportToCsv('export.csv', formatedData)
+});
+
+{% elseif globalAction.type == 'update-sap' %}
+$('#{{ globalAction.type }}{{ globalAction.config.targetDataType }}{{ globalAction.config.entity }}{{ globalAction.index }}').click(function () {
+
+
+    if (table.rows('.selected').data().length === 0) {
+        var modal = $('#anyLines');
+    } else {
+        var modal =
+            $('#{{ globalAction.type }}{{ globalAction.config.entity }}{{ globalAction.config.targetDataType }}{{ globalAction.index }}');
+    }
+
+    {% if globalAction.config.targetDataType == 'static' %}
+    var rows = table.rows('.selected').data();
+    modal.find('.modal-body').html(
+        '<p class="text-gray text-center"><i class="fas fa-info-circle mr-2"></i>' + rows.length + ' ligne(s) sélectionnée(s)</p>');
+    {% endif %}
+
+    modal.modal('show');
+});
+
+
+$('#form{{ globalAction.config.entity }}{{ globalAction.config.targetField }}{{ globalAction.config.entityKey }}{{ globalAction.config.targetDataType }}{{ globalAction.index }}').click(function (other) {
+    var modal =
+        $('#{{ globalAction.type }}{{ globalAction.config.entity }}{{ globalAction.config.targetDataType }}{{ globalAction.index }}');
+
+    var data = table.rows('.selected').data();
+    var targetEntity = $(this).attr('targetEntity');
+    var targetField = $(this).attr('targetField');
+    var entityKey = $(this).attr('entityKey');
+
+    {% if globalAction.config.targetDataType == 'static' %}
+    var targetData = $(this).attr('targetData');
+    updateSap(data, targetEntity, targetField, entityKey, targetData, modal, true);
+    {% else %}
+    var targetData = $('#input{{ globalAction.type }}{{ globalAction.config.targetField }}{{ globalAction.config.targetDataType }}').val();
+    updateSap(data, targetEntity, targetField, entityKey, targetData, modal);
+    {% endif %}
+});
+{% endif %}
+{% endfor %}
