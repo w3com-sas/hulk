@@ -17,9 +17,9 @@ class FilterManager extends AbstractFilterManager
         $this->multilpleFilterManager = new MultipleFilterManager();
     }
 
-    public function initFilters(DataTable $dataTable, $data)
+    public function initFilters(DataTable $dataTable)
     {
-        $this->singleFilterManager->manageSingleFilters($dataTable, $data);
+        $this->singleFilterManager->manageSingleFilters($dataTable);
         $this->multilpleFilterManager->manageMultipleFilters($dataTable);
         return $dataTable;
     }

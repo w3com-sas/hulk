@@ -1,37 +1,38 @@
-{# Global search bar #}
-{% include '@W3comHulk/filter/search_bar.html.twig' %}
-<div class="my-2">
-    <a class="text-gray" data-toggle="collapse" href="#globalActions">
+<div class="d-flex my-2">
+    <a class="text-gray my-auto" data-toggle="collapse" href="#globalActions">
         <i class="far fa-hand-paper mr-2"></i>
         Actions
     </a>
 
-    <a class="text-gray mx-3" data-toggle="collapse" href="#filters">
+    {% if table.filters is not null %}
+    <a class="text-gray ml-3 my-auto" data-toggle="collapse" href="#filters">
         <i class="fas fa-filter mr-2"></i>
         Filtres
     </a>
-    <a class="text-gray" href="">
+    {% endif %}
+    <a class="text-gray my-auto ml-3" href="">
         <i class="fas fa-sync mr-2"></i>
         Actualiser
     </a>
-    <p class="float-right text-gray m-0" id="countSelectedRows" style="display: none;">
+    {% include '@W3comHulk/filter/search_bar.html.twig' %}
+    <p class="text-gray m-0 align-self-end ml-auto" id="countSelectedRows" style="display: none;">
     </p>
-    <div class="row">
-        <div class="col">
-            <div class="collapse" id="filters">
-                <div class="mt-3">
-                    {% include '@W3comHulk/filter/single_filter.html.twig' %}
-                    {% include '@W3comHulk/filter/multiple_filter.html.twig' %}
-                </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div class="collapse" id="filters">
+            <div class="mt-3">
+                {% include '@W3comHulk/filter/single_filter.html.twig' %}
+                {% include '@W3comHulk/filter/multiple_filter.html.twig' %}
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col">
-            <div class="collapse" id="globalActions">
-                <div class="mt-3">
-                    {% include '@W3comHulk/action/global_action.html.twig' %}
-                </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div class="collapse" id="globalActions">
+            <div class="mt-3">
+                {% include '@W3comHulk/action/global_action.html.twig' %}
             </div>
         </div>
     </div>

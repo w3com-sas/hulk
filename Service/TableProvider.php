@@ -2,6 +2,7 @@
 
 namespace W3com\HulkBundle\Service;
 
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use W3com\HulkBundle\Column\ColumnManager;
 use W3com\HulkBundle\Filter\FilterManager;
 use W3com\HulkBundle\Finder\JsonFinder;
@@ -9,6 +10,7 @@ use W3com\HulkBundle\Finder\ModelFinder;
 use W3com\HulkBundle\Model\DataTable;
 use W3com\HulkBundle\Query\QueryManager;
 use W3com\BoomBundle\Service\BoomManager;
+use W3com\HulkBundle\Url\UrlManager;
 use W3com\HulkBundle\Util\DataTablesConstructor;
 use W3com\HulkBundle\Util\DataTransformer;
 use W3com\HulkBundle\Util\Indexor;
@@ -67,11 +69,19 @@ class TableProvider
     private $constructor;
 
     /**
-     * TableProvider constructor.
-     * @param BoomManager $boom
-     * @param $config
+     * @var UrlManager
      */
-    public function __construct($config, BoomManager $boom)
+    private $urlManager;
+
+    /**
+     * TableProvider constructor.
+     * @param $config
+     * @param BoomManager $boom
+     * @param UrlGeneratorInterface $router
+     * @throws \Doctrine\Common\Annotations\AnnotationException
+     * @throws \ReflectionException
+     */
+    public function __construct($config, BoomManager $boom, UrlGeneratorInterface $router)
     {
         $this->dataTable = new DataTable();
         $this->config = $config;
@@ -80,38 +90,40 @@ class TableProvider
         $this->filterManager = new FilterManager();
         $this->columnManager = new ColumnManager();
         $this->modelFinder = new ModelFinder($boom);
-        $this->dataTransformer = new DataTransformer($this->modelFinder);
-        $this->queryManager = new QueryManager($this->modelFinder, $boom);
+        $this->urlManager = new UrlManager($router);
+        $this->dataTransformer = new DataTransformer($this->modelFinder, $this->urlManager);
+        $this->queryManager = new QueryManager($this->modelFinder, $boom, $this->dataTable);
         $this->jsonFinder = new JsonFinder($boom, $config);
     }
 
     /**
      * @param $filename
+     * @param array $requestParams
      * @return DataTable
      * @throws \Exception
      */
-    public function getDataTable($filename)
+    public function getDataTable($filename, $requestParams = [])
     {
         $json = $this->jsonFinder->getOnlineJson($filename, $this->dataTable);
 
         $this->constructor->hydrateDataTable($json, $this->dataTable);
 
-
         if ($this->dataTable->getError()->isFileExist()) {
 
-            $data = $this->queryManager->createDataTableQuery($this->dataTable);
+            $data = $this->queryManager->createDataTableQuery($this->dataTable, $requestParams);
 
             if ($this->dataTable->getError()->isClassExist()) {
 
                 $this->dataTransformer->addData($this->dataTable, $data);
 
-                $this->columnManager->initColumns($this->dataTable, $data);
+                $this->columnManager->initColumns($this->dataTable);
 
-                $this->filterManager->initFilters($this->dataTable, $data);
+                $this->filterManager->initFilters($this->dataTable);
 
                 $this->indexor->addIndex($this->dataTable);
             }
         }
+        dump($this->dataTable);
         return $this->dataTable;
     }
 }

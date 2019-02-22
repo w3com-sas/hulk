@@ -30,7 +30,7 @@ $.fn.dataTable.ext.search.push(
             // Si la data est vide on l'exclu
             if (!isNaN(dataToCompare)) {
                 // Si la data n'est pas dans l'interval on l'exclu
-                if (dataToCompare <= minVal || dataToCompare >= maxVal) {
+                if (dataToCompare < minVal || dataToCompare > maxVal) {
                     return false;
                 }
             } else {

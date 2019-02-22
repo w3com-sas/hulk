@@ -8,14 +8,14 @@ use W3com\HulkBundle\Model\Filter;
 class SingleFilterManager extends AbstractFilterManager
 {
 
-    public function manageSingleFilters(DataTable $dataTable, array $data)
+    public function manageSingleFilters(DataTable $dataTable)
     {
-        $this->addValues($dataTable, $data);
+        $this->addValues($dataTable);
         return $dataTable;
     }
 
     // Très gros traitement pour ajouter les données aux filtres...
-    public function addValues(DataTable $dataTable, $boomObjs)
+    public function addValues(DataTable $dataTable)
     {
 
         if (!empty($dataTable->getFilters())){
@@ -29,14 +29,11 @@ class SingleFilterManager extends AbstractFilterManager
 
                     // Can remove choice
                     $filter->addValue(null);
-                    foreach ($boomObjs as $boomObj) {
+                    foreach ($dataTable->getData() as $line) {
 
-                        foreach ((array)$boomObj as $property => $value) {
+                        foreach ($line as $property => $value) {
 
-                            // Need to substring because the cast add characters (proteted property)
-                            $realProperty = substr($property, 3);
-
-                            if ($realProperty == strtolower($filter->getFieldName())) {
+                            if ($property == $filter->getFieldName()) {
                                 $filter->addValue($value);
                             }
                         }

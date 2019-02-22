@@ -153,6 +153,16 @@ class DataTable
             foreach ($entityFields as $property) {
                 if ($property->getField() == $column->getFieldName()) {
                     $fields[$column->getFieldName()] = $property;
+                } elseif ($column->getCellAction() !== null){
+
+                    if (!empty($column->getCellAction()->getParams())){
+                        foreach ($column->getCellAction()->getParams() as $key => $value){
+                            if ($key === $property->getField()){
+                                $fields[$key] = $property;
+                            }
+                        }
+                    }
+
                 }
             }
         }
@@ -167,7 +177,6 @@ class DataTable
                 }
             }
         }
-
 
         return $fields;
     }

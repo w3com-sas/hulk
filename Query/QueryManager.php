@@ -3,11 +3,13 @@
 namespace W3com\HulkBundle\Query;
 
 use W3com\HulkBundle\Finder\ModelFinder;
+use W3com\HulkBundle\Model\CellAction;
+use W3com\HulkBundle\Model\Column;
 use W3com\HulkBundle\Model\DataTable;
+use W3com\HulkBundle\Model\Error;
 use W3com\HulkBundle\Model\Filter;
 use W3com\BoomBundle\Exception\EntityNotFoundException;
 use W3com\BoomBundle\Generator\Model\Entity;
-use W3com\BoomBundle\Generator\Model\Property;
 use W3com\BoomBundle\Parameters\Parameters;
 use W3com\BoomBundle\Service\BoomManager;
 
@@ -23,20 +25,44 @@ class QueryManager
      */
     private $boom;
 
+    /**
+     * @var Entity
+     */
+    private $entity;
 
-    public function __construct(ModelFinder $finder, BoomManager $boom)
+    /**
+     * @var DataTable
+     */
+    private $dataTable;
+
+
+    /**
+     * QueryManager constructor.
+     * @param ModelFinder $finder
+     * @param BoomManager $boom
+     * @param DataTable $dataTable
+     * @throws \ReflectionException
+     */
+    public function __construct(ModelFinder $finder, BoomManager $boom, DataTable $dataTable)
     {
         $this->modelFinder = $finder;
         $this->boom = $boom;
+        $this->dataTable = $dataTable;
     }
 
     /**
      * @param DataTable $dataTable
+     * @param $requestParams
      * @return array
+     * @throws \Doctrine\Common\Annotations\AnnotationException
+     * @throws \ReflectionException
      * @throws \Exception
      */
-    public function createDataTableQuery(DataTable $dataTable)
+    public function createDataTableQuery(DataTable $dataTable, $requestParams)
     {
+        $this->entity = $this->boom->getGenerator()->getAppInspector()
+            ->getProjectEntity($dataTable->getCalcView());
+
         $this->modelFinder->checkProjectEntities($dataTable);
         $dataTable->getError()->setClassExist(true);
 
@@ -49,44 +75,104 @@ class QueryManager
 
         $params = $repo->createParams();
 
-        // Determine data to get
-        $properties = $this->modelFinder->getAvailableProperties($dataTable);
-
-        /** @var Property $property */
-        foreach ($properties as $property) {
-            $params->addSelect($property->getName());
-        }
-        $this->addSelectForFilters($dataTable, $params);
+        $this->addSelectForColumns($params);
+        $this->addSelectForFilters($params);
+        $this->addSelectForDisplayLink($params);
+        $this->addParamsRequest($requestParams, $params);
+        $params->setTop(10000);
 
         return $repo->findAll($params);
     }
 
     /**
-     * This function allow Filter on hidden column
-     *
-     * @param DataTable $dataTable
-     * @param Parameters $parameters
+     * @param Parameters $params
      * @throws \Exception
      */
-    private function addSelectForFilters(DataTable $dataTable, Parameters $parameters)
+    private function addSelectForColumns(Parameters $params)
     {
-        /** @var Entity $entity */
-        $entity = $this->boom->getGenerator()->getAppInspector()->getProjectEntity($dataTable->getCalcView());
+        /** @var Column $column */
+        foreach ($this->dataTable->getColumns() as $column){
 
-        if (!empty($dataTable->getFilters())){
+            if ($column->getType() === Column::TYPE_TEXT||$column->getFieldName() !== null){
+
+                $params->addSelect($this->entity->getProperty($column->getFieldName())->getName());
+            }
+
+        }
+    }
+
+    /**
+     * This function allow Filter on hidden column
+     *
+     * @param Parameters $params
+     * @throws \Exception
+     */
+    private function addSelectForFilters(Parameters $params)
+    {
+
+        if (!empty($this->dataTable->getFilters())) {
             /** @var Filter $filter */
-            foreach ($dataTable->getFilters() as $filter) {
+            foreach ($this->dataTable->getFilters() as $filter) {
 
-                if ($entity->getProperty($filter->getFieldName()) === null) {
+                if ($this->entity->getProperty($filter->getFieldName()) === null) {
                     $filter->setActive('N');
-                    $filter->addError($filter->getFieldName(). 'n\'éxiste pas.');
+                    $this->dataTable->getError()
+                        ->addFilterError($filter->getFieldName() . 'n\'existe pas');
                 } else {
                     $filter->setActive('Y');
-                    $parameters->addSelect($entity->getProperty($filter->getFieldName())->getName());
+                    $params->addSelect($this->entity->getProperty($filter->getFieldName())->getName());
                 }
             }
         }
 
+    }
+
+    /**
+     * @param Parameters $params
+     */
+    private function addSelectForDisplayLink(Parameters $params)
+    {
+        /** @var Column $column */
+        foreach ($this->dataTable->getColumns() as $column) {
+            if ($column->getCellAction() !== null) {
+                if ($column->getCellAction()->getFunctionName() == CellAction::FUNCTION_DISPLAY_LINK) {
+                    foreach ($column->getCellAction()->getParams() as $fieldKey => $targetFieldKey) {
+
+                         try {
+                            $params->addSelect($this->entity->getProperty($fieldKey)->getName());
+                        } catch (\Exception $e){
+                            $this->dataTable->getError()->addColumnError(
+                                sprintf(Error::ERROR_MISSING_FIELD, $fieldKey, $column)
+                            );
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+
+    /**
+     * @param array $requestParams
+     * @param Parameters $parameters
+     * @throws \Doctrine\Common\Annotations\AnnotationException
+     * @throws \ReflectionException
+     */
+    private function addParamsRequest($requestParams, Parameters $parameters)
+    {
+        $entity = $this->boom->getGenerator()->getAppInspector()->getProjectEntity(
+            $this->dataTable->getCalcView()
+        );
+
+        foreach ($requestParams as $key => $value){
+
+            try {
+                $parameters->addFilter($entity->getProperty($key)->getName(), $value);
+            } catch (\Exception $e){
+                $this->dataTable->getError()->addRequestParamsError(sprintf(Error::ERROR_MISSING_FIELD,
+                    $key, $this->dataTable->getCalcView()));
+            }
+        }
     }
 
 

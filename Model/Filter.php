@@ -25,8 +25,6 @@ class Filter
 
     private $type;
 
-    private $errors = [];
-
     /**
      * @return mixed
      */
@@ -131,17 +129,6 @@ class Filter
             case $this::TYPE_MULTIPLE_DATE:
                 $this->type = $type;
                 break;
-            default:
-                $this->errors[] = 'Le type de filtre suivant n\'est pas supporté :' . $type;
         }
-    }
-
-    /**
-     * @param $error
-     * @return Filter
-     */
-    public function addError($error)
-    {
-        return $this->errors[] = $error;
     }
 }

@@ -5,13 +5,14 @@ namespace W3com\HulkBundle\Column;
 
 use W3com\HulkBundle\Model\Column;
 use W3com\HulkBundle\Model\DataTable;
+use W3com\HulkBundle\Url\UrlManager;
 
 class ColumnManager
 {
 
-    public function initColumns(DataTable $dataTable, $data)
+    public function initColumns(DataTable $dataTable)
     {
-        $this->adaptColumnsWithData($dataTable, $data);
+        $this->adaptColumnsWithData($dataTable);
         $this->addCheckboxColumn($dataTable);
         return $dataTable;
     }
@@ -20,7 +21,7 @@ class ColumnManager
      * @param DataTable $dataTable
      * @param array $data
      */
-    private function adaptColumnsWithData(DataTable $dataTable, array $data)
+    private function adaptColumnsWithData(DataTable $dataTable)
     {
 
         /** @var Column $column */
@@ -28,13 +29,17 @@ class ColumnManager
             foreach ($dataTable->getColumns() as $column) {
 
                 // if column is linked to property of entity
-                foreach ((array)$data[0] as $property => $value) {
+                foreach ($dataTable->getData()[0] as $property => $value) {
 
-                    $realProperty = substr($property, 3);
-
-
-                    if ($realProperty == strtolower($column->getFieldName())) {
+                    if ($property == $column->getFieldName()) {
                         $column->setActive('Y');
+                    } elseif ($column->hasCellAction()){
+
+                        if ($column->getCellAction()->getFunctionName().$column->getCellAction()->getTargetEntity()
+                        == $property){
+                            $column->setActive('Y');
+                        }
+
                     }
 
                     if ($column->getActive() !== 'Y') {
@@ -56,6 +61,7 @@ class ColumnManager
             $column->setFieldName(null);
             $dataTable->addColumn($column);
         }
+
         return $dataTable;
     }
 

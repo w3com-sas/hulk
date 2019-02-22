@@ -5,7 +5,7 @@ namespace W3com\HulkBundle\Controller;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\Session;
+use W3com\HulkBundle\Service\SessionManager;
 use W3com\HulkBundle\Service\TableProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -18,9 +18,13 @@ class JsonTableController extends AbstractController
 
     private $request;
 
-    public function __construct(TableProvider $provider, LoggerInterface $logger, RequestStack $request)
+    private $sessionManager;
+
+    public function __construct(TableProvider $provider,SessionManager $session,
+                                LoggerInterface $logger, RequestStack $request)
     {
         $this->tableProvider = $provider;
+        $this->sessionManager = $session;
         $this->logger = $logger;
         $this->request = $request;
     }
@@ -32,43 +36,31 @@ class JsonTableController extends AbstractController
      */
     public function jsonTableView($filename)
     {
-        $table = $this->tableProvider->getDataTable($filename);
+        $requestParams = $this->request->getCurrentRequest()->query;
+        $table = $this->tableProvider->getDataTable($filename, $requestParams);
 
-        if(!$table->getError()->isClassExist() && $table->getError()->isFileExist()){
+        if (!$table->getError()->isClassExist() && $table->getError()->isFileExist()) {
             return $this->redirectToRoute('w3com_create_view', ['filename' => $filename]);
         }
 
-        $session = $this->getSession();
-        $session->set('displayUrl', $this->request->getCurrentRequest()->getUri());
+        $this->sessionManager->initSession($filename);
         return $this->render('@W3comHulk/display.html.twig', ['table' => $table, 'filename' => $filename]);
     }
 
     /**
-     * @param $key
-     * @param $value
      * @return JsonResponse
      */
-    public function storeInSession($key, $value)
+    public function storeInSession()
     {
+        $data = $this->request->getCurrentRequest()->request->get('sessionData');
         try {
-            $session = $this->getSession();
-            $session->set($key, $value);
-        } catch (\Exception $e){
-            $this->logger->error('Session bug : '.$e->getMessage(), $e->getTrace());
+            $this->sessionManager->addStructureInfo();
+        } catch (\Exception $e) {
+            $this->logger->error('Session store bug : ' . $e->getMessage(), $e->getTrace());
             return new JsonResponse(null, 500);
         }
-        return new JsonResponse('Successfuly stored '.$key.' in session', 200);
+        return new JsonResponse('Successfuly stored ' . $data['key'] . ' in session', 200);
     }
 
-    private function getSession()
-    {
-        if (!$this->request->getCurrentRequest()->hasSession()){
-            $session = new Session();
-            $session->start();
-        } else {
-            $session = $this->request->getCurrentRequest()->getSession();
-        }
-        return $session;
-    }
 
 }

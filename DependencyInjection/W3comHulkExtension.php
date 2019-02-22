@@ -24,13 +24,14 @@ class W3comHulkExtension extends Extension
         $container->setParameter('hulk.config', $config);
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
 
-        $loader->load('services.xml');
+        $loader->load('table_provider.xml');
         $loader->load('json_table.xml');
         $loader->load('create_view.xml');
         $loader->load('update_view.xml');
         $loader->load('update_entity.xml');
         $loader->load('json_file_manager.xml');
         $loader->load('admin.xml');
+        $loader->load('session_manager.xml');
 
     }
 

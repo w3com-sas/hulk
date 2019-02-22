@@ -10,6 +10,7 @@ class Column
     const FIELD_CELL_ACTION = 'CellAction';
 
     const COL_TYPE_CHECKBOX = 'checkbox';
+    const TYPE_TEXT = 'text';
 
     /**
      * @var integer
@@ -48,7 +49,6 @@ class Column
 
     /**
      * @var string
-     * Determine if corresponding field exist in SAP ODATA and prevent error
      */
     private $active;
 
@@ -150,6 +150,11 @@ class Column
     public function getCellAction(): ?CellAction
     {
         return $this->cellAction;
+    }
+
+    public function hasCellAction(): bool
+    {
+        return $this->cellAction instanceof CellAction;
     }
 
     /**

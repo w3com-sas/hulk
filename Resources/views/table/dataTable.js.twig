@@ -56,6 +56,7 @@ $(document).ready(function () {
             },
 
             {% elseif column.type == 'action' %}
+            {% if column.cellAction.functionName == 'openForm' %}
             {
                 data: "{{ column.fieldName }}",
 
@@ -65,6 +66,17 @@ $(document).ready(function () {
                     return tpl.replace('[[data]]', data);
                 }
             },
+            {% elseif column.cellAction.functionName == 'displayLink' %}
+            {
+                data: "{{ column.cellAction.functionName }}{{ column.cellAction.targetEntity }}",
+
+                render: function (data, type, row) {
+                    var idTpl = '#' + '{{ column.cellAction.functionName }}{{ column.cellAction.targetEntity }}';
+                    var tpl = $(idTpl).html();
+                    return tpl.replace('[[data]]', data);
+                }
+            },
+            {% endif %}
             {% elseif column.type == 'checkbox' %}
             {
                 data: null,
@@ -111,5 +123,7 @@ $(document).ready(function () {
         countSelectedRows(rows);
     });
 
-    {% include '@W3comHulk/action/action.js.twig' %}
+    {% include '@W3comHulk/action/global_action.js.twig' %}
+
+
 })

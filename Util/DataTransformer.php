@@ -6,14 +6,18 @@ use W3com\BoomBundle\Generator\Model\Property;
 use W3com\BoomBundle\HanaEntity\AbstractEntity;
 use W3com\HulkBundle\Finder\ModelFinder;
 use W3com\HulkBundle\Model\DataTable;
+use W3com\HulkBundle\Url\UrlManager;
 
 class DataTransformer
 {
     private $modelFinder;
 
-    public function __construct(ModelFinder $finder)
+    private $urlManager;
+
+    public function __construct(ModelFinder $finder, UrlManager $manager)
     {
         $this->modelFinder = $finder;
+        $this->urlManager = $manager;
     }
 
     /**
@@ -24,8 +28,10 @@ class DataTransformer
      */
     public function addData(DataTable $dataTable, $data)
     {
-        $formatedData = $this->retrieveData($data, $dataTable);
+
+        $formatedData = $this->adaptKeyWithProperties($data, $dataTable);
         $dataTable->setData($formatedData);
+        $this->urlManager->generateDisplayLink($dataTable, $dataTable->getData());
         return $dataTable;
     }
 
@@ -35,7 +41,7 @@ class DataTransformer
      * @return array
      * @throws \Exception
      */
-    private function retrieveData($data, DataTable $dataTable)
+    private function adaptKeyWithProperties($data, DataTable $dataTable)
     {
 
         // Boom return all fields of object, even if their selects
@@ -73,7 +79,8 @@ class DataTransformer
         return $newData;
     }
 
-    public function checkDataFormat($value)
+
+    private function checkDataFormat($value)
     {
        /* $dateTime = \DateTime::createFromFormat('Y-m-d H:i:s',
             str_replace('T', ' ', $value));

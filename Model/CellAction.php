@@ -8,7 +8,9 @@ class CellAction
     const FIELD_FUNCTION_NAME = 'FunctionName';
     const FIELD_TARGET_ENTITY = 'TargetEntity';
     const FIELD_ICON = 'Icon';
+    const FIELD_PARAMS = 'Params';
 
+    const FUNCTION_DISPLAY_LINK = 'displayLink';
     private $label;
 
     private $functionName;
@@ -16,6 +18,8 @@ class CellAction
     private $targetEntity;
 
     private $icon;
+
+    private $params;
 
     /**
      * @return mixed
@@ -79,6 +83,23 @@ class CellAction
     public function setFunctionName($functionName): void
     {
         $this->functionName = $functionName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getParams()
+    {
+        return $this->params;
+    }
+
+    /**
+     * @param $key
+     * @param $value
+     */
+    public function addParam($key, $value): void
+    {
+        $this->params[$key] = $value;
     }
 
 }

@@ -4,13 +4,29 @@ namespace W3com\HulkBundle\Model;
 
 class Error
 {
+    const ERROR_MISSING_FIELD = 'Le champ %d n\'existe pas dans la calculation view %s';
+
+
+    /** @var mixed */
     private $nonexistentProperties;
 
+    /** @var bool */
     private $classExist;
 
+    /** @var bool */
     private $fileExist;
 
+    /** @var bool */
     private $viewExist;
+
+    /** @var array */
+    private $filterErrors;
+
+    /** @var array */
+    private $columnErrors;
+
+    /** @var array */
+    private $requestParamsErrors;
 
     /**
      * @param bool $fileExist
@@ -82,5 +98,53 @@ class Error
     public function setViewExist(bool $viewExist): void
     {
         $this->viewExist = $viewExist;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFilterErrors(): array
+    {
+        return $this->filterErrors;
+    }
+
+    /**
+     * @param $filterError
+     */
+    public function addFilterError($filterError): void
+    {
+        $this->filterErrors[] = $filterError;
+    }
+
+    /**
+     * @return array
+     */
+    public function getColumnErrors(): array
+    {
+        return $this->columnErrors;
+    }
+
+    /**
+     * @param $columnError
+     */
+    public function addColumnError($columnError): void
+    {
+        $this->columnErrors[] = $columnError;
+    }
+
+    /**
+     * @return array
+     */
+    public function getRequestParamsErrors(): array
+    {
+        return $this->requestParamsErrors;
+    }
+
+    /**
+     * @param $requestParamsError
+     */
+    public function addRequestParamsError($requestParamsError): void
+    {
+        $this->requestParamsErrors[] = $requestParamsError;
     }
 }
