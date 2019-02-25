@@ -1,7 +1,10 @@
 {% extends '@W3comHulk/base.html.twig' %}
 {% block content %}
 
-    {{ knp_menu_render('main', {'template' : '@W3comHulk/menu.html.twig'}) }}
+    <div class="collapse" id="hulkNav">
+        {{ knp_menu_render('main', {'template' : '@W3comHulk/menu.html.twig'}) }}
+
+    </div>
     {% if table.error.fileExist %}
 
         {# Warning message #}
