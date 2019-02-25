@@ -1,0 +1,21 @@
+{% extends '@KnpMenu/menu.html.twig' %}
+
+{% block list %}
+    <ol class="breadcrumb">
+        {{ block('children') }}
+    </ol>
+{% endblock %}
+
+{% block item %}
+        <li class="breadcrumb-item">
+            {%- if item.uri is not empty and (not matcher.isCurrent(item) or options.currentAsLink) %}
+                {{ block('linkElement') }}
+            {%- else %}
+                {{ block('spanElement') }}
+            {%- endif %}
+        </li>
+{% endblock %}
+
+{% block linkElement %}
+    <a href="{{ item.uri }}" class="breadcrumb-item">{{ block('label') }}</a>
+{% endblock %}
