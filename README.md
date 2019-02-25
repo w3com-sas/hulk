@@ -44,16 +44,16 @@ Declare routes in config/route.yaml
  
 ````yaml
 display_table:
-  resource: '@W3comHulkBundle/Resources/config/routing/display_table_view.xml'
+  resource: display.xml
 
 create_view:
-  resource: '@W3comHulkBundle/Resources/config/routing/create_view.xml'
+  resource: create_view_controller.xml
 
 update_view:
-  resource: '@W3comHulkBundle/Resources/config/routing/update_view.xml'
+  resource: update_project_entity_controller.xml
   
 update_entity:
-  resource: '@W3comHulkBundle/Resources/config/routing/update_entity.xml'
+  resource: update_sap_controller.xml
 ```` 
 
 [Next step, create the json file](Resources/doc/1_create_json_file.rst)

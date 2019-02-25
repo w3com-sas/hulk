@@ -37,7 +37,7 @@ class UrlManager
                                 $urlParams[$targetFieldName] = $valueField;
                             }
                             $urlParams['filename'] = $column->getCellAction()->getTargetEntity();
-                            $url = $this->router->generate('w3com_json_table_view',
+                            $url = $this->router->generate('w3com_display',
                                 $urlParams);
                             $lines[self::DISPLAY_LINK_NAME.$column->getCellAction()->getTargetEntity()] = $url;
                         }

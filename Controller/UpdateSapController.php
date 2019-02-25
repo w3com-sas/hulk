@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use W3com\BoomBundle\Exception\EntityNotFoundException;
 use W3com\BoomBundle\Service\BoomManager;
 
-class UpdateHanaEntityController extends AbstractController
+class UpdateSapController extends AbstractController
 {
     private $boom;
 
@@ -28,7 +28,7 @@ class UpdateHanaEntityController extends AbstractController
     /**
      * @throws \Exception
      */
-    public function updateEntity()
+    public function updateSap()
     {
         $this->manageRequest();
         $data = [];

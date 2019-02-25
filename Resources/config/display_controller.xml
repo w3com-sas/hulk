@@ -4,14 +4,14 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="w3com_hulk.controller.admin_controller"
-                 class="W3com\HulkBundle\Controller\AdminController" public="true">
-            <argument type="service" id="w3com_hulk.service.json_file_manager"/>
+        <service id="w3com_hulk.controller.display_controller"
+                 class="W3com\HulkBundle\Controller\DisplayController" public="true">
+            <argument type="service" id="w3com_hulk.service.table_provider"/>
             <argument type="service" id="monolog.logger"/>
+            <argument type="service" id="request_stack"/>
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>
         </service>
     </services>
-
 </container>

@@ -24,7 +24,8 @@
     "symfony/console": "*",
     "symfony/serializer-pack": "*",
     "symfony/http-foundation": "*",
-    "doctrine/annotations": "1.6.0"
+    "doctrine/annotations": "1.6.0",
+    "knplabs/knp-menu-bundle" : "^2.0"
   },
   "require-dev": {
     "symfony/phpunit-bridge": "^4.2"

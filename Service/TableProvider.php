@@ -78,7 +78,6 @@ class TableProvider
      * @param $config
      * @param BoomManager $boom
      * @param UrlGeneratorInterface $router
-     * @throws \Doctrine\Common\Annotations\AnnotationException
      * @throws \ReflectionException
      */
     public function __construct($config, BoomManager $boom, UrlGeneratorInterface $router)
@@ -123,7 +122,6 @@ class TableProvider
                 $this->indexor->addIndex($this->dataTable);
             }
         }
-        dump($this->dataTable);
         return $this->dataTable;
     }
 }

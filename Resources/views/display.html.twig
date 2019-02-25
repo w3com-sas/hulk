@@ -1,6 +1,7 @@
 {% extends '@W3comHulk/base.html.twig' %}
 {% block content %}
 
+    {{ knp_menu_render('main') }}
     {% if table.error.fileExist %}
 
         {# Warning message #}
@@ -30,7 +31,7 @@
     <script>
 
         const hulkUrls = {
-            updateEntity: '{{ path('w3com_update_entity') }}'
+            updateSap: '{{ path('w3com_update_sap') }}'
         };
         {% include '@W3comHulk/table/dataTable.js.twig' %}
 

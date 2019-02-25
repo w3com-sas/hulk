@@ -3,10 +3,11 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="w3com_hulk.service.json_file_manager"
-                 class="W3com\HulkBundle\Service\JsonFileManager">
-            <argument>%hulk.config%</argument>
-            <argument type="service" id="W3com\BoomBundle\Service\BoomManager"/>
+        <service id="w3com_hulk.menu.menu_builder"
+                 class="W3com\HulkBundle\Menu\MenuBuilder">
+            <argument type="service" id="knp_menu.factory"/>
+            <argument type="service" id="w3com_hulk.menu.menu_session"/>
+            <tag name="knp_menu.menu_builder" method="createMainMenu" alias="main"/>
         </service>
     </services>
 </container>

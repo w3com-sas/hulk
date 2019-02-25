@@ -2,7 +2,6 @@
 
 namespace W3com\HulkBundle\Util;
 
-use phpDocumentor\Reflection\Element;
 use W3com\HulkBundle\Model\CellAction;
 use W3com\HulkBundle\Model\Column;
 use W3com\HulkBundle\Model\Config;

@@ -27,7 +27,7 @@ function countSelectedRows(rows) {
     node.style.display = 'block';
 }
 
-function disableSubmitButton(obj){
+function disableSubmitButton(obj) {
     $(obj).attr('disabled', true);
     $(obj).html('<i class="fas fa-spinner fa-spin"></i>');
 }
@@ -45,7 +45,7 @@ function formatDataToUpdate(data) {
 function updateSap(data, targetEntity, targetField, entityKey, targetData, modal) {
 
     var rows = this.formatDataToUpdate(data);
-    var url = hulkUrls.updateEntity;
+    var url = hulkUrls.updateSap;
     var postData = {
         "data": rows,
         "targetEntity": targetEntity,
@@ -75,23 +75,18 @@ function updateSap(data, targetEntity, targetField, entityKey, targetData, modal
         },
         error: function (xhr) {
 
-            if (xhr.status === 422) {
-                var message = 'Aucune ligne n\'a été sélectionnée';
-            } else {
-                var message = 'Une erreur inconnue est survenue, contactez le support';
-            }
-
+            var message = 'Une erreur inconnue est survenue, contactez le support';
             var tpl = '' +
                 '<p class="text-danger text-center">' +
                 '<i class="fas fa-exclamation-triangle mr-2"></i>' +
                 message + '</p>';
 
-
             if (modal.find('.modal-body').has('p').length >= 1) {
                 modal.find('.modal-body').find('p').remove();
             }
             modal.find('.modal-body').append(tpl);
-            modal.find('.btn-success').html('<i class="far fa-paper-plane mr-2"></i>Valider').removeAttr('disabled');;
+            modal.find('.btn-success').html('<i class="far fa-paper-plane mr-2"></i>Valider').removeAttr('disabled');
+            ;
         }
     })
 }

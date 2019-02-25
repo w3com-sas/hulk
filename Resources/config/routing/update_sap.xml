@@ -3,7 +3,7 @@
 <routes xmlns="http://symfony.com/schema/routing"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
-    <route id="w3com_update_view" path="/update-view/{filename}" methods="GET">
-        <default key="_controller">w3com_hulk.update_view_controller::updateView</default>
+    <route id="w3com_update_sap" path="/update-entity" methods="POST">
+        <default key="_controller">w3com_hulk.controller.update_sap_controller::updateSap</default>
     </route>
 </routes>

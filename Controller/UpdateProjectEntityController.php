@@ -5,7 +5,7 @@ namespace W3com\HulkBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use W3com\BoomBundle\Service\BoomManager;
 
-class UpdateViewController extends AbstractController
+class UpdateProjectEntityController extends AbstractController
 {
     private $boom;
 
