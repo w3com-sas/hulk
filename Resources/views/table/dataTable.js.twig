@@ -1,4 +1,3 @@
-
 {% include '@W3comHulk/filter/filter_data.js.twig' %}
 
 $(document).ready(function () {
@@ -15,6 +14,10 @@ $(document).ready(function () {
         {% endfor %}
     ];
     var table = $('#dataTable').DataTable({
+        buttons: [
+            'selectAll',
+            'selectNone'
+        ],
         language: {
             processing: "Traitement en cours...",
             search: "Rechercher&nbsp;:",
@@ -35,7 +38,9 @@ $(document).ready(function () {
             aria: {
                 sortAscending: ": activer pour trier la colonne par ordre croissant",
                 sortDescending: ": activer pour trier la colonne par ordre décroissant"
-            }
+            },
+            selectAll: "Select all items",
+            selectNone: "Select none"
         },
         dom: 'tp',
         {% if table.pageLenght != null %}
@@ -82,7 +87,7 @@ $(document).ready(function () {
                 data: null,
                 render: function (data, type, row) {
                     return $('#checkboxTpl').html();
-                }
+                },
             },
             {% elseif column.type == 'icon' %}
             {
@@ -99,14 +104,26 @@ $(document).ready(function () {
         ],
         colReorder: true,
         columnDefs: [
-            {% for column in table.columns if column.hidden %}
+            {% for column in table.columns if column.hidden or column.type == 'checkbox' %}
+
+            {% if column.type == 'checkbox' %}
+            {
+                "targets": [ {{ column.index }} ],
+                "visible": true,
+                "searchable": false
+            },
+            {% endif %}
             {
                 "targets": [ {{ column.index }} ],
                 "visible": false,
-                "searchable": true
+                "searchable": false,
+                "orderable": false
             },
             {% endfor %}
-        ]
+        ],
+        "fnPreDrawCallback": function (oSettings) {
+            $('#headerCheckboxInput').prop("checked", false)
+        }
     });
 
     {% include '@W3comHulk/filter/filter.js.twig' %}
@@ -121,6 +138,16 @@ $(document).ready(function () {
         }
         var rows = table.rows('.selected').data();
         countSelectedRows(rows);
+    });
+
+    $('#headerCheckbox :checkbox').on('click', function () {
+
+        if (this.checked) {
+            $('#dataTable tbody tr').addClass('selected')
+        } else {
+            $('#dataTable tbody tr').removeClass('selected')
+        }
+        countSelectedRows(table.rows('.selected').data())
     });
 
     {% include '@W3comHulk/action/global_action.js.twig' %}
