@@ -1,0 +1,39 @@
+//window.onbeforeunload = function () {
+
+function wesh() {
+
+
+    var data = {};
+    data.currentRoute = '{{ app.request.get('_route') }}{{ app.request.get('filename') }}';
+    data.filters = {};
+
+    {% for filter in table.filters if filter.active == 'Y' and filter.type == 'single' %}
+
+    data.filters.{{ filter.fieldName }} = $('#select{{ filter.fieldName }}').val();
+
+    {% endfor %}
+
+
+    {% for filter in table.filters if filter.active == 'Y' and
+        (filter.type == 'multiple' or filter.type == 'multiple-date') %}
+
+
+    data.filters.{{ filter.fieldName }} = {
+        min: $('#min{{ filter.fieldName }}').val(),
+        max: $('#max{{ filter.fieldName }}').val()
+    }
+
+    {% endfor %}
+
+    $.ajax({
+        method: "POST",
+        data: data,
+        url: '{{ url('w3com_save_filters') }}',
+        success: function () {
+            console.log(data)
+        }
+
+    })
+}
+
+//}

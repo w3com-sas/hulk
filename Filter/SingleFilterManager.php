@@ -18,7 +18,7 @@ class SingleFilterManager extends AbstractFilterManager
     public function addValues(DataTable $dataTable)
     {
 
-        if (!empty($dataTable->getFilters())){
+        if (!empty($dataTable->getFilters())) {
             /** @var Filter $filter */
             foreach ($dataTable->getFilters() as $filter) {
 

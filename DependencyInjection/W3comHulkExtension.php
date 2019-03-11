@@ -30,6 +30,7 @@ class W3comHulkExtension extends Extension
         $loader->load('update_sap_controller.xml');
         $loader->load('menu_builder.xml');
         $loader->load('menu_session.xml');
+        $loader->load('save_filters_controller.xml');
     }
 
 }

@@ -31,7 +31,7 @@ class MenuSession
         return $this->manageMenu($currentMenu);
     }
 
-    private function getCurrentMenuItem($isFirst = false, $menu = [])
+    public function getCurrentMenuItem($isFirst = false, $menu = [])
     {
         $currentMenuItem = [];
         $currentMenuItem['route'] = $this->request->getCurrentRequest()->get('_route');
@@ -42,7 +42,7 @@ class MenuSession
             return $menu[$currentMenuItem['uniqId']];
         }
 
-        $currentMenuItem['index'] = $isFirst === true ? 1 : $this->getLastItemIndex() + 1;
+        $currentMenuItem['index'] = $isFirst ? 1 : $this->getLastItemIndex() + 1;
         return $currentMenuItem;
     }
 
