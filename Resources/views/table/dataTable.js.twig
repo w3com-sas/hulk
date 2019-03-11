@@ -134,8 +134,10 @@ $(document).ready(function () {
 
         if (this.checked) {
             $('#dataTable tbody tr').addClass('selected')
+            $('#dataTable tbody tr label input').prop('checked', true)
         } else {
             $('#dataTable tbody tr').removeClass('selected')
+            $('#dataTable tbody tr label input').prop('checked', false)
         }
         countSelectedRows(table.rows('.selected').data())
     });
