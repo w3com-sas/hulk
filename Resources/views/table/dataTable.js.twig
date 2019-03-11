@@ -14,10 +14,6 @@ $(document).ready(function () {
         {% endfor %}
     ];
     var table = $('#dataTable').DataTable({
-        buttons: [
-            'selectAll',
-            'selectNone'
-        ],
         language: {
             processing: "Traitement en cours...",
             search: "Rechercher&nbsp;:",
@@ -28,28 +24,11 @@ $(document).ready(function () {
             infoPostFix: "",
             loadingRecords: "Chargement en cours...",
             zeroRecords: "Aucun &eacute;l&eacute;ment &agrave; afficher",
-            emptyTable: "Aucune donnée disponible dans le tableau",
-            paginate: {
-                first: "Premier",
-                previous: "Pr&eacute;c&eacute;dent",
-                next: "Suivant",
-                last: "Dernier"
-            },
-            aria: {
-                sortAscending: ": activer pour trier la colonne par ordre croissant",
-                sortDescending: ": activer pour trier la colonne par ordre décroissant"
-            },
-            selectAll: "Select all items",
-            selectNone: "Select none"
+            emptyTable: "Aucune donnée disponible dans le tableau"
         },
         dom: 'tp',
-        {% if table.pageLenght != null %}
         pageLength: {{ table.pageLenght }},
-        {% else %}
-        pageLength: 10,
-        {% endif %}
         data: data,
-        //   order: [[3, "asc"]],
         columns: [
 
             {% for column in table.columns if column.active == 'Y' %}
@@ -87,7 +66,7 @@ $(document).ready(function () {
                 data: null,
                 render: function (data, type, row) {
                     return $('#checkboxTpl').html();
-                },
+                }
             },
             {% elseif column.type == 'icon' %}
             {
@@ -110,19 +89,30 @@ $(document).ready(function () {
             {
                 "targets": [ {{ column.index }} ],
                 "visible": true,
-                "searchable": false
-            },
-            {% endif %}
-            {
-                "targets": [ {{ column.index }} ],
-                "visible": false,
                 "searchable": false,
                 "orderable": false
             },
+            {% else %}
+            {
+                "targets": [ {{ column.index }} ],
+                "visible": false,
+                "searchable": true
+            },
+            {% endif %}
             {% endfor %}
         ],
-        "fnPreDrawCallback": function (oSettings) {
-            $('#headerCheckboxInput').prop("checked", false)
+        drawCallback: function () {
+
+            var selectedRows = $('#dataTable tbody .selected');
+            var headerCheckbox = $('#headerCheckbox input');
+
+            if (selectedRows.length === {{ table.pageLenght }}){
+                headerCheckbox.prop("checked", true)
+            } else {
+                headerCheckbox.prop("checked", false)
+
+            }
+
         }
     });
 
