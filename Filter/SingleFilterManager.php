@@ -14,7 +14,6 @@ class SingleFilterManager extends AbstractFilterManager
         return $dataTable;
     }
 
-    // Très gros traitement pour ajouter les données aux filtres...
     public function addValues(DataTable $dataTable)
     {
 

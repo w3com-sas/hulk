@@ -39,10 +39,16 @@ class MenuBuilder
                         break;
                 }
             }
-            $menu->addChild($menuName, ['route' => $parameters['route'],
+            $displayName = $this->getDisplayName($menuName);
+            $menu->addChild($displayName, ['route' => $parameters['route'],
                 'routeParameters' => $parameters['routeParameters']]);
         }
         return $menu;
+    }
+
+    private function getDisplayName($menuName)
+    {
+        return str_replace('w3com_display', 'Display ', $menuName);
     }
 
 

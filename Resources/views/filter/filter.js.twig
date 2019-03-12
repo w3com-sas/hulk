@@ -3,15 +3,30 @@ $('.single-filter .custom-select').on('change', function () {
     table
         .column($(this).attr('colIndex'))
         .search(this.value.toString())
-        .draw()
+        .draw();
+    saveFilters();
+
 });
 $('#searchBar').on('keyup change', function () {
     table
         .search(this.value)
-        .draw()
+        .draw();
+    saveFilters();
 });
 
 // Multiple filter become active when the table is draw in something like fnEventRedraw
 $('.multiple-filter').on('keyup change', function () {
     table.draw();
+    saveFilters();
 });
+
+{% for filter in table.filters if filter.defaultValue != null and filter.defaultValue != "" %}
+{% if filter.type == 'single' %}
+table
+    .column({{ filter.index }})
+    .search('{{ filter.defaultValue }}')
+    .draw();
+{% else %}
+table.draw();
+{% endif %}
+{% endfor %}

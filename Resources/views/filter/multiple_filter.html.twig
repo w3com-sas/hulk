@@ -4,14 +4,28 @@
             <div class="input-group-prepend">
                 <span class="input-group-text">{{ filter.label }}</span>
             </div>
-            <input type="text" class="form-control multiple-filter" id="min{{ filter.fieldName }}">
-            <input type="text" class="form-control multiple-filter" id="max{{ filter.fieldName }}">
+            {% if filter.defaultValue != null and filter.defaultValue != "" %}
+                <input type="text" value="{{ filter.defaultValue['min'] }}"
+                       class="form-control multiple-filter" id="min{{ filter.fieldName }}">
+                <input type="text" value="{{ filter.defaultValue['max'] }}"
+                       class="form-control multiple-filter" id="max{{ filter.fieldName }}">
+            {% else %}
+                <input type="text" class="form-control multiple-filter" id="min{{ filter.fieldName }}">
+                <input type="text" class="form-control multiple-filter" id="max{{ filter.fieldName }}">
+            {% endif %}
         {% elseif filter.type == 'multiple-date' %}
             <div class="input-group-prepend">
                 <span class="input-group-text">{{ filter.label }}</span>
             </div>
-            <input type="date" class="form-control multiple-filter" id="min{{ filter.fieldName }}">
-            <input type="date" class="form-control multiple-filter" id="max{{ filter.fieldName }}">
+            {% if filter.defaultValue != null and filter.defaultValue != "" %}
+                <input type="date" value="{{ filter.defaultValue['min'] }}"
+                       class="form-control multiple-filter" id="min{{ filter.fieldName }}">
+                <input type="date" value="{{ filter.defaultValue['max'] }}"
+                       class="form-control multiple-filter" id="max{{ filter.fieldName }}">
+            {% else %}
+                <input type="date" class="form-control multiple-filter" id="min{{ filter.fieldName }}">
+                <input type="date" class="form-control multiple-filter" id="max{{ filter.fieldName }}">
+            {% endif %}
         {% endif %}
     {% endfor %}
 </div>

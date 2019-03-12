@@ -1,8 +1,4 @@
-//window.onbeforeunload = function () {
-
-function wesh() {
-
-
+function saveFilters() {
     var data = {};
     data.currentRoute = '{{ app.request.get('_route') }}{{ app.request.get('filename') }}';
     data.filters = {};
@@ -30,10 +26,13 @@ function wesh() {
         data: data,
         url: '{{ url('w3com_save_filters') }}',
         success: function () {
-            console.log(data)
+
         }
 
     })
 }
 
-//}
+
+
+
+

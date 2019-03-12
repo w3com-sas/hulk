@@ -25,6 +25,8 @@ class Filter
 
     private $type;
 
+    private $defaultValue;
+
     /**
      * @return mixed
      */
@@ -130,5 +132,21 @@ class Filter
                 $this->type = $type;
                 break;
         }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDefaultValue()
+    {
+        return $this->defaultValue;
+    }
+
+    /**
+     * @param mixed $defaultValue
+     */
+    public function setDefaultValue($defaultValue): void
+    {
+        $this->defaultValue = $defaultValue;
     }
 }

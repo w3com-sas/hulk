@@ -31,6 +31,7 @@ class W3comHulkExtension extends Extension
         $loader->load('menu_builder.xml');
         $loader->load('menu_session.xml');
         $loader->load('save_filters_controller.xml');
+        $loader->load('filter_session_manager.xml');
     }
 
 }

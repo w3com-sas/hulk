@@ -2,10 +2,8 @@
 
 namespace W3com\HulkBundle\Column;
 
-
 use W3com\HulkBundle\Model\Column;
 use W3com\HulkBundle\Model\DataTable;
-use W3com\HulkBundle\Url\UrlManager;
 
 class ColumnManager
 {
@@ -25,27 +23,32 @@ class ColumnManager
     {
 
         /** @var Column $column */
-        if (!empty($dataTable->getColumns())){
+        if (!empty($dataTable->getColumns())) {
+
             foreach ($dataTable->getColumns() as $column) {
 
                 // if column is linked to property of entity
-                foreach ($dataTable->getData()[0] as $property => $value) {
+                if (!empty($dataTable->getData())) {
 
-                    if ($property == $column->getFieldName()) {
-                        $column->setActive('Y');
-                    } elseif ($column->hasCellAction()){
+                    foreach ($dataTable->getData()[0] as $property => $value) {
 
-                        if ($column->getCellAction()->getFunctionName().$column->getCellAction()->getTargetEntity()
-                        == $property){
+                        if ($property == $column->getFieldName()) {
                             $column->setActive('Y');
+                        } elseif ($column->hasCellAction()) {
+
+                            if ($column->getCellAction()->getFunctionName() . $column->getCellAction()->getTargetEntity()
+                                == $property) {
+                                $column->setActive('Y');
+                            }
+
                         }
 
-                    }
-
-                    if ($column->getActive() !== 'Y') {
-                        $column->setActive('N');
+                        if ($column->getActive() !== 'Y') {
+                            $column->setActive('N');
+                        }
                     }
                 }
+
             }
         }
     }

@@ -5,6 +5,7 @@ namespace W3com\HulkBundle\Service;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use W3com\HulkBundle\Column\ColumnManager;
 use W3com\HulkBundle\Filter\FilterManager;
+use W3com\HulkBundle\Filter\FilterSessionManager;
 use W3com\HulkBundle\Finder\JsonFinder;
 use W3com\HulkBundle\Finder\ModelFinder;
 use W3com\HulkBundle\Model\DataTable;
@@ -74,14 +75,21 @@ class TableProvider
     private $urlManager;
 
     /**
+     * @var FilterSessionManager
+     */
+    private $filterSessionManager;
+
+    /**
      * TableProvider constructor.
      * @param $config
      * @param BoomManager $boom
      * @param UrlGeneratorInterface $router
+     * @param FilterSessionManager $filterSessionManager
      * @throws \ReflectionException
      */
-    public function __construct($config, BoomManager $boom, UrlGeneratorInterface $router)
+    public function __construct($config, BoomManager $boom, UrlGeneratorInterface $router, FilterSessionManager $filterSessionManager)
     {
+        $this->filterSessionManager = $filterSessionManager;
         $this->dataTable = new DataTable();
         $this->config = $config;
         $this->constructor = new DataTablesConstructor();
@@ -118,6 +126,8 @@ class TableProvider
                 $this->columnManager->initColumns($this->dataTable);
 
                 $this->filterManager->initFilters($this->dataTable);
+
+                $this->filterSessionManager->checkFiltersDefaultValue($this->dataTable);
 
                 $this->indexor->addIndex($this->dataTable);
             }

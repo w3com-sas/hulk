@@ -32,6 +32,7 @@ class DisplayController extends AbstractController
      */
     public function display($filename)
     {
+
         $requestParams = $this->request->getCurrentRequest()->query;
         $table = $this->tableProvider->getDataTable($filename, $requestParams);
 
