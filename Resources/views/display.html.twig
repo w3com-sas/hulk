@@ -2,7 +2,8 @@
 {% block content %}
 
     <div class="collapse" id="hulkNav">
-        {{ knp_menu_render('main', {'template' : '@W3comHulk/menu.html.twig'}) }}
+        {% set menu = knp_menu_get('main', [], {'displayName' : table.displayName }) %}
+        {{ knp_menu_render(menu, {'template' : '@W3comHulk/include/menu.html.twig'}) }}
     </div>
     {% if table.error.fileExist %}
 
@@ -31,7 +32,6 @@
 
 {% block javascripts %}
     <script>
-
         const hulkUrls = {
             updateSap: '{{ path('w3com_update_sap') }}'
         };

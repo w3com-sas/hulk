@@ -20,10 +20,11 @@ class MenuBuilder
         $this->factory = $factory;
     }
 
-    public function createMainMenu()
+    public function createMainMenu(array $options)
     {
 
-        $menuSession = $this->menuSession->getHulkMenu();
+
+        $menuSession = $this->menuSession->getHulkMenu($options['displayName']);
         $menu = $this->factory->createItem('root');
 
         foreach ($menuSession as $menuName => $menuItem) {
@@ -37,19 +38,21 @@ class MenuBuilder
                     case 'routeParameters':
                         $parameters['routeParameters'] = $value;
                         break;
+                    case 'displayName':
+                        $displayName = $value;
+                        break;
                 }
             }
-            $displayName = $this->getDisplayName($menuName);
+            if (!isset($displayName)){
+                $displayName = $menuItem['uniqId'];
+            }
+
             $menu->addChild($displayName, ['route' => $parameters['route'],
                 'routeParameters' => $parameters['routeParameters']]);
         }
         return $menu;
     }
 
-    private function getDisplayName($menuName)
-    {
-        return str_replace('w3com_display', 'Display ', $menuName);
-    }
 
 
 }

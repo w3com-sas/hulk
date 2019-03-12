@@ -17,26 +17,27 @@ class MenuSession
         $this->request = $request;
     }
 
-    public function getHulkMenu()
+    public function getHulkMenu($currentDisplayName)
     {
         if (!$this->session->has('menu')) {
             $menu = [];
-            $currentMenu = $this->getCurrentMenuItem(true);
+            $currentMenu = $this->getCurrentMenuItem($currentDisplayName,true, []);
             $menu[$currentMenu['uniqId']] = $currentMenu;
             $this->session->set('menu', $menu);
             return $menu;
         }
         $menu = $this->session->get('menu');
-        $currentMenu = $this->getCurrentMenuItem(false, $menu);
+        $currentMenu = $this->getCurrentMenuItem($currentDisplayName,false, $menu);
         return $this->manageMenu($currentMenu);
     }
 
-    public function getCurrentMenuItem($isFirst = false, $menu = [])
+    public function getCurrentMenuItem($currentDisplayName, $isFirst = false, $menu = [])
     {
         $currentMenuItem = [];
         $currentMenuItem['route'] = $this->request->getCurrentRequest()->get('_route');
         $currentMenuItem['routeParameters'] = $this->getRouteParams();
         $currentMenuItem['uniqId'] = $currentMenuItem['route'] . implode('_', $currentMenuItem['routeParameters']);
+        $currentMenuItem['displayName'] = $currentDisplayName;
 
         if (array_key_exists($currentMenuItem['uniqId'], $menu)) {
             return $menu[$currentMenuItem['uniqId']];

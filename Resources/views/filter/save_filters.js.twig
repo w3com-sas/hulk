@@ -25,8 +25,8 @@ function saveFilters() {
         method: "POST",
         data: data,
         url: '{{ url('w3com_save_filters') }}',
-        success: function () {
-
+        success: function (data) {
+            $('#countFilters').text('Filtres ('+data.countFilters+')');
         }
 
     })

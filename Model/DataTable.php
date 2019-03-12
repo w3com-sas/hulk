@@ -12,11 +12,17 @@ class DataTable
     const FIELD_FILTERS = 'Filters';
     const FIELD_COLUMNS = 'Columns';
     const FIELD_PAGE_LENGHT = 'PageLenght';
+    const FIELD_DISPLAY_NAME = 'DisplayName';
 
     public function __construct()
     {
         $this->error = new Error();
     }
+
+    /**
+     * @var string
+     */
+    private $displayName;
 
     /**
      * @var string
@@ -52,6 +58,11 @@ class DataTable
      * @var integer
      */
     private $pageLenght;
+
+    /**
+     * @var integer
+     */
+    private $countSavedFilters = 0;
 
     /**
      * @var Error
@@ -243,6 +254,35 @@ class DataTable
     public function setPageLenght($pageLenght): void
     {
         $this->pageLenght = $pageLenght;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSavedFilters(): int
+    {
+        return $this->countSavedFilters;
+    }
+
+    public function addSavedFilters()
+    {
+        $this->countSavedFilters = $this->countSavedFilters + 1;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDisplayName(): ?string
+    {
+        return $this->displayName;
+    }
+
+    /**
+     * @param string $displayName
+     */
+    public function setDisplayName(string $displayName): void
+    {
+        $this->displayName = $displayName;
     }
 
 }

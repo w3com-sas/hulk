@@ -39,6 +39,7 @@ class FilterSessionManager
                         foreach ($dataTable->getFilters() as $filter) {
 
                             if ($filter->getFieldName() === $filterSessionName) {
+                                $dataTable->addSavedFilters();
                                 $filter->setDefaultValue($filterSessionValue);
                             }
 

@@ -31,6 +31,9 @@ class DataTablesConstructor
                     case DataTable::FIELD_PAGE_LENGHT:
                         $dataTable->setPageLenght(intval($value));
                         break;
+                    case DataTable::FIELD_DISPLAY_NAME:
+                        $dataTable->setDisplayName($value);
+                        break;
                 }
             }
             if ($dataTable->getPageLenght() === null){

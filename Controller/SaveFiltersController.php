@@ -4,8 +4,8 @@ namespace W3com\HulkBundle\Controller;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class SaveFiltersController extends AbstractController
@@ -59,10 +59,9 @@ class SaveFiltersController extends AbstractController
             $this->session->set('filters', $sessionFilters);
         } catch (\Exception $e){
             $this->logger->error($e->getMessage(), $e->getTrace());
-            return new Response('Unknow error when trying to save filter in session.', 500);
+            return new JsonResponse('Unknow error when trying to save filter in session.', 500);
         }
 
-        dump($this->session);
-        return new Response('Filter save with success');
+        return new JsonResponse(['Success', 'countFilters' => count($sessionFilters[$name])]);
     }
 }

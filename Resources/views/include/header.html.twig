@@ -5,9 +5,9 @@
     </a>
 
     {% if table.filters is not null %}
-        <a class="text-gray ml-3 my-auto" data-toggle="collapse" href="#filters">
+        <a class="text-gray ml-3 my-auto" data-toggle="collapse" href="#filters" id="countFilters">
             <i class="fas fa-filter mr-2"></i>
-            Filtres
+            Filtres ({{ table.savedFilters }})
         </a>
     {% endif %}
     <a class="text-gray my-auto ml-3" href="">
