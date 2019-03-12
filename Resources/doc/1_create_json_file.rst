@@ -27,8 +27,8 @@ This entry appear in the navigation menu
 B) Global actions
 -----------------
 
-Global actions are defined to manage multiple rows of the DataTable. It's an array so it can contain
-lot of actions. In the front of the application, these appear when user click on "Action" link.
+Global actions are defined to manage multiple rows of the DataTable.
+ In the front of the application, these appear when user click on "Action" link.
 
 Excel export
 ~~~~~~~~~~~~

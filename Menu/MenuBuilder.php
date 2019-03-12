@@ -47,6 +47,18 @@ class MenuBuilder
                 $displayName = $menuItem['uniqId'];
             }
 
+            if (count($parameters['routeParameters']) > 1){
+
+                foreach ($parameters['routeParameters'] as $key => $parameter){
+
+                    if ($key !== 'filename'){
+
+                        $displayName.=' ('.$parameter.')';
+
+                    }
+                }
+            }
+
             $menu->addChild($displayName, ['route' => $parameters['route'],
                 'routeParameters' => $parameters['routeParameters']]);
         }
