@@ -1,11 +1,12 @@
 Create the json file
 =============================
 
-A) Calculation view
+A) Calculation view and display name
 --------------------
 
 
 .. code:: json
+
 
     {
         "CalculationView" : "ExempleView"
@@ -13,32 +14,21 @@ A) Calculation view
 
 The bundle find all calculation views that they're exposed in "service.xsodata" file.
 
+.. code:: json
+
+
+    {
+        "DisplayName" : "Tableau de bord exemple"
+    }
+
+This entry appear in the navigation menu
+
 
 B) Global actions
 -----------------
 
 Global actions are defined to manage multiple rows of the DataTable. It's an array so it can contain
 lot of actions. In the front of the application, these appear when user click on "Action" link.
-
-The global actions section must look like the following code :
-
-.. code:: json
-
-    {
-        "GlobalActions": [
-            {
-                "Label": "First action",
-                "Type": "exemple-type"
-            },
-            {
-                "Label": "Second action",
-                "Type": "exemple-type"
-            }
-        ],
-    }
-
-
-Different type who exist :
 
 Excel export
 ~~~~~~~~~~~~
@@ -123,34 +113,15 @@ In this exemple, the web-app user see in the screen "À vendre" and the data tha
 C) Filters
 ----------
 
-Filters are defined to sort out data in the front of the application. These appear when user click on "Action" link.
-Actually there are 2 type of filter. The "single" type, who is related to the data of the concerned field,
-and the "multiple" type who is not related to the data. It's also an array in the json file.
-
-The filters section must look like the following code :
-
-.. code:: json
-
-    {
-        "Filters":  [
-            {
-                "FieldName": "U_W3C_EXEMPLE",
-                "Label": "Exemple de nom :",
-                "Type": "exemple-type"
-            },
-            {
-                "FieldName": "U_W3C_EXEMPLE2",
-                "Label": "Exemple de nom 2 :",
-                "Type": "exemple-type-2"
-            }
-        ]
-    }
+Filters are defined to sort out data in the front of the application. These appear when user click on "Filters" link.
+Actually there are 3 types of filter. The "single" type, who is related to the data of the concerned field,
+and the "multiple" type, who is not related to the data.
 
 Single type
 ~~~~~~~~~~~
 
-The single type get all different data of the concerned field. For exemple in a field who have
-3 different status, the user can select 4 different choices in front of the application.
+The single type get all data in the database. For exemple, in a field who have
+3 status, the user would have 4 choices in front of the application.
 Nothing, or one of the 3 status. You don't need to add a columns related to the filter, this
 will be automatically done.
 
@@ -168,9 +139,7 @@ will be automatically done.
 Multiple type
 ~~~~~~~~~~~~~
 
-The multiple type must be related to integer or float field. Actually he can't find an date interval.
-And the system can support only one multiple filter. Soon it will be possible to add more multiple
-filter.
+The multiple type must be related to integer or float field.
 
 .. code:: json
 
@@ -180,18 +149,17 @@ filter.
         "Type": "multiple"
     }
 
-
 Multiple type date
 ~~~~~~~~~~~~~~~~~~
 
-If we need to provid date interval filter
+If you need to provide date interval filter
 
 .. code:: json
 
     {
         "FieldName": "U_W3C_DATE",
         "Label": "Interval des dates :",
-        "Type": "multiple-data"
+        "Type": "multiple-date"
     }
 
 
@@ -199,7 +167,7 @@ C) Columns
 ----------
 
 Columns are defined to see them in the final table of the application. Columns can contain action related to the
-cell or the lines of the table. Actually it exists 3 types of column.
+cell or the lines of the table.
 
 .. code:: json
 
