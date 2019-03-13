@@ -16,7 +16,7 @@ use W3com\HulkBundle\Util\DataTablesConstructor;
 use W3com\HulkBundle\Util\DataTransformer;
 use W3com\HulkBundle\Util\Indexor;
 
-class TableProvider
+class DisplayProvider
 {
 
     /**
@@ -80,7 +80,7 @@ class TableProvider
     private $filterSessionManager;
 
     /**
-     * TableProvider constructor.
+     * DisplayProvider constructor.
      * @param $config
      * @param BoomManager $boom
      * @param UrlGeneratorInterface $router

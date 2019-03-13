@@ -22,7 +22,7 @@ class UpdateProjectEntityController extends AbstractController
     public function updateView($filename)
     {
         $updatedEntities = $this->boom->getGenerator()->updateViewSchema();
-        return $this->render('@W3comHulk/update.html.twig',
+        return $this->render('@W3comHulk/display/update.html.twig',
             ['updatedEntities' => $updatedEntities, 'filename' => $filename]);
     }
 }

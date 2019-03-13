@@ -1,4 +1,4 @@
-{% extends '@W3comHulk/base.html.twig' %}
+{% extends '@W3comHulk/display/base.html.twig' %}
 
 {% if updatedEntities is defined %}
     {% set entities = updatedEntities %}
@@ -62,7 +62,7 @@
             {% endif %}
 
             <a class="btn btn-block btn-success font-weight-bold mb-5"
-               href="{{ path('w3com_json_table_view', { filename : filename }) }}">
+               href="{{ path('w3com_display', { filename : filename }) }}">
                 <i class="fa fa-arrow-circle-left float-left mt-1"></i>
                 {{ btn }}
             </a>

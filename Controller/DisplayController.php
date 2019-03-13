@@ -4,7 +4,7 @@ namespace W3com\HulkBundle\Controller;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use W3com\HulkBundle\Service\TableProvider;
+use W3com\HulkBundle\Service\DisplayProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class DisplayController extends AbstractController
@@ -17,8 +17,7 @@ class DisplayController extends AbstractController
     private $request;
 
 
-    public function __construct(TableProvider $provider,
-                                LoggerInterface $logger, RequestStack $request)
+    public function __construct(DisplayProvider $provider, LoggerInterface $logger, RequestStack $request)
     {
         $this->tableProvider = $provider;
         $this->logger = $logger;
@@ -32,7 +31,6 @@ class DisplayController extends AbstractController
      */
     public function display($filename)
     {
-
         $requestParams = $this->request->getCurrentRequest()->query;
         $table = $this->tableProvider->getDataTable($filename, $requestParams);
 
@@ -40,7 +38,7 @@ class DisplayController extends AbstractController
             return $this->redirectToRoute('w3com_create_view', ['filename' => $filename]);
         }
 
-        return $this->render('@W3comHulk/display.html.twig', ['table' => $table, 'filename' => $filename]);
+        return $this->render('@W3comHulk/display/display.html.twig', ['table' => $table, 'filename' => $filename]);
     }
 
 

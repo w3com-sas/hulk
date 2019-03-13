@@ -25,7 +25,8 @@
     "symfony/serializer-pack": "*",
     "symfony/http-foundation": "*",
     "doctrine/annotations": "1.6.0",
-    "knplabs/knp-menu-bundle" : "^2.0"
+    "knplabs/knp-menu-bundle" : "^2.0",
+    "twig/extensions": "^1.5"
   },
   "require-dev": {
     "symfony/phpunit-bridge": "^4.2"

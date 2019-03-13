@@ -1,4 +1,4 @@
-{% include '@W3comHulk/filter/filter_data.js.twig' %}
+{% include '@W3comHulk/display/filter/filter_data.js.twig' %}
 
 $(document).ready(function () {
     var data = [
@@ -116,7 +116,7 @@ $(document).ready(function () {
         }
     });
 
-    {% include '@W3comHulk/filter/filter.js.twig' %}
+    {% include '@W3comHulk/display/filter/filter.js.twig' %}
 
     $('#dataTable tbody').on('click', 'tr td label input', function () {
 
@@ -142,8 +142,8 @@ $(document).ready(function () {
         countSelectedRows(table.rows('.selected').data())
     });
 
-    {% include '@W3comHulk/action/global_action.js.twig' %}
+    {% include '@W3comHulk/display/action/global_action.js.twig' %}
 
 
 })
-{% include '@W3comHulk/filter/save_filters.js.twig' %}
+{% include '@W3comHulk/display/filter/save_filters.js.twig' %}

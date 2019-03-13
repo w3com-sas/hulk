@@ -18,15 +18,15 @@
         <i class="fas fa-bars mr-2"></i>
         Menu
     </a>
-    {% include '@W3comHulk/filter/search_bar.html.twig' %}
+    {% include '@W3comHulk/display/filter/search_bar.html.twig' %}
     <p class="text-gray m-0 align-self-end ml-auto" id="countSelectedRows" style="display: none;">
     </p>
 </div>
 <div class="row">
     <div class="col">
         <div class="collapse" id="filters">
-            {% include '@W3comHulk/filter/single_filter.html.twig' %}
-            {% include '@W3comHulk/filter/multiple_filter.html.twig' %}
+            {% include '@W3comHulk/display/filter/single_filter.html.twig' %}
+            {% include '@W3comHulk/display/filter/multiple_filter.html.twig' %}
         </div>
     </div>
 </div>
@@ -34,7 +34,7 @@
     <div class="col">
         <div class="collapse" id="globalActions">
             <div class="mt-3">
-                {% include '@W3comHulk/action/global_action.html.twig' %}
+                {% include '@W3comHulk/display/action/global_action.html.twig' %}
             </div>
         </div>
     </div>

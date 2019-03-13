@@ -1,0 +1,86 @@
+<div class="input-group mb-3">
+    <div class="input-group-prepend">
+        <span class="input-group-text">
+            <i class="fa fa-search"></i>
+        </span>
+    </div>
+    <input type="text" class="form-control" id="searchBarView">
+</div>
+
+<div class="row">
+    <div class="col">
+        <table class="table">
+            <thead class="thead-primary">
+            <tr>
+                {% for column, displayName in columns %}
+                    <th scope="col">{{ displayName }}</th>
+                {% endfor %}
+            </tr>
+            </thead>
+            <tbody id="searchViewResults">
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="d-flex justify-content-center" id="searchViewInfo">
+</div>
+
+<template id="searchViewLoader">
+    <i class="fas fa-spinner fa-spin fa-5x text-primary"></i>
+</template>
+
+<template id="searchViewNoResults">
+    <p class="text-muted">
+        <i class="fas fa-exclamation-triangle mr-3"></i>
+        Aucune donnée ne correspond à votre recherche
+    </p>
+</template>
+
+<script type="application/javascript">
+
+    var columns = {};
+    {% for column, displayName in columns %}
+    columns.{{ column }} = '{{ displayName }}';
+    {% endfor %}
+
+    var data = {};
+    data.entity = '{{ entity }}';
+    data.columns = columns;
+
+    var input = document.getElementById('searchBarView');
+
+    input.addEventListener('keyup', function (event) {
+
+        if (event.keyCode === 13) {
+
+            var searchViewResults = $('#searchViewResults');
+            var searchViewInfo = $('#searchViewInfo');
+            var loader = $('#searchViewLoader');
+
+            searchViewResults.html('');
+            searchViewInfo.html(loader.html());
+
+            data.search = event.currentTarget.value;
+
+            $.ajax({
+                method: "POST",
+                data: data,
+                url: '{{ path('w3com_search_view') }}',
+                success: function (data, response) {
+
+
+                    if (response === 'nocontent'){
+                        searchViewInfo.html($('#searchViewNoResults').html())
+                    } else  {
+                        searchViewResults.html(data);
+                        searchViewInfo.html('');
+                    }
+                }
+            })
+
+        }
+
+    });
+</script>

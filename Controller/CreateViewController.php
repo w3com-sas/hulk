@@ -22,7 +22,7 @@ class CreateViewController extends AbstractController
     public function createView($filename)
     {
         $createdEntities = $this->boom->getGenerator()->createViewSchema();
-        return $this->render('@W3comHulk/update.html.twig',
+        return $this->render('@W3comHulk/display/update.html.twig',
             ['createdEntities' => $createdEntities, 'filename' => $filename]);
     }
 }

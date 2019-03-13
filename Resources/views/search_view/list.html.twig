@@ -1,0 +1,7 @@
+{% for line in results %}
+    <tr>
+        {% for data in line %}
+            <td>{{ data }}</td>
+        {% endfor %}
+    </tr>
+{% endfor %}
