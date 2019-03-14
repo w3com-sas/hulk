@@ -66,7 +66,6 @@ class JsonFinder
 
         $files = scandir($this->baseUri.$this->jsonUri,null, $context);
 
-        dump($files);
 
         foreach ($files as $file){
             if ($file !== '.'||$file !== '..'){

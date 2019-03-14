@@ -19,11 +19,14 @@ class MenuSession
 
     public function getHulkMenu($currentDisplayName)
     {
+        $this->session->get('menu');
+
         if (!$this->session->has('menu')) {
             $menu = [];
             $currentMenu = $this->getCurrentMenuItem($currentDisplayName,true, []);
             $menu[$currentMenu['uniqId']] = $currentMenu;
             $this->session->set('menu', $menu);
+
             return $menu;
         }
         $menu = $this->session->get('menu');
@@ -34,7 +37,8 @@ class MenuSession
     public function getCurrentMenuItem($currentDisplayName, $isFirst = false, $menu = [])
     {
         $currentMenuItem = [];
-        $currentMenuItem['route'] = $this->request->getCurrentRequest()->get('_route');
+        $currentMenuItem['route'] = null !== $this->request->getCurrentRequest()->get('_route') ?
+            $this->request->getCurrentRequest()->get('_route') : $this->request->getMasterRequest()->attributes->get('_route');
         $currentMenuItem['routeParameters'] = $this->getRouteParams();
         $currentMenuItem['uniqId'] = $currentMenuItem['route'] . implode('_', $currentMenuItem['routeParameters']);
         $currentMenuItem['displayName'] = $currentDisplayName;
@@ -59,6 +63,8 @@ class MenuSession
         }
         $newMenu[$currentMenu['uniqId']] = $currentMenu;
         $this->session->set('menu', $newMenu);
+
+
         return $newMenu;
     }
 
@@ -71,6 +77,7 @@ class MenuSession
     {
         $params = [];
 
+
         if (!empty($this->request->getCurrentRequest()->get('_route_params'))) {
             foreach ($this->request->getCurrentRequest()->get('_route_params') as $key => $value) {
                 $params[$key] = $value;
@@ -79,7 +86,10 @@ class MenuSession
 
         if (!empty($this->request->getCurrentRequest()->query->all())) {
             foreach ($this->request->getCurrentRequest()->query->all() as $key => $value) {
-                $params[$key] = $value;
+
+                if ($key !== '_path'){
+                    $params[$key] = $value;
+                }
             }
         }
         return $params;

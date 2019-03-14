@@ -166,11 +166,13 @@ class QueryManager
 
         foreach ($requestParams as $key => $value){
 
-            try {
-                $parameters->addFilter($entity->getProperty($key)->getName(), $value);
-            } catch (\Exception $e){
-                $this->dataTable->getError()->addRequestParamsError(sprintf(Error::ERROR_MISSING_FIELD,
-                    $key, $this->dataTable->getCalcView()));
+            if ($entity->getProperty($key) !== null){
+                try {
+                    $parameters->addFilter($entity->getProperty($key)->getName(), $value);
+                } catch (\Exception $e){
+                    $this->dataTable->getError()->addRequestParamsError(sprintf(Error::ERROR_MISSING_FIELD,
+                        $key, $this->dataTable->getCalcView()));
+                }
             }
         }
     }

@@ -5,7 +5,7 @@ namespace W3com\HulkBundle\Twig;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
-class SearchViewExtension extends AbstractExtension
+class DisplayJsExtension extends AbstractExtension
 {
     private $template;
 
@@ -17,8 +17,8 @@ class SearchViewExtension extends AbstractExtension
     public function getFunctions()
     {
         return [
-            new TwigFunction('search_view_render', [$this, 'render'], ['is_safe' => ['html']]),
-            ];
+            new TwigFunction('display_js_render', [$this, 'render'], ['is_safe' => ['html']]),
+        ];
     }
 
     /**
@@ -31,11 +31,9 @@ class SearchViewExtension extends AbstractExtension
      */
     public function render($params)
     {
-        $columns = $params['columns'];
-        $entity = $params['entity'];
-        return $this->template->render('@W3comHulk/search_view/search_view.html.twig', [
-            'columns' => $columns,
-            'entity' => $entity
-            ]);
+        $table = $params['display'];
+        return $this->template->render('@W3comHulk/display/display.js.twig', [
+            'table' => $table
+        ]);
     }
 }

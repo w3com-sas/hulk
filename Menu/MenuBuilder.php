@@ -23,7 +23,6 @@ class MenuBuilder
     public function createMainMenu(array $options)
     {
 
-
         $menuSession = $this->menuSession->getHulkMenu($options['displayName']);
         $menu = $this->factory->createItem('root');
 

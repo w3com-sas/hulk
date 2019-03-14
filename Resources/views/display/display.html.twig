@@ -1,41 +1,29 @@
-{% extends '@W3comHulk/display/base.html.twig' %}
-{% block content %}
+<div class="collapse" id="hulkNav">
+    {% set menu = knp_menu_get('main', [], {'displayName' : table.displayName }) %}
+    {{ knp_menu_render(menu, {'template' : '@W3comHulk/display/include/menu.html.twig'}) }}
+</div>
 
-    <div class="collapse" id="hulkNav">
-        {% set menu = knp_menu_get('main', [], {'displayName' : table.displayName }) %}
-        {{ knp_menu_render(menu, {'template' : '@W3comHulk/display/include/menu.html.twig'}) }}
-    </div>
-    {% if table.error.fileExist %}
+{% if table.error.fileExist %}
 
-        {# Warning message #}
-        {% include '@W3comHulk/display/error/missing_fields.html.twig' %}
+    {# Warning message #}
+    {% include '@W3comHulk/display/error/missing_fields.html.twig' %}
 
-        {% include '@W3comHulk/display/include/header.html.twig' %}
+    {% include '@W3comHulk/display/include/header.html.twig' %}
 
-        {# Html table #}
-        {% include '@W3comHulk/display/table/table.html.twig' %}
+    {# Html table #}
+    {% include '@W3comHulk/display/table/table.html.twig' %}
 
-        {# CellAction template #}
-        {% include '@W3comHulk/display/action/cell_action.html.twig' %}
+    {# CellAction template #}
+    {% include '@W3comHulk/display/action/cell_action.html.twig' %}
 
-    {% else %}
+{% else %}
 
-        {% include '@W3comHulk/display/error/missing_file.html.twig' %}
+    {% include '@W3comHulk/display/error/missing_file.html.twig' %}
 
-    {% endif %}
+{% endif %}
 
     {% include '@W3comHulk/display/include/modal.html.twig' %}
 
     {% include '@W3comHulk/display/include/template.html.twig' %}
 
-{% endblock %}
 
-{% block javascripts %}
-    <script>
-        const hulkUrls = {
-            updateSap: '{{ path('w3com_update_sap') }}'
-        };
-        {% include '@W3comHulk/display/table/dataTable.js.twig' %}
-
-    </script>
-{% endblock %}
