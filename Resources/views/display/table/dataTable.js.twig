@@ -50,7 +50,7 @@ $(document).ready(function () {
                     return tpl.replace('[[data]]', data);
                 }
             },
-            {% elseif column.cellAction.functionName == 'displayLink' %}
+            {% elseif column.cellAction.functionName == 'displayLink' or column.cellAction.functionName == 'link' %}
             {
                 data: "{{ column.cellAction.functionName }}{{ column.cellAction.targetEntity }}",
 
@@ -104,7 +104,7 @@ $(document).ready(function () {
         drawCallback: function () {
 
             var selectedRows = $('#dataTable tbody .selected');
-            var headerCheckbox = $('#headerCheckbox searchViewInput');
+            var headerCheckbox = $('#headerCheckbox input');
 
             if (selectedRows.length === {{ table.pageLenght }}){
                 headerCheckbox.prop("checked", true)
@@ -118,7 +118,7 @@ $(document).ready(function () {
 
     {% include '@W3comHulk/display/filter/filter.js.twig' %}
 
-    $('#dataTable tbody').on('click', 'tr td label searchViewInput', function () {
+    $('#dataTable tbody').on('click', 'tr td label input', function () {
 
         var row = this.parentNode.parentNode.parentNode;
         if ($(row).hasClass('selected')) {
@@ -134,10 +134,10 @@ $(document).ready(function () {
 
         if (this.checked) {
             $('#dataTable tbody tr').addClass('selected')
-            $('#dataTable tbody tr label searchViewInput').prop('checked', true)
+            $('#dataTable tbody tr label input').prop('checked', true)
         } else {
             $('#dataTable tbody tr').removeClass('selected')
-            $('#dataTable tbody tr label searchViewInput').prop('checked', false)
+            $('#dataTable tbody tr label input').prop('checked', false)
         }
         countSelectedRows(table.rows('.selected').data())
     });

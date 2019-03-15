@@ -31,7 +31,7 @@ class DataTransformer
 
         $formatedData = $this->adaptKeyWithProperties($data, $dataTable);
         $dataTable->setData($formatedData);
-        $this->urlManager->generateDisplayLink($dataTable, $dataTable->getData());
+        $this->urlManager->generateLink($dataTable, $dataTable->getData());
         return $dataTable;
     }
 

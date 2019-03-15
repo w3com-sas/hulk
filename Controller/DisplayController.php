@@ -38,6 +38,7 @@ class DisplayController extends AbstractController
             return $this->redirectToRoute('w3com_create_view', ['filename' => $filename]);
         }
 
+
         return $this->render('@W3comHulk/display/all.html.twig',
             ['table' => $table, 'filename' => $filename]);
     }

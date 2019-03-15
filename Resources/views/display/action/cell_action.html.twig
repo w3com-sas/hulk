@@ -13,7 +13,7 @@
                 </button>
             </template>
 
-        {% elseif column.cellAction.functionName == 'displayLink' %}
+        {% elseif column.cellAction.functionName == 'displayLink' or column.cellAction.functionName == 'link' %}
 
 
             <template id="{{ column.cellAction.functionName }}{{ column.cellAction.targetEntity }}">

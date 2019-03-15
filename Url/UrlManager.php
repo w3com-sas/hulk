@@ -10,6 +10,8 @@ class UrlManager
 {
     const DISPLAY_LINK_NAME = 'displayLink';
 
+    const GLOBAL_LINK_NAME = 'link';
+
     private $router;
 
     public function __construct(UrlGeneratorInterface $router)
@@ -17,37 +19,53 @@ class UrlManager
         $this->router = $router;
     }
 
-    public function generateDisplayLink(DataTable $dataTable, $data)
+    public function generateLink(DataTable $dataTable, $data)
     {
-        /** @var Column $column */
-        foreach ($dataTable->getColumns() as $column) {
-
-            if ($column->getCellAction() !== null && $column->getCellAction()->getFunctionName() === self::DISPLAY_LINK_NAME) {
 
 
-                foreach ($column->getCellAction()->getParams() as $fieldName => $targetFieldName) {
+        $newData = [];
+        foreach ($data as $lines) {
 
-                    $newData = [];
+            /** @var Column $column */
+            foreach ($dataTable->getColumns() as $column) {
+
+                if ($column->getCellAction() !== null &&
+                    ($column->getCellAction()->getFunctionName() === self::DISPLAY_LINK_NAME ||
+                        $column->getCellAction()->getFunctionName() === self::GLOBAL_LINK_NAME)) {
+
                     $urlParams = [];
-                    foreach ($data as $lines) {
 
-                        foreach ($lines as $nameField => $valueField) {
+                    foreach ($lines as $nameField => $valueField) {
+
+
+                        foreach ($column->getCellAction()->getParams() as $fieldName => $targetFieldName) {
 
                             if ($nameField == $fieldName) {
                                 $urlParams[$targetFieldName] = $valueField;
                             }
-                            $urlParams['filename'] = $column->getCellAction()->getTargetEntity();
-                            $url = $this->router->generate('w3com_display',
-                                $urlParams);
-                            $lines[self::DISPLAY_LINK_NAME.$column->getCellAction()->getTargetEntity()] = $url;
-                        }
-                        $newData[] = $lines;
-                    }
-                    $dataTable->setData($newData);
-                }
 
+                        }
+
+                    }
+
+                    if ($column->getCellAction()->getFunctionName() === self::DISPLAY_LINK_NAME) {
+
+                        $urlParams['filename'] = $column->getCellAction()->getTargetEntity();
+                        $url = $this->router->generate('w3com_display',
+                            $urlParams);
+
+                    } else {
+                        $url = $this->router->generate($column->getCellAction()->getTargetEntity(),
+                            $urlParams);
+                    }
+
+                    $lines[$column->getCellAction()->getFunctionName() . $column->getCellAction()->getTargetEntity()] = $url;
+                }
             }
+            $newData[] = $lines;
         }
-        return $dataTable;
+        $dataTable->setData($newData);
+
     }
+
 }
