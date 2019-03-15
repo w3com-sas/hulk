@@ -104,7 +104,7 @@ $(document).ready(function () {
         drawCallback: function () {
 
             var selectedRows = $('#dataTable tbody .selected');
-            var headerCheckbox = $('#headerCheckbox input');
+            var headerCheckbox = $('#headerCheckbox searchViewInput');
 
             if (selectedRows.length === {{ table.pageLenght }}){
                 headerCheckbox.prop("checked", true)
@@ -118,7 +118,7 @@ $(document).ready(function () {
 
     {% include '@W3comHulk/display/filter/filter.js.twig' %}
 
-    $('#dataTable tbody').on('click', 'tr td label input', function () {
+    $('#dataTable tbody').on('click', 'tr td label searchViewInput', function () {
 
         var row = this.parentNode.parentNode.parentNode;
         if ($(row).hasClass('selected')) {
@@ -134,10 +134,10 @@ $(document).ready(function () {
 
         if (this.checked) {
             $('#dataTable tbody tr').addClass('selected')
-            $('#dataTable tbody tr label input').prop('checked', true)
+            $('#dataTable tbody tr label searchViewInput').prop('checked', true)
         } else {
             $('#dataTable tbody tr').removeClass('selected')
-            $('#dataTable tbody tr label input').prop('checked', false)
+            $('#dataTable tbody tr label searchViewInput').prop('checked', false)
         }
         countSelectedRows(table.rows('.selected').data())
     });

@@ -115,9 +115,11 @@ class DisplayProvider
 
         $this->constructor->hydrateDataTable($json, $this->dataTable);
 
+
         if ($this->dataTable->getError()->isFileExist()) {
 
             $data = $this->queryManager->createDataTableQuery($this->dataTable, $requestParams);
+
 
             if ($this->dataTable->getError()->isClassExist()) {
 

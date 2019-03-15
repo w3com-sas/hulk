@@ -1,0 +1,46 @@
+
+
+var searchViewInput = document.getElementById('searchBarView');
+
+searchViewInput.addEventListener('keyup', function (event) {
+
+    var columns = {};
+    {% for column, displayName in searchView.columns %}
+    columns.{{ column }} = '{{ displayName }}';
+    {% endfor %}
+
+    var data = {};
+    data.entity = '{{ searchView.calcView }}';
+    data.columns = columns;
+
+
+    if (event.keyCode === 13) {
+
+        var searchViewResults = $('#searchViewResults');
+        var searchViewInfo = $('#searchViewInfo');
+        var loader = $('#searchViewLoader');
+
+        searchViewResults.html('');
+        searchViewInfo.html(loader.html());
+
+        data.search = event.currentTarget.value;
+
+        $.ajax({
+            method: "POST",
+            data: data,
+            url: '{{ path('w3com_search_view') }}',
+            success: function (data, response) {
+
+
+                if (response === 'nocontent') {
+                    searchViewInfo.html($('#searchViewNoResults').html())
+                } else {
+                    searchViewResults.html(data);
+                    searchViewInfo.html('');
+                }
+            }
+        })
+
+    }
+
+});

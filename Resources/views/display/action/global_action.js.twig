@@ -42,7 +42,7 @@ $('#form{{ globalAction.config.entity }}{{ globalAction.config.targetField }}{{ 
     var targetData = $(this).attr('targetData');
     updateSap(data, targetEntity, targetField, entityKey, targetData, modal, true);
     {% else %}
-    var targetData = $('#input{{ globalAction.type }}{{ globalAction.config.targetField }}{{ globalAction.config.targetDataType }}').val();
+    var targetData = $('#searchViewInput{{ globalAction.type }}{{ globalAction.config.targetField }}{{ globalAction.config.targetDataType }}').val();
     updateSap(data, targetEntity, targetField, entityKey, targetData, modal);
     {% endif %}
 });

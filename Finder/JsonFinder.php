@@ -51,6 +51,7 @@ class JsonFinder
     {
         $context = $this->createContext();
         $dataTable->getError()->setFileExist(true);
+
         try {
             $file = file_get_contents($this->baseUri . $this->jsonUri . $filename . '.json', false, $context);
         } catch (\Exception $e){

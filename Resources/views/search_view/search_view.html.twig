@@ -12,7 +12,7 @@
         <table class="table">
             <thead class="thead-primary">
             <tr>
-                {% for column, displayName in columns %}
+                {% for column, displayName in searchView.columns %}
                     <th scope="col">{{ displayName }}</th>
                 {% endfor %}
             </tr>
@@ -38,49 +38,3 @@
     </p>
 </template>
 
-<script type="application/javascript">
-
-    var columns = {};
-    {% for column, displayName in columns %}
-    columns.{{ column }} = '{{ displayName }}';
-    {% endfor %}
-
-    var data = {};
-    data.entity = '{{ entity }}';
-    data.columns = columns;
-
-    var input = document.getElementById('searchBarView');
-
-    input.addEventListener('keyup', function (event) {
-
-        if (event.keyCode === 13) {
-
-            var searchViewResults = $('#searchViewResults');
-            var searchViewInfo = $('#searchViewInfo');
-            var loader = $('#searchViewLoader');
-
-            searchViewResults.html('');
-            searchViewInfo.html(loader.html());
-
-            data.search = event.currentTarget.value;
-
-            $.ajax({
-                method: "POST",
-                data: data,
-                url: '{{ path('w3com_search_view') }}',
-                success: function (data, response) {
-
-
-                    if (response === 'nocontent'){
-                        searchViewInfo.html($('#searchViewNoResults').html())
-                    } else  {
-                        searchViewResults.html(data);
-                        searchViewInfo.html('');
-                    }
-                }
-            })
-
-        }
-
-    });
-</script>
