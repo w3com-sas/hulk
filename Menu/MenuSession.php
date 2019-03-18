@@ -19,7 +19,6 @@ class MenuSession
 
     public function getHulkMenu($currentDisplayName)
     {
-        $this->session->get('menu');
 
         if (!$this->session->has('menu')) {
             $menu = [];

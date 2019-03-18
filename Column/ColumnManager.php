@@ -17,7 +17,6 @@ class ColumnManager
 
     /**
      * @param DataTable $dataTable
-     * @param array $data
      */
     private function adaptColumnsWithData(DataTable $dataTable)
     {
@@ -62,7 +61,9 @@ class ColumnManager
             $column->setLabel(null);
             $column->setActive('Y');
             $column->setFieldName(null);
-            $dataTable->addColumn($column);
+            $columns = $dataTable->getColumns();
+            array_unshift($columns, $column);
+            $dataTable->setColumns($columns);
         }
 
         return $dataTable;

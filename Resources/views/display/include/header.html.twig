@@ -1,8 +1,11 @@
 <div class="d-flex my-2">
+
+    {% if table.globalActions is not empty %}
     <a class="text-gray my-auto" data-toggle="collapse" href="#globalActions">
         <i class="far fa-hand-paper mr-2"></i>
         Actions
     </a>
+    {% endif %}
 
     {% if table.filters is not null %}
         <a class="text-gray ml-3 my-auto" data-toggle="collapse" href="#filters" id="countFilters">
@@ -10,6 +13,7 @@
             Filtres ({{ table.savedFilters }})
         </a>
     {% endif %}
+
     <a class="text-gray my-auto ml-3" href="">
         <i class="fas fa-sync mr-2"></i>
         Actualiser
@@ -18,6 +22,14 @@
         <i class="fas fa-bars mr-2"></i>
         Menu
     </a>
+    <div class="my-auto ml-3">
+        <label class="checkbox-label-gray-1" id="selectAllLines">
+            <input type="checkbox">
+            <span class="checkbox-custom rectangular"></span>
+        </label>
+    </div>
+    <p class="text-gray my-auto ml-2">Tout sélectionner</p>
+
     {% include '@W3comHulk/display/filter/search_bar.html.twig' %}
     <p class="text-gray m-0 align-self-end ml-auto" id="countSelectedRows" style="display: none;">
     </p>

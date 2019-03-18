@@ -78,6 +78,14 @@ class DataTable
     }
 
     /**
+     * @param array $columns
+     */
+    public function setColumns(array $columns)
+    {
+        $this->columns = $columns;
+    }
+
+    /**
      * @return mixed
      */
     public function getColumns()

@@ -106,7 +106,7 @@ $(document).ready(function () {
             var selectedRows = $('#dataTable tbody .selected');
             var headerCheckbox = $('#headerCheckbox input');
 
-            if (selectedRows.length === {{ table.pageLenght }}){
+            if (selectedRows.length === {{ table.pageLenght }}) {
                 headerCheckbox.prop("checked", true)
             } else {
                 headerCheckbox.prop("checked", false)
@@ -128,6 +128,17 @@ $(document).ready(function () {
         }
         var rows = table.rows('.selected').data();
         countSelectedRows(rows);
+    });
+
+    $('#selectAllLines :checkbox').on('click', function () {
+
+        console.log(table.rows)
+        if (this.checked) {
+            table.rows().select();
+        } else {
+            table.rows().deselect();
+        }
+        countSelectedRows(table.rows('.selected').data());
     });
 
     $('#headerCheckbox :checkbox').on('click', function () {

@@ -60,20 +60,4 @@ class JsonFinder
         }
         return $file;
     }
-
-    public function getAllFiles(JsonInspector $inspector)
-    {
-        $context = $this->createContext();
-
-        $files = scandir($this->baseUri.$this->jsonUri,null, $context);
-
-
-        foreach ($files as $file){
-            if ($file !== '.'||$file !== '..'){
-                $inspector->addFile($file);
-            }
-        }
-        return $inspector;
-    }
-
 }

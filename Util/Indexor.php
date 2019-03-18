@@ -45,16 +45,19 @@ class Indexor
                 }
             }
         }
-
     }
 
     private function addGlobalActionIndex(DataTable $dataTable)
     {
         $i=1;
-        /** @var GlobalAction $globalAction */
-        foreach ($dataTable->getGlobalActions() as $globalAction){
-            $globalAction->setIndex($i);
-            $i++;
+
+        if (!empty($dataTable->getGlobalActions())){
+            /** @var GlobalAction $globalAction */
+            foreach ($dataTable->getGlobalActions() as $globalAction){
+                $globalAction->setIndex($i);
+                $i++;
+            }
         }
+
     }
 }

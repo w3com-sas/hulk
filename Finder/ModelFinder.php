@@ -16,6 +16,12 @@ class ModelFinder
         $this->boom = $boom;
     }
 
+    /**
+     * @param DataTable $dataTable
+     * @return DataTable
+     * @throws \Doctrine\Common\Annotations\AnnotationException
+     * @throws \ReflectionException
+     */
     public function checkProjectEntities(DataTable $dataTable)
     {
         $entities = $this->boom->getGenerator()->getAppInspector()->getProjectEntities();
