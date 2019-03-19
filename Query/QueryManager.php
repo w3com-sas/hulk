@@ -95,7 +95,11 @@ class QueryManager
 
             if ($column->getType() === Column::TYPE_TEXT||$column->getFieldName() !== null){
 
-                $params->addSelect($this->entity->getProperty($column->getFieldName())->getName());
+                if ($this->entity->getProperty($column->getFieldName()) !== null){
+                    $params->addSelect($this->entity->getProperty($column->getFieldName())->getName());
+                } else {
+                    $column->setActive('N');
+                }
             }
 
         }
