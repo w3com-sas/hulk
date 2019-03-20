@@ -91,17 +91,21 @@ class QueryManager
     private function addSelectForColumns(Parameters $params)
     {
         /** @var Column $column */
-        foreach ($this->dataTable->getColumns() as $column){
+        foreach ($this->dataTable->getColumns() as $column) {
 
-            if ($column->getType() === Column::TYPE_TEXT||$column->getFieldName() !== null){
+            if ($column->getType() === Column::TYPE_TEXT || $column->getFieldName() !== null) {
 
-                if ($this->entity->getProperty($column->getFieldName()) !== null){
+                if ($this->entity->getProperty($column->getFieldName()) !== null) {
                     $params->addSelect($this->entity->getProperty($column->getFieldName())->getName());
                 } else {
                     $column->setActive('N');
+                    $this->dataTable->getError()->addColumnError(
+                        sprintf(Error::ERROR_MISSING_FIELD, $column->getFieldName(),
+                            $this->dataTable->getCalcView()
+                        )
+                    );
                 }
             }
-
         }
     }
 
@@ -121,7 +125,9 @@ class QueryManager
                 if ($this->entity->getProperty($filter->getFieldName()) === null) {
                     $filter->setActive('N');
                     $this->dataTable->getError()
-                        ->addFilterError($filter->getFieldName() . 'n\'existe pas');
+                        ->addFilterError(
+                            sprintf(Error::ERROR_MISSING_FIELD, $filter->getFieldName(), $this->dataTable->getCalcView())
+                        );
                 } else {
                     $filter->setActive('Y');
                     $params->addSelect($this->entity->getProperty($filter->getFieldName())->getName());
@@ -133,6 +139,7 @@ class QueryManager
 
     /**
      * @param Parameters $params
+     * @throws \Exception
      */
     private function addSelectForDisplayLink(Parameters $params)
     {
@@ -142,13 +149,14 @@ class QueryManager
                 if ($column->getCellAction()->getFunctionName() == CellAction::FUNCTION_DISPLAY_LINK) {
                     foreach ($column->getCellAction()->getParams() as $fieldKey => $targetFieldKey) {
 
-                         try {
+                        if ($this->entity->getProperty($fieldKey) !== null) {
                             $params->addSelect($this->entity->getProperty($fieldKey)->getName());
-                        } catch (\Exception $e){
+                        } else {
                             $this->dataTable->getError()->addColumnError(
-                                sprintf(Error::ERROR_MISSING_FIELD, $fieldKey, $column)
+                                sprintf(Error::ERROR_MISSING_FIELD, $fieldKey, $this->dataTable->getCalcView())
                             );
                         }
+
                     }
                 }
             }
@@ -168,12 +176,12 @@ class QueryManager
             $this->dataTable->getCalcView()
         );
 
-        foreach ($requestParams as $key => $value){
+        foreach ($requestParams as $key => $value) {
 
-            if ($entity->getProperty($key) !== null){
+            if ($entity->getProperty($key) !== null) {
                 try {
                     $parameters->addFilter($entity->getProperty($key)->getName(), $value);
-                } catch (\Exception $e){
+                } catch (\Exception $e) {
                     $this->dataTable->getError()->addRequestParamsError(sprintf(Error::ERROR_MISSING_FIELD,
                         $key, $this->dataTable->getCalcView()));
                 }

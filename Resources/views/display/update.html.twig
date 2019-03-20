@@ -3,8 +3,8 @@
 {% if updatedEntities is defined %}
     {% set entities = updatedEntities %}
     {% set title = 'Les tables suivantes ont été mises à jour' %}
-    {% set alert = 'aucune table n\'a été mise à jour, si des champs sont manquants dans le tableau,
-    c\'est qu\'ils n\'existent pas ou que leurs noms sont écorchés dans le fichier Json.' %}
+    {% set alert = 'aucune table n\'a été mise à jour,
+      les noms sont peut-être écorchés dans le fichier Json.' %}
     {% set btn = 'Recharger le tableau' %}
 {% else %}
     {% set entities = createdEntities %}

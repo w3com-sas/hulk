@@ -4,8 +4,7 @@ namespace W3com\HulkBundle\Model;
 
 class Error
 {
-    const ERROR_MISSING_FIELD = 'Le champ %d n\'existe pas dans la calculation view %s';
-
+    const ERROR_MISSING_FIELD = 'Le champ %s n\'existe pas dans la calculation view %s';
 
     /** @var mixed */
     private $nonexistentProperties;
@@ -20,13 +19,16 @@ class Error
     private $viewExist;
 
     /** @var array */
-    private $filterErrors;
+    private $filterErrors = [];
 
     /** @var array */
-    private $columnErrors;
+    private $columnErrors = [];
 
     /** @var array */
-    private $requestParamsErrors;
+    private $requestParamsErrors = [];
+
+    /** @var array */
+    private $urlErrors = [];
 
     /**
      * @param bool $fileExist
@@ -132,6 +134,11 @@ class Error
         $this->columnErrors[] = $columnError;
     }
 
+    public function addUrlError($column, $urlError)
+    {
+        $this->urlErrors[$column] = $urlError;
+    }
+
     /**
      * @return array
      */
@@ -146,5 +153,13 @@ class Error
     public function addRequestParamsError($requestParamsError): void
     {
         $this->requestParamsErrors[] = $requestParamsError;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasErrorColumn()
+    {
+        return count($this->columnErrors) > 0;
     }
 }

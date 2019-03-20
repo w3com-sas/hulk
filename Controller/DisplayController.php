@@ -16,7 +16,6 @@ class DisplayController extends AbstractController
 
     private $request;
 
-
     public function __construct(DisplayProvider $provider, LoggerInterface $logger, RequestStack $request)
     {
         $this->tableProvider = $provider;
@@ -31,11 +30,15 @@ class DisplayController extends AbstractController
      */
     public function display($filename)
     {
+
         $requestParams = $this->request->getCurrentRequest()->query;
         $table = $this->tableProvider->getDataTable($filename, $requestParams);
 
+
         if (!$table->getError()->isClassExist() && $table->getError()->isFileExist()) {
             return $this->redirectToRoute('w3com_create_view', ['filename' => $filename]);
+        } elseif ($table->getError()->hasErrorColumn()) {
+            return $this->redirectToRoute('w3com_update_project_entity', ['filename' => $filename]);
         }
 
 

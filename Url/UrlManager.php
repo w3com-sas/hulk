@@ -2,6 +2,8 @@
 
 namespace W3com\HulkBundle\Url;
 
+use Symfony\Component\Routing\Exception\InvalidParameterException;
+use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use W3com\HulkBundle\Model\Column;
 use W3com\HulkBundle\Model\DataTable;
@@ -55,8 +57,16 @@ class UrlManager
                             $urlParams);
 
                     } else {
-                        $url = $this->router->generate($column->getCellAction()->getTargetEntity(),
-                            $urlParams);
+
+                        try {
+                            $url = $this->router->generate($column->getCellAction()->getTargetEntity(),
+                                $urlParams);
+                        } catch (MissingMandatoryParametersException $e) {
+                            $dataTable->getError()->addUrlError($column->getFieldName(), $e->getMessage());
+                        } catch (InvalidParameterException $e){
+                            $dataTable->getError()->addUrlError($column->getFieldName(), $e->getMessage());
+                        }
+
                     }
 
                     $lines[$column->getCellAction()->getFunctionName() . $column->getCellAction()->getTargetEntity()] = $url;
