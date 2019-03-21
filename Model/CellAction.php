@@ -11,6 +11,7 @@ class CellAction
     const FIELD_PARAMS = 'Params';
 
     const FUNCTION_DISPLAY_LINK = 'displayLink';
+    const FUNCTION_LINK = 'link';
     private $label;
 
     private $functionName;

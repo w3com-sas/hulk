@@ -77,7 +77,7 @@ class QueryManager
 
         $this->addSelectForColumns($params);
         $this->addSelectForFilters($params);
-        $this->addSelectForDisplayLink($params);
+        $this->addSelectForLink($params);
         $this->addParamsRequest($requestParams, $params);
         $params->setTop(10000);
 
@@ -141,20 +141,28 @@ class QueryManager
      * @param Parameters $params
      * @throws \Exception
      */
-    private function addSelectForDisplayLink(Parameters $params)
+    private function addSelectForLink(Parameters $params)
     {
         /** @var Column $column */
         foreach ($this->dataTable->getColumns() as $column) {
+
             if ($column->getCellAction() !== null) {
-                if ($column->getCellAction()->getFunctionName() == CellAction::FUNCTION_DISPLAY_LINK) {
+
+                if ($column->getCellAction()->getFunctionName() == CellAction::FUNCTION_DISPLAY_LINK
+                || $column->getCellAction()->getFunctionName() == CellAction::FUNCTION_LINK) {
+
                     foreach ($column->getCellAction()->getParams() as $fieldKey => $targetFieldKey) {
 
                         if ($this->entity->getProperty($fieldKey) !== null) {
+
                             $params->addSelect($this->entity->getProperty($fieldKey)->getName());
+
                         } else {
+
                             $this->dataTable->getError()->addColumnError(
                                 sprintf(Error::ERROR_MISSING_FIELD, $fieldKey, $this->dataTable->getCalcView())
                             );
+
                         }
 
                     }
