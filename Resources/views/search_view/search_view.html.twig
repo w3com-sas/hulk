@@ -4,7 +4,7 @@
             <i class="fa fa-search"></i>
         </span>
     </div>
-    <input type="text" class="form-control" id="searchBarView">
+    <input type="text" class="form-control" id="searchBarView{{ searchView.calcView }}">
 </div>
 
 <div class="row">
@@ -17,21 +17,21 @@
                 {% endfor %}
             </tr>
             </thead>
-            <tbody id="searchViewResults">
+            <tbody id="searchViewResults{{ searchView.calcView }}">
 
             </tbody>
         </table>
     </div>
 </div>
 
-<div class="d-flex justify-content-center" id="searchViewInfo">
+<div class="d-flex justify-content-center" id="searchViewInfo{{ searchView.calcView }}">
 </div>
 
-<template id="searchViewLoader">
+<template id="searchViewLoader{{ searchView.calcView }}">
     <i class="fas fa-spinner fa-spin fa-5x text-primary"></i>
 </template>
 
-<template id="searchViewNoResults">
+<template id="searchViewNoResults{{ searchView.calcView }}">
     <p class="text-muted">
         <i class="fas fa-exclamation-triangle mr-3"></i>
         Aucune donnée ne correspond à votre recherche

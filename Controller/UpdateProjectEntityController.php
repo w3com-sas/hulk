@@ -22,10 +22,7 @@ class UpdateProjectEntityController extends AbstractController
     public function updateView($filename)
     {
         $updatedEntities = $this->boom->getGenerator()->updateViewSchema();
-        $test = $this->boom->getGenerator()->getOdsInspector()->getOdsEntity('Facturation');
-        $otherTest = $this->boom->getGenerator()->getAppInspector()->getProjectEntity('Facturation')
-            ->getProperty('U_W3C_NOPV');
-        dump($test, $otherTest);
+
         return $this->render('@W3comHulk/display/update.html.twig',
             ['updatedEntities' => $updatedEntities, 'filename' => $filename]);
     }

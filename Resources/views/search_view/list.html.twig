@@ -1,5 +1,5 @@
 {% for line in results %}
-    <tr class="search-view-lines">
+    <tr class="search-view-lines{{ entity }}">
         {% for data in line %}
             <td>{{ data }}</td>
         {% endfor %}

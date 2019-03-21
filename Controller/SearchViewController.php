@@ -42,7 +42,8 @@ class SearchViewController extends AbstractController
             return new JsonResponse('', 204);
         }
 
-        return $this->render('@W3comHulk/search_view/list.html.twig', ['results' => $results]);
+        return $this->render('@W3comHulk/search_view/list.html.twig', ['results' => $results,
+            'entity' => $params['entity']]);
     }
 
     private function checkRequestParams(array $params)

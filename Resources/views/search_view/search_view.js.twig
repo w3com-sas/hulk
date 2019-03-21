@@ -1,6 +1,6 @@
 
 
-var searchViewInput = document.getElementById('searchBarView');
+var searchViewInput = document.getElementById('searchBarView'+'{{ searchView.calcView }}');
 
 searchViewInput.addEventListener('keyup', function (event) {
 
@@ -16,9 +16,9 @@ searchViewInput.addEventListener('keyup', function (event) {
 
     if (event.keyCode === 13) {
 
-        var searchViewResults = $('#searchViewResults');
-        var searchViewInfo = $('#searchViewInfo');
-        var loader = $('#searchViewLoader');
+        var searchViewResults = $('#searchViewResults'+'{{ searchView.calcView }}');
+        var searchViewInfo = $('#searchViewInfo'+'{{ searchView.calcView }}');
+        var loader = $('#searchViewLoader'+'{{ searchView.calcView }}');
 
         searchViewResults.html('');
         searchViewInfo.html(loader.html());
@@ -33,7 +33,7 @@ searchViewInput.addEventListener('keyup', function (event) {
 
 
                 if (response === 'nocontent') {
-                    searchViewInfo.html($('#searchViewNoResults').html())
+                    searchViewInfo.html($('#searchViewNoResults'+'{{ searchView.calcView }}').html())
                 } else {
                     searchViewResults.html(data);
                     searchViewInfo.html('');
