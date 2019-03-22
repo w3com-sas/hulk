@@ -68,8 +68,10 @@ class UrlManager
                         }
 
                     }
-
-                    $lines[$column->getCellAction()->getFunctionName() . $column->getCellAction()->getTargetEntity()] = $url;
+                    if (isset($url)){
+                        $lines[$column->getCellAction()->getFunctionName() . $column->getCellAction()->getTargetEntity()]
+                            = $url;
+                    }
                 }
             }
             $newData[] = $lines;

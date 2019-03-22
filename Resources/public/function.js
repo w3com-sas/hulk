@@ -138,3 +138,48 @@ function exportToCsv(filename, rows) {
         }
     }
 }
+
+function apiRequest(data, params, urlApi, modal) {
+
+    var rows = this.formatDataToUpdate(data);
+
+    var postData = {
+        "data": rows,
+        "apiParams": params,
+        "urlApi": urlApi
+    };
+
+    $.ajax({
+        method: 'POST',
+        url: hulkUrls.apiRequest,
+        data: postData,
+        dataType: 'json',
+        success: function () {
+
+            var tpl = '<p class="text-success text-center">' +
+                '<i class="fas fa-thumbs-up mr-2"></i>' +
+                'Mis à jour avec succès</p>';
+
+            if (modal.find('.modal-body').has('p').length >= 1) {
+                modal.find('.modal-body').find('p').remove();
+            }
+            modal.find('.modal-body').append(tpl);
+            setTimeout(window.location.reload(), 1500);
+
+        },
+        error: function (xhr) {
+
+            var message = 'Une erreur inconnue est survenue, contactez le support';
+            var tpl = '' +
+                '<p class="text-danger text-center">' +
+                '<i class="fas fa-exclamation-triangle mr-2"></i>' +
+                message + '</p>';
+
+            if (modal.find('.modal-body').has('p').length >= 1) {
+                modal.find('.modal-body').find('p').remove();
+            }
+            modal.find('.modal-body').append(tpl);
+            modal.find('.btn-success').html('<i class="far fa-paper-plane mr-2"></i>Valider').removeAttr('disabled');
+        }
+    })
+}

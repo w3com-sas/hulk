@@ -157,6 +157,9 @@ class DataTablesConstructor
                 case Config::FIELD_TARGET_DATA:
                     $newConfig->setTargetData($value);
                     break;
+                case Config::FIELD_URL:
+                    $newConfig->setUrl($value);
+                    break;
             }
         }
         return $newConfig;

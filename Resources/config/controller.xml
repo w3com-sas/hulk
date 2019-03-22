@@ -53,6 +53,14 @@
                 <argument type="service" id="service_container" />
             </call>
         </service>
+        <service id="w3com_hulk.controller.api_request_controller"
+                 class="W3com\HulkBundle\Controller\ApiRequestController" public="true">
+            <argument type="service" id="request_stack"/>
+            <argument type="service" id="monolog.logger"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
     </services>
 
 </container>

@@ -115,11 +115,9 @@ class DisplayProvider
 
         $this->constructor->hydrateDataTable($json, $this->dataTable);
 
-
         if ($this->dataTable->getError()->isFileExist()) {
 
             $data = $this->queryManager->createDataTableQuery($this->dataTable, $requestParams);
-
 
             if ($this->dataTable->getError()->isClassExist()) {
 
@@ -134,6 +132,7 @@ class DisplayProvider
                 $this->indexor->addIndex($this->dataTable);
             }
         }
+        dump($this->dataTable);
         return $this->dataTable;
     }
 }

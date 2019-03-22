@@ -21,5 +21,10 @@
                 entityKey="{{ globalAction.config.entityKey }}">
             {{ globalAction.label }}
         </button>
+    {% elseif globalAction.type == 'api-request' %}
+        <button class="btn btn-info"
+                id="{{ globalAction.type~globalAction.index }}">
+            {{ globalAction.label }}
+        </button>
     {% endif %}
 {% endfor %}
