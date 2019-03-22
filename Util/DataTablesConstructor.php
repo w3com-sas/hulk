@@ -28,16 +28,16 @@ class DataTablesConstructor
                     case DataTable::FIELD_FILTERS:
                         $this->hydrateFilters($dataTable, $value);
                         break;
-                    case DataTable::FIELD_PAGE_LENGHT:
-                        $dataTable->setPageLenght(intval($value));
+                    case DataTable::FIELD_PAGE_LENGTH:
+                        $dataTable->setPageLength(intval($value));
                         break;
                     case DataTable::FIELD_DISPLAY_NAME:
                         $dataTable->setDisplayName($value);
                         break;
                 }
             }
-            if ($dataTable->getPageLenght() === null){
-                $dataTable->setPageLenght(10);
+            if ($dataTable->getPageLength() === null){
+                $dataTable->setPageLength(10);
             }
         }
         return $dataTable;

@@ -2,7 +2,7 @@ Create the json file
 =============================
 
 A) Calculation view and display name
---------------------
+------------------------------------
 
 
 .. code:: json
@@ -22,6 +22,22 @@ The bundle find all calculation views that they're exposed in "service.xsodata" 
     }
 
 This entry appear in the navigation menu
+
+.. code:: json
+
+
+    {
+        "DisplayName" : "Tableau de bord exemple"
+    }
+
+You can also add page length to manage the number of lines in the table
+
+.. code:: json
+
+
+    {
+        "PageLength" : "Tableau de bord exemple"
+    }
 
 
 B) Global actions

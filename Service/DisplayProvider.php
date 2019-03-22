@@ -132,7 +132,6 @@ class DisplayProvider
                 $this->indexor->addIndex($this->dataTable);
             }
         }
-        dump($this->dataTable);
         return $this->dataTable;
     }
 }

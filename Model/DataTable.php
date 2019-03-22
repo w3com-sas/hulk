@@ -11,7 +11,7 @@ class DataTable
     const FIELD_GLOBAL_ACTION = 'GlobalActions';
     const FIELD_FILTERS = 'Filters';
     const FIELD_COLUMNS = 'Columns';
-    const FIELD_PAGE_LENGHT = 'PageLenght';
+    const FIELD_PAGE_LENGTH = 'PageLength';
     const FIELD_DISPLAY_NAME = 'DisplayName';
 
     public function __construct()
@@ -57,7 +57,7 @@ class DataTable
     /**
      * @var integer
      */
-    private $pageLenght;
+    private $pageLength;
 
     /**
      * @var integer
@@ -251,17 +251,17 @@ class DataTable
     /**
      * @return mixed
      */
-    public function getPageLenght()
+    public function getPageLength()
     {
-        return $this->pageLenght;
+        return $this->pageLength;
     }
 
     /**
-     * @param mixed $pageLenght
+     * @param mixed $pageLength
      */
-    public function setPageLenght($pageLenght): void
+    public function setPageLength($pageLength): void
     {
-        $this->pageLenght = $pageLenght;
+        $this->pageLength = $pageLength;
     }
 
     /**
