@@ -27,7 +27,7 @@ $(document).ready(function () {
             emptyTable: "Aucune donnée disponible dans le tableau"
         },
         dom: 'tp',
-        pageLength: {{ table.pageLenght }},
+        pageLength: {{ table.pageLength }},
         data: data,
         columns: [
 
@@ -74,7 +74,6 @@ $(document).ready(function () {
                 render: function (data, type, row) {
                     var tpl = $('#icon').html();
                     return tpl.replace('[[data]]', data);
-
                 }
             },
             {% endif %}
@@ -106,7 +105,7 @@ $(document).ready(function () {
             var selectedRows = $('#dataTable tbody .selected');
             var headerCheckbox = $('#headerCheckbox input');
 
-            if (selectedRows.length === {{ table.pageLenght }}) {
+            if (selectedRows.length === {{ table.pageLength }}) {
                 headerCheckbox.prop("checked", true)
             } else {
                 headerCheckbox.prop("checked", false)

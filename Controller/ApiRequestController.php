@@ -45,11 +45,13 @@ class ApiRequestController extends AbstractController
         }
 
         foreach ($dataApiRequests as $dataApiRequest){
+
             try {
                 $this->apiManager->post($dataApiRequest, $data['url']);
             } catch (\Exception $e){
                 $this->logger->error($e->getMessage(), $e->getTrace());
             }
+
         }
         return new JsonResponse('', 200);
     }

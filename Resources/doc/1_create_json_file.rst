@@ -30,21 +30,21 @@ This entry appear in the navigation menu
         "DisplayName" : "Tableau de bord exemple"
     }
 
-You can also add page length to manage the number of lines in the table
+You can also add Pagelength option to manage the number of lines in the table
 
 .. code:: json
 
 
     {
-        "PageLength" : "Tableau de bord exemple"
+        "PageLength" : 5
     }
 
 
 B) Global actions
 -----------------
 
-Global actions are defined to manage multiple rows of the DataTable.
- In the front of the application, these appear when user click on "Action" link.
+Global actions are defined to manage multiple rows of the table.
+In the front of the application, these appear when user click on "Action" link.
 
 Excel export
 ~~~~~~~~~~~~
@@ -214,6 +214,25 @@ It look like this :
         "Type" : "text"
     }
 
+
+
+Icon type
+~~~~~~~~~~
+
+The icon type work with the calculation. The calculation need to provide the icon, according to the library fontawesome,
+and it can also provide the color of the icon. For exemple, take the status of an employee. If the employee is active
+the calculation view can return "user-check text-success" and "user-times text-danger" for a disable employee.
+
+
+
+.. code:: json
+
+
+    {
+        "Label" : "Nom partenaire : ",
+        "FieldName" : "IconEmployee",
+        "Type" : "icon"
+    }
 
 
 Action type

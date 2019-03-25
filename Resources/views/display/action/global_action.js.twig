@@ -43,15 +43,17 @@ $('{{ btnFormId }}').click(function () {
     {% if globalAction.config.targetDataType == 'static' %}
     var targetData = $(this).attr('targetData');
     updateSap(data, targetEntity, targetField, entityKey, targetData, modal, true);
+
     {% elseif globalAction.type == 'update-sap' %}
     var targetData = $('{{ inputId }}').val();
     updateSap(data, targetEntity, targetField, entityKey, targetData, modal);
+
     {% elseif globalAction.type == 'api-request' %}
 
     var params = {};
     {% for param, targetParam in globalAction.config.targetData %}
-    {% if targetParam is iterable %}
 
+    {% if targetParam is iterable %}
     params.{{ param }} = {};
     {% for field, targetField in targetParam %}
     params.{{ param }}.{{ field }} = '{{ targetField }}';
