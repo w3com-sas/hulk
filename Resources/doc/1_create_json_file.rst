@@ -125,6 +125,36 @@ key-value.
 
 In this exemple, the web-app user see in the screen "À vendre" and the data that will be sent is "forSale".
 
+Api request
+~~~~~~~~~~~
+
+You can make an api request in global action. In the config, put the url. The "TargetData" field is the body of the post request.
+In the "data" section you can put any fields of the concerned calculation view. If the application can't find this field, it
+sends the request with the key and the value provided in the json schema. On the other hand, if the application find
+a field, it get the value of the row and send it, keep in memory that the value (in the json schema) is the sent key
+of the data of the post request.
+
+.. code:: json
+
+
+    {
+        "Label": "Créer une commande",
+        "Type": "api-request",
+        "Config" : {
+            "Url": "https://wendis.arnaune.com/rest/adj.php",
+            "TargetData": {
+                "satellite": "WebApp",
+                "apikey" : "apzojerizenflkzdpoez",
+                "data": {
+                    "Mode": "0",
+                    "XCLE":  "NOID"
+                }
+            }
+        }
+    }
+
+
+
 
 C) Filters
 ----------
@@ -221,7 +251,8 @@ Icon type
 
 The icon type work with the calculation. The calculation need to provide the icon, according to the library fontawesome,
 and it can also provide the color of the icon. For exemple, take the status of an employee. If the employee is active
-the calculation view can return "user-check text-success" and "user-times text-danger" for a disable employee.
+the calculation view can return "user-check text-success" and "user-times text-danger" for a disable employee. The
+available colors are according with https://getbootstrap.com/docs/4.3/utilities/colors/
 
 
 
@@ -262,3 +293,46 @@ icons, the library used to run it is https://fontawesome.com/
     }
 
 .. _`fontawesome`:
+
+
+
+Action type : open a link of the application
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+.. code:: json
+
+
+        {
+            "Label"   :   "Procès verbal",
+            "Type"    :   "action",
+            "CellAction": {
+                "FunctionName" : "link",
+                "TargetEntity" : "FormPvLigne",
+                "Icon" :  "edit",
+                "Params": {
+                    "XCLE" : "codeFacturation"
+                }
+            }
+        }
+
+
+Action type : open an other display
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+.. code:: json
+
+
+        {
+            "Label"   :   "VH achetée",
+            "Type"    :   "action",
+            "CellAction": {
+                "FunctionName" : "displayLink",
+                "TargetEntity" : "VHView",
+                "Icon" :  "external-link-alt",
+                "Params": {
+                    "E_MailL" : "EMAIL"
+                }
+            }
+        }
