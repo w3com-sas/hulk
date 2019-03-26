@@ -86,6 +86,10 @@ class DataTablesConstructor
                     case Filter::FIELD_TYPE:
                         $filter->setType($value);
                         break;
+                    case Filter::FIELD_PARAMS:
+                        $filter->setParams($value);
+                        break;
+
                 }
             }
             $dataTable->addFilter($filter);

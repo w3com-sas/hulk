@@ -12,6 +12,8 @@ class Filter
     const TYPE_SINGLE = 'single';
     const TYPE_MULTIPLE = 'multiple';
     const TYPE_MULTIPLE_DATE = 'multiple-date';
+    const TYPE_PRE_FILTER = 'pre-filter';
+    const FIELD_PARAMS = 'Params';
 
     private $fieldName;
 
@@ -26,6 +28,8 @@ class Filter
     private $type;
 
     private $defaultValue;
+
+    private $params;
 
     /**
      * @return mixed
@@ -121,17 +125,7 @@ class Filter
      */
     public function setType($type): void
     {
-        switch ($type) {
-            case $this::TYPE_SINGLE:
-                $this->type = $type;
-                break;
-            case $this::TYPE_MULTIPLE;
-                $this->type = $type;
-                break;
-            case $this::TYPE_MULTIPLE_DATE:
-                $this->type = $type;
-                break;
-        }
+        $this->type = $type;
     }
 
     /**
@@ -148,5 +142,21 @@ class Filter
     public function setDefaultValue($defaultValue): void
     {
         $this->defaultValue = $defaultValue;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getParams()
+    {
+        return $this->params;
+    }
+
+    /**
+     * @param mixed $params
+     */
+    public function setParams($params): void
+    {
+        $this->params = $params;
     }
 }

@@ -79,6 +79,7 @@ class QueryManager
         $this->addSelectForFilters($params);
         $this->addSelectForLink($params);
         $this->addParamsRequest($requestParams, $params);
+        $this->addPreFilter($dataTable, $params);
         $params->setTop(10000);
 
         return $repo->findAll($params);
@@ -195,6 +196,28 @@ class QueryManager
                 }
             }
         }
+    }
+
+    /**
+     * @param DataTable $dataTable
+     * @param Parameters $parameters
+     * @return Parameters
+     * @throws \Exception
+     */
+    private function addPreFilter(DataTable $dataTable, Parameters $parameters)
+    {
+        /** @var Filter $filter */
+        foreach ($dataTable->getFilters() as $filter){
+
+            if ($filter->getType() === Filter::TYPE_PRE_FILTER){
+
+                foreach ($filter->getParams() as $field => $value){
+                    $parameters->addFilter($this->entity->getProperty($field)->getName(), $value);
+                }
+
+            }
+        }
+        return $parameters;
     }
 
 
