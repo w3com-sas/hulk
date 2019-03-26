@@ -127,9 +127,10 @@ $(document).ready(function () {
 
             if (selectedRows.length === {{ table.pageLength }}) {
                 headerCheckbox.prop("checked", true)
+                $('#dataTable tbody tr label input').prop('checked', true)
             } else {
                 headerCheckbox.prop("checked", false)
-
+                $('#dataTable tbody tr label input').prop('checked', false)
             }
 
         }
@@ -151,11 +152,13 @@ $(document).ready(function () {
 
     $('#selectAllLines :checkbox').on('click', function () {
 
-        console.log(table.rows)
         if (this.checked) {
             table.rows().select();
+            $('#dataTable tbody tr label input').prop('checked', true)
         } else {
             table.rows().deselect();
+            $('#dataTable tbody tr label input').prop('checked', false)
+
         }
         countSelectedRows(table.rows('.selected').data());
     });
