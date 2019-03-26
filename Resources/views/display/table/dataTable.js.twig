@@ -124,8 +124,9 @@ $(document).ready(function () {
 
             var selectedRows = $('#dataTable tbody .selected');
             var headerCheckbox = $('#headerCheckbox input');
+            var allRows = $('#dataTable tbody tr');
 
-            if (selectedRows.length === {{ table.pageLength }}) {
+            if (selectedRows.length === allRows.length) {
                 headerCheckbox.prop("checked", true)
                 $('#dataTable tbody tr label input').prop('checked', true)
             } else {
