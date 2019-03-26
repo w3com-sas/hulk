@@ -23,12 +23,6 @@ The bundle find all calculation views that they're exposed in "service.xsodata" 
 
 This entry appear in the navigation menu
 
-.. code:: json
-
-
-    {
-        "DisplayName" : "Tableau de bord exemple"
-    }
 
 You can also add Pagelength option to manage the number of lines in the table
 
