@@ -8,6 +8,7 @@ class Column
     const FIELD_FIELDNAME = 'FieldName';
     const FIELD_TYPE = 'Type';
     const FIELD_CELL_ACTION = 'CellAction';
+    const FIELD_WIDTH = 'Width';
 
     const COL_TYPE_CHECKBOX = 'checkbox';
     const TYPE_TEXT = 'text';
@@ -51,6 +52,11 @@ class Column
      * @var string
      */
     private $active;
+
+    /**
+     * @var integer
+     */
+    private $width;
 
 
     public function setLabel($label)
@@ -179,5 +185,21 @@ class Column
     public function setIcons(array $icons): void
     {
         $this->icons = $icons;
+    }
+
+    /**
+     * @return int
+     */
+    public function getWidth(): ?int
+    {
+        return $this->width;
+    }
+
+    /**
+     * @param int $width
+     */
+    public function setWidth(int $width): void
+    {
+        $this->width = $width;
     }
 }

@@ -36,14 +36,19 @@ $(document).ready(function () {
             {% if column.type == 'text' or column.hidden %}
 
             {
+                {% if column.width is not null %}
+                width: "{{ column.width }}%",
+                {% endif %}
                 data: "{{ column.fieldName }}"
             },
 
             {% elseif column.type == 'action' %}
             {% if column.cellAction.functionName == 'openForm' %}
             {
+                {% if column.width is not null %}
+                width: "{{ column.width }}%",
+                {% endif %}
                 data: "{{ column.fieldName }}",
-
                 render: function (data, type, row) {
                     var idTpl = '#' + '{{ column.cellAction.functionName }}{{ column.cellAction.targetEntity }}';
                     var tpl = $(idTpl).html();
@@ -52,8 +57,10 @@ $(document).ready(function () {
             },
             {% elseif column.cellAction.functionName == 'displayLink' or column.cellAction.functionName == 'link' %}
             {
+                {% if column.width is not null %}
+                width: "{{ column.width }}%",
+                {% endif %}
                 data: "{{ column.cellAction.functionName }}{{ column.cellAction.targetEntity }}",
-
                 render: function (data, type, row) {
                     var idTpl = '#' + '{{ column.cellAction.functionName }}{{ column.cellAction.targetEntity }}';
                     var tpl = $(idTpl).html();
@@ -63,6 +70,9 @@ $(document).ready(function () {
             {% endif %}
             {% elseif column.type == 'checkbox' %}
             {
+                {% if column.width is not null %}
+                width: "{{ column.width }}%",
+                {% endif %}
                 data: null,
                 render: function (data, type, row) {
                     return $('#checkboxTpl').html();
@@ -70,6 +80,9 @@ $(document).ready(function () {
             },
             {% elseif column.type == 'icon' %}
             {
+                {% if column.width is not null %}
+                width: "{{ column.width }}%",
+                {% endif %}
                 data: "{{ column.fieldName }}",
                 render: function (data, type, row) {
                     var tpl = $('#icon').html();
@@ -80,9 +93,9 @@ $(document).ready(function () {
 
             {% endfor %}
         ],
-        colReorder: true,
+        colReorder: false,
         columnDefs: [
-            {% for column in table.columns if column.hidden or column.type == 'checkbox' %}
+            {% for column in table.columns %}
 
             {% if column.type == 'checkbox' %}
             {
@@ -91,12 +104,19 @@ $(document).ready(function () {
                 "searchable": false,
                 "orderable": false
             },
-            {% else %}
+            {% elseif column.hidden %}
             {
                 "targets": [ {{ column.index }} ],
                 "visible": false,
                 "searchable": true
             },
+            {% elseif column.width is not null %}
+            {
+                "target": [ {{ column.index }} ],
+                "visible": true,
+                "searchable": true,
+                "width": "{{ column.width }}%"
+            }
             {% endif %}
             {% endfor %}
         ],

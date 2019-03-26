@@ -13,7 +13,7 @@ class DataTablesConstructor
 {
     public function hydrateDataTable($file, DataTable $dataTable)
     {
-        if ($dataTable->getError()->isFileExist()){
+        if ($dataTable->getError()->isFileExist()) {
             foreach (json_decode($file, true) as $key => $value) {
                 switch ($key) {
                     case DataTable::FIELD_CALCVIEW:
@@ -36,7 +36,7 @@ class DataTablesConstructor
                         break;
                 }
             }
-            if ($dataTable->getPageLength() === null){
+            if ($dataTable->getPageLength() === null) {
                 $dataTable->setPageLength(10);
             }
         }
@@ -45,7 +45,7 @@ class DataTablesConstructor
 
     private function hydrateColumns(DataTable $dataTable, $columns)
     {
-        foreach ($columns as $dataColumn){
+        foreach ($columns as $dataColumn) {
             $column = new Column();
             foreach ($dataColumn as $field => $value) {
                 switch ($field) {
@@ -60,6 +60,11 @@ class DataTablesConstructor
                         break;
                     case Column::FIELD_CELL_ACTION:
                         $column->setCellAction($this->hydrateCellAction($value));
+                        break;
+                    case Column::FIELD_WIDTH:
+                        $column->setWidth($value);
+                        break;
+
                 }
             }
             $dataTable->addColumn($column);
@@ -68,7 +73,7 @@ class DataTablesConstructor
 
     private function hydrateFilters(DataTable $dataTable, $filters)
     {
-        foreach ($filters as $jsonFilter){
+        foreach ($filters as $jsonFilter) {
             $filter = new Filter();
             foreach ($jsonFilter as $field => $value) {
                 switch ($field) {
@@ -90,8 +95,8 @@ class DataTablesConstructor
     private function hydrateCellAction(array $dataAction)
     {
         $action = new CellAction();
-        foreach ($dataAction as $field => $value){
-            switch ($field){
+        foreach ($dataAction as $field => $value) {
+            switch ($field) {
                 case CellAction::FIELD_LABEL:
                     $action->setLabel($value);
                     break;
@@ -105,7 +110,7 @@ class DataTablesConstructor
                     $action->setIcon($value);
                     break;
                 case CellAction::FIELD_PARAMS:
-                    foreach ($value as $fieldKey => $targetFieldKey){
+                    foreach ($value as $fieldKey => $targetFieldKey) {
                         $action->addParam($fieldKey, $targetFieldKey);
                     }
                     break;
@@ -116,10 +121,10 @@ class DataTablesConstructor
 
     private function hydrateGlobalAction(DataTable $dataTable, array $dataGlobalActions)
     {
-        foreach ($dataGlobalActions as $globalAction){
+        foreach ($dataGlobalActions as $globalAction) {
             $newGlobalAction = new GlobalAction();
-            foreach ($globalAction as $field => $value){
-                switch ($field){
+            foreach ($globalAction as $field => $value) {
+                switch ($field) {
                     case GlobalAction::FIELD_LABEL:
                         $newGlobalAction->setLabel($value);
                         break;
@@ -139,9 +144,9 @@ class DataTablesConstructor
     private function hydrateConfig($arrayConfig)
     {
         $newConfig = new Config();
-        foreach ($arrayConfig as $field => $value){
+        foreach ($arrayConfig as $field => $value) {
 
-            switch ($field){
+            switch ($field) {
                 case Config::FIELD_ENTITY:
                     $newConfig->setEntity($value);
                     break;
