@@ -181,6 +181,22 @@ will be automatically done.
     }
 
 
+Pre filter
+~~~~~~~~~~
+
+It's possible to filter data before the display get it. You can add all params you want.
+
+.. code:: json
+
+
+    {
+        "Type": "pre-filter",
+        "Params": {
+           "U_W3C_VH": 27891
+        }
+    }
+
+
 
 Multiple type
 ~~~~~~~~~~~~~
@@ -213,7 +229,7 @@ C) Columns
 ----------
 
 Columns are defined to see them in the final table of the application. Columns can contain action related to the
-cell or the lines of the table.
+cell or the lines of the table. You also can define the width of the columns with a percentage.
 
 .. code:: json
 
@@ -222,7 +238,8 @@ cell or the lines of the table.
             {
                 "Label" : "Nom partenaire : ",
                 "FieldName" : "CardName",
-                "Type" : "text"
+                "Type" : "text",
+                "Width": 20
             }
         ]
     }
