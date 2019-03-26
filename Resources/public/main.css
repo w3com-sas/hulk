@@ -1,5 +1,6 @@
 body {
     background: #E1F2F3;
+    overflow: scroll;
 }
 
 .selected {
