@@ -86,7 +86,7 @@ function updateSap(data, targetEntity, targetField, entityKey, targetData, modal
             }
             modal.find('.modal-body').append(tpl);
             modal.find('.btn-success').html('<i class="far fa-paper-plane mr-2"></i>Valider').removeAttr('disabled');
-            ;
+
         }
     })
 }
@@ -115,7 +115,8 @@ function exportToCsv(filename, rows) {
         return finalVal + '\n';
     };
 
-    var csvFile = '';
+    // Force excel à l'utf-8
+    var csvFile = "\uFEFF";
     for (var i = 0; i < rows.length; i++) {
         csvFile += processRow(rows[i]);
     }

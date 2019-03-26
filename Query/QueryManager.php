@@ -41,7 +41,6 @@ class QueryManager
      * @param ModelFinder $finder
      * @param BoomManager $boom
      * @param DataTable $dataTable
-     * @throws \ReflectionException
      */
     public function __construct(ModelFinder $finder, BoomManager $boom, DataTable $dataTable)
     {
@@ -201,24 +200,23 @@ class QueryManager
     /**
      * @param DataTable $dataTable
      * @param Parameters $parameters
-     * @return Parameters
+     * @return void
      * @throws \Exception
      */
     private function addPreFilter(DataTable $dataTable, Parameters $parameters)
     {
-        /** @var Filter $filter */
-        foreach ($dataTable->getFilters() as $filter){
+        if (!empty($dataTable->getFilters())){
+            /** @var Filter $filter */
+            foreach ($dataTable->getFilters() as $filter){
 
-            if ($filter->getType() === Filter::TYPE_PRE_FILTER){
+                if ($filter->getType() === Filter::TYPE_PRE_FILTER){
 
-                foreach ($filter->getParams() as $field => $value){
-                    $parameters->addFilter($this->entity->getProperty($field)->getName(), $value);
+                    foreach ($filter->getParams() as $field => $value){
+                        $parameters->addFilter($this->entity->getProperty($field)->getName(), $value);
+                    }
+
                 }
-
             }
         }
-        return $parameters;
     }
-
-
 }

@@ -156,9 +156,12 @@ $(document).ready(function () {
         if (this.checked) {
             table.rows().select();
             $('#dataTable tbody tr label input').prop('checked', true)
+            $('#headerCheckbox input').prop('checked', true);
+
         } else {
             table.rows().deselect();
             $('#dataTable tbody tr label input').prop('checked', false)
+            $('#headerCheckbox input').prop('checked', false);
 
         }
         countSelectedRows(table.rows('.selected').data());
@@ -172,6 +175,7 @@ $(document).ready(function () {
         } else {
             $('#dataTable tbody tr').removeClass('selected')
             $('#dataTable tbody tr label input').prop('checked', false)
+
         }
         countSelectedRows(table.rows('.selected').data())
     });
