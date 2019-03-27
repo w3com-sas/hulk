@@ -25,10 +25,11 @@ $.fn.dataTable.ext.search.push(
 
 
         // Si les champs ne sont pas remplis osef
-        if (!isNaN(minVal) && !isNaN(maxVal)) {
+        if (!isNaN(minVal) || !isNaN(maxVal)) {
 
             // Si la data est vide on l'exclu
             if (!isNaN(dataToCompare)) {
+
                 // Si la data n'est pas dans l'interval on l'exclu
                 if (dataToCompare < minVal || dataToCompare > maxVal) {
                     return false;

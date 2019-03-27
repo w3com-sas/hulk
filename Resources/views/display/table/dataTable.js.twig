@@ -70,9 +70,6 @@ $(document).ready(function () {
             {% endif %}
             {% elseif column.type == 'checkbox' %}
             {
-                {% if column.width is not null %}
-                width: "{{ column.width }}%",
-                {% endif %}
                 data: null,
                 render: function (data, type, row) {
                     return $('#checkboxTpl').html();
@@ -116,7 +113,7 @@ $(document).ready(function () {
                 "visible": true,
                 "searchable": true,
                 "width": "{{ column.width }}%"
-            }
+            },
             {% endif %}
             {% endfor %}
         ],
