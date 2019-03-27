@@ -131,6 +131,9 @@ $(document).ready(function () {
                 $('#dataTable tbody tr label input').prop('checked', false)
             }
 
+        },
+        exportOptions: {
+            rows: ':visible'
         }
     });
 
@@ -151,7 +154,7 @@ $(document).ready(function () {
     $('#selectAllLines :checkbox').on('click', function () {
 
         if (this.checked) {
-            table.rows().select();
+            table.rows({ search: 'applied' }).select();
             $('#dataTable tbody tr label input').prop('checked', true)
             $('#headerCheckbox input').prop('checked', true);
 

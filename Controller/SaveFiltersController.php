@@ -39,7 +39,7 @@ class SaveFiltersController extends AbstractController
             if ($value !== "" && $value !== null){
 
                 // Multiple filter
-                if (is_array($value) && $value['min'] !== "" && $value['min'] !== null){
+                if (is_array($value) && ($value['min'] != "" || $value['max'] != "")){
                     $formatedFilters[$filter] = $value;
 
                     // Single
