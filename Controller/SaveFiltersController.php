@@ -30,7 +30,6 @@ class SaveFiltersController extends AbstractController
         $name = $this->request->getCurrentRequest()->request->get('currentRoute');
 
 
-        dump($filters);
         $sessionFilters = [];
         $formatedFilters = [];
 
@@ -62,7 +61,6 @@ class SaveFiltersController extends AbstractController
             $this->logger->error($e->getMessage(), $e->getTrace());
             return new JsonResponse('Unknow error when trying to save filter in session.', 500);
         }
-        dump($sessionFilters);
 
         return new JsonResponse(['Success', 'countFilters' => count($sessionFilters[$name])]);
     }

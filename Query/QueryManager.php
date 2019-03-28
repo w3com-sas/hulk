@@ -84,7 +84,6 @@ class QueryManager
         $this->addPreFilter($dataTable, $params);
         $params->setTop(10000);
 
-        dump($params);
         return $repo->findAll($params);
     }
 
