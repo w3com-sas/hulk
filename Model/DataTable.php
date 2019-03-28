@@ -164,27 +164,31 @@ class DataTable
     public function getAvailableFields($entityFields)
     {
         $fields = [];
-        /** @var Column $column */
-        foreach ($this->columns as $column) {
 
-            // Need to get property name to check it in entity
-            /** @var Property $property */
-            foreach ($entityFields as $property) {
-                if ($property->getField() == $column->getFieldName()) {
-                    $fields[$column->getFieldName()] = $property;
-                } elseif ($column->getCellAction() !== null){
+        if (!empty($this->columns)){
+            /** @var Column $column */
+            foreach ($this->columns as $column) {
 
-                    if (!empty($column->getCellAction()->getParams())){
-                        foreach ($column->getCellAction()->getParams() as $key => $value){
-                            if ($key === $property->getField()){
-                                $fields[$key] = $property;
+                // Need to get property name to check it in entity
+                /** @var Property $property */
+                foreach ($entityFields as $property) {
+                    if ($property->getField() == $column->getFieldName()) {
+                        $fields[$column->getFieldName()] = $property;
+                    } elseif ($column->getCellAction() !== null){
+
+                        if (!empty($column->getCellAction()->getParams())){
+                            foreach ($column->getCellAction()->getParams() as $key => $value){
+                                if ($key === $property->getField()){
+                                    $fields[$key] = $property;
+                                }
                             }
                         }
-                    }
 
+                    }
                 }
             }
         }
+
 
         if (!empty($this->filters)){
             /** @var Filter $filter */

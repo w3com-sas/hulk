@@ -17,11 +17,11 @@ class ApiRequestController extends AbstractController
 
     private $apiManager;
 
-    public function __construct(RequestStack $request, LoggerInterface $logger, ApiManager $apiManager)
+    public function __construct(RequestStack $request, LoggerInterface $logger)
     {
         $this->request = $request;
         $this->logger = $logger;
-        $this->apiManager = $apiManager;
+        $this->apiManager = new ApiManager();
     }
 
     public function apiRequest()

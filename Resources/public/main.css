@@ -3,6 +3,10 @@ body {
     overflow: scroll;
 }
 
+.fullHeightContainer {
+    height: 100vh;
+}
+
 .selected {
     background: #c1cfd0;
 }

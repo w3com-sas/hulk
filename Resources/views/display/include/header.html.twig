@@ -31,6 +31,9 @@
     <p class="text-gray my-auto ml-2">Tout sélectionner</p>
 
     {% include '@W3comHulk/display/filter/search_bar.html.twig' %}
+    <p class="text-gray my-auto ml-2">
+        Dernière actualisation : {{ "now"|date("H:i d M")|replace({':' : 'h'}) }}.
+    </p>
     <p class="text-gray m-0 align-self-end ml-auto" id="countSelectedRows" style="display: none;">
     </p>
 </div>

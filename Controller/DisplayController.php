@@ -4,6 +4,8 @@ namespace W3com\HulkBundle\Controller;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use W3com\HulkBundle\Form\DisplayFilterType;
+use W3com\HulkBundle\Model\DataTable;
 use W3com\HulkBundle\Service\DisplayProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -30,19 +32,51 @@ class DisplayController extends AbstractController
      */
     public function display($filename)
     {
-
-        $requestParams = $this->request->getCurrentRequest()->query;
-        $table = $this->tableProvider->getDataTable($filename, $requestParams);
-
+        $table = $this->displayInit($filename);
 
         if (!$table->getError()->isClassExist() && $table->getError()->isFileExist()) {
             return $this->redirectToRoute('w3com_create_view', ['filename' => $filename]);
-        } elseif ($table->getError()->hasErrorColumn()) {
-            return $this->redirectToRoute('w3com_update_project_entity', ['filename' => $filename]);
         }
 
         return $this->render('@W3comHulk/display/all.html.twig',
             ['table' => $table, 'filename' => $filename]);
+    }
+
+    /**
+     * @param $filename
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Exception
+     */
+    public function debug($filename)
+    {
+        $table = $this->displayInit($filename);
+        return $this->render('@W3comHulk/display/all.html.twig',
+            ['table' => $table, 'filename' => $filename, 'debug' => true]);
+    }
+
+    /**
+     * @param $filename
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|DataTable
+     * @throws \Exception
+     */
+    private function displayInit($filename)
+    {
+        $getRequestParams = $this->request->getCurrentRequest()->query;
+        $postRequestParams = $this->formatPostRequestParams($this->request->getCurrentRequest()->request->all());
+        $table = $this->tableProvider->getDataTable($filename, $getRequestParams, $postRequestParams);
+        return $table;
+    }
+
+
+    private function formatPostRequestParams($postRequestParams)
+    {
+        if (array_key_exists('display_filter', $postRequestParams)){
+            $displayFilters = $postRequestParams['display_filter'];
+            unset($displayFilters['submit']);
+            unset($displayFilters['_token']);
+            return $displayFilters;
+        }
+        return [];
     }
 
 

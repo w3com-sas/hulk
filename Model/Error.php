@@ -162,4 +162,12 @@ class Error
     {
         return count($this->columnErrors) > 0;
     }
+
+    /**
+     * @return array
+     */
+    public function getUrlErrors(): array
+    {
+        return $this->urlErrors;
+    }
 }

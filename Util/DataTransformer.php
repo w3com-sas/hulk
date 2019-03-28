@@ -14,7 +14,7 @@ class DataTransformer
 
     private $urlManager;
 
-    public function __construct(ModelFinder $finder, UrlManager $manager)
+    public function __construct(ModelFinder $finder, UrlManager $manager = null)
     {
         $this->modelFinder = $finder;
         $this->urlManager = $manager;
@@ -31,7 +31,11 @@ class DataTransformer
 
         $formatedData = $this->adaptKeyWithProperties($data, $dataTable);
         $dataTable->setData($formatedData);
-        $this->urlManager->generateLink($dataTable, $dataTable->getData());
+
+        if ($this->urlManager !== null){
+            $this->urlManager->generateLink($dataTable, $dataTable->getData());
+        }
+
         return $dataTable;
     }
 

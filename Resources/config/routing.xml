@@ -6,8 +6,11 @@
     <route id="w3com_create_view" path="/create-view/{filename}" methods="GET">
         <default key="_controller">w3com_hulk.controller.create_view_controller::createView</default>
     </route>
-    <route id="w3com_display" path="/display/{filename}" methods="GET">
+    <route id="w3com_display" path="/display/{filename}" methods="GET POST">
         <default key="_controller">w3com_hulk.controller.display_controller::display</default>
+    </route>
+    <route id="w3com_display_admin" path="/admin/display/{filename}" methods="GET">
+        <default key="_controller">w3com_hulk.controller.display_controller::debug</default>
     </route>
     <route id="w3com_save_filters" path="/save-filters" methods="POST">
         <default key="_controller">w3com_hulk.controller.save_filters_controller::saveFilters</default>
@@ -23,5 +26,8 @@
     </route>
     <route id="w3com_api_request" path="/api-request" methods="POST">
         <default key="_controller">w3com_hulk.controller.api_request_controller::apiRequest</default>
+    </route>
+    <route id="w3com_display_filters" path="/display-filters/{filename}" methods="GET">
+        <default key="_controller">w3com_hulk.controller.display_filters_controller::filtersForm</default>
     </route>
 </routes>

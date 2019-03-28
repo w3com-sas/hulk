@@ -1,0 +1,10 @@
+{% extends '@W3comHulk/display/base.html.twig' %}
+
+{% block containerClass %}container fullHeightContainer{% endblock %}
+{% block rowClass %}row h-100{% endblock %}
+{% block colClass %}col my-auto{% endblock %}
+
+{% block content %}
+    {{ form_start(form, {'action' : path('w3com_display', {'filename' : display.displayName })}) }}
+    {{ form_end(form) }}
+{% endblock %}

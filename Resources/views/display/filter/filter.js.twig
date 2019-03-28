@@ -20,8 +20,10 @@ $('.multiple-filter').on('keyup change', function () {
     saveFilters();
 });
 
-{% for filter in table.filters if filter.defaultValue != null and filter.defaultValue != "" %}
+{% for filter in table.filters if filter.defaultValue != null and filter.defaultValue != ""
+ and filter.defaultValue is not iterable %}
 {% if filter.type == 'single' %}
+{% dump filter %}
 table
     .column({{ filter.index }})
     .search('{{ filter.defaultValue }}')

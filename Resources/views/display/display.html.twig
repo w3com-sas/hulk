@@ -3,10 +3,13 @@
     {{ knp_menu_render(menu, {'template' : '@W3comHulk/display/include/menu.html.twig'}) }}
 </div>
 
+{% if debug is defined %}
+    {% include '@W3comHulk/display/error/global_errors.html.twig' %}
+{% endif %}
+
+
 {% if table.error.fileExist %}
 
-    {# Warning message #}
-    {% include '@W3comHulk/display/error/missing_fields.html.twig' %}
 
     {% include '@W3comHulk/display/include/header.html.twig' %}
 

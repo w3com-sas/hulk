@@ -22,6 +22,7 @@ class SingleFilterManager extends AbstractFilterManager
             foreach ($dataTable->getFilters() as $filter) {
 
                 if ($filter->getType() === Filter::TYPE_SINGLE) {
+
                     if ($filter->getActive() == 'Y' && !$this->isColumnExist($filter, $dataTable)) {
                         $this->addHidenColumn($filter, $dataTable);
                     }

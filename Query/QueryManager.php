@@ -2,6 +2,7 @@
 
 namespace W3com\HulkBundle\Query;
 
+use W3com\BoomBundle\Parameters\Clause;
 use W3com\HulkBundle\Finder\ModelFinder;
 use W3com\HulkBundle\Model\CellAction;
 use W3com\HulkBundle\Model\Column;
@@ -15,6 +16,7 @@ use W3com\BoomBundle\Service\BoomManager;
 
 class QueryManager
 {
+
     /**
      * @var ModelFinder
      */
@@ -57,7 +59,7 @@ class QueryManager
      * @throws \ReflectionException
      * @throws \Exception
      */
-    public function createDataTableQuery(DataTable $dataTable, $requestParams)
+    public function createDataTableQuery(DataTable $dataTable, $requestParams = [], $postRequestParams = [])
     {
         $this->entity = $this->boom->getGenerator()->getAppInspector()
             ->getProjectEntity($dataTable->getCalcView());
@@ -77,10 +79,12 @@ class QueryManager
         $this->addSelectForColumns($params);
         $this->addSelectForFilters($params);
         $this->addSelectForLink($params);
-        $this->addParamsRequest($requestParams, $params);
+        $this->addGetParamsRequest($requestParams, $params);
+        $this->addPostParamsRequest($postRequestParams, $params);
         $this->addPreFilter($dataTable, $params);
         $params->setTop(10000);
 
+        dump($params);
         return $repo->findAll($params);
     }
 
@@ -90,20 +94,22 @@ class QueryManager
      */
     private function addSelectForColumns(Parameters $params)
     {
-        /** @var Column $column */
-        foreach ($this->dataTable->getColumns() as $column) {
+        if (!empty($this->dataTable->getColumns())) {
+            /** @var Column $column */
+            foreach ($this->dataTable->getColumns() as $column) {
 
-            if ($column->getType() === Column::TYPE_TEXT || $column->getFieldName() !== null) {
+                if ($column->getType() === Column::TYPE_TEXT || $column->getFieldName() !== null) {
 
-                if ($this->entity->getProperty($column->getFieldName()) !== null) {
-                    $params->addSelect($this->entity->getProperty($column->getFieldName())->getName());
-                } else {
-                    $column->setActive('N');
-                    $this->dataTable->getError()->addColumnError(
-                        sprintf(Error::ERROR_MISSING_FIELD, $column->getFieldName(),
-                            $this->dataTable->getCalcView()
-                        )
-                    );
+                    if ($this->entity->getProperty($column->getFieldName()) !== null) {
+                        $params->addSelect($this->entity->getProperty($column->getFieldName())->getName());
+                    } else {
+                        $column->setActive('N');
+                        $this->dataTable->getError()->addColumnError(
+                            sprintf(Error::ERROR_MISSING_FIELD, $column->getFieldName(),
+                                $this->dataTable->getCalcView()
+                            )
+                        );
+                    }
                 }
             }
         }
@@ -143,48 +149,51 @@ class QueryManager
      */
     private function addSelectForLink(Parameters $params)
     {
-        /** @var Column $column */
-        foreach ($this->dataTable->getColumns() as $column) {
+        if (!empty($this->dataTable->getColumns())) {
 
-            if ($column->getCellAction() !== null) {
+            /** @var Column $column */
+            foreach ($this->dataTable->getColumns() as $column) {
 
-                if ($column->getCellAction()->getFunctionName() == CellAction::FUNCTION_DISPLAY_LINK
-                || $column->getCellAction()->getFunctionName() == CellAction::FUNCTION_LINK) {
+                if ($column->getCellAction() !== null) {
 
-                    foreach ($column->getCellAction()->getParams() as $fieldKey => $targetFieldKey) {
+                    if ($column->getCellAction()->getFunctionName() == CellAction::FUNCTION_DISPLAY_LINK
+                        || $column->getCellAction()->getFunctionName() == CellAction::FUNCTION_LINK) {
 
-                        if ($this->entity->getProperty($fieldKey) !== null) {
+                        foreach ($column->getCellAction()->getParams() as $fieldKey => $targetFieldKey) {
 
-                            $params->addSelect($this->entity->getProperty($fieldKey)->getName());
+                            if ($this->entity->getProperty($fieldKey) !== null) {
 
-                        } else {
+                                $params->addSelect($this->entity->getProperty($fieldKey)->getName());
 
-                            $this->dataTable->getError()->addColumnError(
-                                sprintf(Error::ERROR_MISSING_FIELD, $fieldKey, $this->dataTable->getCalcView())
-                            );
+                            } else {
+
+                                $this->dataTable->getError()->addColumnError(
+                                    sprintf(Error::ERROR_MISSING_FIELD, $fieldKey, $this->dataTable->getCalcView())
+                                );
+
+                            }
 
                         }
-
                     }
                 }
-            }
 
+            }
         }
     }
 
     /**
-     * @param array $requestParams
+     * @param array $getRequestParams
      * @param Parameters $parameters
      * @throws \Doctrine\Common\Annotations\AnnotationException
      * @throws \ReflectionException
      */
-    private function addParamsRequest($requestParams, Parameters $parameters)
+    private function addGetParamsRequest($getRequestParams, Parameters $parameters)
     {
         $entity = $this->boom->getGenerator()->getAppInspector()->getProjectEntity(
             $this->dataTable->getCalcView()
         );
 
-        foreach ($requestParams as $key => $value) {
+        foreach ($getRequestParams as $key => $value) {
 
             if ($entity->getProperty($key) !== null) {
                 try {
@@ -197,6 +206,42 @@ class QueryManager
         }
     }
 
+    private function addPostParamsRequest($postRequestParams, Parameters $parameters)
+    {
+
+        $rawFilter = '';
+
+            foreach ($postRequestParams as $field => $value){
+
+                $sapField = substr($field, 3);
+
+                if (end($postRequestParams) === $value) {
+                    $filterOperator = '';
+                } else {
+                    $filterOperator = ' and ';
+                }
+
+                if (substr($field, 0, 3) == 'min'){
+
+                    $rawFilter.=sprintf(Clause::GREATER_THAN, $sapField, "'".$value."'".$filterOperator);
+
+                } elseif (substr($field, 0, 3) == 'max'){
+
+                    $rawFilter.=sprintf(Clause::LOWER_THAN, $sapField, "'".$value."'".$filterOperator);
+
+                } elseif ($field !== 'submit' && $field !== '_token') {
+
+                    if ($this->entity->getProperty($field) !== null){
+                        $rawFilter.=sprintf(Clause::EQUALS,
+                        $field, "'".$value."'".$filterOperator);
+                    } else {
+                        $this->dataTable->getError()->addRequestParamsError($field. 'does not exist');
+                    }
+                }
+            }
+            $parameters->addRawFilter($rawFilter);
+    }
+
     /**
      * @param DataTable $dataTable
      * @param Parameters $parameters
@@ -205,13 +250,13 @@ class QueryManager
      */
     private function addPreFilter(DataTable $dataTable, Parameters $parameters)
     {
-        if (!empty($dataTable->getFilters())){
+        if (!empty($dataTable->getFilters())) {
             /** @var Filter $filter */
-            foreach ($dataTable->getFilters() as $filter){
+            foreach ($dataTable->getFilters() as $filter) {
 
-                if ($filter->getType() === Filter::TYPE_PRE_FILTER){
+                if ($filter->getType() === Filter::TYPE_PRE_FILTER) {
 
-                    foreach ($filter->getParams() as $field => $value){
+                    foreach ($filter->getParams() as $field => $value) {
                         $parameters->addFilter($this->entity->getProperty($field)->getName(), $value);
                     }
 

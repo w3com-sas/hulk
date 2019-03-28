@@ -105,11 +105,13 @@ class DisplayProvider
 
     /**
      * @param $filename
-     * @param array $requestParams
+     * @param array $getRequestParams
+     * @param array $postRequestParams
      * @return DataTable
-     * @throws \Exception
+     * @throws \Doctrine\Common\Annotations\AnnotationException
+     * @throws \ReflectionException
      */
-    public function getDataTable($filename, $requestParams = [])
+    public function getDataTable($filename, $getRequestParams = [], $postRequestParams = [])
     {
         $json = $this->jsonFinder->getOnlineJson($filename, $this->dataTable);
 
@@ -117,7 +119,7 @@ class DisplayProvider
 
         if ($this->dataTable->getError()->isFileExist()) {
 
-            $data = $this->queryManager->createDataTableQuery($this->dataTable, $requestParams);
+            $data = $this->queryManager->createDataTableQuery($this->dataTable, $getRequestParams, $postRequestParams);
 
             if ($this->dataTable->getError()->isClassExist()) {
 
@@ -133,5 +135,21 @@ class DisplayProvider
             }
         }
         return $this->dataTable;
+    }
+
+    /**
+     * @return JsonFinder
+     */
+    public function getJsonFinder(): JsonFinder
+    {
+        return $this->jsonFinder;
+    }
+
+    /**
+     * @return DataTablesConstructor
+     */
+    public function getConstructor(): DataTablesConstructor
+    {
+        return $this->constructor;
     }
 }
