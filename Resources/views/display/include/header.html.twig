@@ -1,10 +1,9 @@
 <div class="d-flex my-2">
-
     {% if table.globalActions is not empty %}
-    <a class="text-gray my-auto" data-toggle="collapse" href="#globalActions">
-        <i class="far fa-hand-paper mr-2"></i>
-        Actions
-    </a>
+        <a class="text-gray my-auto" data-toggle="collapse" href="#globalActions">
+            <i class="far fa-hand-paper mr-2"></i>
+            Actions
+        </a>
     {% endif %}
 
     {% if table.filters is not null %}
@@ -31,11 +30,12 @@
     <p class="text-gray my-auto ml-2">Tout sélectionner</p>
 
     {% include '@W3comHulk/display/filter/search_bar.html.twig' %}
-    <p class="text-gray my-auto ml-2">
-        Dernière actualisation : {{ "now"|date("H:i d M")|replace({':' : 'h'}) }}.
+    <p class="text-gray my-auto mb-0 ml-2" style="font-size: small;">
+            Actualisé à : {{ "now"|date("H:i")|replace({':' : 'h'}) }}
     </p>
-    <p class="text-gray m-0 align-self-end ml-auto" id="countSelectedRows" style="display: none;">
+    <p class="text-gray m-0 align-self-end ml-auto" id="countSelectedRows" style="display: none;font-size: small">
     </p>
+
 </div>
 <div class="row">
     <div class="col">

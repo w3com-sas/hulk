@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service;
+namespace W3com\HulkBundle\Service;
 
 use GuzzleHttp\Client;
 

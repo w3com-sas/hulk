@@ -2,11 +2,11 @@
 
 namespace W3com\HulkBundle\Controller;
 
-use App\Service\ApiManager;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
+use W3com\HulkBundle\Service\ApiManager;
 
 class ApiRequestController extends AbstractController
 {
@@ -44,15 +44,18 @@ class ApiRequestController extends AbstractController
             $dataApiRequests[] = array_merge($data['apiParams'], $dataApiRequest);
         }
 
+
+
         foreach ($dataApiRequests as $dataApiRequest){
 
             try {
-                $this->apiManager->post($dataApiRequest, $data['url']);
+                $this->apiManager->post($dataApiRequest, $data['urlApi']);
             } catch (\Exception $e){
                 $this->logger->error($e->getMessage(), $e->getTrace());
             }
 
         }
+
         return new JsonResponse('', 200);
     }
 
@@ -60,7 +63,8 @@ class ApiRequestController extends AbstractController
     {
         if (!$this->request->getCurrentRequest()->request->has('data') ||
             !$this->request->getCurrentRequest()->request->has('apiParams') ||
-            !$this->request->getCurrentRequest()->request->has('url')) {
+            !$this->request->getCurrentRequest()->request->has('urlApi')) {
+
             $this->logger->error('Missing data to update in the Json file.');
             return new JsonResponse(['valid' => false], 400);
         }

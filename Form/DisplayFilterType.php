@@ -5,7 +5,7 @@ namespace W3com\HulkBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\RangeType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -39,13 +39,13 @@ class DisplayFilterType extends AbstractType
 
                     $form->add('min'.$filter->getFieldName(), DateType::class, [
                         'label' => 'Minimum : '.$filter->getLabel(), 'mapped' => false, 'widget' => 'single_text',
-                        'attr' => ['class' => 'form-control'], 'label_attr' => ['class' => 'input-group-text']
+                        'attr' => ['class' => 'form-control mb-2'], 'label_attr' => ['class' => 'input-group-text']
 
                     ]);
 
                     $form->add('max'.$filter->getFieldName(), DateType::class, [
                         'label' => 'Minimum : '.$filter->getLabel(), 'mapped' => false, 'widget' => 'single_text',
-                        'attr' => ['class' => 'form-control'], 'label_attr' => ['class' => 'input-group-text mt-2']
+                        'attr' => ['class' => 'form-control mb-2'], 'label_attr' => ['class' => 'input-group-text']
                     ]);
 
                 } elseif ($filter->getType() === Filter::TYPE_SINGLE) {
@@ -53,12 +53,20 @@ class DisplayFilterType extends AbstractType
                     $form->add($filter->getFieldName(), ChoiceType::class, [ 'mapped' => false,
                         'label' => $filter->getLabel(), 'choices' => $filter->getValues(),
                         'attr' =>
-                        ['class' => 'custom-select'], 'label_attr' => ['class' => 'input-group-text mt-2']
+                        ['class' => 'custom-select mb-2'], 'label_attr' => ['class' => 'input-group-text']
                     ]);
 
                 } elseif ($filter->getType() === Filter::TYPE_MULTIPLE) {
-                    $form->add($filter->getFieldName(), RangeType::class, ['mapped' => false,
-                        'label' => $filter->getLabel()]);
+
+                    $form->add('min'.$filter->getFieldName(), NumberType::class, ['mapped' => false,
+                        'label' => $filter->getLabel(),
+                        'attr' => ['class' => 'form-control mb-2'], 'label_attr' => ['class' => 'input-group-text']
+                    ]);
+
+                    $form->add('max'.$filter->getFieldName(), NumberType::class, ['mapped' => false,
+                        'label' => $filter->getLabel(),
+                        'attr' => ['class' => 'form-control mb-2'], 'label_attr' => ['class' => 'input-group-text']
+                    ]);
                 }
 
             }

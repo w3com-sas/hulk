@@ -5,6 +5,10 @@
 {% block colClass %}col my-auto{% endblock %}
 
 {% block content %}
+    <div class="collapse" id="hulkNav">
+        {% set menu = knp_menu_get('main', [], {'displayName' : 'Formulaire '~display.entity }) %}
+        {{ knp_menu_render(menu, {'template' : '@W3comHulk/display/include/menu.html.twig'}) }}
+    </div>
     {{ form_start(form, {'action' : path('w3com_display', {'filename' : display.displayName })}) }}
     {{ form_end(form) }}
 {% endblock %}
