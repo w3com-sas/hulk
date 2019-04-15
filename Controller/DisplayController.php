@@ -34,8 +34,10 @@ class DisplayController extends AbstractController
     {
         $table = $this->displayInit($filename);
 
-        if (!$table->getError()->isClassExist() && $table->getError()->isFileExist()) {
-            return $this->redirectToRoute('w3com_create_view', ['filename' => $filename]);
+
+        if (!$table->getError()->isClassExist() && $table->getError()->isFileExist() ||
+            count($table->getError()->getColumnErrors()) > 0) {
+            return $this->redirectToRoute('w3com_update_project_entity', ['filename' => $filename]);
         }
 
         return $this->render('@W3comHulk/display/all.html.twig',
@@ -50,6 +52,12 @@ class DisplayController extends AbstractController
     public function debug($filename)
     {
         $table = $this->displayInit($filename);
+
+        if (!$table->getError()->isClassExist() && $table->getError()->isFileExist() ||
+            count($table->getError()->getColumnErrors()) > 0) {
+            return $this->redirectToRoute('w3com_update_project_entity', ['filename' => $filename]);
+        }
+
         return $this->render('@W3comHulk/display/all.html.twig',
             ['table' => $table, 'filename' => $filename, 'debug' => true]);
     }
@@ -70,7 +78,7 @@ class DisplayController extends AbstractController
 
     private function formatPostRequestParams($postRequestParams)
     {
-        if (array_key_exists('display_filter', $postRequestParams)){
+        if (array_key_exists('display_filter', $postRequestParams)) {
             $displayFilters = $postRequestParams['display_filter'];
             unset($displayFilters['submit']);
             unset($displayFilters['_token']);
