@@ -4,6 +4,7 @@ namespace W3com\HulkBundle\Controller;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Response;
 use W3com\HulkBundle\Form\DisplayFilterType;
 use W3com\HulkBundle\Model\DataTable;
 use W3com\HulkBundle\Service\DisplayProvider;
@@ -27,7 +28,7 @@ class DisplayController extends AbstractController
 
     /**
      * @param $filename
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      * @throws \Exception
      */
     public function display($filename)
@@ -46,18 +47,12 @@ class DisplayController extends AbstractController
 
     /**
      * @param $filename
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      * @throws \Exception
      */
     public function debug($filename)
     {
         $table = $this->displayInit($filename);
-
-        if (!$table->getError()->isClassExist() && $table->getError()->isFileExist() ||
-            count($table->getError()->getColumnErrors()) > 0) {
-            return $this->redirectToRoute('w3com_update_project_entity', ['filename' => $filename]);
-        }
-
         return $this->render('@W3comHulk/display/all.html.twig',
             ['table' => $table, 'filename' => $filename, 'debug' => true]);
     }
