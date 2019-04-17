@@ -1,23 +1,30 @@
 $('.single-filter .custom-select').on('change', function () {
 
+    table.rows().deselect();
     table
         .column($(this).attr('colIndex'))
         .search(this.value.toString())
         .draw();
     saveFilters();
+    countSelectedRows(table.rows('.selected').data());
 
 });
 $('#searchBar').on('keyup change', function () {
+    table.rows().deselect();
     table
         .search(this.value)
         .draw();
     saveFilters();
+    console.log(table.rows('.selected'))
+    countSelectedRows(table.rows('.selected').data());
 });
 
 // Multiple filter become active when the table is draw in something like fnEventRedraw
 $('.multiple-filter').on('keyup change', function () {
+    table.rows().deselect();
     table.draw();
     saveFilters();
+    countSelectedRows(table.rows('.selected').data());
 });
 
 {% for filter in table.filters if filter.defaultValue != null and filter.defaultValue != ""
