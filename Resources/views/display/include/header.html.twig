@@ -31,7 +31,7 @@
 
     {% include '@W3comHulk/display/filter/search_bar.html.twig' %}
     <p class="text-gray my-auto mb-0 ml-2" style="font-size: small;">
-            Actualisé à : {{ "now"|date("H:i")|replace({':' : 'h'}) }}
+            Actualisé à : {{ "now"|date("H:i", "Europe/Paris")|replace({':' : 'h'}) }}
     </p>
     <p class="text-gray m-0 align-self-end ml-auto" id="countSelectedRows" style="display: none;font-size: small">
     </p>
