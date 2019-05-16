@@ -2,6 +2,7 @@
 
 namespace W3com\HulkBundle\Service;
 
+use Doctrine\Common\Annotations\AnnotationException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use W3com\HulkBundle\Column\ColumnManager;
 use W3com\HulkBundle\Filter\FilterManager;
@@ -108,7 +109,7 @@ class DisplayProvider
      * @param array $getRequestParams
      * @param array $postRequestParams
      * @return DataTable
-     * @throws \Doctrine\Common\Annotations\AnnotationException
+     * @throws AnnotationException
      * @throws \ReflectionException
      */
     public function getDataTable($filename, $getRequestParams = [], $postRequestParams = [])

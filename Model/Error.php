@@ -18,6 +18,9 @@ class Error
     /** @var bool */
     private $viewExist;
 
+    /** @var bool */
+    private $fileIsBroken;
+
     /** @var array */
     private $filterErrors = [];
 
@@ -169,5 +172,21 @@ class Error
     public function getUrlErrors(): array
     {
         return $this->urlErrors;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFileIsBroken(): ?bool
+    {
+        return $this->fileIsBroken;
+    }
+
+    /**
+     * @param bool $fileIsBroken
+     */
+    public function setFileIsBroken(bool $fileIsBroken): void
+    {
+        $this->fileIsBroken = $fileIsBroken;
     }
 }

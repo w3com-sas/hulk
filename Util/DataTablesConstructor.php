@@ -14,30 +14,39 @@ class DataTablesConstructor
     public function hydrateDataTable($file, DataTable $dataTable)
     {
         if ($dataTable->getError()->isFileExist()) {
-            foreach (json_decode($file, true) as $key => $value) {
-                switch ($key) {
-                    case DataTable::FIELD_CALCVIEW:
-                        $dataTable->setCalcView($value);
-                        break;
-                    case DataTable::FIELD_GLOBAL_ACTION:
-                        $this->hydrateGlobalAction($dataTable, $value);
-                        break;
-                    case DataTable::FIELD_COLUMNS:
-                        $this->hydrateColumns($dataTable, $value);
-                        break;
-                    case DataTable::FIELD_FILTERS:
-                        $this->hydrateFilters($dataTable, $value);
-                        break;
-                    case DataTable::FIELD_PAGE_LENGTH:
-                        $dataTable->setPageLength(intval($value));
-                        break;
-                    case DataTable::FIELD_DISPLAY_NAME:
-                        $dataTable->setDisplayName($value);
-                        break;
+
+            $decodedJson = json_decode($file, true);
+
+            if ($decodedJson === null){
+
+                $dataTable->getError()->setFileIsBroken(true);
+
+            } else {
+                foreach ($decodedJson as $key => $value) {
+                    switch ($key) {
+                        case DataTable::FIELD_CALCVIEW:
+                            $dataTable->setCalcView($value);
+                            break;
+                        case DataTable::FIELD_GLOBAL_ACTION:
+                            $this->hydrateGlobalAction($dataTable, $value);
+                            break;
+                        case DataTable::FIELD_COLUMNS:
+                            $this->hydrateColumns($dataTable, $value);
+                            break;
+                        case DataTable::FIELD_FILTERS:
+                            $this->hydrateFilters($dataTable, $value);
+                            break;
+                        case DataTable::FIELD_PAGE_LENGTH:
+                            $dataTable->setPageLength(intval($value));
+                            break;
+                        case DataTable::FIELD_DISPLAY_NAME:
+                            $dataTable->setDisplayName($value);
+                            break;
+                    }
                 }
-            }
-            if ($dataTable->getPageLength() === null) {
-                $dataTable->setPageLength(10);
+                if ($dataTable->getPageLength() === null) {
+                    $dataTable->setPageLength(10);
+                }
             }
         }
         return $dataTable;
@@ -63,6 +72,9 @@ class DataTablesConstructor
                         break;
                     case Column::FIELD_WIDTH:
                         $column->setWidth($value);
+                        break;
+                    case Column::FIELD_HIDDEN:
+                        $column->setHidden($value);
                         break;
 
                 }

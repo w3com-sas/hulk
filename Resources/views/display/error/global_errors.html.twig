@@ -1,8 +1,16 @@
 {% if table.error.nonexistentProperties is not null  %}
 <div class="alert alert-danger">
-    <i class="fas fa-exclamation-triangle"></i>
+    <i class="fas fa-exclamation-triangle mr-2"></i>
     {{ table.error.nonexistentProperties }} champ(s) renseigné(s) dans le
     fichier json
+</div>
+{% endif %}
+
+{% if table.error.isFileIsBroken  %}
+<div class="alert alert-danger">
+    <i class="fas fa-exclamation-triangle mr-2"></i>
+    Impossible de lire le fichier JSON. Il semblerait qu'il y ai
+    une erreur de syntaxe.
 </div>
 {% endif %}
 

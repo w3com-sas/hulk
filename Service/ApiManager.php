@@ -3,6 +3,7 @@
 namespace W3com\HulkBundle\Service;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 
 class ApiManager
 {
@@ -18,7 +19,7 @@ class ApiManager
      * @param array $bodyRequest
      * @param $url
      * @return bool
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws GuzzleException
      */
     public function post(array $bodyRequest, $url)
     {

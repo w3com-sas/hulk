@@ -9,6 +9,7 @@ class Column
     const FIELD_TYPE = 'Type';
     const FIELD_CELL_ACTION = 'CellAction';
     const FIELD_WIDTH = 'Width';
+    const FIELD_HIDDEN = 'Hidden';
 
     const COL_TYPE_CHECKBOX = 'checkbox';
     const TYPE_TEXT = 'text';

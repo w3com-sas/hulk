@@ -2,6 +2,8 @@
 
 namespace W3com\HulkBundle\Query;
 
+use Doctrine\Common\Annotations\AnnotationException;
+use ReflectionException;
 use W3com\BoomBundle\Parameters\Clause;
 use W3com\HulkBundle\Finder\ModelFinder;
 use W3com\HulkBundle\Model\CellAction;
@@ -53,11 +55,11 @@ class QueryManager
 
     /**
      * @param DataTable $dataTable
-     * @param $requestParams
+     * @param array $requestParams
+     * @param array $postRequestParams
      * @return array
-     * @throws \Doctrine\Common\Annotations\AnnotationException
-     * @throws \ReflectionException
-     * @throws \Exception
+     * @throws AnnotationException
+     * @throws ReflectionException
      */
     public function createDataTableQuery(DataTable $dataTable, $requestParams = [], $postRequestParams = [])
     {
@@ -184,8 +186,8 @@ class QueryManager
     /**
      * @param array $getRequestParams
      * @param Parameters $parameters
-     * @throws \Doctrine\Common\Annotations\AnnotationException
-     * @throws \ReflectionException
+     * @throws AnnotationException
+     * @throws ReflectionException
      */
     private function addGetParamsRequest($getRequestParams, Parameters $parameters)
     {

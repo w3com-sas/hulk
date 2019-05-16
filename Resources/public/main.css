@@ -456,3 +456,7 @@ table th:nth-last-child(1) {
     -o-transition: all 0.3s ease-out;
 }
 
+#dataTable_wrapper {
+    overflow-x: scroll;
+}
+
