@@ -3,28 +3,20 @@
 {% block content %}
     <div class="row">
         <div class="col">
-            {% if createdEntities is empty %}
-                <div class="alert alert-danger d-flex my-5">
-                    <i class="fa fa-exclamation-triangle mr-3 my-auto"></i>
-                    <p class="my-auto mb-0">
-                        aucune table n\'a été créée.
-                    </p>
-                </div>
-            {% endif %}
-            {% if updatedEntities is empty %}
-                <div class="alert alert-danger d-flex my-5">
-                    <i class="fa fa-exclamation-triangle mr-3 my-auto"></i>
-                    <p class="my-auto mb-0">
-                        aucune table n\'a été mis à jour.
-                    </p>
-                </div>
-            {% endif %}
-                <h2 class="mt-5 text-center text-gray">
-                    Tables mises à jour
-                </h2>
-                <div class="row my-5">
-                    <div class="col-md-6 mx-auto">
-                        <div class="accordion" id="accordion">
+            <h2 class="mt-5 text-center text-gray">
+                Tables mises à jour
+            </h2>
+            <div class="row my-5">
+                <div class="col-md-6 mx-auto">
+                    <div class="accordion" id="accordion">
+                        {% if updatedEntities is empty %}
+                            <div class="alert alert-info d-flex my-5">
+                                <i class="fa fa-exclamation-triangle mr-3 my-auto"></i>
+                                <p class="my-auto mb-0">
+                                    aucune table n\'a été mis à jour.
+                                </p>
+                            </div>
+                        {% else %}
                             {% for entity in updatedEntities %}
                                 <div class="card">
                                     <div class="card-header d-flex justify-content-between" id="headingOne">
@@ -49,15 +41,24 @@
                                     </div>
                                 </div>
                             {% endfor %}
-                        </div>
+                        {% endif %}
                     </div>
                 </div>
-                <h2 class="mt-5 text-center text-gray">
-                    Tables créées
-                </h2>
-                <div class="row my-5">
-                    <div class="col-md-6 mx-auto">
-                        <div class="accordion" id="accordion">
+            </div>
+            <h2 class="mt-5 text-center text-gray">
+                Tables créées
+            </h2>
+            <div class="row my-5">
+                <div class="col-md-6 mx-auto">
+                    <div class="accordion" id="accordion">
+                        {% if createdEntities is empty %}
+                            <div class="alert alert-danger d-flex my-5">
+                                <i class="fa fa-exclamation-triangle mr-3 my-auto"></i>
+                                <p class="my-auto mb-0">
+                                    aucune table n\'a été créée.
+                                </p>
+                            </div>
+                        {% else %}
                             {% for entity in createdEntities %}
                                 <div class="card">
                                     <div class="card-header d-flex justify-content-between" id="headingOne">
@@ -82,9 +83,10 @@
                                     </div>
                                 </div>
                             {% endfor %}
-                        </div>
+                        {% endif %}
                     </div>
                 </div>
+            </div>
 
             <a class="btn btn-block btn-success font-weight-bold mb-5"
                href="{{ path('w3com_display', { filename : filename }) }}">
