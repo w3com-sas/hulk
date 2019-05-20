@@ -28,7 +28,7 @@ class SingleFilterManager extends AbstractFilterManager
                     }
 
                     // Can remove choice
-                    $filter->addValue(null);
+                    $filter->addValue("");
                     foreach ($dataTable->getData() as $line) {
 
                         foreach ($line as $property => $value) {

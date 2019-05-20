@@ -51,7 +51,7 @@ class DisplayFilterType extends AbstractType
                 } elseif ($filter->getType() === Filter::TYPE_SINGLE) {
 
                     $form->add($filter->getFieldName(), ChoiceType::class, [ 'mapped' => false,
-                        'label' => $filter->getLabel(), 'choices' => $filter->getValues(),
+                        'label' => $filter->getLabel(), 'choices' => $filter->getValues(), 'required' => false,
                         'attr' =>
                         ['class' => 'custom-select mb-2'], 'label_attr' => ['class' => 'input-group-text']
                     ]);

@@ -32,7 +32,8 @@ class QueryManager
     /**
      * @var Entity
      */
-    private $entity;
+    private $appEntity;
+
 
     /**
      * @var DataTable
@@ -63,7 +64,7 @@ class QueryManager
      */
     public function createDataTableQuery(DataTable $dataTable, $requestParams = [], $postRequestParams = [])
     {
-        $this->entity = $this->boom->getGenerator()->getAppInspector()
+        $this->appEntity = $this->boom->getGenerator()->getAppInspector()
             ->getProjectEntity($dataTable->getCalcView());
 
         $this->modelFinder->checkProjectEntities($dataTable);
@@ -100,8 +101,8 @@ class QueryManager
 
                 if ($column->getType() === Column::TYPE_TEXT || $column->getFieldName() !== null) {
 
-                    if ($this->entity->getProperty($column->getFieldName()) !== null) {
-                        $params->addSelect($this->entity->getProperty($column->getFieldName())->getName());
+                    if ($this->appEntity->getProperty($column->getFieldName()) !== null) {
+                        $params->addSelect($this->appEntity->getProperty($column->getFieldName())->getName());
                     } else {
                         $column->setActive('N');
                         $this->dataTable->getError()->addColumnError(
@@ -129,7 +130,7 @@ class QueryManager
             /** @var Filter $filter */
             foreach ($this->dataTable->getFilters() as $filter) {
 
-                if ($this->entity->getProperty($filter->getFieldName()) === null) {
+                if ($this->appEntity->getProperty($filter->getFieldName()) === null) {
                     $filter->setActive('N');
                     $this->dataTable->getError()
                         ->addFilterError(
@@ -137,7 +138,7 @@ class QueryManager
                         );
                 } else {
                     $filter->setActive('Y');
-                    $params->addSelect($this->entity->getProperty($filter->getFieldName())->getName());
+                    $params->addSelect($this->appEntity->getProperty($filter->getFieldName())->getName());
                 }
             }
         }
@@ -162,9 +163,9 @@ class QueryManager
 
                         foreach ($column->getCellAction()->getParams() as $fieldKey => $targetFieldKey) {
 
-                            if ($this->entity->getProperty($fieldKey) !== null) {
+                            if ($this->appEntity->getProperty($fieldKey) !== null) {
 
-                                $params->addSelect($this->entity->getProperty($fieldKey)->getName());
+                                $params->addSelect($this->appEntity->getProperty($fieldKey)->getName());
 
                             } else {
 
@@ -190,9 +191,6 @@ class QueryManager
      */
     private function addGetParamsRequest($getRequestParams, Parameters $parameters)
     {
-        $entity = $this->boom->getGenerator()->getAppInspector()->getProjectEntity(
-            $this->dataTable->getCalcView()
-        );
 
         foreach ($getRequestParams as $key => $value) {
 
@@ -210,37 +208,58 @@ class QueryManager
     private function addPostParamsRequest($postRequestParams, Parameters $parameters)
     {
 
+        $odsEntity = $this->boom->getGenerator()->getOdsInspector()->getOdsEntity(
+            $this->dataTable->getCalcView()
+        );
         $rawFilter = '';
 
-            foreach ($postRequestParams as $field => $value){
+        $formattedPostRequestParams = array_filter($postRequestParams, function ($value) {
+            return ($value != "");
+        });
 
-                $sapField = substr($field, 3);
+        foreach ($formattedPostRequestParams as $field => $value) {
 
-                if (end($postRequestParams) === $value) {
-                    $filterOperator = '';
+            $quote = ('Edm.Int32' === $odsEntity->getProperty($field)->getFieldType()|| 'Edm.Decimal'
+            === $odsEntity->getProperty($field)->getFieldType()|| 'Edm.Double' ===
+                $odsEntity->getProperty($field)->getFieldType()) ? "" : "'";
+
+            $sapField = substr($field, 3);
+
+
+            if (end($formattedPostRequestParams) === $value) {
+                $filterOperator = '';
+            } else {
+                $filterOperator = ' and ';
+            }
+
+            if (substr($field, 0, 3) == 'min') {
+                $sapQuote = ('Edm.Int32' === $odsEntity->getProperty($sapField)->getFieldType()|| 'Edm.Decimal'
+                    === $odsEntity->getProperty($sapField)->getFieldType()|| 'Edm.Double' ===
+                    $odsEntity->getProperty($sapField)->getFieldType()) ? "" : "'";
+
+
+                $rawFilter .= sprintf(Clause::GREATER_THAN, $sapQuote, $quote . $value . $sapQuote . $filterOperator);
+
+            } elseif (substr($field, 0, 3) == 'max') {
+                $sapQuote = ('Edm.Int32' === $odsEntity->getProperty($sapField)->getFieldType()|| 'Edm.Decimal'
+                    === $odsEntity->getProperty($sapField)->getFieldType()|| 'Edm.Double' ===
+                    $odsEntity->getProperty($sapField)->getFieldType()) ? "" : "'";
+
+
+                $rawFilter .= sprintf(Clause::LOWER_THAN, $sapField, $sapQuote . $value . $sapQuote . $filterOperator);
+
+            } elseif ($field !== 'submit' && $field !== '_token') {
+
+                if ($this->appEntity->getProperty($field) !== null) {
+
+                    $rawFilter .= sprintf(Clause::EQUALS,
+                        $field, $quote . $value . $quote . $filterOperator);
                 } else {
-                    $filterOperator = ' and ';
-                }
-
-                if (substr($field, 0, 3) == 'min'){
-
-                    $rawFilter.=sprintf(Clause::GREATER_THAN, $sapField, "'".$value."'".$filterOperator);
-
-                } elseif (substr($field, 0, 3) == 'max'){
-
-                    $rawFilter.=sprintf(Clause::LOWER_THAN, $sapField, "'".$value."'".$filterOperator);
-
-                } elseif ($field !== 'submit' && $field !== '_token') {
-
-                    if ($this->entity->getProperty($field) !== null){
-                        $rawFilter.=sprintf(Clause::EQUALS,
-                        $field, "'".$value."'".$filterOperator);
-                    } else {
-                        $this->dataTable->getError()->addRequestParamsError($field. 'does not exist');
-                    }
+                    $this->dataTable->getError()->addRequestParamsError($field . 'does not exist');
                 }
             }
-            $parameters->addRawFilter($rawFilter);
+        }
+        $parameters->addRawFilter($rawFilter);
     }
 
     /**
@@ -258,7 +277,7 @@ class QueryManager
                 if ($filter->getType() === Filter::TYPE_PRE_FILTER) {
 
                     foreach ($filter->getParams() as $field => $value) {
-                        $parameters->addFilter($this->entity->getProperty($field)->getName(), $value);
+                        $parameters->addFilter($this->appEntity->getProperty($field)->getName(), $value);
                     }
                 }
             }

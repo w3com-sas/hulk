@@ -2,6 +2,7 @@
 
 namespace W3com\HulkBundle\Service;
 
+use Doctrine\Common\Annotations\AnnotationException;
 use W3com\BoomBundle\Service\BoomManager;
 use W3com\HulkBundle\Filter\FilterManager;
 use W3com\HulkBundle\Finder\JsonFinder;
@@ -41,16 +42,16 @@ class DisplayFilterProvider
     /**
      * @param $filename
      * @return DataTable
-     * @throws \Doctrine\Common\Annotations\AnnotationException
+     * @throws AnnotationException
      * @throws \ReflectionException
      */
     public function getDisplayFilters($filename)
     {
         $json = $this->jsonFinder->getOnlineJson($filename, $this->display);
-        $display = $this->displayConstructor->hydrateDataTable($json, $this->display);
+        $this->displayConstructor->hydrateDataTable($json, $this->display);
         $data = $this->queryManager->createDataTableQuery($this->display);
-        $display = $this->dataTransformer->addData($this->display, $data);
-        $display = $this->filterManager->initFilters($display);
-        return $display;
+        $this->dataTransformer->addData($this->display, $data);
+        $this->filterManager->initFilters($this->display);
+        return $this->display;
     }
 }
