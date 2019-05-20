@@ -194,9 +194,9 @@ class QueryManager
 
         foreach ($getRequestParams as $key => $value) {
 
-            if ($entity->getProperty($key) !== null) {
+            if ($this->appEntity->getProperty($key) !== null) {
                 try {
-                    $parameters->addFilter($entity->getProperty($key)->getName(), $value);
+                    $parameters->addFilter($this->appEntity->getProperty($key)->getName(), $value);
                 } catch (\Exception $e) {
                     $this->dataTable->getError()->addRequestParamsError(sprintf(Error::ERROR_MISSING_FIELD,
                         $key, $this->dataTable->getCalcView()));
