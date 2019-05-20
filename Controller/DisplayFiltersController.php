@@ -2,7 +2,9 @@
 
 namespace W3com\HulkBundle\Controller;
 
+use Doctrine\Common\Annotations\AnnotationException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use W3com\HulkBundle\Form\DisplayFilterType;
 use W3com\HulkBundle\Model\DataTable;
 use W3com\HulkBundle\Service\DisplayFilterProvider;
@@ -20,8 +22,8 @@ class DisplayFiltersController extends AbstractController
 
     /**
      * @param $filename
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @throws \Doctrine\Common\Annotations\AnnotationException
+     * @return Response
+     * @throws AnnotationException
      * @throws \ReflectionException
      */
     public function filtersForm($filename)

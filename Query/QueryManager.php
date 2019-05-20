@@ -77,7 +77,6 @@ class QueryManager
         }
 
         $params = $repo->createParams();
-
         $this->addSelectForColumns($params);
         $this->addSelectForFilters($params);
         $this->addSelectForLink($params);
@@ -85,7 +84,6 @@ class QueryManager
         $this->addPostParamsRequest($postRequestParams, $params);
         $this->addPreFilter($dataTable, $params);
         $params->setTop(10000);
-
 
         return $repo->findAll($params);
     }
@@ -127,6 +125,7 @@ class QueryManager
     {
 
         if (!empty($this->dataTable->getFilters())) {
+
             /** @var Filter $filter */
             foreach ($this->dataTable->getFilters() as $filter) {
 
@@ -261,7 +260,6 @@ class QueryManager
                     foreach ($filter->getParams() as $field => $value) {
                         $parameters->addFilter($this->entity->getProperty($field)->getName(), $value);
                     }
-
                 }
             }
         }

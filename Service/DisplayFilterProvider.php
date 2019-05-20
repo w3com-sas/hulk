@@ -46,11 +46,10 @@ class DisplayFilterProvider
      */
     public function getDisplayFilters($filename)
     {
-        $display = new DataTable();
-        $json = $this->jsonFinder->getOnlineJson($filename, $display);
-        $display = $this->displayConstructor->hydrateDataTable($json, $display);
-        $data = $this->queryManager->createDataTableQuery($display);
-        $display = $this->dataTransformer->addData($display, $data);
+        $json = $this->jsonFinder->getOnlineJson($filename, $this->display);
+        $display = $this->displayConstructor->hydrateDataTable($json, $this->display);
+        $data = $this->queryManager->createDataTableQuery($this->display);
+        $display = $this->dataTransformer->addData($this->display, $data);
         $display = $this->filterManager->initFilters($display);
         return $display;
     }
