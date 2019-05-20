@@ -14,6 +14,7 @@ class Filter
     const TYPE_MULTIPLE_DATE = 'multiple-date';
     const TYPE_PRE_FILTER = 'pre-filter';
     const FIELD_PARAMS = 'Params';
+    const TYPE_DATE = 'date';
 
     private $fieldName;
 

@@ -40,12 +40,13 @@ class DisplayFilterType extends AbstractType
                     $form->add('min'.$filter->getFieldName(), DateType::class, [
                         'label' => 'Minimum : '.$filter->getLabel(), 'mapped' => false, 'widget' => 'single_text',
                         'attr' => ['class' => 'form-control mb-2'], 'label_attr' => ['class' => 'input-group-text']
-
+                        , 'required' => false
                     ]);
 
                     $form->add('max'.$filter->getFieldName(), DateType::class, [
-                        'label' => 'Minimum : '.$filter->getLabel(), 'mapped' => false, 'widget' => 'single_text',
+                        'label' => 'Maximum : '.$filter->getLabel(), 'mapped' => false, 'widget' => 'single_text',
                         'attr' => ['class' => 'form-control mb-2'], 'label_attr' => ['class' => 'input-group-text']
+                        , 'required' => false
                     ]);
 
                 } elseif ($filter->getType() === Filter::TYPE_SINGLE) {
@@ -59,14 +60,24 @@ class DisplayFilterType extends AbstractType
                 } elseif ($filter->getType() === Filter::TYPE_MULTIPLE) {
 
                     $form->add('min'.$filter->getFieldName(), NumberType::class, ['mapped' => false,
-                        'label' => $filter->getLabel(),
+                        'label' => 'Minimum '.$filter->getLabel(),
                         'attr' => ['class' => 'form-control mb-2'], 'label_attr' => ['class' => 'input-group-text']
+                        , 'required' => false
                     ]);
 
                     $form->add('max'.$filter->getFieldName(), NumberType::class, ['mapped' => false,
-                        'label' => $filter->getLabel(),
+                        'label' => 'Maximum '.$filter->getLabel(),
                         'attr' => ['class' => 'form-control mb-2'], 'label_attr' => ['class' => 'input-group-text']
+                        , 'required' => false
                     ]);
+                } elseif ($filter->getType() === Filter::TYPE_DATE) {
+
+                    $form->add($filter->getFieldName(), DateType::class, [
+                        'label' => $filter->getLabel(), 'mapped' => false, 'widget' => 'single_text',
+                        'attr' => ['class' => 'form-control mb-2'], 'label_attr' => ['class' => 'input-group-text']
+                        , 'required' => false
+                    ]);
+
                 }
 
             }

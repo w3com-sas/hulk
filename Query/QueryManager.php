@@ -219,10 +219,6 @@ class QueryManager
 
         foreach ($formattedPostRequestParams as $field => $value) {
 
-            $quote = ('Edm.Int32' === $odsEntity->getProperty($field)->getFieldType()|| 'Edm.Decimal'
-            === $odsEntity->getProperty($field)->getFieldType()|| 'Edm.Double' ===
-                $odsEntity->getProperty($field)->getFieldType()) ? "" : "'";
-
             $sapField = substr($field, 3);
 
 
@@ -233,12 +229,13 @@ class QueryManager
             }
 
             if (substr($field, 0, 3) == 'min') {
+
                 $sapQuote = ('Edm.Int32' === $odsEntity->getProperty($sapField)->getFieldType()|| 'Edm.Decimal'
                     === $odsEntity->getProperty($sapField)->getFieldType()|| 'Edm.Double' ===
                     $odsEntity->getProperty($sapField)->getFieldType()) ? "" : "'";
 
 
-                $rawFilter .= sprintf(Clause::GREATER_THAN, $sapQuote, $quote . $value . $sapQuote . $filterOperator);
+                $rawFilter .= sprintf(Clause::GREATER_THAN, $sapField,$sapQuote  . $value . $sapQuote . $filterOperator);
 
             } elseif (substr($field, 0, 3) == 'max') {
                 $sapQuote = ('Edm.Int32' === $odsEntity->getProperty($sapField)->getFieldType()|| 'Edm.Decimal'
@@ -249,6 +246,10 @@ class QueryManager
                 $rawFilter .= sprintf(Clause::LOWER_THAN, $sapField, $sapQuote . $value . $sapQuote . $filterOperator);
 
             } elseif ($field !== 'submit' && $field !== '_token') {
+
+                $quote = ('Edm.Int32' === $odsEntity->getProperty($field)->getFieldType()|| 'Edm.Decimal'
+                    === $odsEntity->getProperty($field)->getFieldType()|| 'Edm.Double' ===
+                    $odsEntity->getProperty($field)->getFieldType()) ? "" : "'";
 
                 if ($this->appEntity->getProperty($field) !== null) {
 
