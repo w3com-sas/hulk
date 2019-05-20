@@ -93,7 +93,9 @@ class Filter
      */
     public function addValue($value): void
     {
-        $this->values[$value] = $value;
+        if ($value !== null){
+            $this->values[$value] = $value;
+        }
     }
 
     /**
