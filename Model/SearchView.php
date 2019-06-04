@@ -8,10 +8,13 @@ class SearchView
 
     private $columns = [];
 
-    public function __construct($calcView, array $columns)
+    private $filters = [];
+
+    public function __construct($calcView, array $columns, array $filters = [])
     {
         $this->calcView = $calcView;
         $this->columns = $columns;
+        $this->filters = $filters;
     }
 
     /**
@@ -44,6 +47,22 @@ class SearchView
     public function setColumns(array $columns): void
     {
         $this->columns = $columns;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFilters(): array
+    {
+        return $this->filters;
+    }
+
+    /**
+     * @param array $filters
+     */
+    public function setFilters(array $filters): void
+    {
+        $this->filters = $filters;
     }
 
 }

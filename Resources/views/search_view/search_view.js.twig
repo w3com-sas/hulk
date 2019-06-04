@@ -9,10 +9,15 @@ searchViewInput.addEventListener('keyup', function (event) {
     columns.{{ column }} = '{{ displayName }}';
     {% endfor %}
 
+    var filters = {};
+    {% for field, value in searchView.filters %}
+    filters.{{ field }} = '{{ value }}';
+    {% endfor %}
+
     var data = {};
     data.entity = '{{ searchView.calcView }}';
     data.columns = columns;
-
+    data.filters = filters;
 
     if (event.keyCode === 13) {
 
@@ -22,7 +27,6 @@ searchViewInput.addEventListener('keyup', function (event) {
 
         searchViewResults.html('');
         searchViewInfo.html(loader.html());
-
         data.search = event.currentTarget.value;
 
         $.ajax({
@@ -30,8 +34,6 @@ searchViewInput.addEventListener('keyup', function (event) {
             data: data,
             url: '{{ path('w3com_search_view') }}',
             success: function (data, response) {
-
-
                 if (response === 'nocontent') {
                     searchViewInfo.html($('#searchViewNoResults'+'{{ searchView.calcView }}').html())
                 } else {
