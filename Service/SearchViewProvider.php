@@ -31,7 +31,13 @@ class SearchViewProvider
     {
         $repo = $this->boom->getRepository($entity);
 
-        $rawFilter = $this->createRawFilter($columns, $search);
+        if (!empty($filters)){
+            $rawFilter = ' and ';
+        } else {
+            $rawFilter = '';
+        }
+
+        $rawFilter = $this->createRawFilter($columns, $search, $rawFilter);
 
         $params = $repo->createParams()->setTop($top)->addRawFilter($rawFilter);
 

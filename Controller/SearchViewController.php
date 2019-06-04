@@ -32,7 +32,7 @@ class SearchViewController extends AbstractController
 
         try {
             $results = $this->searchView->getBoomResults(
-                $params['entity'], $params['columns'], $params['search'], $params['filters']
+                $params['entity'], $params['columns'], $params['search'], 100, $params['filters']
             );
         } catch (BadRequestHttpException $e) {
             return new JsonResponse($e->getMessage(), 400);
