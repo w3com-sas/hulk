@@ -65,6 +65,8 @@ class UrlManager
                             $dataTable->getError()->addUrlError($column->getFieldName(), $e->getMessage());
                         } catch (InvalidParameterException $e){
                             $dataTable->getError()->addUrlError($column->getFieldName(), $e->getMessage());
+                        } catch (\Exception $e){
+                            $dataTable->getError()->addUrlError($column->getFieldName(), $e->getMessage());
                         }
 
                     }
