@@ -112,7 +112,7 @@ class DisplayProvider
      * @throws AnnotationException
      * @throws \ReflectionException
      */
-    public function getDataTable($filename, $getRequestParams = [], $postRequestParams = [])
+    public function getDataTable($filename, $getRequestParams = [])
     {
         $json = $this->jsonFinder->getOnlineJson($filename, $this->dataTable);
 
@@ -120,7 +120,7 @@ class DisplayProvider
 
         if ($this->dataTable->getError()->isFileExist()) {
 
-            $data = $this->queryManager->createDataTableQuery($this->dataTable, $getRequestParams, $postRequestParams);
+            $data = $this->queryManager->createDataTableQuery($this->dataTable, $getRequestParams);
 
             if ($this->dataTable->getError()->isClassExist()) {
 

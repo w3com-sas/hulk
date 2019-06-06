@@ -5,7 +5,6 @@ namespace W3com\HulkBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -26,50 +25,35 @@ class DisplayFilterType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $formEvent){
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $formEvent) {
 
             /** @var DataTable $display */
             $display = $formEvent->getData();
             $form = $formEvent->getForm();
 
             /** @var Filter $filter */
-            foreach ($display->getFilters() as $filter){
+            foreach ($display->getFilters() as $filter) {
 
                 if ($filter->getType() === Filter::TYPE_MULTIPLE_DATE) {
 
-                    $form->add('min'.$filter->getFieldName(), DateType::class, [
-                        'label' => 'Minimum : '.$filter->getLabel(), 'mapped' => false, 'widget' => 'single_text',
-                        'attr' => ['class' => 'form-control mb-2'], 'label_attr' => ['class' => 'input-group-text']
-                        , 'required' => false
-                    ]);
-
-                    $form->add('max'.$filter->getFieldName(), DateType::class, [
-                        'label' => 'Maximum : '.$filter->getLabel(), 'mapped' => false, 'widget' => 'single_text',
-                        'attr' => ['class' => 'form-control mb-2'], 'label_attr' => ['class' => 'input-group-text']
-                        , 'required' => false
-                    ]);
-
-                } elseif ($filter->getType() === Filter::TYPE_SINGLE) {
-
-                    $form->add($filter->getFieldName(), ChoiceType::class, [ 'mapped' => false,
-                        'label' => $filter->getLabel(), 'choices' => $filter->getValues(), 'required' => false,
-                        'attr' =>
-                        ['class' => 'custom-select mb-2'], 'label_attr' => ['class' => 'input-group-text']
+                    $form->add('_interval' . $filter->getFieldName(), DisplayFilterMultipleType::class, [
+                        'data' => $filter, 'filter_type' => Filter::TYPE_MULTIPLE_DATE, 'mapped' => false
                     ]);
 
                 } elseif ($filter->getType() === Filter::TYPE_MULTIPLE) {
 
-                    $form->add('min'.$filter->getFieldName(), NumberType::class, ['mapped' => false,
-                        'label' => 'Minimum '.$filter->getLabel(),
-                        'attr' => ['class' => 'form-control mb-2'], 'label_attr' => ['class' => 'input-group-text']
-                        , 'required' => false
+                    $form->add('_interval' . $filter->getFieldName(), DisplayFilterMultipleType::class, [
+                        'data' => $filter, 'filter_type' => Filter::TYPE_MULTIPLE, 'mapped' => false
                     ]);
 
-                    $form->add('max'.$filter->getFieldName(), NumberType::class, ['mapped' => false,
-                        'label' => 'Maximum '.$filter->getLabel(),
-                        'attr' => ['class' => 'form-control mb-2'], 'label_attr' => ['class' => 'input-group-text']
-                        , 'required' => false
+                } elseif ($filter->getType() === Filter::TYPE_SINGLE) {
+
+                    $form->add($filter->getFieldName(), ChoiceType::class, ['mapped' => false,
+                        'label' => $filter->getLabel(), 'choices' => $filter->getValues(), 'required' => false,
+                        'attr' =>
+                            ['class' => 'custom-select mb-2'], 'label_attr' => ['class' => 'input-group-text']
                     ]);
+
                 } elseif ($filter->getType() === Filter::TYPE_DATE) {
 
                     $form->add($filter->getFieldName(), DateType::class, [
@@ -82,7 +66,7 @@ class DisplayFilterType extends AbstractType
 
             }
             $form->add('submit', SubmitType::class, ['label' => 'Valider', 'attr' =>
-           ['class' => 'btn btn-success btn-block my-3']]);
+                ['class' => 'btn btn-success btn-block my-3']]);
 
         });
     }

@@ -4,7 +4,9 @@ namespace W3com\HulkBundle\Query;
 
 use Doctrine\Common\Annotations\AnnotationException;
 use ReflectionException;
+use Symfony\Component\HttpFoundation\ParameterBag;
 use W3com\BoomBundle\Parameters\Clause;
+use W3com\HulkBundle\Controller\DisplayFiltersController;
 use W3com\HulkBundle\Finder\ModelFinder;
 use W3com\HulkBundle\Model\CellAction;
 use W3com\HulkBundle\Model\Column;
@@ -57,12 +59,11 @@ class QueryManager
     /**
      * @param DataTable $dataTable
      * @param array $requestParams
-     * @param array $postRequestParams
      * @return array
      * @throws AnnotationException
      * @throws ReflectionException
      */
-    public function createDataTableQuery(DataTable $dataTable, $requestParams = [], $postRequestParams = [])
+    public function createDataTableQuery(DataTable $dataTable, $requestParams = [])
     {
         $this->appEntity = $this->boom->getGenerator()->getAppInspector()
             ->getProjectEntity($dataTable->getCalcView());
@@ -82,7 +83,6 @@ class QueryManager
         $this->addSelectForFilters($params);
         $this->addSelectForLink($params);
         $this->addGetParamsRequest($requestParams, $params);
-        $this->addPostParamsRequest($postRequestParams, $params);
         $this->addPreFilter($dataTable, $params);
         $params->setTop(10000);
 
@@ -192,15 +192,60 @@ class QueryManager
     private function addGetParamsRequest($getRequestParams, Parameters $parameters)
     {
 
-        foreach ($getRequestParams as $key => $value) {
+        $odsEntity = $this->boom->getGenerator()->getOdsInspector()->getOdsEntity(
+            $this->dataTable->getCalcView()
+        );
+
+        if ($getRequestParams instanceof ParameterBag){
+            $arrayGetParams = $getRequestParams->all();
+        } else {
+            $arrayGetParams = $getRequestParams;
+        }
+
+        $paramsExist = false;
+
+        foreach ($arrayGetParams as $key => $value) {
 
             if ($this->appEntity->getProperty($key) !== null) {
-                try {
-                    $parameters->addFilter($this->appEntity->getProperty($key)->getName(), $value);
-                } catch (\Exception $e) {
-                    $this->dataTable->getError()->addRequestParamsError(sprintf(Error::ERROR_MISSING_FIELD,
-                        $key, $this->dataTable->getCalcView()));
+
+                $paramsExist = true;
+
+                $parameters->addFilter($this->appEntity->getProperty($key)->getName(), $value,
+                    Clause::EQUALS, Clause::AND);
+
+                unset($arrayGetParams[$key]);
+
+            }
+        }
+
+        foreach ($arrayGetParams as $key => $value) {
+
+            if (substr($key, 0, strlen(DisplayFiltersController::INTERVAL_URL_KEY))
+                === DisplayFiltersController::INTERVAL_URL_KEY) {
+
+                if ($paramsExist){
+                    $rawFilter = ' and ';
+                } else {
+                    $rawFilter = '';
                 }
+
+                if (end($arrayGetParams) === $value) {
+                    $filterOperator = '';
+                } else {
+                    $filterOperator = Clause:: AND;
+                }
+
+                $sapField = substr($key, strlen(DisplayFiltersController::INTERVAL_URL_KEY));
+                $sapQuote = ('Edm.Int32' === $odsEntity->getProperty($sapField)->getFieldType() || 'Edm.Decimal'
+                    === $odsEntity->getProperty($sapField)->getFieldType() || 'Edm.Double' ===
+                    $odsEntity->getProperty($sapField)->getFieldType()) ? "" : "'";
+
+                $min = explode('|', $value)[0];
+                $max = explode('|', $value)[1];
+                $rawFilter .= sprintf(Clause::GREATER_THAN, $sapField, $sapQuote . $min . $sapQuote . ' and ');
+                $rawFilter .= sprintf(Clause::LOWER_THAN, $sapField, $sapQuote . $max . $sapQuote . $filterOperator);
+                $parameters->addRawFilter($rawFilter);
+
             }
         }
     }
@@ -230,16 +275,16 @@ class QueryManager
 
             if (substr($field, 0, 3) == 'min') {
 
-                $sapQuote = ('Edm.Int32' === $odsEntity->getProperty($sapField)->getFieldType()|| 'Edm.Decimal'
-                    === $odsEntity->getProperty($sapField)->getFieldType()|| 'Edm.Double' ===
+                $sapQuote = ('Edm.Int32' === $odsEntity->getProperty($sapField)->getFieldType() || 'Edm.Decimal'
+                    === $odsEntity->getProperty($sapField)->getFieldType() || 'Edm.Double' ===
                     $odsEntity->getProperty($sapField)->getFieldType()) ? "" : "'";
 
 
-                $rawFilter .= sprintf(Clause::GREATER_THAN, $sapField,$sapQuote  . $value . $sapQuote . $filterOperator);
+                $rawFilter .= sprintf(Clause::GREATER_THAN, $sapField, $sapQuote . $value . $sapQuote . $filterOperator);
 
             } elseif (substr($field, 0, 3) == 'max') {
-                $sapQuote = ('Edm.Int32' === $odsEntity->getProperty($sapField)->getFieldType()|| 'Edm.Decimal'
-                    === $odsEntity->getProperty($sapField)->getFieldType()|| 'Edm.Double' ===
+                $sapQuote = ('Edm.Int32' === $odsEntity->getProperty($sapField)->getFieldType() || 'Edm.Decimal'
+                    === $odsEntity->getProperty($sapField)->getFieldType() || 'Edm.Double' ===
                     $odsEntity->getProperty($sapField)->getFieldType()) ? "" : "'";
 
 
@@ -247,8 +292,8 @@ class QueryManager
 
             } elseif ($field !== 'submit' && $field !== '_token') {
 
-                $quote = ('Edm.Int32' === $odsEntity->getProperty($field)->getFieldType()|| 'Edm.Decimal'
-                    === $odsEntity->getProperty($field)->getFieldType()|| 'Edm.Double' ===
+                $quote = ('Edm.Int32' === $odsEntity->getProperty($field)->getFieldType() || 'Edm.Decimal'
+                    === $odsEntity->getProperty($field)->getFieldType() || 'Edm.Double' ===
                     $odsEntity->getProperty($field)->getFieldType()) ? "" : "'";
 
                 if ($this->appEntity->getProperty($field) !== null) {

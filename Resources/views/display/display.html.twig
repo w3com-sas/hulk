@@ -13,6 +13,16 @@
 
     {% include '@W3comHulk/display/include/header.html.twig' %}
 
+    {% if table.data|length == 10000 %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fa fa-exclamation-triangle mr-2"></i>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            Attention, la limite des 10000 lignes est atteinte. Des résultats peuvent être omis.
+        </div>
+    {% endif %}
+
     {# Html table #}
     {% include '@W3comHulk/display/table/table.html.twig' %}
 
