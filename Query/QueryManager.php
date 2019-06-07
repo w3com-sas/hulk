@@ -36,13 +36,6 @@ class QueryManager
      */
     private $appEntity;
 
-
-    /**
-     * @var DataTable
-     */
-    private $dataTable;
-
-
     /**
      * QueryManager constructor.
      * @param ModelFinder $finder
@@ -53,18 +46,19 @@ class QueryManager
     {
         $this->modelFinder = $finder;
         $this->boom = $boom;
-        $this->dataTable = $dataTable;
     }
 
     /**
      * @param DataTable $dataTable
      * @param array $requestParams
+     * @param bool $dataFilter
      * @return array
      * @throws AnnotationException
      * @throws ReflectionException
      */
     public function createDataTableQuery(DataTable $dataTable, $requestParams = [])
     {
+
         $this->appEntity = $this->boom->getGenerator()->getAppInspector()
             ->getProjectEntity($dataTable->getCalcView());
 
@@ -79,10 +73,16 @@ class QueryManager
         }
 
         $params = $repo->createParams();
-        $this->addSelectForColumns($params);
-        $this->addSelectForFilters($params);
-        $this->addSelectForLink($params);
-        $this->addGetParamsRequest($requestParams, $params);
+
+        if ($dataTable->isFilter) {
+            $this->addSelectForFilters($dataTable, $params);
+            return $repo->findAll($params);
+        }
+
+        $this->addSelectForColumns($dataTable, $params);
+        $this->addSelectForFilters($dataTable, $params);
+        $this->addSelectForLink($dataTable, $params);
+        $this->addGetParamsRequest($dataTable, $requestParams, $params);
         $this->addPreFilter($dataTable, $params);
         $params->setTop(10000);
 
@@ -90,14 +90,15 @@ class QueryManager
     }
 
     /**
+     * @param DataTable $dataTable
      * @param Parameters $params
      * @throws \Exception
      */
-    private function addSelectForColumns(Parameters $params)
+    private function addSelectForColumns(DataTable $dataTable, Parameters $params)
     {
-        if (!empty($this->dataTable->getColumns())) {
+        if (!empty($dataTable->getColumns())) {
             /** @var Column $column */
-            foreach ($this->dataTable->getColumns() as $column) {
+            foreach ($dataTable->getColumns() as $column) {
 
                 if ($column->getType() === Column::TYPE_TEXT || $column->getFieldName() !== null) {
 
@@ -105,9 +106,9 @@ class QueryManager
                         $params->addSelect($this->appEntity->getProperty($column->getFieldName())->getName());
                     } else {
                         $column->setActive('N');
-                        $this->dataTable->getError()->addColumnError(
+                        $dataTable->getError()->addColumnError(
                             sprintf(Error::ERROR_MISSING_FIELD, $column->getFieldName(),
-                                $this->dataTable->getCalcView()
+                                $dataTable->getCalcView()
                             )
                         );
                     }
@@ -119,22 +120,23 @@ class QueryManager
     /**
      * This function allow Filter on hidden column
      *
+     * @param DataTable $dataTable
      * @param Parameters $params
      * @throws \Exception
      */
-    private function addSelectForFilters(Parameters $params)
+    private function addSelectForFilters(DataTable $dataTable, Parameters $params)
     {
 
-        if (!empty($this->dataTable->getFilters())) {
+        if (!empty($dataTable->getFilters())) {
 
             /** @var Filter $filter */
-            foreach ($this->dataTable->getFilters() as $filter) {
+            foreach ($dataTable->getFilters() as $filter) {
 
                 if ($this->appEntity->getProperty($filter->getFieldName()) === null) {
                     $filter->setActive('N');
-                    $this->dataTable->getError()
+                    $dataTable->getError()
                         ->addFilterError(
-                            sprintf(Error::ERROR_MISSING_FIELD, $filter->getFieldName(), $this->dataTable->getCalcView())
+                            sprintf(Error::ERROR_MISSING_FIELD, $filter->getFieldName(), $dataTable->getCalcView())
                         );
                 } else {
                     $filter->setActive('Y');
@@ -146,15 +148,16 @@ class QueryManager
     }
 
     /**
+     * @param DataTable $dataTable
      * @param Parameters $params
      * @throws \Exception
      */
-    private function addSelectForLink(Parameters $params)
+    private function addSelectForLink(DataTable $dataTable, Parameters $params)
     {
-        if (!empty($this->dataTable->getColumns())) {
+        if (!empty($dataTable->getColumns())) {
 
             /** @var Column $column */
-            foreach ($this->dataTable->getColumns() as $column) {
+            foreach ($dataTable->getColumns() as $column) {
 
                 if ($column->getCellAction() !== null) {
 
@@ -169,8 +172,8 @@ class QueryManager
 
                             } else {
 
-                                $this->dataTable->getError()->addColumnError(
-                                    sprintf(Error::ERROR_MISSING_FIELD, $fieldKey, $this->dataTable->getCalcView())
+                                $dataTable->getError()->addColumnError(
+                                    sprintf(Error::ERROR_MISSING_FIELD, $fieldKey, $dataTable->getCalcView())
                                 );
 
                             }
@@ -184,19 +187,20 @@ class QueryManager
     }
 
     /**
+     * @param DataTable $dataTable
      * @param array $getRequestParams
      * @param Parameters $parameters
      * @throws AnnotationException
      * @throws ReflectionException
      */
-    private function addGetParamsRequest($getRequestParams, Parameters $parameters)
+    private function addGetParamsRequest(DataTable $dataTable, $getRequestParams, Parameters $parameters)
     {
 
         $odsEntity = $this->boom->getGenerator()->getOdsInspector()->getOdsEntity(
-            $this->dataTable->getCalcView()
+            $dataTable->getCalcView()
         );
 
-        if ($getRequestParams instanceof ParameterBag){
+        if ($getRequestParams instanceof ParameterBag) {
             $arrayGetParams = $getRequestParams->all();
         } else {
             $arrayGetParams = $getRequestParams;
@@ -211,7 +215,7 @@ class QueryManager
                 $paramsExist = true;
 
                 $parameters->addFilter($this->appEntity->getProperty($key)->getName(), $value,
-                    Clause::EQUALS, Clause::AND);
+                    Clause::EQUALS, Clause:: AND);
 
                 unset($arrayGetParams[$key]);
 
@@ -223,9 +227,9 @@ class QueryManager
             if (substr($key, 0, strlen(DisplayFiltersController::INTERVAL_URL_KEY))
                 === DisplayFiltersController::INTERVAL_URL_KEY) {
 
-                if ($paramsExist){
+                if ($paramsExist && !isset($rawFilter)) {
                     $rawFilter = ' and ';
-                } else {
+                } elseif (!$paramsExist && !isset($rawFilter)) {
                     $rawFilter = '';
                 }
 
@@ -242,70 +246,22 @@ class QueryManager
 
                 $min = explode('|', $value)[0];
                 $max = explode('|', $value)[1];
-                $rawFilter .= sprintf(Clause::GREATER_THAN, $sapField, $sapQuote . $min . $sapQuote . ' and ');
-                $rawFilter .= sprintf(Clause::LOWER_THAN, $sapField, $sapQuote . $max . $sapQuote . $filterOperator);
-                $parameters->addRawFilter($rawFilter);
 
-            }
-        }
-    }
-
-    private function addPostParamsRequest($postRequestParams, Parameters $parameters)
-    {
-
-        $odsEntity = $this->boom->getGenerator()->getOdsInspector()->getOdsEntity(
-            $this->dataTable->getCalcView()
-        );
-        $rawFilter = '';
-
-        $formattedPostRequestParams = array_filter($postRequestParams, function ($value) {
-            return ($value != "");
-        });
-
-        foreach ($formattedPostRequestParams as $field => $value) {
-
-            $sapField = substr($field, 3);
-
-
-            if (end($formattedPostRequestParams) === $value) {
-                $filterOperator = '';
-            } else {
-                $filterOperator = ' and ';
-            }
-
-            if (substr($field, 0, 3) == 'min') {
-
-                $sapQuote = ('Edm.Int32' === $odsEntity->getProperty($sapField)->getFieldType() || 'Edm.Decimal'
-                    === $odsEntity->getProperty($sapField)->getFieldType() || 'Edm.Double' ===
-                    $odsEntity->getProperty($sapField)->getFieldType()) ? "" : "'";
-
-
-                $rawFilter .= sprintf(Clause::GREATER_THAN, $sapField, $sapQuote . $value . $sapQuote . $filterOperator);
-
-            } elseif (substr($field, 0, 3) == 'max') {
-                $sapQuote = ('Edm.Int32' === $odsEntity->getProperty($sapField)->getFieldType() || 'Edm.Decimal'
-                    === $odsEntity->getProperty($sapField)->getFieldType() || 'Edm.Double' ===
-                    $odsEntity->getProperty($sapField)->getFieldType()) ? "" : "'";
-
-
-                $rawFilter .= sprintf(Clause::LOWER_THAN, $sapField, $sapQuote . $value . $sapQuote . $filterOperator);
-
-            } elseif ($field !== 'submit' && $field !== '_token') {
-
-                $quote = ('Edm.Int32' === $odsEntity->getProperty($field)->getFieldType() || 'Edm.Decimal'
-                    === $odsEntity->getProperty($field)->getFieldType() || 'Edm.Double' ===
-                    $odsEntity->getProperty($field)->getFieldType()) ? "" : "'";
-
-                if ($this->appEntity->getProperty($field) !== null) {
-
-                    $rawFilter .= sprintf(Clause::EQUALS,
-                        $field, $quote . $value . $quote . $filterOperator);
-                } else {
-                    $this->dataTable->getError()->addRequestParamsError($field . 'does not exist');
+                if ($min != null && $max != null){
+                    $rawFilter .= sprintf(Clause::GREATER_THAN, $sapField, $sapQuote . $min . $sapQuote . ' and ');
+                    $rawFilter .= sprintf(Clause::LOWER_THAN, $sapField, $sapQuote . $max . $sapQuote . $filterOperator);
+                } elseif ($min != null){
+                    $rawFilter .= sprintf(Clause::GREATER_THAN, $sapField, $sapQuote . $min . $sapQuote);
+                } elseif ($max != null){
+                    $rawFilter .= sprintf(Clause::LOWER_THAN, $sapField, $sapQuote . $max . $sapQuote . $filterOperator);
                 }
+
+                if ($min != null||$max != null){
+                    $parameters->addRawFilter($rawFilter);
+                }
+
             }
         }
-        $parameters->addRawFilter($rawFilter);
     }
 
     /**

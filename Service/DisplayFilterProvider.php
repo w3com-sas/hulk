@@ -37,6 +37,7 @@ class DisplayFilterProvider
         $this->displayConstructor = new DataTablesConstructor();
         $this->filterManager = new FilterManager();
         $this->dataTransformer = new DataTransformer($this->modelFinder);
+        $this->display->isFilter = true;
     }
 
     /**
@@ -50,6 +51,11 @@ class DisplayFilterProvider
         $json = $this->jsonFinder->getOnlineJson($filename, $this->display);
         $this->displayConstructor->hydrateDataTable($json, $this->display);
         $data = $this->queryManager->createDataTableQuery($this->display);
+
+        if (!$this->display->getError()->isClassExist()){
+            return $this->display;
+        }
+
         $this->dataTransformer->addData($this->display, $data);
         $this->filterManager->initFilters($this->display);
         return $this->display;

@@ -19,6 +19,8 @@ class DataTable
         $this->error = new Error();
     }
 
+    public $isFilter = false;
+
     /**
      * @var string
      */
