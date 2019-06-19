@@ -32,9 +32,9 @@ class SearchViewProvider
         $repo = $this->boom->getRepository($entity);
 
         if (!empty($filters)){
-            $rawFilter = ' and ';
+            $rawFilter = ' and (';
         } else {
-            $rawFilter = '';
+            $rawFilter = '(';
         }
 
         $rawFilter = $this->createRawFilter($columns, $search, $rawFilter);
@@ -62,7 +62,7 @@ class SearchViewProvider
                 $rawFilter .= 'substringof(\'' . strtoupper($search) . '\' , ' . $col . ')';
             }
         }
-        return $rawFilter;
+        return $rawFilter.')';
     }
 
     /**

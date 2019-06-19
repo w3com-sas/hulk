@@ -224,6 +224,7 @@ class QueryManager
 
         foreach ($arrayGetParams as $key => $value) {
 
+            
             if (substr($key, 0, strlen(DisplayFiltersController::INTERVAL_URL_KEY))
                 === DisplayFiltersController::INTERVAL_URL_KEY) {
 

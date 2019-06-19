@@ -23,8 +23,6 @@ class UrlManager
 
     public function generateLink(DataTable $dataTable, $data)
     {
-
-
         $newData = [];
         foreach ($data as $lines) {
 
@@ -79,7 +77,5 @@ class UrlManager
             $newData[] = $lines;
         }
         $dataTable->setData($newData);
-
     }
-
 }
