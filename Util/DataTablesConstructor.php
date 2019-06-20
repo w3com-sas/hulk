@@ -125,6 +125,9 @@ class DataTablesConstructor
                 case CellAction::FIELD_ICON:
                     $action->setIcon($value);
                     break;
+                case CellAction::FIELD_ICON_FIELDNAME:
+                    $action->setIconFieldName($value);
+                    break;
                 case CellAction::FIELD_PARAMS:
                     foreach ($value as $fieldKey => $targetFieldKey) {
                         $action->addParam($fieldKey, $targetFieldKey);

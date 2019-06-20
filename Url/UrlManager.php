@@ -35,15 +35,18 @@ class UrlManager
 
                     $urlParams = [];
 
-                    foreach ($lines as $nameField => $valueField) {
+                    foreach ($column->getCellAction()->getParams() as $fieldName => $targetFieldName) {
 
-
-                        foreach ($column->getCellAction()->getParams() as $fieldName => $targetFieldName) {
+                        foreach ($lines as $nameField => $valueField) {
 
                             if ($nameField == $fieldName) {
                                 $urlParams[$targetFieldName] = $valueField;
                             }
 
+                        }
+
+                        if (!isset($urlParams[$targetFieldName])){
+                            $urlParams[$fieldName] = $targetFieldName;
                         }
 
                     }
@@ -61,14 +64,14 @@ class UrlManager
                                 $urlParams);
                         } catch (MissingMandatoryParametersException $e) {
                             $dataTable->getError()->addUrlError($column->getFieldName(), $e->getMessage());
-                        } catch (InvalidParameterException $e){
+                        } catch (InvalidParameterException $e) {
                             $dataTable->getError()->addUrlError($column->getFieldName(), $e->getMessage());
-                        } catch (\Exception $e){
+                        } catch (\Exception $e) {
                             $dataTable->getError()->addUrlError($column->getFieldName(), $e->getMessage());
                         }
 
                     }
-                    if (isset($url)){
+                    if (isset($url)) {
                         $lines[$column->getCellAction()->getFunctionName() . $column->getCellAction()->getTargetEntity()]
                             = $url;
                     }

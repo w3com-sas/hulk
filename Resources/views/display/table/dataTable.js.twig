@@ -52,6 +52,11 @@ $(document).ready(function () {
                 render: function (data, type, row) {
                     var idTpl = '#' + '{{ column.cellAction.functionName }}{{ column.cellAction.targetEntity }}';
                     var tpl = $(idTpl).html();
+
+                    {% if column.cellAction.iconFieldName is defined %}
+                    var data = row[{{ column.cellAction.iconFieldIndex }}]
+                    {% endif %}
+
                     return tpl.replace('[[data]]', data);
                 }
             },

@@ -12,6 +12,8 @@ class CellAction
 
     const FUNCTION_DISPLAY_LINK = 'displayLink';
     const FUNCTION_LINK = 'link';
+    const FIELD_ICON_FIELDNAME = 'IconFieldName';
+
     private $label;
 
     private $functionName;
@@ -19,6 +21,8 @@ class CellAction
     private $targetEntity;
 
     private $icon;
+
+    private $iconFieldName;
 
     private $params;
 
@@ -101,6 +105,19 @@ class CellAction
     public function addParam($key, $value): void
     {
         $this->params[$key] = $value;
+    }
+
+    public function setIconFieldName($value)
+    {
+        $this->iconFieldName = $value;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIconFieldName()
+    {
+        return $this->iconFieldName;
     }
 
 }
