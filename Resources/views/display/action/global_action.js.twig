@@ -59,12 +59,6 @@ $('{{ btnFormId }}').click(function () {
     params.{{ param }}.{{ field }} = '{{ targetField }}';
     {% endfor %}
 
-    {% elseif globalAction.type == 'call-function' %}
-    {% if globalAction.config.name is defined %}
-    eval({{ globalAction.config.name }} + '(data)');
-    {% endif %}
-
-
     {% else %}
     params.{{ param }} = '{{ targetParam }}';
     {% endif %}
@@ -83,5 +77,15 @@ $('#{{ globalAction.type }}').click(function () {
     var data = table.rows('.selected').data();
     var formatedData = formatDataToCsv(data);
     exportToCsv('export.csv', formatedData)
+});
+{% endfor %}
+
+{% for globalAction in table.globalActions if globalAction.type == 'call-function' %}
+$('#{{ globalAction.type~globalAction.index }}').click(function () {
+    var data = table.rows('.selected').data();
+    {% if globalAction.config.name is defined %}
+    eval({{ globalAction.config.name }} + '(data)');
+    {% endif %}
+
 });
 {% endfor %}
