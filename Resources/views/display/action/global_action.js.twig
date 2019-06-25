@@ -84,7 +84,7 @@ $('#{{ globalAction.type }}').click(function () {
 $('#{{ globalAction.type~globalAction.index }}').click(function () {
     var data = table.rows('.selected').data();
     {% if globalAction.config.name is defined %}
-    eval({{ globalAction.config.name }} + '(data)');
+    eval('{{ globalAction.config.name }}(data)');
     {% endif %}
 
 });
