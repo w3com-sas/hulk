@@ -11,6 +11,7 @@ class Config
     const FIELD_TARGET_DATA_TYPE = 'TargetDataType';
     const FIELD_TARGET_DATA = 'TargetData';
     const FIELD_URL = 'Url';
+    const FIELD_NAME = 'Name';
 
     const DATA_TYPE_STATIC = 'static';
     const DATA_TYPE_TEXT = 'text';
@@ -28,6 +29,8 @@ class Config
     private $targetData;
 
     private $url;
+
+    private $name;
 
     /**
      * @return mixed
@@ -123,5 +126,21 @@ class Config
     public function setUrl($url): void
     {
         $this->url = $url;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param mixed $name
+     */
+    public function setName($name): void
+    {
+        $this->name = $name;
     }
 }

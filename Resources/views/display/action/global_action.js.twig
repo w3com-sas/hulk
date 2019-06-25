@@ -59,6 +59,12 @@ $('{{ btnFormId }}').click(function () {
     params.{{ param }}.{{ field }} = '{{ targetField }}';
     {% endfor %}
 
+    {% elseif globalAction.type == 'call-function' %}
+    {% if globalAction.config.name is defined %}
+    eval({{ globalAction.config.name }} + '(data)');
+    {% endif %}
+
+
     {% else %}
     params.{{ param }} = '{{ targetParam }}';
     {% endif %}
