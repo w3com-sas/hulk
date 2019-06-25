@@ -26,5 +26,10 @@
                 id="{{ globalAction.type~globalAction.index }}">
             {{ globalAction.label }}
         </button>
+    {% elseif globalAction.type == 'call-function' %}
+        <button class="btn btn-info"
+                id="{{ globalAction.type~globalAction.index }}">
+            {{ globalAction.label }}
+        </button>
     {% endif %}
 {% endfor %}
