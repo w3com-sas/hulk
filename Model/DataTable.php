@@ -13,6 +13,7 @@ class DataTable
     const FIELD_COLUMNS = 'Columns';
     const FIELD_PAGE_LENGTH = 'PageLength';
     const FIELD_DISPLAY_NAME = 'DisplayName';
+    const FIELD_MENU_CONFIG = 'MenuConfig';
 
     public function __construct()
     {
@@ -70,6 +71,11 @@ class DataTable
      * @var Error
      */
     private $error;
+
+    /**
+     * @var string
+     */
+    private $menuConfig;
 
     /**
      * @param Column $column
@@ -268,6 +274,22 @@ class DataTable
     public function setPageLength($pageLength): void
     {
         $this->pageLength = $pageLength;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMenuConfig()
+    {
+        return $this->menuConfig;
+    }
+
+    /**
+     * @param $menuConfig
+     */
+    public function setMenuConfig($menuConfig): void
+    {
+        $this->menuConfig = $menuConfig;
     }
 
     /**
