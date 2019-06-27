@@ -75,7 +75,7 @@ class DataTable
     /**
      * @var string
      */
-    private $menuConfig;
+    private $menuConfig = '';
 
     /**
      * @param Column $column
