@@ -53,10 +53,11 @@ $(document).ready(function () {
                     var idTpl = '#' + '{{ column.cellAction.functionName }}{{ column.cellAction.targetEntity }}';
                     var tpl = $(idTpl).html();
 
-                    {% if column.cellAction.iconFieldName is defined %}
-                    var data = row[{{ column.cellAction.iconFieldIndex }}]
-                    {% endif %}
-
+                    {# removed 28.06 for debug purpose
+                        {% if column.cellAction.iconFieldName is defined %}
+                        var data = row[{{ column.cellAction.iconFieldIndex }}]
+                        {% endif %}
+                    #}
                     return tpl.replace('[[data]]', data);
                 }
             },
