@@ -53,6 +53,10 @@ $(document).ready(function () {
                     var idTpl = '#' + '{{ column.cellAction.functionName }}{{ column.index }}';
                     var tpl = $(idTpl).html();
 
+
+                    if (data == ''){
+                        return  null;
+                    }
                     {# removed 28.06 for debug purpose
                         {% if column.cellAction.iconFieldName is defined %}
                         var data = row[{{ column.cellAction.iconFieldIndex }}]
