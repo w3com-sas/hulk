@@ -50,7 +50,7 @@ $(document).ready(function () {
                 {% endif %}
                 data: "{{ column.fieldName }}",
                 render: function (data, type, row) {
-                    var idTpl = '#' + '{{ column.cellAction.functionName }}{{ column.cellAction.targetEntity }}';
+                    var idTpl = '#' + '{{ column.cellAction.functionName }}{{ column.index }}';
                     var tpl = $(idTpl).html();
 
                     {# removed 28.06 for debug purpose

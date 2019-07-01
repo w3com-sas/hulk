@@ -4,7 +4,7 @@
 
         {% if column.cellAction.functionName == 'openForm' %}
 
-            <template id="{{ column.cellAction.functionName }}{{ column.cellAction.targetEntity }}">
+            <template id="{{ column.cellAction.functionName }}{{ column.index }}">
                 <button class="btn btn-primary btn-sm"
                         onclick="{{ column.cellAction.functionName }}('{{ column.cellAction.targetEntity }}', '[[data]]')">
                     {% if column.cellAction.icon != null %}
@@ -18,7 +18,7 @@
 
             <template id="{{ column.cellAction.functionName }}{{ column.cellAction.targetEntity }}">
                 <a class="btn btn-primary btn-sm"
-                        href="[[data]]">
+                   href="[[data]]">
                     {% if column.cellAction.icon != null %}
                         <i class="fa fa-{{ column.cellAction.icon }}"></i>
                     {% endif %}
