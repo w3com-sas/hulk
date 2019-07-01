@@ -170,13 +170,13 @@ class QueryManager
 
                                 $params->addSelect($this->appEntity->getProperty($fieldKey)->getName());
 
-                            } else {
+                            } /*else {
 
                                 $dataTable->getError()->addColumnError(
                                     sprintf(Error::ERROR_MISSING_FIELD, $fieldKey, $dataTable->getCalcView())
                                 );
 
-                            }
+                            }*/
 
                         }
                     }
