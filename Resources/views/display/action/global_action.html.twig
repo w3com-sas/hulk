@@ -6,7 +6,7 @@
     {% elseif globalAction.type == 'update-sap' and globalAction.config.targetDataType == 'static' or
         globalAction.config.targetDataType == 'text' %}
         <button class="btn btn-info"
-                id="{{ globalAction.type }}{{ globalAction.config.targetDataType }}{{ globalAction.config.entity }}{{ globalAction.index }}"
+                id="btn{{ globalAction.type }}{{ globalAction.config.targetDataType }}{{ globalAction.index }}"
                 targetEntity="{{ globalAction.config.entity }}"
                 targetField="{{ globalAction.config.targetField }}"
                 targetData="{{ globalAction.config.targetData }}"
@@ -15,7 +15,7 @@
         </button>
     {% elseif globalAction.config.targetDataType == 'array' %}
         <button class="btn btn-info"
-                id="{{ globalAction.type }}{{ globalAction.config.targetDataType }}{{ globalAction.config.entity }}{{ globalAction.index }}"
+                id="btn{{ globalAction.type }}{{ globalAction.config.targetDataType }}{{ globalAction.index }}"
                 targetEntity="{{ globalAction.config.entity }}"
                 targetField="{{ globalAction.config.targetField }}"
                 entityKey="{{ globalAction.config.entityKey }}">

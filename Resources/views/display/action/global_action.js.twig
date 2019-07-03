@@ -2,9 +2,9 @@
     if globalAction.type == 'update-sap' or globalAction.type == 'api-request' %}
 
 {% if globalAction.type == 'update-sap' %}
-{% set btnModalId = '#'~globalAction.type~globalAction.config.targetDataType~globalAction.config.entity~globalAction.index %}
-{% set btnFormId = '#form'~globalAction.type~globalAction.config.targetDataType~globalAction.config.entity~globalAction.index %}
-{% set modalId = '#'~globalAction.type~globalAction.config.entity~globalAction.config.targetDataType~globalAction.index %}
+{% set btnModalId = '#btn'~globalAction.type~globalAction.config.targetDataType~globalAction.index %}
+{% set btnFormId = '#form'~globalAction.type~globalAction.config.targetDataType~globalAction.index %}
+{% set modalId = '#'~globalAction.type~globalAction.config.targetDataType~globalAction.index %}
 {% set inputId = '#input'~globalAction.type~globalAction.config.targetField~globalAction.config.targetDataType %}
 {% elseif globalAction.type == 'api-request' %}
 {% set btnModalId = '#'~globalAction.type~globalAction.index %}

@@ -2,8 +2,8 @@
     or globalAction.type == 'api-request' %}
 
     {% if globalAction.type == 'update-sap' %}
-        {% set modalId = globalAction.type~globalAction.config.entity~globalAction.config.targetDataType~globalAction.index %}
-        {% set btnFormId = 'form'~globalAction.config.entity~globalAction.config.targetField~globalAction.config.entityKey~globalAction.config.targetDataType~globalAction.index %}
+        {% set modalId = globalAction.type~globalAction.config.targetDataType~globalAction.index %}
+        {% set btnFormId = 'form'~globalAction.type~globalAction.config.targetDataType~globalAction.index %}
         {% set inputId = 'input'~globalAction.type~globalAction.config.targetField~globalAction.config.targetDataType %}
         {% set title = 'Mise à jour SAP :'~globalAction.config.entity %}
     {% elseif globalAction.type == 'api-request' %}
