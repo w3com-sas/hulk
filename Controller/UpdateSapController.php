@@ -63,7 +63,8 @@ class UpdateSapController extends AbstractController
                                 400);
                         }
 
-                        $obj->set($data['targetField'], $data['targetData']);
+                        $property = $obj->getPropertyByColumn($data['targetField']);
+                        $obj->set($property, $data['targetData']);
 
                         // Update
                         try {
