@@ -19,13 +19,11 @@ class MenuSession
 
     public function getHulkMenu($currentDisplayName)
     {
-
         if (!$this->session->has('menu')) {
             $menu = [];
             $currentMenu = $this->getCurrentMenuItem($currentDisplayName,true, []);
             $menu[$currentMenu['uniqId']] = $currentMenu;
             $this->session->set('menu', $menu);
-
             return $menu;
         }
         $menu = $this->session->get('menu');

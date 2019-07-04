@@ -14,6 +14,7 @@ class Indexor
         $this->addColumnsIndex($dataTable);
         $this->addFiltersIndex($dataTable);
         $this->addGlobalActionIndex($dataTable);
+        $this->addIconFieldNameIndex($dataTable);
         return $dataTable;
     }
 
@@ -59,5 +60,28 @@ class Indexor
             }
         }
 
+    }
+
+    private function addIconFieldNameIndex(DataTable $dataTable)
+    {
+        /** @var Column $column */
+        foreach ($dataTable->getColumns() as $column){
+
+            if ($column->getCellAction() !== null && $column->getCellAction()->getIconFieldName() !== null){
+
+                /** @var Column $toCompareColumn */
+                foreach ($dataTable->getColumns() as $toCompareColumn){
+
+                    if ($toCompareColumn->getFieldName() === $column->getCellAction()->getIconFieldName()){
+
+                        $column->getCellAction()->setIconColumnIndex($toCompareColumn->getIndex());
+
+                    }
+
+                }
+
+            }
+
+        }
     }
 }

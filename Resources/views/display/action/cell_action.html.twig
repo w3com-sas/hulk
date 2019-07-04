@@ -2,29 +2,35 @@
 
     {% if column.type == 'action' %}
 
-        {% if column.cellAction.functionName == 'openForm' %}
+        {% if column.cellAction.iconFieldName is not null %}
 
+            {# For dynamic icon with field who provide it #}
+            {% set btnClass =  'btn btn-sm' %}
+            {% set iconTpl = '<i class="fa fa-[[icon]]"></i>' %}
+
+        {% else %}
+
+            {% if column.cellAction.icon != null %}
+                {% set btnClass =  'btn btn-primary btn-sm' %}
+                {% set iconTpl = '<i class="fa fa-'~column.cellAction.icon~'"></i>' %}
+            {% endif %}
+
+        {% endif %}
+
+        {% if column.cellAction.functionName == 'openForm' %}
             <template id="{{ column.cellAction.functionName }}{{ column.index }}">
-                <button class="btn btn-primary btn-sm"
+                <button class="{{ btnClass }}"
                         onclick="{{ column.cellAction.functionName }}('{{ column.cellAction.targetEntity }}', '[[data]]')">
-                    {% if column.cellAction.icon != null %}
-                        <i class="fa fa-{{ column.cellAction.icon }}"></i>
-                    {% endif %}
+                    {{ iconTpl|raw }}
                 </button>
             </template>
-
         {% elseif column.cellAction.functionName == 'displayLink' or column.cellAction.functionName == 'link' %}
-
-
             <template id="{{ column.cellAction.functionName }}{{ column.cellAction.targetEntity }}">
                 <a class="btn btn-primary btn-sm"
                    href="[[data]]">
-                    {% if column.cellAction.icon != null %}
-                        <i class="fa fa-{{ column.cellAction.icon }}"></i>
-                    {% endif %}
+                    {{ iconTpl|raw }}
                 </a>
             </template>
-
         {% endif %}
 
     {% endif %}

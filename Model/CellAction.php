@@ -26,6 +26,8 @@ class CellAction
 
     private $params;
 
+    private $iconColumnIndex;
+
     /**
      * @return mixed
      */
@@ -118,6 +120,22 @@ class CellAction
     public function getIconFieldName()
     {
         return $this->iconFieldName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIconColumnIndex()
+    {
+        return $this->iconColumnIndex;
+    }
+
+    /**
+     * @param mixed $iconColumnIndex
+     */
+    public function setIconColumnIndex($iconColumnIndex): void
+    {
+        $this->iconColumnIndex = $iconColumnIndex;
     }
 
 }
