@@ -6,6 +6,7 @@
             </label>
         </div>
         <select class="custom-select" id="select{{ filter.fieldName }}" colIndex="{{ filter.index }}">
+
             {% for value in filter.values %}
 
                 {% if filter.defaultValue == value %}

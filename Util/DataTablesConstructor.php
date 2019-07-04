@@ -104,6 +104,9 @@ class DataTablesConstructor
                     case Filter::FIELD_PARAMS:
                         $filter->setParams($value);
                         break;
+                    case Filter::FIELD_ORDER:
+                        $filter->setOrder($value);
+                        break;
 
                 }
             }

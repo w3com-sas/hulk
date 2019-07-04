@@ -15,6 +15,10 @@ class Filter
     const TYPE_PRE_FILTER = 'pre-filter';
     const FIELD_PARAMS = 'Params';
     const TYPE_DATE = 'date';
+    const FIELD_ORDER = 'Order';
+
+    const ORDER_ASC = 'ASC';
+    const ORDER_DESC = 'DESC';
 
     private $fieldName;
 
@@ -23,6 +27,8 @@ class Filter
     private $values;
 
     private $active;
+
+    private $order;
 
     private $index;
 
@@ -85,6 +91,12 @@ class Filter
      */
     public function getValues()
     {
+        if ($this->order === self::ORDER_ASC){
+            ksort($this->values, SORT_NATURAL | SORT_FLAG_CASE);
+        } elseif ($this->order === self::ORDER_DESC){
+            krsort($this->values, SORT_NATURAL | SORT_FLAG_CASE);
+        }
+
         return $this->values;
     }
 
@@ -161,5 +173,21 @@ class Filter
     public function setParams($params): void
     {
         $this->params = $params;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOrder()
+    {
+        return $this->order;
+    }
+
+    /**
+     * @param mixed $order
+     */
+    public function setOrder($order): void
+    {
+        $this->order = $order;
     }
 }
