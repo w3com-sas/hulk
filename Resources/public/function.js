@@ -4,6 +4,7 @@ function openForm(obj, id) {
 
 function formatDataToCsv(rows) {
 
+
     var formatedData = [];
 
     // On passe le header (Les entêtes)
@@ -17,6 +18,20 @@ function formatDataToCsv(rows) {
         });
         formatedData.push(line);
     });
+/*
+    var formatedData = {};
+
+    // On passe le header (Les entêtes)
+    formatedData.header = push(Object.keys(rows[0]));
+
+    // On transform l'objet en tableau pour qu'il puisse être traité.
+    $.each(rows, function (indexObj, obj) {
+        var line = [];
+        $.each(obj, function (index, value) {
+            line.push(value)
+        });
+        formatedData.push(line);
+    });*/
 
     return formatedData;
 }

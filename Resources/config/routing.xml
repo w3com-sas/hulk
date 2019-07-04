@@ -30,4 +30,7 @@
     <route id="w3com_display_filters" path="/display-filters/{filename}" methods="GET POST">
         <default key="_controller">w3com_hulk.controller.display_filters_controller::filtersForm</default>
     </route>
+    <route id="w3com_export_csv" path="/export-csv" methods="POST">
+        <default key="_controller">w3com_hulk.controller.export_csv_controller::exportCsv</default>
+    </route>
 </routes>

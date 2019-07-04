@@ -25,6 +25,11 @@ class DataTable
     /**
      * @var string
      */
+    private $filename;
+
+    /**
+     * @var string
+     */
     private $displayName;
 
     /**
@@ -319,6 +324,22 @@ class DataTable
     public function setDisplayName(string $displayName): void
     {
         $this->displayName = $displayName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFilename(): string
+    {
+        return $this->filename;
+    }
+
+    /**
+     * @param string $filename
+     */
+    public function setFilename(string $filename): void
+    {
+        $this->filename = $filename;
     }
 
 }

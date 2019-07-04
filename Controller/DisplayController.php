@@ -13,7 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class DisplayController extends AbstractController
 {
 
-    private $tableProvider;
+    private $displayProvider;
 
     private $logger;
 
@@ -21,7 +21,7 @@ class DisplayController extends AbstractController
 
     public function __construct(DisplayProvider $provider, LoggerInterface $logger, RequestStack $request)
     {
-        $this->tableProvider = $provider;
+        $this->displayProvider = $provider;
         $this->logger = $logger;
         $this->request = $request;
     }
@@ -64,7 +64,7 @@ class DisplayController extends AbstractController
     private function displayInit($filename)
     {
         $getRequestParams = $this->request->getCurrentRequest()->query;
-        $table = $this->tableProvider->getDataTable($filename, $getRequestParams);
+        $table = $this->displayProvider->getDataTable($filename, $getRequestParams);
         return $table;
     }
 }

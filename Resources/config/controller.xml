@@ -69,6 +69,14 @@
                 <argument type="service" id="service_container" />
             </call>
         </service>
+        <service id="w3com_hulk.controller.export_csv_controller"
+                 class="W3com\HulkBundle\Controller\ExportCsvController" public="true">
+            <argument type="service" id="w3com_hulk.service.display_provider"/>
+            <argument type="service" id="request_stack"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
     </services>
 
 </container>

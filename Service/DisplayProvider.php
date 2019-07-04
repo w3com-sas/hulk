@@ -114,6 +114,8 @@ class DisplayProvider
      */
     public function getDataTable($filename, $getRequestParams = [])
     {
+        $this->dataTable->setFilename($filename);
+
         $json = $this->jsonFinder->getOnlineJson($filename, $this->dataTable);
 
         $this->constructor->hydrateDataTable($json, $this->dataTable);
