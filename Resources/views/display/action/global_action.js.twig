@@ -71,8 +71,6 @@ $('{{ btnFormId }}').click(function () {
 });
 {% endfor %}
 
-{% dump table %}
-
 
 {% for globalAction in table.globalActions if globalAction.type == 'export-csv' %}
 $('#{{ globalAction.type }}').click(function () {
