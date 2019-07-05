@@ -84,7 +84,6 @@ $('#{{ globalAction.type }}').click(function () {
         if (xhttp.readyState === 4 && xhttp.status === 200) {
             // Trick for making downloadable link
             a = document.createElement('a');
-            console.log(xhttp.response);
             a.href = window.URL.createObjectURL(xhttp.response);
             // Give filename you wish to download
             a.download = filename;
