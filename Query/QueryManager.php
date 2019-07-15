@@ -84,7 +84,7 @@ class QueryManager
         $this->addSelectForLink($dataTable, $params);
         $this->addGetParamsRequest($dataTable, $requestParams, $params);
         $this->addPreFilter($dataTable, $params);
-        $params->setTop(10000);
+        $params->setTop(6000);
 
         return $repo->findAll($params);
     }
