@@ -33,7 +33,7 @@ class SearchViewProvider
         }
 
         $columns = array_key_exists('columns', $params) ? $params['columns'] : null;
-        $search = array_key_exists('search', $params) ? $params['columns'] : null;
+        $search = array_key_exists('search', $params) ? $params['search'] : null;
         $top = array_key_exists('top', $params) ? $params['top'] : 100;
         $filters = array_key_exists('filters', $params) ? $params['filters'] : [];
 
