@@ -17,25 +17,26 @@ class SearchViewProvider
     }
 
     /**
-     * @param AbstractEntity $entity
-     * @param array $columns
-     * @param string $search
-     * @param int $top
-     * @param array $filters
+     * @param $params
      * @return array
      * @throws AnnotationException
      * @throws \ReflectionException
      */
-    public function getBoomResults($entity, array $columns, string $search = null, int $top = 100,
-                                   array $filters = [])
+    public function getBoomResults($params)
     {
-        $repo = $this->boom->getRepository($entity);
+        $repo = $this->boom->getRepository($params['entity']);
 
-        if (!empty($filters)){
+        if (array_key_exists('filters', $params) && !empty($params['filters'])){
             $rawFilter = ' and (';
         } else {
             $rawFilter = '(';
         }
+
+        $columns = array_key_exists('columns', $params) ? $params['columns'] : null;
+        $search = array_key_exists('search', $params) ? $params['columns'] : null;
+        $top = array_key_exists('top', $params) ? $params['top'] : 100;
+        $filters = array_key_exists('filters', $params) ? $params['filters'] : [];
+
 
         $rawFilter = $this->createRawFilter($columns, $search, $rawFilter);
 
