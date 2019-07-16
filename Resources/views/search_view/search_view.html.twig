@@ -28,7 +28,7 @@
 </div>
 
 <template id="searchViewLoader{{ searchView.calcView }}">
-    <i class="fas fa-spinner fa-spin fa-5x text-primary"></i>
+    <i class="fal fa-circle-notch fa-5x text-primary"></i>
 </template>
 
 <template id="searchViewNoResults{{ searchView.calcView }}">
@@ -36,5 +36,12 @@
         <i class="fas fa-exclamation-triangle mr-3"></i>
         Aucune donnée ne correspond à votre recherche
     </p>
+</template>
+
+<template id="searchViewError{{ searchView.calcView }}">
+    <div class="alert alert-danger">
+        <i class="fal fa-exclamation mr-3"></i>
+        Une erreur inconnue est survenue, merci de réessayer plus tard.
+    </div>
 </template>
 

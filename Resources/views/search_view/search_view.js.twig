@@ -24,6 +24,8 @@ searchViewInput.addEventListener('keyup', function (event) {
         var searchViewResults = $('#searchViewResults'+'{{ searchView.calcView }}');
         var searchViewInfo = $('#searchViewInfo'+'{{ searchView.calcView }}');
         var loader = $('#searchViewLoader'+'{{ searchView.calcView }}');
+        var error = $('#searchViewError' + '{{ searchView.calcView }}');
+
 
         searchViewResults.html('');
         searchViewInfo.html(loader.html());
@@ -40,6 +42,9 @@ searchViewInput.addEventListener('keyup', function (event) {
                     searchViewResults.html(data);
                     searchViewInfo.html('');
                 }
+            },
+            error: function () {
+                searchViewInfo.html($(error).html());
             }
         })
 
