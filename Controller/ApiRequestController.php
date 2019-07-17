@@ -21,7 +21,7 @@ class ApiRequestController extends AbstractController
     {
         $this->request = $request;
         $this->logger = $logger;
-        $this->apiManager = new ApiManager();
+        $this->apiManager = new ApiManager($logger);
     }
 
     public function apiRequest()
