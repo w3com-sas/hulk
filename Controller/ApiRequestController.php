@@ -24,39 +24,15 @@ class ApiRequestController extends AbstractController
         $this->apiManager = new ApiManager($logger);
     }
 
+    /**
+     * @return JsonResponse
+     */
     public function apiRequest()
     {
         $this->manageRequest();
         $data = $this->request->getCurrentRequest()->request->all();
-
-        $dataApiRequests = [];
-
-        foreach ($data['data'] as $line){
-
-            $dataApiRequest = [];
-            foreach ($line as $field => $value){
-                if (array_key_exists($field, $data['apiParams']['data'])){
-                    $dataApiRequest['data'][$data['apiParams']['data'][$field]] = $value;
-                }
-            }
-
-            $dataApiRequest['data'] = array_merge($data['apiParams']['data'], $dataApiRequest['data']);
-            $dataApiRequests[] = array_merge($data['apiParams'], $dataApiRequest);
-        }
-
-
-
-        foreach ($dataApiRequests as $dataApiRequest){
-
-            try {
-                $this->apiManager->post($dataApiRequest, $data['urlApi']);
-            } catch (\Exception $e){
-                $this->logger->error($e->getMessage(), $e->getTrace());
-            }
-
-        }
-
-        return new JsonResponse('', 200);
+        $response = $this->apiManager->manageApiCalls($data);
+        return new JsonResponse($response, 200);
     }
 
     private function manageRequest()

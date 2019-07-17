@@ -170,7 +170,17 @@ function apiRequest(data, params, urlApi, modal) {
         url: hulkUrls.apiRequest,
         data: postData,
         dataType: 'json',
-        success: function () {
+        success: function (response) {
+
+            console.log(response);
+
+            if (response.errors !== undefined){
+                console.log(response.errors);
+            }
+
+            if (response.success !== undefined){
+                console.log(res)
+            }
 
             var tpl = '<p class="text-success text-center">' +
                 '<i class="fas fa-thumbs-up mr-2"></i>' +

@@ -56,8 +56,7 @@ $('{{ btnFormId }}').click(function () {
     {% if targetParam is iterable %}
     params.{{ param }} = {};
     {% for field, targetField in targetParam %}
-    params
-.{{ param }}.{{ field }} = '{{ targetField }}';
+    params.{{ param }}.{{ field }} = '{{ targetField }}';
     {% endfor %}
 
     {% else %}
