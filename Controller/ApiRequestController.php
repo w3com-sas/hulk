@@ -36,7 +36,7 @@ class ApiRequestController extends AbstractController
             $dataApiRequest = [];
             foreach ($line as $field => $value){
                 if (array_key_exists($field, $data['apiParams']['data'])){
-                    $dataApiRequest['data'][$field] = $value;
+                    $dataApiRequest['data'][$data['apiParams']['data'][$field]] = $value;
                 }
             }
 
