@@ -172,25 +172,41 @@ function apiRequest(data, params, urlApi, modal) {
         dataType: 'json',
         success: function (response) {
 
-            console.log(response);
+            var reportTpl = document.importNode(document.getElementById('reporting').content, true);
+            var modalSuccess = reportTpl.querySelectorAll('.card-body')[0];
+            var modalError = reportTpl.querySelectorAll('.card-body')[1];
 
             if (response.errors !== undefined){
-                console.log(response.errors);
+
+                reportTpl.querySelector('.text-danger').textContent = 'Nombre d\'erreur : '+response.errors.length;
+
+                for (var i = 0; i < response.errors.length; i++){
+                    var tpl = document.createElement('p');
+                    tpl.textContent = response.errors[i];
+                    modalError.innerHTML += tpl.outerHTML;
+                }
             }
 
             if (response.success !== undefined){
-                console.log(res)
-            }
 
-            var tpl = '<p class="text-success text-center">' +
-                '<i class="fas fa-thumbs-up mr-2"></i>' +
-                'Mis à jour avec succès</p>';
+                reportTpl.querySelector('.text-success').textContent = 'Nombre de réussite : '+response.success.length;
+
+                for (var i = 0; i < response.success.length; i++){
+                    var tpl = document.createElement('p');
+                    tpl.textContent = response.success[i];
+                    modalSuccess.innerHTML += tpl.outerHTML;
+                }
+            }
 
             if (modal.find('.modal-body').has('p').length >= 1) {
                 modal.find('.modal-body').find('p').remove();
             }
-            modal.find('.modal-body').append(tpl);
-            setTimeout(window.location.reload(), 1500);
+            modal.find('.modal-body').append(reportTpl);
+            var btn = modal.find('.modal-footer').find('.btn-success')[0];
+            btn.disabled = false;
+            btn.innerHTML = 'Actualiser';
+            btn.onclick = () => window.location.reload();
+            modal.find('.modal-footer').find('.btn-success');
 
         },
         error: function (xhr) {
