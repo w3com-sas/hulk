@@ -40,23 +40,17 @@ class ApiManager
 
                 foreach ($data['apiParams']['data'] as $targetField => $targetKey){
 
-
                     if ($targetKey === $field){
 
                         $dataLine['data'][$targetField] = $value;
                         $toRemoveFields[] = $field;
                     }
-
-
                 }
-
-
             }
 
             // TODO : Existe-t-il des actions sans données propre à un objet ?
             if (isset($dataLine['data'])){
                 $dataLine['data'] = array_merge($data['apiParams']['data'], $dataLine['data']);
-
 
                 foreach ($toRemoveFields as $toRemoveField){
                     unset($dataLine['data'][$toRemoveField]);
@@ -88,7 +82,7 @@ class ApiManager
 
 
             if ($response['valid']) {
-                $responses['success'][] = $response;
+                $responses['success'][] = 'Réussie pour : '.implode(',', $dataLine['apiParams']['data']);
             } else {
 
                 $responses['errors'][] = $response['error'];

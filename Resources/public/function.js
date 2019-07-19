@@ -201,12 +201,14 @@ function apiRequest(data, params, urlApi, modal) {
             if (modal.find('.modal-body').has('p').length >= 1) {
                 modal.find('.modal-body').find('p').remove();
             }
+
+
             modal.find('.modal-body').append(reportTpl);
             var btn = modal.find('.modal-footer').find('.btn-success')[0];
             btn.disabled = false;
             btn.innerHTML = 'Actualiser';
             btn.onclick = () => window.location.reload();
-            modal.find('.modal-footer').find('.btn-success');
+            //modal.find('.modal-footer').find('.btn-success');
 
         },
         error: function (xhr) {
