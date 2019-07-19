@@ -1,4 +1,5 @@
-<div class="input-group mt-1">
+
+<div class="input-group mt-1 bg-blue">
     {% for filter in table.filters if filter.active == 'Y' %}
         {% if filter.type == 'multiple' %}
             <div class="input-group-prepend">
@@ -18,13 +19,17 @@
                 <span class="input-group-text">{{ filter.label }}</span>
             </div>
             {% if filter.defaultValue != null and filter.defaultValue != "" %}
-                <input type="date" value="{{ filter.defaultValue['min'] }}"
-                       class="form-control multiple-filter" id="min{{ filter.fieldName }}">
-                <input type="date" value="{{ filter.defaultValue['max'] }}"
-                       class="form-control multiple-filter" id="max{{ filter.fieldName }}">
+                <input type="text" value="{{ filter.defaultValue['min'] }}"
+                       class="form-control multiple-filter datepicker-here" id="min{{ filter.fieldName }}"
+                       data-language="fr">
+                <input type="text" value="{{ filter.defaultValue['max'] }}"
+                       class="form-control multiple-filter datepicker-here" id="max{{ filter.fieldName }}"
+                       data-language="fr">
             {% else %}
-                <input type="date" class="form-control multiple-filter" id="min{{ filter.fieldName }}">
-                <input type="date" class="form-control multiple-filter" id="max{{ filter.fieldName }}">
+                <input type="text" class="form-control multiple-filter datepicker-here" id="min{{ filter.fieldName }}"
+                       data-language="fr">
+                <input type="text" class="form-control multiple-filter datepicker-here" id="max{{ filter.fieldName }}"
+                       data-language="fr">
             {% endif %}
         {% endif %}
     {% endfor %}
