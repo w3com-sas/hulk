@@ -48,7 +48,7 @@ class DataTablesConstructor
                     }
                 }
                 if ($dataTable->getPageLength() === null) {
-                    $dataTable->setPageLength(10);
+                    $dataTable->setPageLength(10000);
                 }
             }
         }
