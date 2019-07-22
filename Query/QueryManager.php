@@ -241,6 +241,14 @@ class QueryManager
                 }
 
                 $sapField = substr($key, strlen(DisplayFiltersController::INTERVAL_URL_KEY));
+
+               /* TODO : manage error before
+
+               if ($odsEntity->getProperty($sapField) === null){
+                    $dataTable->getError()->addColumnError('Unknown field '.$sapField.' maybe need a hulk/update-view/{display}');
+                    return;
+                }
+                */
                 $sapQuote = ('Edm.Int32' === $odsEntity->getProperty($sapField)->getFieldType() || 'Edm.Decimal'
                     === $odsEntity->getProperty($sapField)->getFieldType() || 'Edm.Double' ===
                     $odsEntity->getProperty($sapField)->getFieldType()) ? "" : "'";
