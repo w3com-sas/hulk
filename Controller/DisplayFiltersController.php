@@ -71,8 +71,11 @@ class DisplayFiltersController extends AbstractController
 
             if (substr($field, 0, 9) === '_interval') {
 
-                $routeParams[self::INTERVAL_URL_KEY.substr(array_keys($value)[0], 3)] = array_values($value)[0] . '|' .
-                    array_values($value)[1];
+                if ($value['min'] != "" ||$value['max'] != ""){
+                    $fieldName = substr($field, 9);
+                    $routeParams[self::INTERVAL_URL_KEY.$fieldName] = array_values($value)[0] . '|' .
+                        array_values($value)[1];
+                }
 
             }
         }

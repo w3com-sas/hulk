@@ -224,7 +224,7 @@ class QueryManager
 
         foreach ($arrayGetParams as $key => $value) {
 
-            
+
             if (substr($key, 0, strlen(DisplayFiltersController::INTERVAL_URL_KEY))
                 === DisplayFiltersController::INTERVAL_URL_KEY) {
 
@@ -244,20 +244,20 @@ class QueryManager
                 $sapQuote = ('Edm.Int32' === $odsEntity->getProperty($sapField)->getFieldType() || 'Edm.Decimal'
                     === $odsEntity->getProperty($sapField)->getFieldType() || 'Edm.Double' ===
                     $odsEntity->getProperty($sapField)->getFieldType()) ? "" : "'";
-
+                $sapDatetime = $odsEntity->getProperty($sapField)->getFieldType() === 'Edm.DateTime' ? 'datetime' : null;
                 $min = explode('|', $value)[0];
                 $max = explode('|', $value)[1];
 
-                if ($min != null && $max != null){
-                    $rawFilter .= sprintf(Clause::GREATER_THAN, $sapField, $sapQuote . $min . $sapQuote . ' and ');
-                    $rawFilter .= sprintf(Clause::LOWER_THAN, $sapField, $sapQuote . $max . $sapQuote . $filterOperator);
-                } elseif ($min != null){
-                    $rawFilter .= sprintf(Clause::GREATER_THAN, $sapField, $sapQuote . $min . $sapQuote);
-                } elseif ($max != null){
-                    $rawFilter .= sprintf(Clause::LOWER_THAN, $sapField, $sapQuote . $max . $sapQuote . $filterOperator);
+                if ($min != null && $max != null) {
+                    $rawFilter .= sprintf(Clause::GREATER_THAN, $sapField, $sapDatetime.$sapQuote . $min . $sapQuote . ' and ');
+                    $rawFilter .= sprintf(Clause::LOWER_THAN, $sapField, $sapDatetime.$sapQuote . $max . $sapQuote . $filterOperator);
+                } elseif ($min != null) {
+                    $rawFilter .= sprintf(Clause::GREATER_THAN, $sapField, $sapDatetime.$sapQuote . $min . $sapQuote);
+                } elseif ($max != null) {
+                    $rawFilter .= sprintf(Clause::LOWER_THAN, $sapField, $sapDatetime.$sapQuote . $max . $sapQuote . $filterOperator);
                 }
 
-                if ($min != null||$max != null){
+                if ($min != null || $max != null) {
                     $parameters->addRawFilter($rawFilter);
                 }
 

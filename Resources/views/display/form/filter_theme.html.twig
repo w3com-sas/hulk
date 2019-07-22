@@ -1,0 +1,82 @@
+{% extends 'bootstrap_4_layout.html.twig' %}
+
+{% block form %}
+    {{ form_start(form) }}
+    {{ form_row(form) }}
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block form_rows %}
+
+    <div class="row">
+        {% for child in form if not child.rendered %}
+            {# Single field #}
+
+            {% if child.vars.name == 'submit' %}
+                <div class="col-12">
+                    {{ form_row(child) }}
+                </div>
+            {% elseif child.children is empty %}
+                <div class="col-4">
+                    {{ form_row(child) }}
+                </div>
+            {% else %}
+                <div class="col-12 d-flex">
+                    {% for multipleChild in child if not child.rendered %}
+                        {{ form_row(multipleChild) }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+{% endblock form_rows %}
+
+{% block form_row %}
+
+    {% if (form.vars.name == 'min') or (form.vars.name == 'max') %}
+
+        <div class="form-group w-50">
+            {{ form_label(form) }}
+            {{ form_widget(form) }}
+            {{ form_errors(form) }}
+        </div>
+
+    {% else %}
+
+        <div class="form-group">
+            {{ form_label(form) }}
+            {{ form_widget(form) }}
+            {{ form_errors(form) }}
+        </div>
+
+    {% endif %}
+
+{% endblock %}
+
+{% block display_filter_multiple_row %}
+    {% dump 'toto' %}
+    <div class="form-group w-50">
+        <div class="input-group">
+            <div class="input-group-prepend">
+                {{ form_label(form.min) }}
+            </div>
+            {{ form_widget(form.min) }}
+            <div class="input-group-prepend">
+                {{ form_label(form.max) }}
+            </div>
+            {{ form_widget(form.max) }}
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block submit_widget %}
+    <button type="submit" id="{{ form.vars.id }}" name="{{ form.vars.full_name }}"
+            class="{{ form.vars.attr.class }}">
+        <i class="fa fa-search float-left mt-1"></i>
+        {{ form.vars.label }}
+    </button>
+{% endblock %}
+
+

@@ -50,22 +50,22 @@ class DisplayFilterType extends AbstractType
 
                     $form->add($filter->getFieldName(), ChoiceType::class, ['mapped' => false,
                         'label' => $filter->getLabel(), 'choices' => $filter->getValues(), 'required' => false,
-                        'attr' =>
-                            ['class' => 'custom-select mb-2'], 'label_attr' => ['class' => 'input-group-text']
+                      //  'attr' =>
+                    //        ['class' => 'custom-select mb-2'], 'label_attr' => ['class' => 'input-group-text']
                     ]);
 
                 } elseif ($filter->getType() === Filter::TYPE_DATE) {
 
                     $form->add($filter->getFieldName(), DateType::class, [
                         'label' => $filter->getLabel(), 'mapped' => false, 'widget' => 'single_text',
-                        'attr' => ['class' => 'form-control mb-2'], 'label_attr' => ['class' => 'input-group-text']
-                        , 'required' => false
+                       // 'attr' => ['class' => 'form-control mb-2'], 'label_attr' => ['class' => 'input-group-text']
+                        //, 'required' => false
                     ]);
 
                 }
 
             }
-            $form->add('submit', SubmitType::class, ['label' => 'Valider', 'attr' =>
+            $form->add('submit', SubmitType::class, ['label' => 'Rechercher', 'attr' =>
                 ['class' => 'btn btn-success btn-block my-3']]);
 
         });

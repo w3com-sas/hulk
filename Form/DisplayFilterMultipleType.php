@@ -25,28 +25,28 @@ class DisplayFilterMultipleType extends AbstractType
             $options = $formEvent->getForm()->getConfig()->getOptions();
 
             if ($options['filter_type'] === Filter::TYPE_MULTIPLE) {
-                $form->add('min' . $filter->getFieldName(), NumberType::class, [
-                    'label' => 'Minimum ' . $filter->getLabel(),
-                    'attr' => ['class' => 'form-control mb-2'], 'label_attr' => ['class' => 'input-group-text']
-                    , 'required' => false, 'mapped' => false
+                $form->add('min', NumberType::class, [
+                    'label' => 'Min : ' . $filter->getLabel(),
+                    'label_attr' => ['class' => 'input-group-text'],
+                     'required' => false, 'mapped' => false
                 ]);
 
-                $form->add('max' . $filter->getFieldName(), NumberType::class, [
-                    'label' => 'Maximum ' . $filter->getLabel(),
-                    'attr' => ['class' => 'form-control mb-2'], 'label_attr' => ['class' => 'input-group-text']
-                    , 'required' => false, 'mapped' => false
+                $form->add('max' , NumberType::class, [
+                    'label' => 'Max : ' . $filter->getLabel(),
+                    'label_attr' => ['class' => 'input-group-text'],
+                     'required' => false, 'mapped' => false
                 ]);
             } elseif ($options['filter_type'] === Filter::TYPE_MULTIPLE_DATE) {
-                $form->add('min' . $filter->getFieldName(), DateType::class, [
-                    'label' => 'Minimum : ' . $filter->getLabel(), 'widget' => 'single_text',
-                    'attr' => ['class' => 'form-control mb-2'], 'label_attr' => ['class' => 'input-group-text']
-                    , 'required' => false, 'mapped' => false
+                $form->add('min' , DateType::class, [
+                    'label' => 'Min : ' . $filter->getLabel(), 'widget' => 'single_text',
+                    'label_attr' => ['class' => 'input-group-text'],
+                     'required' => false, 'mapped' => false
                 ]);
 
-                $form->add('max' . $filter->getFieldName(), DateType::class, [
-                    'label' => 'Maximum : ' . $filter->getLabel(), 'widget' => 'single_text',
-                    'attr' => ['class' => 'form-control mb-2'], 'label_attr' => ['class' => 'input-group-text']
-                    , 'required' => false, 'mapped' => false
+                $form->add('max', DateType::class, [
+                    'label' => 'Max : ' . $filter->getLabel(), 'widget' => 'single_text',
+                    'label_attr' => ['class' => 'input-group-text'],
+                     'required' => false, 'mapped' => false
                 ]);
             }
 
