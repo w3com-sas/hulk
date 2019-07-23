@@ -79,6 +79,9 @@ class DataTablesConstructor
                     case Column::FIELD_HIDDEN:
                         $column->setHidden($value);
                         break;
+                    case Column::FIELD_ORDERABLE:
+                        $column->setOrderable(true);
+                        break;
 
                 }
             }

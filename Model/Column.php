@@ -10,6 +10,7 @@ class Column
     const FIELD_CELL_ACTION = 'CellAction';
     const FIELD_WIDTH = 'Width';
     const FIELD_HIDDEN = 'Hidden';
+    const FIELD_ORDERABLE = 'Orderable';
 
     const COL_TYPE_CHECKBOX = 'checkbox';
     const TYPE_TEXT = 'text';
@@ -58,6 +59,8 @@ class Column
      * @var integer
      */
     private $width;
+
+    private $orderable = false;
 
 
     public function setLabel($label)
@@ -202,5 +205,21 @@ class Column
     public function setWidth(int $width): void
     {
         $this->width = $width;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOrderable(): bool
+    {
+        return $this->orderable;
+    }
+
+    /**
+     * @param bool $orderable
+     */
+    public function setOrderable(bool $orderable): void
+    {
+        $this->orderable = $orderable;
     }
 }

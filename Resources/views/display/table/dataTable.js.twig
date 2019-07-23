@@ -130,6 +130,7 @@ $(document).ready(function () {
                 {% endfor %}
             ],
             colReorder: false,
+            order : [],
             columnDefs:
                 [
                     {% for column in table.columns %}
@@ -137,24 +138,38 @@ $(document).ready(function () {
                     {% if column.type == 'checkbox' %}
                     {
                         "targets": [ {{ column.index }} ],
-                        "visible": true,
-                        "searchable": false,
                         "orderable": false
                     },
                     {% elseif column.hidden %}
                     {
                         "targets": [ {{ column.index }} ],
                         "visible": false,
-                        "searchable": true
+                        "searchable": true,
+                        "orderable": false
+                    },
+                    {% elseif column.orderable %}
+                    {
+                        "targets": [ {{ column.index }} ],
+                        "visible": true,
+                        "searchable": true,
+                        "orderable": true
                     },
                     {% elseif column.width is not null %}
                     {
                         "target": [ {{ column.index }} ],
                         "visible": true,
                         "searchable": true,
-                        "width": "{{ column.width }}%"
+                        "width": {{ column.width }}
+                    },
+                    {% else %}
+                    {
+                        "targets": [ {{ column.index }} ],
+                        "visible": true,
+                        "searchable": true,
+                        "orderable": false
                     },
                     {% endif %}
+                    { targets: 'no-sort', orderable: false },
                     {% endfor %}
                 ],
             drawCallback:
