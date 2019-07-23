@@ -26,7 +26,11 @@ function saveFilters() {
         data: data,
         url: '{{ url('w3com_save_filters') }}',
         success: function (data) {
-            $('#countFilters').html('<i class="fas fa-filter mr-2"></i> Filtres ('+data.countFilters+')');
+            var countFilter = document.getElementById('countFilters');
+            var startSubstr = countFilter.innerHTML.indexOf('(');
+            var endSubstr = countFilter.innerHTML.indexOf(')');
+            countFilter.innerHTML = countFilter.innerHTML.replace(countFilter.innerHTML.substr(startSubstr, endSubstr),
+            '('+data.countFilters+')')
         }
 
     })
