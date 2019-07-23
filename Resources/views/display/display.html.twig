@@ -1,21 +1,24 @@
+{% block hulk_menu %}
 <div class="collapse" id="hulkNav">
     {% set menu = knp_menu_get('main', [], {'displayName' : table.displayName }) %}
     {{ knp_menu_render(menu, {'template' : '@W3comHulk/display/include/menu.html.twig'}) }}
 </div>
+{% endblock %}
 
 {% if debug is defined %}
     {% include '@W3comHulk/display/error/global_errors.html.twig' %}
 {% endif %}
 
 
+
 {% if table.error.fileExist %}
 
-    {% block header %}
+    {% block hulk_header %}
         {% include '@W3comHulk/display/include/header.html.twig' %}
     {% endblock %}
 
     {% if table.data|length == table.maxLength %}
-        <div class="alert alert-warning" role="alert">
+        <div class="alert alert-warning m-3" role="alert">
             <i class="fal fa-info-circle mr-2"></i>
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
@@ -25,7 +28,7 @@
     {% endif %}
 
     {# Html table #}
-    {% block table %}
+    {% block hulk_table %}
         {% include '@W3comHulk/display/table/table.html.twig' %}
     {% endblock %}
 
