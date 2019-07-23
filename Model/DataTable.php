@@ -82,6 +82,7 @@ class DataTable
      */
     private $menuConfig = '';
 
+    private $maxLength = 6000;
     /**
      * @param Column $column
      */
@@ -340,6 +341,22 @@ class DataTable
     public function setFilename(string $filename): void
     {
         $this->filename = $filename;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxLength(): int
+    {
+        return $this->maxLength;
+    }
+
+    /**
+     * @param int $maxLength
+     */
+    public function setMaxLength(int $maxLength): void
+    {
+        $this->maxLength = $maxLength;
     }
 
 }
