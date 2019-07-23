@@ -10,6 +10,9 @@
 
 {% if table.error.fileExist %}
 
+    {% block header %}
+        {% include '@W3comHulk/display/include/header.html.twig' %}
+    {% endblock %}
 
     {% if table.data|length == 10000 %}
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
