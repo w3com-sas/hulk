@@ -57,6 +57,17 @@
                                 {% endfor %}
                             </select>
                         </div>
+                    {% elseif globalAction.config.targetDataType == 'date' %}
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text">
+                                    {{ labelField }}
+                                    :
+                                </label>
+                            </div>
+                            <input type="text" class="form-control datepicker-here"
+                                   id="{{ inputId }}">
+                        </div>
                     {% endif %}
                 </div>
 
