@@ -83,8 +83,14 @@ class DataTable
      */
     private $menuConfig = '';
 
+    /**
+     * @var string
+     */
     private $menuName = '';
 
+    /**
+     * @var int
+     */
     private $maxLength = 6000;
 
     /**

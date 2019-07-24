@@ -19,7 +19,10 @@ class MenuSession
 
     public function getHulkMenu($currentDisplayName, $currentMenuName)
     {
-       // $this->session->remove('menu');
+        if ($currentMenuName == null){
+            return [];
+        }
+
         if (!$this->session->has('menu')) {
             $menus = [];
             $menus[$currentMenuName] = [];
