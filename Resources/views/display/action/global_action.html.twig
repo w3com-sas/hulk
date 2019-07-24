@@ -4,7 +4,7 @@
             {{ globalAction.label }}
         </button>
     {% elseif globalAction.type == 'update-sap' and globalAction.config.targetDataType == 'static' or
-        globalAction.config.targetDataType == 'text' %}
+        globalAction.config.targetDataType == 'text' or globalAction.config.targetDataType == 'date' %}
         <button class="btn btn-info"
                 id="btn{{ globalAction.type }}{{ globalAction.config.targetDataType }}{{ globalAction.index }}"
                 targetEntity="{{ globalAction.config.entity }}"
