@@ -23,43 +23,49 @@ class MenuBuilder
     public function createMainMenu(array $options)
     {
 
-        $menuSession = $this->menuSession->getHulkMenu($options['displayName']);
+        $menuSession = $this->menuSession->getHulkMenu($options['displayName'], $options['menuName']);
         $menu = $this->factory->createItem('root');
 
-        foreach ($menuSession as $menuName => $menuItem) {
-            $parameters = [];
-            foreach ($menuItem as $key => $value) {
+        foreach ($menuSession as $menuName => $menuItems) {
 
-                switch ($key) {
-                    case 'route':
-                        $parameters['route'] = $value;
-                        break;
-                    case 'routeParameters':
-                        $parameters['routeParameters'] = $value;
-                        break;
-                    case 'displayName':
-                        $displayName = $value;
-                        break;
-                }
-            }
-            if (!isset($displayName)){
-                $displayName = $menuItem['uniqId'];
-            }
+            if ($options['menuName'] === $menuName){
 
-            if (count($parameters['routeParameters']) > 1){
+                foreach ($menuItems as $menuItem){
 
-                foreach ($parameters['routeParameters'] as $key => $parameter){
+                    $parameters = [];
+                    foreach ($menuItem as $key => $value) {
 
-                    if ($key !== 'filename'){
-
-                        $displayName.=' ('.$parameter.')';
-
+                        switch ($key) {
+                            case 'route':
+                                $parameters['route'] = $value;
+                                break;
+                            case 'routeParameters':
+                                $parameters['routeParameters'] = $value;
+                                break;
+                            case 'displayName':
+                                $displayName = $value;
+                                break;
+                        }
                     }
+                    if (!isset($displayName)){
+                        $displayName = $menuItem['uniqId'];
+                    }
+
+                    if (count($parameters['routeParameters']) > 1){
+
+                        foreach ($parameters['routeParameters'] as $key => $parameter){
+
+                            if ($key !== 'filename'){
+
+                                $displayName.=' ('.$parameter.')';
+
+                            }
+                        }
+                    }
+                    $menu->addChild($displayName, ['route' => $parameters['route'],
+                        'routeParameters' => $parameters['routeParameters']]);
                 }
             }
-
-            $menu->addChild($displayName, ['route' => $parameters['route'],
-                'routeParameters' => $parameters['routeParameters']]);
         }
         return $menu;
     }

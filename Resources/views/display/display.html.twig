@@ -1,6 +1,6 @@
 {% block hulk_menu %}
 <div class="collapse" id="hulkNav">
-    {% set menu = knp_menu_get('main', [], {'displayName' : table.displayName }) %}
+    {% set menu = knp_menu_get('main', [], {'displayName' : table.displayName, 'menuName' : table.menuName }) %}
     {{ knp_menu_render(menu, {'template' : '@W3comHulk/display/include/menu.html.twig'}) }}
 </div>
 {% endblock %}

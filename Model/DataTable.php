@@ -14,6 +14,7 @@ class DataTable
     const FIELD_PAGE_LENGTH = 'PageLength';
     const FIELD_DISPLAY_NAME = 'DisplayName';
     const FIELD_MENU_CONFIG = 'MenuConfig';
+    const FIELD_MENU_NAME = 'MenuName';
 
     public function __construct()
     {
@@ -82,7 +83,10 @@ class DataTable
      */
     private $menuConfig = '';
 
+    private $menuName = '';
+
     private $maxLength = 6000;
+
     /**
      * @param Column $column
      */
@@ -357,6 +361,22 @@ class DataTable
     public function setMaxLength(int $maxLength): void
     {
         $this->maxLength = $maxLength;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMenuName(): string
+    {
+        return $this->menuName;
+    }
+
+    /**
+     * @param string $menuName
+     */
+    public function setMenuName(string $menuName): void
+    {
+        $this->menuName = $menuName;
     }
 
 }

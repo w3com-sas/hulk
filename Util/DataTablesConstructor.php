@@ -45,6 +45,9 @@ class DataTablesConstructor
                         case DataTable::FIELD_MENU_CONFIG:
                             $dataTable->setMenuConfig($value);
                             break;
+                            case DataTable::FIELD_MENU_NAME;
+                            $dataTable->setMenuName($value);
+                            break;
                     }
                 }
                 if ($dataTable->getPageLength() === null) {

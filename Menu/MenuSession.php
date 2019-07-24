@@ -17,21 +17,23 @@ class MenuSession
         $this->request = $request;
     }
 
-    public function getHulkMenu($currentDisplayName)
+    public function getHulkMenu($currentDisplayName, $currentMenuName)
     {
+       // $this->session->remove('menu');
         if (!$this->session->has('menu')) {
-            $menu = [];
-            $currentMenu = $this->getCurrentMenuItem($currentDisplayName,true, []);
-            $menu[$currentMenu['uniqId']] = $currentMenu;
-            $this->session->set('menu', $menu);
-            return $menu;
+            $menus = [];
+            $menus[$currentMenuName] = [];
+            $currentMenu = $this->getCurrentMenuItem($currentDisplayName, true, [], $currentMenuName);
+            $menus[$currentMenuName][$currentMenu['uniqId']] = $currentMenu;
+            $this->session->set('menu', $menus);
+            return $menus;
         }
-        $menu = $this->session->get('menu');
-        $currentMenu = $this->getCurrentMenuItem($currentDisplayName,false, $menu);
-        return $this->manageMenu($currentMenu);
+        $menus = $this->session->get('menu');
+        $currentMenu = $this->getCurrentMenuItem($currentDisplayName, false, $menus, $currentMenuName);
+        return $this->manageMenu($currentMenu, $currentMenuName);
     }
 
-    public function getCurrentMenuItem($currentDisplayName, $isFirst = false, $menu = [])
+    public function getCurrentMenuItem($currentDisplayName, $isFirst = false, $menus = [], $currentMenuName = '')
     {
         $currentMenuItem = [];
         $currentMenuItem['route'] = null !== $this->request->getCurrentRequest()->get('_route') ?
@@ -40,40 +42,48 @@ class MenuSession
         $currentMenuItem['uniqId'] = $currentMenuItem['route'] . implode('_', $currentMenuItem['routeParameters']);
         $currentMenuItem['displayName'] = $currentDisplayName;
 
-        if (array_key_exists($currentMenuItem['uniqId'], $menu)) {
-            return $menu[$currentMenuItem['uniqId']];
+        foreach ($menus as $menu) {
+            if (array_key_exists($currentMenuItem['uniqId'], $menu)) {
+                return $menu[$currentMenuItem['uniqId']];
+            }
         }
 
-        $currentMenuItem['index'] = $isFirst ? 1 : $this->getLastItemIndex() + 1;
+        $currentMenuItem['index'] = $isFirst ? 1 : $this->getLastItemIndex($currentMenuName) + 1;
         return $currentMenuItem;
     }
 
-    private function manageMenu(array $currentMenu)
+    private function manageMenu(array $currentMenu, $currentMenuName)
     {
         $newMenu = [];
-        foreach ($this->session->get('menu') as $menu) {
+        $newMenu[$currentMenuName] = [];
+        foreach ($this->session->get('menu') as $menuName => $menus) {
 
-            if ($menu['index'] < $currentMenu['index']) {
 
-                $newMenu[$menu['uniqId']] = $menu;
+            foreach ($menus as $menu) {
+
+                if ($menuName === $currentMenuName) {
+                    // Remove useless item
+                    if ($menu['index'] < $currentMenu['index']) {
+                        $newMenu[$currentMenuName][$menu['uniqId']] = $menu;
+                    }
+                } else {
+                    $newMenu[$currentMenuName][$menu['uniqId']] = $menu;
+                }
             }
         }
-        $newMenu[$currentMenu['uniqId']] = $currentMenu;
+        $newMenu[$currentMenuName][$currentMenu['uniqId']] = $currentMenu;
         $this->session->set('menu', $newMenu);
-
-
         return $newMenu;
     }
 
-    private function getLastItemIndex()
+    private function getLastItemIndex($currentMenuName)
     {
-        return max(array_column($this->session->get('menu'), 'index'));
+        return max(array_column($this->session->get('menu')[$currentMenuName], 'index'));
     }
 
     private function getRouteParams()
     {
         $params = [];
-
 
         if (!empty($this->request->getCurrentRequest()->get('_route_params'))) {
             foreach ($this->request->getCurrentRequest()->get('_route_params') as $key => $value) {
@@ -84,7 +94,7 @@ class MenuSession
         if (!empty($this->request->getCurrentRequest()->query->all())) {
             foreach ($this->request->getCurrentRequest()->query->all() as $key => $value) {
 
-                if ($key !== '_path'){
+                if ($key !== '_path') {
                     $params[$key] = $value;
                 }
             }
