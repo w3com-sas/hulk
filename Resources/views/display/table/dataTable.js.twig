@@ -38,6 +38,11 @@ $(document).ready(function () {
             },
             dom: 'tp',
             pageLength: {{ table.pageLength }},
+            fnDrawCallback: function (settings) {
+                $('a').parent('td').addClass('text-center');
+                $('button').parent('td').addClass('text-center');
+                $('i').parent('td').addClass('text-center');
+            },
             data: data,
             columns: [
 
@@ -130,7 +135,7 @@ $(document).ready(function () {
                 {% endfor %}
             ],
             colReorder: false,
-            order : [],
+            order: [],
             columnDefs:
                 [
                     {% for column in table.columns %}
@@ -169,7 +174,7 @@ $(document).ready(function () {
                         "orderable": false
                     },
                     {% endif %}
-                    { targets: 'no-sort', orderable: false },
+                    {targets: 'no-sort', orderable: false},
                     {% endfor %}
                 ],
             drawCallback:
