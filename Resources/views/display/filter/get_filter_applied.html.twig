@@ -1,0 +1,3 @@
+{% for param, value in app.request.query.all %}
+    <span class="badge badge-info">{{ value }}</span>
+{% endfor %}
