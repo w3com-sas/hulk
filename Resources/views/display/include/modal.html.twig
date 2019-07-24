@@ -6,11 +6,19 @@
         {% set btnFormId = 'form'~globalAction.type~globalAction.config.targetDataType~globalAction.index %}
         {% set inputId = 'input'~globalAction.type~globalAction.config.targetField~globalAction.config.targetDataType %}
         {% set title = 'Mise à jour SAP :'~globalAction.config.entity %}
+
+        {% if globalAction.config.label != '' %}
+            {% set labelField = globalAction.config.label %}
+        {% else %}
+            {% set labelField = globalAction.config.targetField %}
+        {% endif %}
+
     {% elseif globalAction.type == 'api-request' %}
         {% set modalId = 'modal'~globalAction.type~globalAction.index %}
         {% set btnFormId = 'form'~globalAction.type~globalAction.index %}
         {% set title = globalAction.label %}
     {% endif %}
+
 
     <div class="modal fade"
          id="{{ modalId }}"
@@ -28,7 +36,7 @@
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
                             <span class="input-group-text">
-                                {{ globalAction.config.targetField }} :
+                                {{ labelField }} :
                             </span>
                             </div>
                             <input type="text" class="form-control"
@@ -38,7 +46,7 @@
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
                                 <label class="input-group-text">
-                                    {{ globalAction.config.targetField }}
+                                    {{ labelField }}
                                     :
                                 </label>
                             </div>

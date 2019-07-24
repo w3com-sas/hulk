@@ -12,6 +12,7 @@ class Config
     const FIELD_TARGET_DATA = 'TargetData';
     const FIELD_URL = 'Url';
     const FIELD_NAME = 'Name';
+    const FIELD_LABEL = 'Label';
 
     const DATA_TYPE_STATIC = 'static';
     const DATA_TYPE_TEXT = 'text';
@@ -31,6 +32,8 @@ class Config
     private $url;
 
     private $name;
+
+    private $label = '';
 
     /**
      * @return mixed
@@ -142,5 +145,21 @@ class Config
     public function setName($name): void
     {
         $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLabel(): string
+    {
+        return $this->label;
+    }
+
+    /**
+     * @param string $label
+     */
+    public function setLabel(string $label): void
+    {
+        $this->label = $label;
     }
 }

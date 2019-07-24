@@ -199,6 +199,9 @@ class DataTablesConstructor
                 case Config::FIELD_NAME:
                     $newConfig->setName($value);
                     break;
+                case Config::FIELD_LABEL:
+                    $newConfig->setLabel($value);
+                    break;
             }
         }
         return $newConfig;
