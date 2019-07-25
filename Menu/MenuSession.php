@@ -23,7 +23,7 @@ class MenuSession
             return [];
         }
 
-        if (!$this->session->has('menu')) {
+        if (!$this->session->has('menu') || !array_key_exists($currentMenuName, $this->session->get('menu'))) {
             $menus = [];
             $menus[$currentMenuName] = [];
             $currentMenu = $this->getCurrentMenuItem($currentDisplayName, true, [], $currentMenuName);
