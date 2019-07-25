@@ -64,7 +64,8 @@ class UpdateSapController extends AbstractController
                         }
 
                         $property = $obj->getPropertyByColumn($data['targetField']);
-                        $obj->set($property, $data['targetData']);
+                        $dataToSet = $this->formatData($data['targetData']);
+                        $obj->set($property, $dataToSet);
 
                         // Update
                         try {
@@ -96,5 +97,14 @@ class UpdateSapController extends AbstractController
             $this->logger->error('Missing data to update in the Json file.');
             return new JsonResponse(['valid' => false], 400);
         }
+    }
+
+    private function formatData($targetData)
+    {
+        if (\DateTime::createFromFormat('d/m/Y', $targetData) !== false){
+            $dateTime = \DateTime::createFromFormat('d/m/Y', $targetData);
+            return $dateTime->format('Y-m-d');
+        }
+        return $targetData;
     }
 }
