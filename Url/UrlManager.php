@@ -14,6 +14,8 @@ class UrlManager
 
     const GLOBAL_LINK_NAME = 'link';
 
+    const KEY_WORD_TODAY = 'today';
+
     private $router;
 
     public function __construct(UrlGeneratorInterface $router)
@@ -37,6 +39,10 @@ class UrlManager
 
                     foreach ($column->getCellAction()->getParams() as $fieldName => $targetFieldName) {
 
+                        if ($targetFieldName === self::KEY_WORD_TODAY){
+                            $urlParams[$fieldName] = date('Y-m-d');
+                        }
+
                         foreach ($lines as $nameField => $valueField) {
 
                             if ($nameField == $fieldName) {
@@ -45,7 +51,7 @@ class UrlManager
 
                         }
 
-                        if (!isset($urlParams[$targetFieldName])){
+                        if (!isset($urlParams[$targetFieldName]) && !isset($urlParams[$fieldName])){
                             $urlParams[$fieldName] = $targetFieldName;
                         }
 
