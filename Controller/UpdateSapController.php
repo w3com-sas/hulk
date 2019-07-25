@@ -77,6 +77,7 @@ class UpdateSapController extends AbstractController
                         break;
                     }
                 }
+
                 if (!isset($entityKey)){
                     $this->logger->error('Error : missing ID of '.$data['targetEntity'].'in 
                     the lines of the table.');
