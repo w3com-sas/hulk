@@ -34,7 +34,7 @@ class DisplayFilterHtmlExtension extends AbstractExtension
         $table = $params['display'];
         $form = $params['form'];
         return $this->template->render('@W3comHulk/display/display_form_filter.html.twig', [
-            'table' => $table, 'form' => $form
+            'display' => $table, 'form' => $form
         ]);
     }
 }

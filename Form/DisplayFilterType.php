@@ -12,6 +12,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use W3com\HulkBundle\Model\DataTable;
 use W3com\HulkBundle\Model\Filter;
+use function Symfony\Component\DependencyInjection\Tests\Fixtures\factoryFunction;
 
 class DisplayFilterType extends AbstractType
 {
@@ -75,6 +76,7 @@ class DisplayFilterType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => DataTable::class,
+            'label' => false
         ]);
     }
 
