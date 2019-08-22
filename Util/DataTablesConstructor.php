@@ -11,6 +11,13 @@ use W3com\HulkBundle\Model\GlobalAction;
 
 class DataTablesConstructor
 {
+    private $boom;
+
+    public function __construct($boom)
+    {
+        $this->boom = $boom;
+    }
+
     public function hydrateDataTable($file, DataTable $dataTable)
     {
         if ($dataTable->getError()->isFileExist()) {
