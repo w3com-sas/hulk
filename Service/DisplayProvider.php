@@ -93,7 +93,7 @@ class DisplayProvider
         $this->filterSessionManager = $filterSessionManager;
         $this->dataTable = new DataTable();
         $this->config = $config;
-        $this->constructor = new DataTablesConstructor();
+        $this->constructor = new DataTablesConstructor($boom);
         $this->indexor = new Indexor();
         $this->filterManager = new FilterManager();
         $this->columnManager = new ColumnManager();

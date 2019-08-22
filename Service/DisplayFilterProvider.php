@@ -34,7 +34,7 @@ class DisplayFilterProvider
         $this->jsonFinder = new JsonFinder($boom, $config);
         $this->modelFinder = new ModelFinder($boom);
         $this->queryManager = new QueryManager($this->modelFinder, $boom, $this->display);
-        $this->displayConstructor = new DataTablesConstructor();
+        $this->displayConstructor = new DataTablesConstructor($boom);
         $this->filterManager = new FilterManager();
         $this->dataTransformer = new DataTransformer($this->modelFinder);
         $this->display->isFilter = true;
