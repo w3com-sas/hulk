@@ -163,6 +163,10 @@ class DataTablesConstructor
                         $newGlobalAction->setType($value);
                         break;
                     case GlobalAction::FIELD_CONFIG:
+                        if(array_key_exists('Entity',$value) && array_key_exists('TargetField',$value)){
+                            $moreHydratation = $this->hydrateConfigWithBoom($value['Entity'],$value['TargetField']);
+                            $value = array_merge($value,$moreHydratation);
+                        }
                         $config = $this->hydrateConfig($value);
                         $newGlobalAction->setConfig($config);
                         break;
@@ -202,8 +206,36 @@ class DataTablesConstructor
                 case Config::FIELD_LABEL:
                     $newConfig->setLabel($value);
                     break;
+                case Config::FIELD_TARGET_DESCRIPTION:
+                    $newConfig->setTargetDescription($value);
+                    break;
+                case Config::FIELD_TARGET_CHOICES:
+                    $newConfig->setTargetChoices($value);
+                    break;
             }
         }
         return $newConfig;
+    }
+
+    private function hydrateConfigWithBoom($entity,$fieldname)
+    {
+        $entityUtil = $this->boom->getRepository($entity);
+        if($entityUtil == null) return [];
+
+        $instanceName = '\\App\\HanaENtity\\'.$entity;
+        $instance = new $instanceName();
+
+        $property = $instance->getPropertyByColumn($fieldname);
+        $description = $instance->getDescriptionByProperty($property);
+        $type = $instance->getTypeByField($property);
+        $choices = $instance->getChoicesByProperty($property);
+
+        return [
+            'TargetProperty' => $property,
+            'TargetDescription' => $description,
+            'TargetType' => $type,
+            'TargetChoices' => $choices,
+        ];
+
     }
 }

@@ -10,6 +10,8 @@ class Config
     const FIELD_TARGET_FIELD = 'TargetField';
     const FIELD_TARGET_DATA_TYPE = 'TargetDataType';
     const FIELD_TARGET_DATA = 'TargetData';
+    const FIELD_TARGET_DESCRIPTION = 'TargetDescription';
+    const FIELD_TARGET_CHOICES = 'TargetChoices';
     const FIELD_URL = 'Url';
     const FIELD_NAME = 'Name';
     const FIELD_LABEL = 'Label';
@@ -25,9 +27,13 @@ class Config
 
     private $targetField;
 
+    private $targetDescription;
+
     private $targetDataType;
 
     private $targetData;
+
+    private $targetChoices;
 
     private $url;
 
@@ -162,4 +168,38 @@ class Config
     {
         $this->label = $label;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getTargetDescription()
+    {
+        return $this->targetDescription;
+    }
+
+    /**
+     * @param mixed $targetDescription
+     */
+    public function setTargetDescription($targetDescription): void
+    {
+        $this->targetDescription = $targetDescription;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTargetChoices()
+    {
+        return $this->targetChoices;
+    }
+
+    /**
+     * @param mixed $targetChoices
+     */
+    public function setTargetChoices($targetChoices): void
+    {
+        $this->targetChoices = $targetChoices;
+    }
+
+
 }
