@@ -10,7 +10,7 @@
         {% if globalAction.config.label != '' %}
             {% set labelField = globalAction.config.label %}
         {% else %}
-            {% set labelField = globalAction.config.targetField %}
+            {% set labelField = globalAction.config.targetDescription %}
         {% endif %}
 
     {% elseif globalAction.type == 'api-request' %}

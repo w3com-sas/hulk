@@ -9,6 +9,7 @@
                 id="btn{{ globalAction.type }}{{ globalAction.config.targetDataType }}{{ globalAction.index }}"
                 targetEntity="{{ globalAction.config.entity }}"
                 targetField="{{ globalAction.config.targetField }}"
+                targetDescription="{{ globalAction.config.targetDescription is defined ? globalAction.config.targetDescription : globalAction.config.targetField }}"
                 targetData="{{ globalAction.config.targetData }}"
                 entityKey="{{ globalAction.config.entityKey }}">
             {{ globalAction.label }}
