@@ -56,6 +56,13 @@ update_entity:
   resource: update_sap_controller.xml
 ```` 
 
+#### Install front dependances
+
+    - Moment Js
+    - DataTables + select plugin
+    - JQuery
+    - AirDatepicker
+
 [Next step, create the json file](Resources/doc/1_create_json_file.rst)
 
 
