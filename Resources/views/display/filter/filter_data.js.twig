@@ -1,7 +1,6 @@
 $.fn.dataTable.ext.search.push(
     function (settings, data) {
 
-        console.log(data);
         {# Trie les data à chaque "draw()" du tableau #}
         {# data = ligne du tableau #}
         {% for filter in table.filters if filter.active == 'Y' and (filter.type == 'multiple'
