@@ -17,6 +17,7 @@ use W3com\BoomBundle\Exception\EntityNotFoundException;
 use W3com\BoomBundle\Generator\Model\Entity;
 use W3com\BoomBundle\Parameters\Parameters;
 use W3com\BoomBundle\Service\BoomManager;
+use W3com\HulkBundle\Url\UrlManager;
 
 class QueryManager
 {
@@ -226,8 +227,8 @@ class QueryManager
         foreach ($arrayGetParams as $key => $value) {
 
 
-            if (substr($key, 0, strlen(DisplayFormController::INTERVAL_URL_KEY))
-                === DisplayFormController::INTERVAL_URL_KEY) {
+            if (substr($key, 0, strlen(UrlManager::INTERVAL_URL_KEY))
+                === UrlManager::INTERVAL_URL_KEY) {
 
                 if ($paramsExist && !isset($rawFilter)) {
                     $rawFilter = ' and ';
@@ -241,15 +242,15 @@ class QueryManager
                     $filterOperator = Clause:: AND;
                 }
 
-                $sapField = substr($key, strlen(DisplayFormController::INTERVAL_URL_KEY));
+                $sapField = substr($key, strlen(UrlManager::INTERVAL_URL_KEY));
 
-               /* TODO : manage error before
-
+                dump($sapField);
+                /*
                if ($odsEntity->getProperty($sapField) === null){
                     $dataTable->getError()->addColumnError('Unknown field '.$sapField.' maybe need a hulk/update-view/{display}');
-                    return;
-                }
-                */
+                    continue;
+                }*/
+
                 $sapQuote = ('Edm.Int32' === $odsEntity->getProperty($sapField)->getFieldType() || 'Edm.Decimal'
                     === $odsEntity->getProperty($sapField)->getFieldType() || 'Edm.Double' ===
                     $odsEntity->getProperty($sapField)->getFieldType()) ? "" : "'";
