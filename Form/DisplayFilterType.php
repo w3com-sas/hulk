@@ -10,7 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use W3com\HulkBundle\Model\DataTable;
+use W3com\HulkBundle\Model\Display;
 use W3com\HulkBundle\Model\Filter;
 use function Symfony\Component\DependencyInjection\Tests\Fixtures\factoryFunction;
 
@@ -28,7 +28,7 @@ class DisplayFilterType extends AbstractType
     {
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $formEvent) {
 
-            /** @var DataTable $display */
+            /** @var Display $display */
             $display = $formEvent->getData();
             $form = $formEvent->getForm();
 
@@ -51,16 +51,12 @@ class DisplayFilterType extends AbstractType
 
                     $form->add($filter->getFieldName(), ChoiceType::class, ['mapped' => false,
                         'label' => $filter->getLabel(), 'choices' => $filter->getValues(), 'required' => false,
-                      //  'attr' =>
-                    //        ['class' => 'custom-select mb-2'], 'label_attr' => ['class' => 'input-group-text']
                     ]);
 
                 } elseif ($filter->getType() === Filter::TYPE_DATE) {
 
                     $form->add($filter->getFieldName(), DateType::class, [
                         'label' => $filter->getLabel(), 'mapped' => false, 'widget' => 'single_text',
-                       // 'attr' => ['class' => 'form-control mb-2'], 'label_attr' => ['class' => 'input-group-text']
-                        //, 'required' => false
                     ]);
 
                 }
@@ -75,7 +71,7 @@ class DisplayFilterType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => DataTable::class,
+            'data_class' => Display::class,
             'label' => false
         ]);
     }

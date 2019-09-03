@@ -6,11 +6,70 @@
     {% if column.cellAction.iconColumnIndex is not null %}
     var icon = row[{{ column.cellAction.iconColumnIndex }}];
     tpl.replace('[[icon]]', icon);
-    console.log(tpl);
     {% endif %}
 {% endmacro %}#}
 
+// Datatables plugin to sort datetime data with moment js
+
+(function (factory) {
+    if (typeof define === "function" && define.amd) {
+        define(["jquery", "moment", "datatables.net"], factory);
+    } else {
+        factory(jQuery, moment);
+    }
+}(function ($, moment) {
+
+    $.fn.dataTable.moment = function ( format, locale ) {
+        var types = $.fn.dataTable.ext.type;
+
+        // Add type detection
+        types.detect.unshift( function ( d ) {
+            if ( d ) {
+                // Strip HTML tags and newline characters if possible
+                if ( d.replace ) {
+                    d = d.replace(/(<.*?>)|(\r?\n|\r)/g, '');
+                }
+
+                // Strip out surrounding white space
+                d = $.trim( d );
+            }
+
+            // Null and empty values are acceptable
+            if ( d === '' || d === null ) {
+                return 'moment-'+format;
+            }
+
+            return moment( d, format, locale, true ).isValid() ?
+                'moment-'+format :
+                null;
+        } );
+
+        // Add sorting method - use an integer for the sorting
+        types.order[ 'moment-'+format+'-pre' ] = function ( d ) {
+            if ( d ) {
+                // Strip HTML tags and newline characters if possible
+                if ( d.replace ) {
+                    d = d.replace(/(<.*?>)|(\r?\n|\r)/g, '');
+                }
+
+                // Strip out surrounding white space
+                d = $.trim( d );
+            }
+
+            return !moment(d, format, locale, true).isValid() ?
+                Infinity :
+                parseInt( moment( d, format, locale, true ).format( 'x' ), 10 );
+        };
+    };
+
+}));
+
+
 $(document).ready(function () {
+
+    // Add all datetime format here
+
+    $.fn.dataTable.moment( 'DD/MM/YYYY');
     var data = [
         {% for object in table.data %}
 

@@ -9,7 +9,7 @@ use W3com\HulkBundle\Filter\FilterManager;
 use W3com\HulkBundle\Filter\FilterSessionManager;
 use W3com\HulkBundle\Finder\JsonFinder;
 use W3com\HulkBundle\Finder\ModelFinder;
-use W3com\HulkBundle\Model\DataTable;
+use W3com\HulkBundle\Model\Display;
 use W3com\HulkBundle\Query\QueryManager;
 use W3com\BoomBundle\Service\BoomManager;
 use W3com\HulkBundle\Url\UrlManager;
@@ -41,7 +41,7 @@ class DisplayProvider
     private $modelFinder;
 
     /**
-     * @var DataTable
+     * @var Display
      */
     private $dataTable;
 
@@ -86,12 +86,11 @@ class DisplayProvider
      * @param BoomManager $boom
      * @param UrlGeneratorInterface $router
      * @param FilterSessionManager $filterSessionManager
-     * @throws \ReflectionException
      */
     public function __construct($config, BoomManager $boom, UrlGeneratorInterface $router, FilterSessionManager $filterSessionManager)
     {
         $this->filterSessionManager = $filterSessionManager;
-        $this->dataTable = new DataTable();
+        $this->dataTable = new Display();
         $this->config = $config;
         $this->constructor = new DataTablesConstructor($boom);
         $this->indexor = new Indexor();
@@ -107,12 +106,11 @@ class DisplayProvider
     /**
      * @param $filename
      * @param array $getRequestParams
-     * @param array $postRequestParams
-     * @return DataTable
+     * @return Display
      * @throws AnnotationException
      * @throws \ReflectionException
      */
-    public function getDataTable($filename, $getRequestParams = [])
+    public function getDisplay($filename, $getRequestParams = [])
     {
         $this->dataTable->setFilename($filename);
 

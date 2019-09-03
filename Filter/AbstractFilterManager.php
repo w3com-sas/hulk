@@ -3,12 +3,12 @@
 namespace W3com\HulkBundle\Filter;
 
 use W3com\HulkBundle\Model\Column;
-use W3com\HulkBundle\Model\DataTable;
+use W3com\HulkBundle\Model\Display;
 use W3com\HulkBundle\Model\Filter;
 
 abstract class AbstractFilterManager
 {
-    protected function addHidenColumn(Filter $filter, DataTable $dataTable)
+    protected function addHidenColumn(Filter $filter, Display $dataTable)
     {
         $newCol = new Column();
         $newCol->setActive('Y');
@@ -18,7 +18,7 @@ abstract class AbstractFilterManager
         $dataTable->addColumn($newCol);
     }
 
-    protected function isColumnExist(Filter $filter, DataTable $dataTable)
+    protected function isColumnExist(Filter $filter, Display $dataTable)
     {
         /** @var Column $column */
         if (!empty($dataTable->getColumns())){

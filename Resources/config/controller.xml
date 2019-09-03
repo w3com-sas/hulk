@@ -4,13 +4,6 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="w3com_hulk.controller.create_view_controller"
-                 class="W3com\HulkBundle\Controller\CreateViewController" public="true">
-            <argument type="service" id="W3com\BoomBundle\Service\BoomManager"/>
-            <call method="setContainer">
-                <argument type="service" id="service_container" />
-            </call>
-        </service>
         <service id="w3com_hulk.controller.display_controller"
                  class="W3com\HulkBundle\Controller\DisplayController" public="true">
             <argument type="service" id="w3com_hulk.service.display_provider"/>
@@ -20,19 +13,12 @@
                 <argument type="service" id="service_container" />
             </call>
         </service>
-        <service id="w3com_hulk.controller.display_filters_controller"
-                 class="W3com\HulkBundle\Controller\DisplayFiltersController" public="true">
-            <argument type="service" id="w3com_hulk.service.display_filter_provider"/>
+        <service id="w3com_hulk.controller.display_form_controller"
+                 class="W3com\HulkBundle\Controller\DisplayFormController" public="true">
+            <argument type="service" id="w3com_hulk.service.display_form_provider"/>
             <argument type="service" id="request_stack"/>
-            <call method="setContainer">
-                <argument type="service" id="service_container" />
-            </call>
-        </service>
-        <service id="w3com_hulk.controller.save_filters_controller"
-                 class="W3com\HulkBundle\Controller\SaveFiltersController" public="true">
-            <argument type="service" id="session"/>
-            <argument type="service" id="request_stack"/>
-            <argument type="service" id="monolog.logger"/>
+            <argument
+                    type="service" id="w3com_hulk.url.url_manager"/>
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>

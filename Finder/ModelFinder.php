@@ -2,7 +2,7 @@
 
 namespace W3com\HulkBundle\Finder;
 
-use W3com\HulkBundle\Model\DataTable;
+use W3com\HulkBundle\Model\Display;
 use W3com\BoomBundle\Generator\Model\Entity;
 use W3com\BoomBundle\Service\BoomManager;
 
@@ -17,12 +17,12 @@ class ModelFinder
     }
 
     /**
-     * @param DataTable $dataTable
-     * @return DataTable
+     * @param Display $dataTable
+     * @return Display
      * @throws \Doctrine\Common\Annotations\AnnotationException
      * @throws \ReflectionException
      */
-    public function checkProjectEntities(DataTable $dataTable)
+    public function setDataTableEntity(Display $dataTable)
     {
         $entities = $this->boom->getGenerator()->getAppInspector()->getProjectEntities();
 
@@ -36,12 +36,12 @@ class ModelFinder
     }
 
     /**
-     * @param DataTable $dataTable
+     * @param Display $dataTable
      * @return array|mixed
      * @throws \Doctrine\Common\Annotations\AnnotationException
      * @throws \ReflectionException
      */
-    public function getAvailableProperties(DataTable $dataTable)
+    public function getAvailableProperties(Display $dataTable)
     {
         $entity = $this->boom->getGenerator()->getAppInspector()->getProjectEntity($dataTable->getEntity());
 

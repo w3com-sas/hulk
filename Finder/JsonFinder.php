@@ -3,7 +3,7 @@
 namespace W3com\HulkBundle\Finder;
 
 use W3com\BoomBundle\Service\BoomManager;
-use W3com\HulkBundle\Model\DataTable;
+use W3com\HulkBundle\Model\Display;
 use W3com\HulkBundle\Util\JsonInspector;
 
 class JsonFinder
@@ -47,7 +47,7 @@ class JsonFinder
         return stream_context_create($opts);
     }
 
-    public function getOnlineJson($filename, DataTable $dataTable)
+    public function getOnlineJson($filename, Display $dataTable)
     {
         $context = $this->createContext();
         $dataTable->getError()->setFileExist(true);

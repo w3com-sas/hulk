@@ -52,9 +52,9 @@ class Error
     }
 
     /**
-     * @param DataTable $dataTable
+     * @param Display $dataTable
      */
-    public function setNonexistentProperties(DataTable $dataTable)
+    public function setNonexistentProperties(Display $dataTable)
     {
         /** @var Column $column */
         foreach ($dataTable->getColumns() as $column){

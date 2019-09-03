@@ -4,16 +4,15 @@ namespace W3com\HulkBundle\Tests\Util;
 
 use PHPUnit\Framework\TestCase;
 use W3com\HulkBundle\Model\Column;
-use W3com\HulkBundle\Model\DataTable;
+use W3com\HulkBundle\Model\Display;
 use W3com\HulkBundle\Model\Filter;
 use W3com\HulkBundle\Util\Indexor;
 
 class IndexorTest extends TestCase
 {
-
     public function testIndexBetweenColAndFilter()
     {
-        $dataTable = new DataTable();
+        $dataTable = new Display();
         for ($i = 0; $i < 5; $i++){
             $col = new Column();
             $col->setActive('Y');

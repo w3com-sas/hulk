@@ -6,7 +6,7 @@ use Symfony\Component\Routing\Exception\InvalidParameterException;
 use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use W3com\HulkBundle\Model\Column;
-use W3com\HulkBundle\Model\DataTable;
+use W3com\HulkBundle\Model\Display;
 
 class UrlManager
 {
@@ -16,6 +16,8 @@ class UrlManager
 
     const KEY_WORD_TODAY = 'today';
 
+    const INTERVAL_URL_KEY = 'interval_';
+
     private $router;
 
     public function __construct(UrlGeneratorInterface $router)
@@ -23,7 +25,7 @@ class UrlManager
         $this->router = $router;
     }
 
-    public function generateLink(DataTable $dataTable, $data)
+    public function generateLink(Display $dataTable, $data)
     {
         $newData = [];
         foreach ($data as $lines) {
@@ -86,5 +88,31 @@ class UrlManager
             $newData[] = $lines;
         }
         $dataTable->setData($newData);
+    }
+
+    public function createRouteParams(array $formData, Display $dataTable)
+    {
+
+        $routeParams = [];
+        foreach ($formData['display_filter'] as $field => $value) {
+
+            if ($value != null && substr($field, 0, 9) !== '_interval' &&
+                $field !== 'submit' && $field !== '_token') {
+                $routeParams[$field] = $value;
+            }
+
+            if (substr($field, 0, 9) === '_interval') {
+
+                if ($value['min'] != "" ||$value['max'] != ""){
+                    $fieldName = substr($field, 9);
+                    $routeParams[self::INTERVAL_URL_KEY.$fieldName] = array_values($value)[0] . '|' .
+                        array_values($value)[1];
+                }
+
+            }
+        }
+
+        $routeParams['filename'] = $dataTable->getDisplayName();
+        return $routeParams;
     }
 }

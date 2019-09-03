@@ -2,12 +2,12 @@
 
 namespace W3com\HulkBundle\Filter;
 
-use W3com\HulkBundle\Model\DataTable;
+use W3com\HulkBundle\Model\Display;
 use W3com\HulkBundle\Model\Filter;
 
 class MultipleFilterManager extends AbstractFilterManager
 {
-    public function manageMultipleFilters(DataTable $dataTable)
+    public function manageMultipleFilters(Display $dataTable)
     {
         if (!empty($dataTable->getFilters())){
             /** @var Filter $filter */

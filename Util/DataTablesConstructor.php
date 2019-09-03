@@ -5,7 +5,7 @@ namespace W3com\HulkBundle\Util;
 use W3com\HulkBundle\Model\CellAction;
 use W3com\HulkBundle\Model\Column;
 use W3com\HulkBundle\Model\Config;
-use W3com\HulkBundle\Model\DataTable;
+use W3com\HulkBundle\Model\Display;
 use W3com\HulkBundle\Model\Filter;
 use W3com\HulkBundle\Model\GlobalAction;
 
@@ -18,7 +18,7 @@ class DataTablesConstructor
         $this->boom = $boom;
     }
 
-    public function hydrateDataTable($file, DataTable $dataTable)
+    public function hydrateDataTable($file, Display $dataTable)
     {
         if ($dataTable->getError()->isFileExist()) {
 
@@ -31,28 +31,28 @@ class DataTablesConstructor
             } else {
                 foreach ($decodedJson as $key => $value) {
                     switch ($key) {
-                        case DataTable::FIELD_CALCVIEW:
+                        case Display::FIELD_CALCVIEW:
                             $dataTable->setCalcView($value);
                             break;
-                        case DataTable::FIELD_GLOBAL_ACTION:
+                        case Display::FIELD_GLOBAL_ACTION:
                             $this->hydrateGlobalAction($dataTable, $value);
                             break;
-                        case DataTable::FIELD_COLUMNS:
+                        case Display::FIELD_COLUMNS:
                             $this->hydrateColumns($dataTable, $value);
                             break;
-                        case DataTable::FIELD_FILTERS:
+                        case Display::FIELD_FILTERS:
                             $this->hydrateFilters($dataTable, $value);
                             break;
-                        case DataTable::FIELD_PAGE_LENGTH:
+                        case Display::FIELD_PAGE_LENGTH:
                             $dataTable->setPageLength(intval($value));
                             break;
-                        case DataTable::FIELD_DISPLAY_NAME:
+                        case Display::FIELD_DISPLAY_NAME:
                             $dataTable->setDisplayName($value);
                             break;
-                        case DataTable::FIELD_MENU_CONFIG:
+                        case Display::FIELD_MENU_CONFIG:
                             $dataTable->setMenuConfig($value);
                             break;
-                            case DataTable::FIELD_MENU_NAME;
+                            case Display::FIELD_MENU_NAME;
                             $dataTable->setMenuName($value);
                             break;
                     }
@@ -65,7 +65,7 @@ class DataTablesConstructor
         return $dataTable;
     }
 
-    private function hydrateColumns(DataTable $dataTable, $columns)
+    private function hydrateColumns(Display $dataTable, $columns)
     {
         foreach ($columns as $dataColumn) {
             $column = new Column();
@@ -99,7 +99,7 @@ class DataTablesConstructor
         }
     }
 
-    private function hydrateFilters(DataTable $dataTable, $filters)
+    private function hydrateFilters(Display $dataTable, $filters)
     {
         foreach ($filters as $jsonFilter) {
             $filter = new Filter();
@@ -157,7 +157,7 @@ class DataTablesConstructor
         return $action;
     }
 
-    private function hydrateGlobalAction(DataTable $dataTable, array $dataGlobalActions)
+    private function hydrateGlobalAction(Display $dataTable, array $dataGlobalActions)
     {
         foreach ($dataGlobalActions as $globalAction) {
             $newGlobalAction = new GlobalAction();

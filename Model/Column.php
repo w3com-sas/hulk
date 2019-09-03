@@ -60,6 +60,9 @@ class Column
      */
     private $width;
 
+    /**
+     * @var bool
+     */
     private $orderable = false;
 
 

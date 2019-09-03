@@ -10,7 +10,7 @@ use Symfony\Component\Serializer\Encoder\CsvEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use W3com\HulkBundle\Model\Column;
-use W3com\HulkBundle\Model\DataTable;
+use W3com\HulkBundle\Model\Display;
 use W3com\HulkBundle\Service\DisplayProvider;
 
 class ExportCsvController extends AbstractController
@@ -29,7 +29,7 @@ class ExportCsvController extends AbstractController
         $this->displayProvider = $displayProvider;
         $this->request = $request;
         $this->serializer = new Serializer([new ObjectNormalizer()], [new CsvEncoder()]);
-        $this->dataTable = new DataTable();
+        $this->dataTable = new Display();
     }
 
     public function exportCsv()

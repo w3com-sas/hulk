@@ -2,19 +2,19 @@
 
 namespace W3com\HulkBundle\Filter;
 
-use W3com\HulkBundle\Model\DataTable;
+use W3com\HulkBundle\Model\Display;
 use W3com\HulkBundle\Model\Filter;
 
 class SingleFilterManager extends AbstractFilterManager
 {
 
-    public function manageSingleFilters(DataTable $dataTable)
+    public function manageSingleFilters(Display $dataTable)
     {
         $this->addValues($dataTable);
         return $dataTable;
     }
 
-    public function addValues(DataTable $dataTable)
+    public function addValues(Display $dataTable)
     {
 
         if (!empty($dataTable->getFilters())) {

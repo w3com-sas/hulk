@@ -3,12 +3,12 @@
 namespace W3com\HulkBundle\Column;
 
 use W3com\HulkBundle\Model\Column;
-use W3com\HulkBundle\Model\DataTable;
+use W3com\HulkBundle\Model\Display;
 
 class ColumnManager
 {
 
-    public function initColumns(DataTable $dataTable)
+    public function initColumns(Display $dataTable)
     {
         $this->adaptColumnsWithData($dataTable);
         $this->addCheckboxColumn($dataTable);
@@ -16,9 +16,9 @@ class ColumnManager
     }
 
     /**
-     * @param DataTable $dataTable
+     * @param Display $dataTable
      */
-    private function adaptColumnsWithData(DataTable $dataTable)
+    private function adaptColumnsWithData(Display $dataTable)
     {
 
         /** @var Column $column */
@@ -52,7 +52,7 @@ class ColumnManager
         }
     }
 
-    private function addCheckboxColumn(DataTable $dataTable)
+    private function addCheckboxColumn(Display $dataTable)
     {
         // If global action, need to add column with checkbox for selected table.
         if (!empty($dataTable->getGlobalActions())) {

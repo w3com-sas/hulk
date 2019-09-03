@@ -15,7 +15,6 @@ $('#searchBar').on('keyup change', function () {
         .search(this.value)
         .draw();
     saveFilters();
-    console.log(table.rows('.selected'))
     countSelectedRows(table.rows('.selected').data());
 });
 

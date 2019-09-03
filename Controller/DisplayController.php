@@ -6,7 +6,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
-use W3com\HulkBundle\Model\DataTable;
+use W3com\HulkBundle\Model\Display;
 use W3com\HulkBundle\Service\DisplayProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -26,12 +26,26 @@ class DisplayController extends AbstractController
         $this->request = $request;
     }
 
+    // TODO make view dev and btn tu update entities.
+
     /**
      * @param $filename
      * @return Response
      * @throws \Exception
      */
-    public function display($filename)
+    public function displayDev($filename)
+    {
+        $table = $this->displayInit($filename);
+        return $this->render('@W3comHulk/display/all.html.twig',
+            ['table' => $table, 'filename' => $filename, 'debug' => true]);
+    }
+
+    /**
+     * @param $filename
+     * @return Response
+     * @throws \Exception
+     */
+    public function displayProd($filename)
     {
         $table = $this->displayInit($filename);
 
@@ -46,25 +60,13 @@ class DisplayController extends AbstractController
 
     /**
      * @param $filename
-     * @return Response
-     * @throws \Exception
-     */
-    public function debug($filename)
-    {
-        $table = $this->displayInit($filename);
-        return $this->render('@W3comHulk/display/all.html.twig',
-            ['table' => $table, 'filename' => $filename, 'debug' => true]);
-    }
-
-    /**
-     * @param $filename
-     * @return RedirectResponse|DataTable
+     * @return RedirectResponse|Display
      * @throws \Exception
      */
     private function displayInit($filename)
     {
         $getRequestParams = $this->request->getCurrentRequest()->query;
-        $table = $this->displayProvider->getDataTable($filename, $getRequestParams);
+        $table = $this->displayProvider->getDisplay($filename, $getRequestParams);
         return $table;
     }
 }

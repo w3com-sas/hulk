@@ -6,7 +6,7 @@ namespace W3com\HulkBundle\Tests;
 use PHPUnit\Framework\TestCase;
 use W3com\BoomBundle\HanaEntity\AbstractEntity;
 use W3com\HulkBundle\Filter\FilterManager;
-use W3com\HulkBundle\Model\DataTable;
+use W3com\HulkBundle\Model\Display;
 use W3com\HulkBundle\Model\Filter;
 
 class FilterManagerTest extends TestCase
@@ -22,7 +22,7 @@ class FilterManagerTest extends TestCase
             $data[] = $boomObj;
         }
 
-        $dataTable = new DataTable();
+        $dataTable = new Display();
         $filter = new Filter();
         $filter->setActive('Y');
         $filter->setFieldName('field');
@@ -37,13 +37,14 @@ class FilterManagerTest extends TestCase
         $filterManager = new FilterManager();
 
         $data = [];
+
         for ($i = 0; $i < 5; $i++){
             $boomObj = new AbstractEntity();
             $boomObj->set('azefield', 'value'.$i);
             $data[] = $boomObj;
         }
 
-        $dataTable = new DataTable();
+        $dataTable = new Display();
         $filter = new Filter();
         $filter->setActive('Y');
         $filter->setFieldName('field');

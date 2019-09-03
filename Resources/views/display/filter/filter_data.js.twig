@@ -18,11 +18,13 @@ $.fn.dataTable.ext.search.push(
         {% elseif filter.type == 'multiple-date' and filter.active == 'Y' %}
 
 
+
         var minValues = $(window['minId{{ filter.fieldName }}']).val().split('/');
         var maxValues = $(window['maxId{{ filter.fieldName }}']).val().split('/');
         var minVal = parseInt(new Date(minValues[2], minValues[1] - 1, minValues[0]).getTime());
-        var maxVal = parseInt(new Date(maxValues[2], maxValues[1] - 1, maxValues[0]).getTime());
-        var dataToCompare = parseInt(new Date(data[{{ filter.index }}]).getTime());
+        var maxVal = parseInt(new Date(maxValues[2], maxValues[1] - 1, maxValues[0], 23, 59).getTime());
+        var datumToCompare = data[{{ filter.index }}].split('/');
+        var dataToCompare = parseInt(new Date(datumToCompare[2], datumToCompare[1] - 1, datumToCompare[0]).getTime());
 
         {% endif %}
 
@@ -49,3 +51,4 @@ $.fn.dataTable.ext.search.push(
 
     }
 );
+

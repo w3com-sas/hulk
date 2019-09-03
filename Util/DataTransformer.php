@@ -5,7 +5,7 @@ namespace W3com\HulkBundle\Util;
 use W3com\BoomBundle\Generator\Model\Property;
 use W3com\BoomBundle\HanaEntity\AbstractEntity;
 use W3com\HulkBundle\Finder\ModelFinder;
-use W3com\HulkBundle\Model\DataTable;
+use W3com\HulkBundle\Model\Display;
 use W3com\HulkBundle\Url\UrlManager;
 
 class DataTransformer
@@ -21,12 +21,12 @@ class DataTransformer
     }
 
     /**
-     * @param DataTable $dataTable
+     * @param Display $dataTable
      * @param $data
-     * @return DataTable
+     * @return Display
      * @throws \Exception
      */
-    public function addData(DataTable $dataTable, $data)
+    public function addData(Display $dataTable, $data)
     {
 
         $formatedData = $this->adaptKeyWithProperties($data, $dataTable);
@@ -41,11 +41,11 @@ class DataTransformer
 
     /**
      * @param $data
-     * @param DataTable $dataTable
+     * @param Display $dataTable
      * @return array
      * @throws \Exception
      */
-    private function adaptKeyWithProperties($data, DataTable $dataTable)
+    private function adaptKeyWithProperties($data, Display $dataTable)
     {
 
         // Boom return all fields of object, even if their selects
@@ -86,13 +86,15 @@ class DataTransformer
 
     private function checkDataFormat($value)
     {
-       /* $dateTime = \DateTime::createFromFormat('Y-m-d H:i:s',
+        $dateTime = \DateTime::createFromFormat('Y-m-d H:i:s',
             str_replace('T', ' ', $value));
 
-        if (false === $dateTime){
+        $date = \DateTime::createFromFormat('Y-m-d', $value);
+
+        if (false === $dateTime && false === $date){
             return $value;
+        } else {
+            return $dateTime ? $dateTime->format('d/m/Y H:i:s') : $date->format('d/m/Y');
         }
-        return $dateTime->format('d/m/Y');*/
-       return $value;
     }
 }

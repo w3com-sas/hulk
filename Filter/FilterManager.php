@@ -2,7 +2,7 @@
 
 namespace W3com\HulkBundle\Filter;
 
-use W3com\HulkBundle\Model\DataTable;
+use W3com\HulkBundle\Model\Display;
 
 class FilterManager extends AbstractFilterManager
 {
@@ -17,7 +17,7 @@ class FilterManager extends AbstractFilterManager
         $this->multilpleFilterManager = new MultipleFilterManager();
     }
 
-    public function initFilters(DataTable $dataTable)
+    public function initFilters(Display $dataTable)
     {
         $this->singleFilterManager->manageSingleFilters($dataTable);
         $this->multilpleFilterManager->manageMultipleFilters($dataTable);

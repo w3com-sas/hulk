@@ -3,13 +3,13 @@
 namespace W3com\HulkBundle\Util;
 
 use W3com\HulkBundle\Model\Column;
-use W3com\HulkBundle\Model\DataTable;
+use W3com\HulkBundle\Model\Display;
 use W3com\HulkBundle\Model\Filter;
 use W3com\HulkBundle\Model\GlobalAction;
 
 class Indexor
 {
-    public function addIndex(DataTable $dataTable)
+    public function addIndex(Display $dataTable)
     {
         $this->addColumnsIndex($dataTable);
         $this->addFiltersIndex($dataTable);
@@ -18,7 +18,7 @@ class Indexor
         return $dataTable;
     }
 
-    private function addColumnsIndex(DataTable $dataTable)
+    private function addColumnsIndex(Display $dataTable)
     {
         /** @var Column $column */
         $i = 0;
@@ -31,7 +31,7 @@ class Indexor
         }
     }
 
-    private function addFiltersIndex(DataTable $dataTable)
+    private function addFiltersIndex(Display $dataTable)
     {
         if (!empty($dataTable->getFilters())){
             /** @var Column $column */
@@ -48,7 +48,7 @@ class Indexor
         }
     }
 
-    private function addGlobalActionIndex(DataTable $dataTable)
+    private function addGlobalActionIndex(Display $dataTable)
     {
         $i=1;
 
@@ -62,7 +62,7 @@ class Indexor
 
     }
 
-    private function addIconFieldNameIndex(DataTable $dataTable)
+    private function addIconFieldNameIndex(Display $dataTable)
     {
         /** @var Column $column */
         foreach ($dataTable->getColumns() as $column){

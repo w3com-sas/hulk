@@ -6,18 +6,16 @@ use PHPUnit\Framework\TestCase;
 use W3com\BoomBundle\HanaEntity\AbstractEntity;
 use W3com\HulkBundle\Column\ColumnManager;
 use W3com\HulkBundle\Model\Column;
-use W3com\HulkBundle\Model\DataTable;
+use W3com\HulkBundle\Model\Display;
 use W3com\HulkBundle\Model\GlobalAction;
 
 
 class ColumnManagerTest extends TestCase
 {
-
-
     public function testReturnActiveColumnWhenRelatedDataExist()
     {
         $columnManager = new ColumnManager();
-        $dataTable = new DataTable();
+        $dataTable = new Display();
         $col = new Column();
         $data = [];
         $boomObj = new AbstractEntity();
@@ -34,7 +32,7 @@ class ColumnManagerTest extends TestCase
     public function testReturnUnActiveColumnWhenRelatedDataDoesNotExist()
     {
         $columnManager = new ColumnManager();
-        $dataTable = new DataTable();
+        $dataTable = new Display();
         $col = new Column();
         $data = [];
         $boomObj = new AbstractEntity();
@@ -52,7 +50,7 @@ class ColumnManagerTest extends TestCase
     public function testReturnCheckBoxColWhenGlobalActionExist()
     {
         $columnManager = new ColumnManager();
-        $dataTable = new DataTable();
+        $dataTable = new Display();
         $data = [];
         $dataTable->addGlobalAction(new GlobalAction());
         $data[] = ['field' => 'value'];

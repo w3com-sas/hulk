@@ -4,7 +4,7 @@ namespace W3com\HulkBundle\Filter;
 
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use W3com\HulkBundle\Model\DataTable;
+use W3com\HulkBundle\Model\Display;
 use W3com\HulkBundle\Model\Filter;
 
 class FilterSessionManager
@@ -25,7 +25,7 @@ class FilterSessionManager
 
     }
 
-    public function checkFiltersDefaultValue(DataTable $dataTable)
+    public function checkFiltersDefaultValue(Display $dataTable)
     {
         if ($this->session->has('filters')) {
 

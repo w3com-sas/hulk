@@ -5,7 +5,7 @@ namespace W3com\HulkBundle\Model;
 
 use W3com\BoomBundle\Generator\Model\Property;
 
-class DataTable
+class Display
 {
     const FIELD_CALCVIEW = 'CalculationView';
     const FIELD_GLOBAL_ACTION = 'GlobalActions';

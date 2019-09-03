@@ -6,11 +6,11 @@ use Doctrine\Common\Annotations\AnnotationException;
 use ReflectionException;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use W3com\BoomBundle\Parameters\Clause;
-use W3com\HulkBundle\Controller\DisplayFiltersController;
+use W3com\HulkBundle\Controller\DisplayFormController;
 use W3com\HulkBundle\Finder\ModelFinder;
 use W3com\HulkBundle\Model\CellAction;
 use W3com\HulkBundle\Model\Column;
-use W3com\HulkBundle\Model\DataTable;
+use W3com\HulkBundle\Model\Display;
 use W3com\HulkBundle\Model\Error;
 use W3com\HulkBundle\Model\Filter;
 use W3com\BoomBundle\Exception\EntityNotFoundException;
@@ -40,29 +40,29 @@ class QueryManager
      * QueryManager constructor.
      * @param ModelFinder $finder
      * @param BoomManager $boom
-     * @param DataTable $dataTable
+     * @param Display $dataTable
      */
-    public function __construct(ModelFinder $finder, BoomManager $boom, DataTable $dataTable)
+    public function __construct(ModelFinder $finder, BoomManager $boom, Display $dataTable)
     {
         $this->modelFinder = $finder;
         $this->boom = $boom;
     }
 
     /**
-     * @param DataTable $dataTable
+     * @param Display $dataTable
      * @param array $requestParams
      * @param bool $dataFilter
      * @return array
      * @throws AnnotationException
      * @throws ReflectionException
      */
-    public function createDataTableQuery(DataTable $dataTable, $requestParams = [])
+    public function createDataTableQuery(Display $dataTable, $requestParams = [])
     {
 
         $this->appEntity = $this->boom->getGenerator()->getAppInspector()
             ->getProjectEntity($dataTable->getCalcView());
 
-        $this->modelFinder->checkProjectEntities($dataTable);
+        $this->modelFinder->setDataTableEntity($dataTable);
         $dataTable->getError()->setClassExist(true);
 
         try {
@@ -74,6 +74,7 @@ class QueryManager
 
         $params = $repo->createParams();
 
+        // Si formulaire alors select pour GROUP BY (Si calcview est en mode aggregate)
         if ($dataTable->isFilter) {
             $this->addSelectForFilters($dataTable, $params);
             return $repo->findAll($params);
@@ -90,11 +91,11 @@ class QueryManager
     }
 
     /**
-     * @param DataTable $dataTable
+     * @param Display $dataTable
      * @param Parameters $params
      * @throws \Exception
      */
-    private function addSelectForColumns(DataTable $dataTable, Parameters $params)
+    private function addSelectForColumns(Display $dataTable, Parameters $params)
     {
         if (!empty($dataTable->getColumns())) {
             /** @var Column $column */
@@ -120,23 +121,23 @@ class QueryManager
     /**
      * This function allow Filter on hidden column
      *
-     * @param DataTable $dataTable
+     * @param Display $display
      * @param Parameters $params
      * @throws \Exception
      */
-    private function addSelectForFilters(DataTable $dataTable, Parameters $params)
+    private function addSelectForFilters(Display $display, Parameters $params)
     {
 
-        if (!empty($dataTable->getFilters())) {
+        if (!empty($display->getFilters())) {
 
             /** @var Filter $filter */
-            foreach ($dataTable->getFilters() as $filter) {
+            foreach ($display->getFilters() as $filter) {
 
                 if ($this->appEntity->getProperty($filter->getFieldName()) === null) {
                     $filter->setActive('N');
-                    $dataTable->getError()
+                    $display->getError()
                         ->addFilterError(
-                            sprintf(Error::ERROR_MISSING_FIELD, $filter->getFieldName(), $dataTable->getCalcView())
+                            sprintf(Error::ERROR_MISSING_FIELD, $filter->getFieldName(), $display->getCalcView())
                         );
                 } else {
                     $filter->setActive('Y');
@@ -148,11 +149,11 @@ class QueryManager
     }
 
     /**
-     * @param DataTable $dataTable
+     * @param Display $dataTable
      * @param Parameters $params
      * @throws \Exception
      */
-    private function addSelectForLink(DataTable $dataTable, Parameters $params)
+    private function addSelectForLink(Display $dataTable, Parameters $params)
     {
         if (!empty($dataTable->getColumns())) {
 
@@ -187,13 +188,13 @@ class QueryManager
     }
 
     /**
-     * @param DataTable $dataTable
+     * @param Display $dataTable
      * @param array $getRequestParams
      * @param Parameters $parameters
      * @throws AnnotationException
      * @throws ReflectionException
      */
-    private function addGetParamsRequest(DataTable $dataTable, $getRequestParams, Parameters $parameters)
+    private function addGetParamsRequest(Display $dataTable, $getRequestParams, Parameters $parameters)
     {
 
         $odsEntity = $this->boom->getGenerator()->getOdsInspector()->getOdsEntity(
@@ -225,8 +226,8 @@ class QueryManager
         foreach ($arrayGetParams as $key => $value) {
 
 
-            if (substr($key, 0, strlen(DisplayFiltersController::INTERVAL_URL_KEY))
-                === DisplayFiltersController::INTERVAL_URL_KEY) {
+            if (substr($key, 0, strlen(DisplayFormController::INTERVAL_URL_KEY))
+                === DisplayFormController::INTERVAL_URL_KEY) {
 
                 if ($paramsExist && !isset($rawFilter)) {
                     $rawFilter = ' and ';
@@ -240,7 +241,7 @@ class QueryManager
                     $filterOperator = Clause:: AND;
                 }
 
-                $sapField = substr($key, strlen(DisplayFiltersController::INTERVAL_URL_KEY));
+                $sapField = substr($key, strlen(DisplayFormController::INTERVAL_URL_KEY));
 
                /* TODO : manage error before
 
@@ -274,12 +275,12 @@ class QueryManager
     }
 
     /**
-     * @param DataTable $dataTable
+     * @param Display $dataTable
      * @param Parameters $parameters
      * @return void
      * @throws \Exception
      */
-    private function addPreFilter(DataTable $dataTable, Parameters $parameters)
+    private function addPreFilter(Display $dataTable, Parameters $parameters)
     {
         if (!empty($dataTable->getFilters())) {
             /** @var Filter $filter */
