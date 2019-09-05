@@ -11,58 +11,30 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use W3com\HulkBundle\Model\Column;
 use W3com\HulkBundle\Model\Display;
+use W3com\HulkBundle\Service\CsvManager;
 use W3com\HulkBundle\Service\DisplayProvider;
 
 class ExportCsvController extends AbstractController
 {
 
-    private $serializer;
+    private $csvManager;
 
     private $request;
 
-    private $dataTable;
-
-    private $displayProvider;
-
-    public function __construct(DisplayProvider $displayProvider, RequestStack $request)
+    public function __construct(RequestStack $request, CsvManager $csvManager)
     {
-        $this->displayProvider = $displayProvider;
         $this->request = $request;
-        $this->serializer = new Serializer([new ObjectNormalizer()], [new CsvEncoder()]);
-        $this->dataTable = new Display();
+        $this->csvManager = $csvManager;
     }
 
     public function exportCsv()
     {
-        //$data = $this->request->getCurrentRequest()->request->all();
         $data = json_decode($this->request->getCurrentRequest()->getContent(), true);
         $filename = $this->request->getCurrentRequest()->query->get('filename');
-
-        $file = $this->displayProvider->getJsonFinder()->getOnlineJson($filename, $this->dataTable);
-        $dataTable = $this->displayProvider->getConstructor()->hydrateDataTable($file, $this->dataTable);
-
-        $formattedData = [];
-
-        foreach ($data as $dataLine) {
-            $line = [];
-            foreach ($dataLine as $fieldName => $value){
-
-                /** @var Column $column */
-                foreach ($dataTable->getColumns() as $column) {
-
-                    if ($column->getFieldName() === $fieldName && $column->getType() === Column::TYPE_TEXT) {
-                        $line[$column->getLabel()] = $value;
-                    }
-                }
-            }
-            $formattedData[] = $line;
-        }
-
-        $csvContent = $this->serializer->encode($formattedData, 'csv', [CsvEncoder::DELIMITER_KEY => ';']);
-        $response = new Response($csvContent);
+        $response = new Response($this->csvManager->getCsv($data, $filename));
         $disposition = $response->headers->makeDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            $dataTable->getDisplayName().'.csv'
+            $this->csvManager->getDisplayName().'.csv'
         );
 
         $response->headers->set('Content-Type', 'application/csv');

@@ -194,6 +194,7 @@ class QueryManager
      * @param Parameters $parameters
      * @throws AnnotationException
      * @throws ReflectionException
+     * @throws \Exception
      */
     private function addGetParamsRequest(Display $dataTable, $getRequestParams, Parameters $parameters)
     {

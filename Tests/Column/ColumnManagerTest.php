@@ -21,11 +21,13 @@ class ColumnManagerTest extends TestCase
         $boomObj = new AbstractEntity();
         // Need to add 3 characters because cast boom obj with protected properties add 3 characs,
         // but not with the set method..
-        $boomObj->set('azefield', 'value');
+        $boomObj->set('field', 'value');
         $data[] = $boomObj;
         $col->setFieldName('field');
         $dataTable->addColumn($col);
-        $newDataTable = $columnManager->initColumns($dataTable, $data);
+        $dataTable->setData($data);
+        $newDataTable = $columnManager->initColumns($dataTable);
+        dump($newDataTable);
         $this->assertEquals('Y', $newDataTable->getColumns()[0]->getActive());
     }
 
@@ -43,7 +45,8 @@ class ColumnManagerTest extends TestCase
         $col->setFieldName('unknowField');
         $dataTable->addColumn($col);
         $data[] = ['azefield' => 'value'];
-        $newDataTable = $columnManager->initColumns($dataTable, $data);
+        $dataTable->setData($data);
+        $newDataTable = $columnManager->initColumns($dataTable);
         $this->assertEquals('N', $newDataTable->getColumns()[0]->getActive());
     }
 
@@ -54,7 +57,8 @@ class ColumnManagerTest extends TestCase
         $data = [];
         $dataTable->addGlobalAction(new GlobalAction());
         $data[] = ['field' => 'value'];
-        $newDataDatable = $columnManager->initColumns($dataTable, $data);
+        $dataTable->setData($data);
+        $newDataDatable = $columnManager->initColumns($dataTable);
         $this->assertEquals(Column::COL_TYPE_CHECKBOX, $newDataDatable->getColumns()[0]->getType());
     }
 

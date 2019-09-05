@@ -26,8 +26,6 @@ class DisplayController extends AbstractController
         $this->request = $request;
     }
 
-    // TODO make view dev and btn tu update entities.
-
     /**
      * @param $filename
      * @return Response
@@ -48,12 +46,6 @@ class DisplayController extends AbstractController
     public function displayProd($filename)
     {
         $table = $this->displayInit($filename);
-
-        if (!$table->getError()->isClassExist() && $table->getError()->isFileExist() ||
-            count($table->getError()->getColumnErrors()) > 0) {
-            return $this->redirectToRoute('w3com_update_project_entity', ['filename' => $filename]);
-        }
-
         return $this->render('@W3comHulk/display/all.html.twig',
             ['table' => $table, 'filename' => $filename]);
     }

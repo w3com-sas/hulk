@@ -47,7 +47,7 @@ class JsonFinder
         return stream_context_create($opts);
     }
 
-    public function getOnlineJson($filename, Display $dataTable)
+    public function getOnlineJson($filename, Display $dataTable = null)
     {
         $context = $this->createContext();
         $dataTable->getError()->setFileExist(true);

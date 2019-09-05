@@ -84,7 +84,6 @@ class ApiManager
             if ($response['valid']) {
                 $responses['success'][] = 'Réussie pour : '.implode(',', $dataLine['apiParams']['data']);
             } else {
-
                 $responses['errors'][] = $response['error'];
             }
 
@@ -94,10 +93,7 @@ class ApiManager
 
     private function convertContentToArray(ResponseInterface $response)
     {
-
-
         $response->getBody()->rewind();
-
         $body = $response->getBody()->getContents();
         // Remove HTML and other useless things
         $json = substr($body, strpos($body, '{'), strpos($body, '}') + 1);

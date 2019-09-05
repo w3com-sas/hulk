@@ -41,17 +41,14 @@ class DisplayFormController extends AbstractController
         if (!$display->getError()->isClassExist()) {
             return $this->redirectToRoute('w3com_update_project_entity', ['filename' => $filename]);
         }
-
         $form = $this->createForm(DisplayFilterType::class, $display);
         $form->handleRequest($this->request->getCurrentRequest());
-
         if ($form->isSubmitted() && $form->isValid()) {
 
             $formData = $this->request->getCurrentRequest()->request->all();
             $routeParams = $this->urlManager->createRouteParams($formData, $display);
             return $this->redirectToRoute('w3com_display', $routeParams);
         }
-
         return $this->render('@W3comHulk/display/display_form_filter.html.twig', [
             'form' => $form->createView(), 'filename' => $filename, 'display' => $display
         ]);
