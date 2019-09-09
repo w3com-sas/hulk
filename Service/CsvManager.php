@@ -31,7 +31,7 @@ class CsvManager
     {
 
         //$data = $this->request->getCurrentRequest()->request->all();
-        $file = $this->displayProvider->getJsonFinder()->getOnlineJson($filename, new Display());
+        $file = $this->displayProvider->getJsonFinder()->getOnlineJson($filename, $this->dataTable);
         $dataTable = $this->displayProvider->getConstructor()->hydrateDataTable($file, $this->dataTable);
 
         $formattedData = [];

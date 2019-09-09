@@ -64,7 +64,7 @@ class DisplayFilterType extends AbstractType
 
             }
             $form->add('submit', SubmitType::class, ['label' => 'Rechercher', 'attr' =>
-                ['class' => 'btn btn-success btn-block']]);
+                ['class' => 'btn btn-blue btn-block']]);
 
         });
     }
