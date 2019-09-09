@@ -16,38 +16,24 @@ class ColumnManager
     }
 
     /**
-     * @param Display $dataTable
+     * @param Display $display
      */
-    private function adaptColumnsWithData(Display $dataTable)
+    private function adaptColumnsWithData(Display $display)
     {
+        foreach ($display->getColumns() as $column) {
+            foreach ($display->getData()[0] as $property => $value) {
+                if ($property == $column->getFieldName()) {
+                    $column->setActive('Y');
+                } elseif ($column->hasCellAction()) {
 
-        /** @var Column $column */
-        if (!empty($dataTable->getColumns())) {
-
-            foreach ($dataTable->getColumns() as $column) {
-
-                // if column is linked to property of entity
-                if (!empty($dataTable->getData())) {
-
-                    foreach ($dataTable->getData()[0] as $property => $value) {
-
-                        if ($property == $column->getFieldName()) {
-                            $column->setActive('Y');
-                        } elseif ($column->hasCellAction()) {
-
-                            if ($column->getCellAction()->getFunctionName() . $column->getCellAction()->getTargetEntity()
-                                == $property) {
-                                $column->setActive('Y');
-                            }
-
-                        }
-
-                        if ($column->getActive() !== 'Y') {
-                            $column->setActive('N');
-                        }
+                    if ($column->getCellAction()->getFunctionName() . $column->getCellAction()->getTargetEntity()
+                        == $property) {
+                        $column->setActive('Y');
                     }
                 }
-
+                if ($column->getActive() !== 'Y') {
+                    $column->setActive('N');
+                }
             }
         }
     }

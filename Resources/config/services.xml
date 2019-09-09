@@ -39,5 +39,18 @@
             <argument type="service" id="W3com\BoomBundle\Service\BoomManager" />
             <argument type="service" id="request_stack"/>
         </service>
+        <service id="w3com_hulk.finder.json_finder" class="W3com\HulkBundle\Finder\JsonFinder">
+            <argument type="service" id="W3com\BoomBundle\Service\BoomManager" />
+            <argument>%hulk.config%</argument>
+        </service>
+        <service class="W3com\HulkBundle\Service\DisplayPersister" id="w3com_hulk.service.display_persister">
+            <argument type="service" id="W3com\BoomBundle\Service\BoomManager"/>
+            <argument type="service" id="request_stack"/>
+            <argument type="service" id="monolog.logger"/>
+        </service>
+        <service class="W3com\HulkBundle\Service\CsvManager" id="w3com_hulk.service.csv_manager">
+            <argument type="service" id="w3com_hulk.service.display_provider"/>
+            <argument type="service" id="request_stack"/>
+        </service>
     </services>
 </container>

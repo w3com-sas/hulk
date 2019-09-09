@@ -51,17 +51,17 @@ class Display
     /**
      * @var array
      */
-    private $columns;
+    private $columns = [];
 
     /**
      * @var array
      */
-    private $filters;
+    private $filters = [];
 
     /**
      * @var array
      */
-    private $data;
+    private $data = [];
 
     /**
      * @var integer
@@ -112,7 +112,7 @@ class Display
     /**
      * @return mixed
      */
-    public function getColumns()
+    public function getColumns(): array
     {
         return $this->columns;
     }

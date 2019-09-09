@@ -59,8 +59,8 @@ class MenuSession
     {
         $newMenu = [];
         $newMenu[$currentMenuName] = [];
-        foreach ($this->session->get('menu') as $menuName => $menus) {
 
+        foreach ($this->session->get('menu') as $menuName => $menus) {
 
             foreach ($menus as $menu) {
 
@@ -88,6 +88,7 @@ class MenuSession
     {
         $params = [];
 
+        // Old function for display-form params ?
         if (!empty($this->request->getCurrentRequest()->get('_route_params'))) {
             foreach ($this->request->getCurrentRequest()->get('_route_params') as $key => $value) {
                 $params[$key] = $value;
@@ -96,7 +97,6 @@ class MenuSession
 
         if (!empty($this->request->getCurrentRequest()->query->all())) {
             foreach ($this->request->getCurrentRequest()->query->all() as $key => $value) {
-
                 if ($key !== '_path') {
                     $params[$key] = $value;
                 }

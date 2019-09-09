@@ -42,15 +42,10 @@ class FilterSessionManager
                                 $dataTable->addSavedFilters();
                                 $filter->setDefaultValue($filterSessionValue);
                             }
-
                         }
-
                     }
-
                 }
-
             }
-
         }
     }
 }

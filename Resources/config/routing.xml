@@ -30,4 +30,10 @@
     <route id="w3com_export_csv" path="/export-csv" methods="POST">
         <default key="_controller">w3com_hulk.controller.export_csv_controller::exportCsv</default>
     </route>
+    <route id="w3com_app" path="/app/{fileApp}" methods="GET POST">
+        <default key="_controller">w3com_hulk.controller.app_controller::runApp</default>
+    </route>
+    <route id="w3com_app_module" path="/app/{fileApp}/{screenName}" methods="GET POST">
+        <default key="_controller">w3com_hulk.controller.app_controller::runApp</default>
+    </route>
 </routes>

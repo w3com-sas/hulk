@@ -14,21 +14,20 @@ class FilterManagerTest extends TestCase
     public function testReturnHiddenColWhenThereIsFilterButNoCol()
     {
         $filterManager = new FilterManager();
-
         $data = [];
         for ($i = 0; $i > 5; $i++){
             $boomObj = new AbstractEntity();
             $boomObj->set('azefield', 'value'.$i);
             $data[] = $boomObj;
         }
-
         $dataTable = new Display();
         $filter = new Filter();
         $filter->setActive('Y');
         $filter->setFieldName('field');
         $filter->setType(Filter::TYPE_SINGLE);
         $dataTable->addFilter($filter);
-        $newDt = $filterManager->initFilters($dataTable, $data);
+        $dataTable->setData($data);
+        $newDt = $filterManager->initFilters($dataTable);
         $this->assertEquals(true, $newDt->getColumns()[0]->isHidden());
     }
 
@@ -50,7 +49,8 @@ class FilterManagerTest extends TestCase
         $filter->setFieldName('field');
         $filter->setType(Filter::TYPE_SINGLE);
         $dataTable->addFilter($filter);
-        $newDt = $filterManager->initFilters($dataTable, $data);
+        $dataTable->setData($data);
+        $newDt = $filterManager->initFilters($dataTable);
         $this->assertEquals(6, count($newDt->getFilters()[0]->getValues()));
     }
 }

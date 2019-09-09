@@ -37,10 +37,6 @@ class DisplayFormController extends AbstractController
     {
         /** @var Display $display */
         $display = $this->displayProvider->getDisplay($filename);
-
-        if (!$display->getError()->isClassExist()) {
-            return $this->redirectToRoute('w3com_update_project_entity', ['filename' => $filename]);
-        }
         $form = $this->createForm(DisplayFilterType::class, $display);
         $form->handleRequest($this->request->getCurrentRequest());
         if ($form->isSubmitted() && $form->isValid()) {

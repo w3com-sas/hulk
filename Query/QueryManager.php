@@ -245,7 +245,6 @@ class QueryManager
 
                 $sapField = substr($key, strlen(UrlManager::INTERVAL_URL_KEY));
 
-                dump($sapField);
                 /*
                if ($odsEntity->getProperty($sapField) === null){
                     $dataTable->getError()->addColumnError('Unknown field '.$sapField.' maybe need a hulk/update-view/{display}');

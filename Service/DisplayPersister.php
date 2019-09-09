@@ -80,4 +80,13 @@ class DisplayPersister
             }
         }
     }
+
+    private function formatData($targetData)
+    {
+        if (\DateTime::createFromFormat('d/m/Y', $targetData) !== false){
+            $dateTime = \DateTime::createFromFormat('d/m/Y', $targetData);
+            return $dateTime->format('Y-m-d');
+        }
+        return $targetData;
+    }
 }
