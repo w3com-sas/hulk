@@ -57,7 +57,7 @@ class DisplayFilterType extends AbstractType
 
                     $form->add($filter->getFieldName(), DateType::class, [
                         'label' => $filter->getLabel(), 'mapped' => false, 'widget' => 'single_text',
-                        'required' => false
+                        'required' => false, 'html5' => false
                     ]);
 
                 }

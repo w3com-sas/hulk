@@ -26,27 +26,22 @@ class DisplayFilterMultipleType extends AbstractType
 
             if ($options['filter_type'] === Filter::TYPE_MULTIPLE) {
                 $form->add('min', NumberType::class, [
-                    'label' => 'Min : ' . $filter->getLabel(),
-                    'label_attr' => ['class' => 'input-group-text'],
-                     'required' => false, 'mapped' => false
+                    'label' => $filter->getLabel(),
+                    'required' => false, 'mapped' => false
                 ]);
 
-                $form->add('max' , NumberType::class, [
-                    'label' => 'Max : ' . $filter->getLabel(),
-                    'label_attr' => ['class' => 'input-group-text'],
-                     'required' => false, 'mapped' => false
+                $form->add('max', NumberType::class, [
+                    'label' => false, 'required' => false, 'mapped' => false
                 ]);
             } elseif ($options['filter_type'] === Filter::TYPE_MULTIPLE_DATE) {
-                $form->add('min' , DateType::class, [
-                    'label' => 'Min : ' . $filter->getLabel(), 'widget' => 'single_text',
-                    'label_attr' => ['class' => 'input-group-text'],
-                     'required' => false, 'mapped' => false
+                $form->add('min', DateType::class, [
+                    'label' => $filter->getLabel(), 'widget' => 'single_text',
+                    'html5' => false, 'required' => false, 'mapped' => false
                 ]);
 
                 $form->add('max', DateType::class, [
-                    'label' => 'Max : ' . $filter->getLabel(), 'widget' => 'single_text',
-                    'label_attr' => ['class' => 'input-group-text'],
-                     'required' => false, 'mapped' => false
+                    'label' => false, 'widget' => 'single_text',
+                    'html5' => false,'required' => false, 'mapped' => false
                 ]);
             }
 
