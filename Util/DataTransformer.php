@@ -32,7 +32,7 @@ class DataTransformer
         $formatedData = $this->adaptKeyWithProperties($data, $dataTable);
         $dataTable->setData($formatedData);
 
-        if ($this->urlManager !== null){
+        if ($this->urlManager !== null) {
             $this->urlManager->generateLink($dataTable, $dataTable->getData());
         }
 
@@ -73,7 +73,7 @@ class DataTransformer
                     // Match with json Required property
                     if ($realProperty == $requiredProperty->getName()) {
 
-                        $value = $this->checkDataFormat($value);
+                        $value = $this->transformDateFormat($value);
                         $data[$field] = $value;
                     }
                 }
@@ -84,17 +84,26 @@ class DataTransformer
     }
 
 
-    private function checkDataFormat($value)
+    private function transformDateFormat($value)
     {
         $dateTime = \DateTime::createFromFormat('Y-m-d H:i:s',
             str_replace('T', ' ', $value));
 
         $date = \DateTime::createFromFormat('Y-m-d', $value);
 
-        if (false === $dateTime && false === $date){
+        if (false === $dateTime && false === $date) {
             return $value;
         } else {
             return $dateTime ? $dateTime->format('d/m/Y H:i:s') : $date->format('d/m/Y');
         }
+    }
+
+    public function reverseDateFormat($value)
+    {
+        $date = \DateTime::createFromFormat('d/m/Y', $value);
+        if ($date !== false) {
+            return $date->format('Y-m-d');
+        }
+        return $value;
     }
 }

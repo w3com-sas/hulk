@@ -7,6 +7,7 @@ use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use W3com\HulkBundle\Model\Column;
 use W3com\HulkBundle\Model\Display;
+use W3com\HulkBundle\Util\DataTransformer;
 
 class UrlManager
 {
@@ -98,6 +99,7 @@ class UrlManager
 
             if ($value != null && substr($field, 0, 9) !== '_interval' &&
                 $field !== 'submit' && $field !== '_token') {
+                $value = $this->reverseDateFormat($value);
                 $routeParams[$field] = $value;
             }
 
@@ -105,8 +107,10 @@ class UrlManager
 
                 if ($value['min'] != "" ||$value['max'] != ""){
                     $fieldName = substr($field, 9);
-                    $routeParams[self::INTERVAL_URL_KEY.$fieldName] = array_values($value)[0] . '|' .
-                        array_values($value)[1];
+                    $min = $this->reverseDateFormat(array_values($value)[0]);
+                    $max = $this->reverseDateFormat(array_values($value)[1]);
+                    $routeParams[self::INTERVAL_URL_KEY.$fieldName] = $min . '|' .
+                        $max;
                 }
 
             }
@@ -114,5 +118,15 @@ class UrlManager
 
         $routeParams['filename'] = $dataTable->getDisplayName();
         return $routeParams;
+    }
+
+    private function reverseDateFormat($value)
+    {
+        dump('toto');
+        $date = \DateTime::createFromFormat('d/m/Y', $value);
+        if ($date !== false) {
+            return $date->format('Y-m-d');
+        }
+        return $value;
     }
 }

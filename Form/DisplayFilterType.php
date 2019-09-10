@@ -56,6 +56,7 @@ class DisplayFilterType extends AbstractType
                 } elseif ($filter->getType() === Filter::TYPE_DATE) {
 
                     $form->add($filter->getFieldName(), DateType::class, [
+                        'format' => 'd/m/Y',
                         'label' => $filter->getLabel(), 'mapped' => false, 'widget' => 'single_text',
                         'required' => false, 'html5' => false
                     ]);

@@ -34,12 +34,15 @@ class DisplayFilterMultipleType extends AbstractType
                     'label' => false, 'required' => false, 'mapped' => false
                 ]);
             } elseif ($options['filter_type'] === Filter::TYPE_MULTIPLE_DATE) {
+
                 $form->add('min', DateType::class, [
+                    'format' => 'd/m/Y',
                     'label' => $filter->getLabel(), 'widget' => 'single_text',
                     'html5' => false, 'required' => false, 'mapped' => false
                 ]);
 
                 $form->add('max', DateType::class, [
+                    'format' => 'd/m/Y',
                     'label' => false, 'widget' => 'single_text',
                     'html5' => false,'required' => false, 'mapped' => false
                 ]);
