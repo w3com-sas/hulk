@@ -6,6 +6,8 @@ class Column
 {
     const FIELD_LABEL = 'Label';
     const FIELD_FIELDNAME = 'FieldName';
+    const FIELD_ICON_FIELDNAME = 'IconFieldName';
+    const FIELD_LABEL_FIELDNAME = 'LabelFieldName';
     const FIELD_TYPE = 'Type';
     const FIELD_CELL_ACTION = 'CellAction';
     const FIELD_WIDTH = 'Width';
@@ -34,6 +36,16 @@ class Column
      * @var string
      */
     private $fieldName;
+
+    /**
+     * @var string
+     */
+    private $iconFieldName;
+
+    /**
+     * @var string
+     */
+    private $labelFieldName;
 
     /**
      * @var string
@@ -224,5 +236,37 @@ class Column
     public function setOrderable(bool $orderable): void
     {
         $this->orderable = $orderable;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIconFieldName()
+    {
+        return $this->iconFieldName;
+    }
+
+    /**
+     * @param string $iconFieldName
+     */
+    public function setIconFieldName($iconFieldName): void
+    {
+        $this->iconFieldName = $iconFieldName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLabelFieldName()
+    {
+        return $this->labelFieldName;
+    }
+
+    /**
+     * @param string $labelFieldName
+     */
+    public function setLabelFieldName($labelFieldName): void
+    {
+        $this->labelFieldName = $labelFieldName;
     }
 }

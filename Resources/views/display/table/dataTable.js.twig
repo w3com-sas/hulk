@@ -140,6 +140,9 @@ $(document).ready(function () {
 
                             {% if column.cellAction.iconColumnIndex is not null %}
                             var icon = row.{{ column.cellAction.iconFieldName }};
+
+
+
                             return tpl.replace('[[icon]]', icon).replace('[[data]]', data);
                             {% else %}
                             return tpl.replace('[[data]]', data);
@@ -185,6 +188,9 @@ $(document).ready(function () {
 
                         function (data, type, row) {
                             var tpl = $('#icon').html();
+                            if(data.split(' ').length == 1){
+                                data = 'fa fa-' + data;
+                            }
                             return tpl.replace('[[data]]', data);
                         }
                 }

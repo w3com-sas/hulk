@@ -21,11 +21,10 @@ class ColumnManager
     private function adaptColumnsWithData(Display $display)
     {
         foreach ($display->getColumns() as $column) {
-            if (count($display->getData()) > 0){
-                foreach ($display->getData()[0] as $property => $value) {
-                    if ($property == $column->getFieldName()) {
-                        $column->setActive('Y');
-                    } elseif ($column->hasCellAction()) {
+            foreach ($display->getData()[0] as $property => $value) {
+                if (in_array($property , [$column->getFieldName(),$column->getIconFieldName(),$column->getLabelFieldName()])) {
+                    $column->setActive('Y');
+                } elseif ($column->hasCellAction()) {
 
                         if ($column->getCellAction()->getFunctionName() . $column->getCellAction()->getTargetEntity()
                             == $property) {

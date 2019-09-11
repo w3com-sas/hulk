@@ -9,6 +9,9 @@ class CellAction
     const FIELD_TARGET_ENTITY = 'TargetEntity';
     const FIELD_ICON = 'Icon';
     const FIELD_PARAMS = 'Params';
+    const FIELD_RENDER_TYPE = 'RenderType';
+    const FIELD_RENDER_VALUE = 'RenderValue';
+    const FIELD_RENDER_FIELDNAME = 'RenderFieldName';
 
     const FUNCTION_DISPLAY_LINK = 'displayLink';
     const FUNCTION_LINK = 'link';
@@ -27,6 +30,12 @@ class CellAction
     private $params;
 
     private $iconColumnIndex;
+
+    private $renderType;
+
+    private $renderValue;
+
+    private $renderFieldName;
 
     /**
      * @return mixed
@@ -138,4 +147,51 @@ class CellAction
         $this->iconColumnIndex = $iconColumnIndex;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getRenderType()
+    {
+        return $this->renderType;
+    }
+
+    /**
+     * @param mixed $renderType
+     */
+    public function setRenderType($renderType): void
+    {
+        $this->renderType = $renderType;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRenderValue()
+    {
+        return $this->renderValue;
+    }
+
+    /**
+     * @param mixed $renderValue
+     */
+    public function setRenderValue($renderValue): void
+    {
+        $this->renderValue = $renderValue;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRenderFieldName()
+    {
+        return $this->renderFieldName;
+    }
+
+    /**
+     * @param mixed $renderFieldName
+     */
+    public function setRenderFieldName($renderFieldName): void
+    {
+        $this->renderFieldName = $renderFieldName;
+    }
 }

@@ -102,11 +102,27 @@ class QueryManager
             /** @var Column $column */
             foreach ($dataTable->getColumns() as $column) {
 
-                if ($column->getType() === Column::TYPE_TEXT || $column->getFieldName() !== null) {
+                if ($column->getType() === Column::TYPE_TEXT || $column->getFieldName() !== null
+                    || $column->getIconFieldName() !== null || $column->getLabelFieldName() !== null) {
+
+                    $atLeastOne = false;
 
                     if ($this->appEntity->getProperty($column->getFieldName()) !== null) {
                         $params->addSelect($this->appEntity->getProperty($column->getFieldName())->getName());
-                    } else {
+                        $atLeastOne = true;
+                    }
+
+                    if ($this->appEntity->getProperty($column->getIconFieldName()) !== null) {
+                        $params->addSelect($this->appEntity->getProperty($column->getIconFieldName())->getName());
+                        $atLeastOne = true;
+                    }
+
+                    if ($this->appEntity->getProperty($column->getLabelFieldName()) !== null) {
+                        $params->addSelect($this->appEntity->getProperty($column->getLabelFieldName())->getName());
+                        $atLeastOne = true;
+                    }
+
+                    if(!$atLeastOne) {
                         $column->setActive('N');
                         $dataTable->getError()->addColumnError(
                             sprintf(Error::ERROR_MISSING_FIELD, $column->getFieldName(),

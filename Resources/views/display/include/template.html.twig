@@ -13,7 +13,17 @@
 </template>
 
 <template id="icon">
-    <i class="fa fa-[[data]]"></i>
+    <i class="[[data]]"></i>
+</template>
+
+<template id="labelRenderer">
+    [[data]]
+</template>
+
+<template id="actionRenderer">
+    <a href="[[action]]" class="[[class]]">
+        [[data]]
+    </a>
 </template>
 
 <div class="modal fade"

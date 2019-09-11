@@ -77,6 +77,12 @@ class DataTablesConstructor
                     case Column::FIELD_FIELDNAME:
                         $column->setFieldName($value);
                         break;
+                    case Column::FIELD_ICON_FIELDNAME:
+                        $column->setIconFieldName($value);
+                        break;
+                    case Column::FIELD_LABEL_FIELDNAME:
+                        $column->setLabelFieldName($value);
+                        break;
                     case Column::FIELD_TYPE:
                         $column->setType($value);
                         break;

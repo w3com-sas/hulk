@@ -196,8 +196,12 @@ class Display
                 // Need to get property name to check it in entity
                 /** @var Property $property */
                 foreach ($entityFields as $property) {
-                    if ($property->getField() == $column->getFieldName()) {
+                    if ($property->getField() === $column->getFieldName()) {
                         $fields[$column->getFieldName()] = $property;
+                    } elseif($property->getField() === $column->getIconFieldName()) {
+                        $fields[$column->getIconFieldName()] = $property;
+                    } elseif($property->getField() === $column->getLabelFieldName()){
+                        $fields[$column->getLabelFieldName()] = $property;
                     } elseif ($column->getCellAction() !== null){
 
                         if (!empty($column->getCellAction()->getParams())){
