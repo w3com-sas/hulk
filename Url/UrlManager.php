@@ -122,7 +122,6 @@ class UrlManager
 
     private function reverseDateFormat($value)
     {
-        dump('toto');
         $date = \DateTime::createFromFormat('d/m/Y', $value);
         if ($date !== false) {
             return $date->format('Y-m-d');
