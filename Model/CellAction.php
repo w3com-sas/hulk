@@ -15,6 +15,8 @@ class CellAction
 
     const FUNCTION_DISPLAY_LINK = 'displayLink';
     const FUNCTION_LINK = 'link';
+    const FUNCTION_CALL_FUNCTION = 'call-function';
+
     const FIELD_ICON_FIELDNAME = 'IconFieldName';
 
     private $label;

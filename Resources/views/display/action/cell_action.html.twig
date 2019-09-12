@@ -12,7 +12,12 @@
 
             {% if column.cellAction.icon != null %}
                 {% set btnClass =  'btn btn-primary btn-sm' %}
-                {% set iconTpl = '<i class="fa fa-'~column.cellAction.icon~'"></i>' %}
+                {% if column.cellAction.icon|split(' ')|length == 2 %}
+                    {% set iconRender = column.cellAction.icon %}
+                {% else %}
+                    {% set iconRender = 'fa fa-'~column.cellAction.icon %}
+                {% endif %}
+                {% set iconTpl = '<i class="'~iconRender~'"></i>' %}
             {% endif %}
 
         {% endif %}
@@ -33,6 +38,40 @@
             </template>
         {% endif %}
 
+    {% elseif column.type == 'universal' %}
+        {% if column.cellAction is not null %}
+
+            {% if column.cellAction.RenderType is defined %}
+                {% if column.cellAction.RenderType == 'static' %}
+                    {% set classRender = column.cellAction.RenderValue %}
+                {% else %}
+                    {% set classRender = '[[classRender]]' %}
+                {% endif %}
+            {% else %}
+                {% set classRender = 'btn btn-link' %}
+            {% endif %}
+
+            {% if column.cellAction.functionName == 'displayLink' or column.cellAction.functionName == 'link' %}
+                {% set hrefAction = "[[data]]" %}
+            {% elseif column.cellAction.functionName == 'openForm' %}
+                {% set hrefAction = "javascript:" ~ column.cellAction.functionName ~ "('" ~ column.cellAction.targetEntity ~ "', '[[data]]')" %}
+            {%  elseif column.cellAction.functionName == 'call-function' %}
+                {% if "(" in column.cellAction.params['FunctionToCall'] %}
+                    {% set hrefAction = "javascript:" ~ column.cellAction.params['FunctionToCall'] %}
+                {% else %}
+                    {% set hrefAction = "javascript:" ~ column.cellAction.params['FunctionToCall'] ~ '([[row]])' %}
+                {% endif %}
+            {% endif %}
+            <template id="action{{ column.cellAction.functionName }}{{ column.index }}">
+                <a href="{{ hrefAction }}" class="{{ classRender }}">
+                    [[globalRender]]
+                </a>
+            </template>
+        {% else %}
+            <template id="action{{ column.cellAction.functionName }}{{ column.index }}">
+                [[globalRender]]
+            </template>
+        {% endif %}
     {% endif %}
 
 {% endfor %}

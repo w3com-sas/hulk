@@ -20,20 +20,19 @@ class ColumnManager
      */
     private function adaptColumnsWithData(Display $display)
     {
+        /** @var Column $column */
         foreach ($display->getColumns() as $column) {
             foreach ($display->getData()[0] as $property => $value) {
                 if (in_array($property , [$column->getFieldName(),$column->getIconFieldName(),$column->getLabelFieldName()])) {
                     $column->setActive('Y');
                 } elseif ($column->hasCellAction()) {
-
-                        if ($column->getCellAction()->getFunctionName() . $column->getCellAction()->getTargetEntity()
-                            == $property) {
-                            $column->setActive('Y');
-                        }
+                    if ($column->getCellAction()->getFunctionName() . $column->getCellAction()->getTargetEntity()
+                        == $property) {
+                        $column->setActive('Y');
                     }
-                    if ($column->getActive() !== 'Y') {
-                        $column->setActive('N');
-                    }
+                }
+                if ($column->getActive() !== 'Y') {
+                    $column->setActive('N');
                 }
             }
         }

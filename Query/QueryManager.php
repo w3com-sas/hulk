@@ -122,6 +122,11 @@ class QueryManager
                         $atLeastOne = true;
                     }
 
+                    if ($column->getCellAction() != null && $this->appEntity->getProperty($column->getCellAction()->getRenderFieldName()) !== null) {
+                        $params->addSelect($this->appEntity->getProperty($column->getCellAction()->getRenderFieldName())->getName());
+                        $atLeastOne = true;
+                    }
+
                     if(!$atLeastOne) {
                         $column->setActive('N');
                         $dataTable->getError()->addColumnError(

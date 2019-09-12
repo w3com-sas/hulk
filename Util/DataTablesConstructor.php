@@ -158,6 +158,15 @@ class DataTablesConstructor
                         $action->addParam($fieldKey, $targetFieldKey);
                     }
                     break;
+                case CellAction::FIELD_RENDER_TYPE:
+                    $action->setRenderType($value);
+                    break;
+                case CellAction::FIELD_RENDER_VALUE:
+                    $action->setRenderValue($value);
+                    break;
+                case CellAction::FIELD_RENDER_FIELDNAME:
+                    $action->setRenderFieldName($value);
+                    break;
             }
         }
         return $action;

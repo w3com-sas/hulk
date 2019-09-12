@@ -212,6 +212,11 @@ class Display
                             }
                         }
 
+                        if($column->getCellAction()->getRenderFieldName() != ''){
+                            if($column->getCellAction()->getRenderFieldName() == $property->getField()){
+                                $fields[$column->getCellAction()->getRenderFieldName()] = $property;
+                            }
+                        }
                     }
                 }
             }

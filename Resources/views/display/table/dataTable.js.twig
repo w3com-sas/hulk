@@ -195,6 +195,48 @@ $(document).ready(function () {
                         }
                 }
                 ,
+                {% elseif column.type == 'universal' %}
+                {
+                    {% if column.width is not null %}
+                    width: "{{ column.width }}%",
+                    {% endif %}
+                    data: null,
+                    render: function(data,type,row){
+                        var iconRenderer = '';
+                        if(row.hasOwnProperty('{{ column.iconFieldName }}') && (row.{{ column.iconFieldName }} != '')){
+                            var tplIcon = $('#icon').html();
+                            var prefixIcon = '';
+                            if(row.{{ column.iconFieldName }}.split(' ').length == 1){
+                                prefixIcon = 'fa fa-';
+                            }
+                            iconRenderer = tplIcon.replace('[[data]]', prefixIcon + row.{{ column.iconFieldName }});
+
+                        }
+                        var labelRenderer = '';
+                        if(row.hasOwnProperty('{{ column.labelFieldName }}') && row.{{ column.labelFieldName }} != ''){
+                            var tplLabel = $('#labelRenderer').html();
+                            labelRenderer = tplLabel.replace('[[data]]',row.{{ column.labelFieldName }});
+                        }
+
+                        {% if column.cellAction is defined %}
+                        var tplAction = $('#action{{ column.cellAction.functionName }}{{ column.index }}').html();
+
+                        tplAction = tplAction
+                            .replace('[[globalRender]]',iconRenderer + labelRenderer)
+                            .replace('[[row]]',JSON.stringify(row).replace(/"/g,'&quot;'));
+
+                        {% if column.cellAction.renderType is defined and column.cellAction.renderType == 'dynamic' %}
+                        tplAction = tplAction.replace('[[classRender]]',row.{{ column.cellAction.renderFieldName }})
+                        {% endif %}
+
+                        return tplAction;
+
+                        {% else %}
+                        return iconRenderer + labelRenderer;
+                        {% endif %}
+                    }
+                }
+                ,
                 {% endif %}
 
                 {% endfor %}
