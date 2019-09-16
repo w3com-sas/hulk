@@ -1,11 +1,17 @@
 {% extends '@W3comHulk/display/base.html.twig' %}
 
 {% block content %}
-{% include '@W3comHulk/display/display.html.twig' %}
+    {% if display.criticalError %}
+        {% include '@W3comHulk/display/error/critical_error.html.twig' %}
+    {% else %}
+        {% include '@W3comHulk/display/display.html.twig' %}
+    {% endif %}
 {% endblock %}
 
 {% block javascripts %}
-<script>
-    {% include '@W3comHulk/display/display.js.twig' %}
-</script>
+    {% if not display.criticalError %}
+        <script>
+            {% include '@W3comHulk/display/display.js.twig' %}
+        </script>
+    {% endif %}
 {% endblock %}

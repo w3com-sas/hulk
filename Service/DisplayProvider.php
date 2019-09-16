@@ -4,6 +4,7 @@ namespace W3com\HulkBundle\Service;
 
 use Doctrine\Common\Annotations\AnnotationException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use W3com\BoomBundle\Service\BoomGenerator;
 use W3com\HulkBundle\Column\ColumnManager;
 use W3com\HulkBundle\Filter\FilterManager;
 use W3com\HulkBundle\Filter\FilterSessionManager;
@@ -43,7 +44,7 @@ class DisplayProvider
     /**
      * @var Display
      */
-    private $dataTable;
+    private $display;
 
     /**
      * @var array
@@ -84,22 +85,23 @@ class DisplayProvider
      * DisplayProvider constructor.
      * @param $config
      * @param BoomManager $boom
+     * @param BoomGenerator $generator
      * @param UrlGeneratorInterface $router
      * @param FilterSessionManager $filterSessionManager
      */
-    public function __construct($config, BoomManager $boom, UrlGeneratorInterface $router, FilterSessionManager $filterSessionManager)
+    public function __construct($config, BoomManager $boom, BoomGenerator $generator, UrlGeneratorInterface $router, FilterSessionManager $filterSessionManager)
     {
         $this->filterSessionManager = $filterSessionManager;
-        $this->dataTable = new Display();
+        $this->display = new Display();
         $this->config = $config;
         $this->constructor = new DataTablesConstructor($boom);
         $this->indexor = new Indexor();
         $this->filterManager = new FilterManager();
         $this->columnManager = new ColumnManager();
-        $this->modelFinder = new ModelFinder($boom);
+        $this->modelFinder = new ModelFinder($generator);
         $this->urlManager = new UrlManager($router);
         $this->dataTransformer = new DataTransformer($this->modelFinder, $this->urlManager);
-        $this->queryManager = new QueryManager($this->modelFinder, $boom, $this->dataTable);
+        $this->queryManager = new QueryManager($this->modelFinder, $boom, $generator);
         $this->jsonFinder = new JsonFinder($boom, $config);
     }
 
@@ -112,30 +114,27 @@ class DisplayProvider
      */
     public function getDisplay($filename, $getRequestParams = [])
     {
-        $this->dataTable->setFilename($filename);
+        $this->display->setFilename($filename);
+        $this->constructor->hydrateDataTable($this->jsonFinder->getOnlineJson($filename, $this->display), $this->display);
 
-        $json = $this->jsonFinder->getOnlineJson($filename, $this->dataTable);
+        if ($this->display->getError()->isFileExist()) {
 
-        $this->constructor->hydrateDataTable($json, $this->dataTable);
+            $data = $this->queryManager->createDataTableQuery($this->display, $getRequestParams);
 
-        if ($this->dataTable->getError()->isFileExist()) {
+            if ($this->display->getError()->isClassExist()) {
 
-            $data = $this->queryManager->createDataTableQuery($this->dataTable, $getRequestParams);
+                $this->dataTransformer->addData($this->display, $data);
 
-            if ($this->dataTable->getError()->isClassExist()) {
+                $this->columnManager->initColumns($this->display);
 
-                $this->dataTransformer->addData($this->dataTable, $data);
+                $this->filterManager->initFilters($this->display);
 
-                $this->columnManager->initColumns($this->dataTable);
+                $this->filterSessionManager->checkFiltersDefaultValue($this->display);
 
-                $this->filterManager->initFilters($this->dataTable);
-
-                $this->filterSessionManager->checkFiltersDefaultValue($this->dataTable);
-
-                $this->indexor->addIndex($this->dataTable);
+                $this->indexor->addIndex($this->display);
             }
         }
-        return $this->dataTable;
+        return $this->display;
     }
 
     /**

@@ -3,32 +3,35 @@
 namespace W3com\HulkBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use W3com\BoomBundle\Service\BoomGenerator;
 use W3com\BoomBundle\Service\BoomManager;
 
 class UpdateProjectEntityController extends AbstractController
 {
-    private $boom;
+    /**
+     * @var BoomGenerator
+     */
+    private $generator;
 
-    public function __construct(BoomManager $boom)
+    public function __construct(BoomGenerator $generator)
     {
-        $this->boom = $boom;
+        $this->generator = $generator;
     }
 
     /**
-     * @param $filename
      * @return Response
      * @throws \Exception
      */
-    public function updateView($filename)
+    public function updateView()
     {
-        $createdEntities = $this->boom->getGenerator()->createViewSchema();
-        $updatedEntities = $this->boom->getGenerator()->updateViewSchema();
-        return $this->render('@W3comHulk/display/update.html.twig',
+        $createdEntities = $this->generator->createViewSchema();
+        $updatedEntities = $this->generator->updateViewSchema();
+        return new JsonResponse(
             [
                 'updatedEntities' => $updatedEntities,
-                'createdEntities' => $createdEntities,
-                'filename' => $filename
+                'createdEntities' => $createdEntities
             ]);
     }
 }

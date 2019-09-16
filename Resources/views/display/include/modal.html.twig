@@ -1,4 +1,4 @@
-{% for globalAction in table.globalActions if globalAction.type == 'update-sap'
+{% for globalAction in display.globalActions if globalAction.type == 'update-sap'
     or globalAction.type == 'api-request' %}
 
     {% if globalAction.type == 'update-sap' %}

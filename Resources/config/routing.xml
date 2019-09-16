@@ -4,10 +4,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
     <route id="w3com_display" path="/display/{filename}" methods="GET POST">
-        <default key="_controller">w3com_hulk.controller.display_controller::displayProd</default>
-    </route>
-    <route id="w3com_display_admin" path="/dev/display/{filename}" methods="GET">
-        <default key="_controller">w3com_hulk.controller.display_controller::displayDev</default>
+        <default key="_controller">w3com_hulk.controller.display_controller::display</default>
     </route>
     <route id="w3com_save_filters" path="/save-filters" methods="POST">
         <default key="_controller">w3com_hulk.controller.filter_controller::saveFilters</default>
@@ -15,7 +12,7 @@
     <route id="w3com_search_view" path="/search-view" methods="POST">
         <default key="_controller">w3com_hulk.controller.search_view_controller::searchView</default>
     </route>
-    <route id="w3com_update_project_entity" path="/update-view/{filename}" methods="GET">
+    <route id="w3com_update_project_entity" path="/update-view" methods="GET">
         <default key="_controller">w3com_hulk.controller.update_project_entity_controller::updateView</default>
     </route>
     <route id="w3com_update_sap" path="/update-entity" methods="POST">

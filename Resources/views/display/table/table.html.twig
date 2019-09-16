@@ -1,7 +1,7 @@
 <table class="table" id="dataTable">
     <thead>
     <tr role="row">
-        {% for column in table.columns if column.active == 'Y' and column.hidden is null %}
+        {% for column in display.columns if column.active == 'Y' and column.hidden is null %}
             {% if column.type == 'checkbox' %}
                 <th>
                     <label class="checkbox-label-header" id="headerCheckbox">

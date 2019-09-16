@@ -15,7 +15,7 @@ class ColumnManagerTest extends TestCase
     public function testReturnActiveColumnWhenRelatedDataExist()
     {
         $columnManager = new ColumnManager();
-        $dataTable = new Display();
+        $display = new Display();
         $col = new Column();
         $data = [];
         $boomObj = new AbstractEntity();
@@ -24,11 +24,10 @@ class ColumnManagerTest extends TestCase
         $boomObj->set('field', 'value');
         $data[] = $boomObj;
         $col->setFieldName('field');
-        $dataTable->addColumn($col);
-        $dataTable->setData($data);
-        $newDataTable = $columnManager->initColumns($dataTable);
-        dump($newDataTable);
-        $this->assertEquals('Y', $newDataTable->getColumns()[0]->getActive());
+        $display->addColumn($col);
+        $display->setData($data);
+        $newDisplay = $columnManager->initColumns($display);
+        $this->assertEquals('Y', $newDisplay->getColumns()[0]->getActive());
     }
 
     public function testReturnUnActiveColumnWhenRelatedDataDoesNotExist()

@@ -1,12 +1,17 @@
-{% if table.error.nonexistentProperties is not null  %}
+<div class="alert alert-danger">
+    <i class="fas fa-exclamation-triangle mr-3"></i>
+    Des erreurs de configuration empêchent l'affichage du module.
+</div>
+{#
+{% if display.error.nonexistentProperties is not null  %}
 <div class="alert alert-danger">
     <i class="fas fa-exclamation-triangle mr-2"></i>
-    {{ table.error.nonexistentProperties }} champ(s) renseigné(s) dans le
+    {{ display.error.nonexistentProperties }} champ(s) renseigné(s) dans le
     fichier json
 </div>
 {% endif %}
 
-{% if table.error.isFileIsBroken  %}
+{% if display.error.isFileIsBroken  %}
 <div class="alert alert-danger">
     <i class="fas fa-exclamation-triangle mr-2"></i>
     Impossible de lire le fichier JSON. Il semblerait qu'il y ai
@@ -33,4 +38,4 @@
         <i class="fas fa-exclamation-triangle mr-2"></i>
         URL : {{ urlError }}
     </div>
-{% endfor %}
+{% endfor %}#}

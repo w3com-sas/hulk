@@ -1,4 +1,4 @@
-{% for globalAction in table.globalActions
+{% for globalAction in display.globalActions
     if globalAction.type == 'update-sap' or globalAction.type == 'api-request' %}
 
 {% if globalAction.type == 'update-sap' %}
@@ -71,11 +71,11 @@ $('{{ btnFormId }}').click(function () {
 {% endfor %}
 
 
-{% for globalAction in table.globalActions if globalAction.type == 'export-csv' %}
+{% for globalAction in display.globalActions if globalAction.type == 'export-csv' %}
 $('#{{ globalAction.type }}').click(function () {
     var data = table.rows('.selected').data().toArray();
     var jsonData = Object.assign({}, data);
-    var filename = '{{ table.filename }}' + '.csv';
+    var filename = '{{ display.filename }}' + '.csv';
 
     xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
@@ -92,7 +92,7 @@ $('#{{ globalAction.type }}').click(function () {
         }
     };
     // Post data to URL which handles post request
-    xhttp.open("POST", '{{ path('w3com_export_csv', {filename : table.filename }) }}');
+    xhttp.open("POST", '{{ path('w3com_export_csv', {filename : display.filename }) }}');
     xhttp.setRequestHeader("Content-Type", "application/json");
     xhttp.setRequestHeader("accept", "application/json");
     // You should set responseType as blob for binary responses
@@ -102,7 +102,7 @@ $('#{{ globalAction.type }}').click(function () {
 });
 {% endfor %}
 
-{% for globalAction in table.globalActions if globalAction.type == 'call-function' %}
+{% for globalAction in display.globalActions if globalAction.type == 'call-function' %}
 $('#{{ globalAction.type~globalAction.index }}').click(function () {
     var data = table.rows('.selected').data();
     {% if globalAction.config.name is defined %}

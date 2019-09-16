@@ -166,6 +166,11 @@ class Error
         return count($this->columnErrors) > 0;
     }
 
+    public function hasErrorFilter()
+    {
+        return count($this->filterErrors) > 0;
+    }
+
     /**
      * @return array
      */

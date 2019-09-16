@@ -71,7 +71,7 @@ $(document).ready(function () {
     $.fn.dataTable.moment( 'DD/MM/YYYY');
 
     var data = [
-        {% for object in table.data %}
+        {% for object in display.data %}
 
         {
             {% for col, value in object %}
@@ -96,7 +96,7 @@ $(document).ready(function () {
                 emptyTable: "Aucune donnée disponible dans le tableau"
             },
             dom: 'tp',
-            pageLength: {{ table.pageLength }},
+            pageLength: {{ display.pageLength }},
             fnDrawCallback: function (settings) {
                 $('a').parent('td').addClass('text-center');
                 $('button').parent('td').addClass('text-center');
@@ -107,7 +107,7 @@ $(document).ready(function () {
 
 
 
-                {% for column in table.columns if column.active == 'Y' %}
+                {% for column in display.columns if column.active == 'Y' %}
 
                 {% if column.type == 'text' or column.hidden %}
 
@@ -245,7 +245,7 @@ $(document).ready(function () {
             order: [],
             columnDefs:
                 [
-                    {% for column in table.columns %}
+                    {% for column in display.columns %}
 
                     {% if column.type == 'checkbox' %}
                     {

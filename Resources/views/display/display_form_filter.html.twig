@@ -6,5 +6,9 @@
         {% set menu = knp_menu_get('main', [], {'displayName' : 'Formulaire '~display.entity, 'menuName' : display.menuName }) %}
         {{ knp_menu_render(menu, {'template' : '@W3comHulk/display/include/menu.html.twig'}) }}
     </div>
-    {{ form(form) }}
+    {% if display.hasCriticalError %}
+        {% include '@W3comHulk/display/error/critical_error.html.twig' %}
+    {% else %}
+        {{ form(form) }}
+    {% endif %}
 {% endblock %}

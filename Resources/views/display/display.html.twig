@@ -1,48 +1,34 @@
 {% block hulk_menu %}
-<div class="collapse" id="hulkNav">
-    {% set menu = knp_menu_get('main', [], {'displayName' : table.displayName, 'menuName' : table.menuName }) %}
-    {{ knp_menu_render(menu, {'template' : '@W3comHulk/display/include/menu.html.twig'}) }}
-</div>
+    <div class="collapse" id="hulkNav">
+        {% set menu = knp_menu_get('main', [], {'displayName' : display.displayName, 'menuName' : display.menuName }) %}
+        {{ knp_menu_render(menu, {'template' : '@W3comHulk/display/include/menu.html.twig'}) }}
+    </div>
 {% endblock %}
 
-{% if debug is defined %}
-    {% include '@W3comHulk/display/error/global_errors.html.twig' %}
+{% block hulk_header %}
+    {% include '@W3comHulk/display/include/header.html.twig' %}
+{% endblock %}
+{% if display.data|length == display.maxLength %}
+    <div class="alert alert-warning m-3" role="alert">
+        <i class="fal fa-info-circle mr-2"></i>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        Les {{ table.maxLength }} premiers résultats sont affichés, des résultats ont peut-être été omis.
+    </div>
 {% endif %}
 
+{# Html table #}
+{% block hulk_table %}
+    {% include '@W3comHulk/display/table/table.html.twig' %}
+{% endblock %}
 
+{# CellAction template #}
+{% include '@W3comHulk/display/action/cell_action.html.twig' %}
 
-{% if table.error.fileExist %}
+{% include '@W3comHulk/display/include/modal.html.twig' %}
 
-    {% block hulk_header %}
-        {% include '@W3comHulk/display/include/header.html.twig' %}
-    {% endblock %}
+{% include '@W3comHulk/display/include/template.html.twig' %}
 
-    {% if table.data|length == table.maxLength %}
-        <div class="alert alert-warning m-3" role="alert">
-            <i class="fal fa-info-circle mr-2"></i>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            Les {{ table.maxLength }} premiers résultats sont affichés, des résultats ont peut-être été omis.
-        </div>
-    {% endif %}
-
-    {# Html table #}
-    {% block hulk_table %}
-        {% include '@W3comHulk/display/table/table.html.twig' %}
-    {% endblock %}
-
-    {# CellAction template #}
-    {% include '@W3comHulk/display/action/cell_action.html.twig' %}
-
-{% else %}
-
-    {% include '@W3comHulk/display/error/missing_file.html.twig' %}
-
-{% endif %}
-
-    {% include '@W3comHulk/display/include/modal.html.twig' %}
-
-    {% include '@W3comHulk/display/include/template.html.twig' %}
 
 

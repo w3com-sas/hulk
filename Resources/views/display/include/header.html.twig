@@ -1,15 +1,15 @@
 <div class="d-flex p-3">
-    {% if table.globalActions is not empty %}
+    {% if display.globalActions is not empty %}
         <a class="text-gray my-auto" data-toggle="collapse" href="#globalActions">
             <i class="far fa-hand-paper mr-2"></i>
             Actions
         </a>
     {% endif %}
 
-    {% if table.filters is not null %}
+    {% if display.filters is not null %}
         <a class="text-gray ml-3 my-auto" data-toggle="collapse" href="#filters" id="countFilters">
             <i class="fas fa-filter mr-2"></i>
-            Filtres ({{ table.savedFilters }})
+            Filtres ({{ display.savedFilters }})
         </a>
     {% endif %}
 
@@ -17,7 +17,7 @@
         <i class="fas fa-sync mr-2"></i>
         Actualiser
     </a>
-    {% if table.menuConfig is defined and table.menuConfig != "without-breadcrumb" %}
+    {% if display.menuConfig is defined and display.menuConfig != "without-breadcrumb" %}
         <a class="text-gray my-auto ml-3" data-toggle="collapse" href="#hulkNav">
             <i class="fas fa-bars mr-2"></i>
             Menu

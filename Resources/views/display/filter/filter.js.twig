@@ -26,7 +26,7 @@ $('.multiple-filter').on('keyup change', function () {
     countSelectedRows(table.rows('.selected').data());
 });
 
-{% for filter in table.filters if filter.defaultValue != null and filter.defaultValue != ""
+{% for filter in display.filters if filter.defaultValue != null and filter.defaultValue != ""
  and filter.defaultValue is not iterable %}
 {% if filter.type == 'single' %}
 table

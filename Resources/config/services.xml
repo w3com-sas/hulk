@@ -7,6 +7,7 @@
                  class="W3com\HulkBundle\Service\DisplayProvider" public="true">
             <argument>%hulk.config%</argument>
             <argument type="service" id="W3com\BoomBundle\Service\BoomManager"/>
+            <argument type="service" id="W3com\BoomBundle\Service\BoomGenerator"/>
             <argument type="service" id="router"/>
             <argument type="service" id="w3com_hulk.filter.filter_session_manager"/>
         </service>
@@ -18,6 +19,7 @@
         <service id="w3com_hulk.service.display_form_provider"
                  class="W3com\HulkBundle\Service\DisplayFormProvider" public="true">
             <argument type="service" id="W3com\BoomBundle\Service\BoomManager"/>
+            <argument type="service" id="W3com\BoomBundle\Service\BoomGenerator"/>
             <argument>%hulk.config%</argument>
         </service>
 

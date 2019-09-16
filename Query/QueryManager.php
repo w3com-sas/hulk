@@ -6,6 +6,7 @@ use Doctrine\Common\Annotations\AnnotationException;
 use ReflectionException;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use W3com\BoomBundle\Parameters\Clause;
+use W3com\BoomBundle\Service\BoomGenerator;
 use W3com\HulkBundle\Controller\DisplayFormController;
 use W3com\HulkBundle\Finder\ModelFinder;
 use W3com\HulkBundle\Model\CellAction;
@@ -38,57 +39,61 @@ class QueryManager
     private $appEntity;
 
     /**
+     * @var BoomGenerator
+     */
+    private $generator;
+
+    /**
      * QueryManager constructor.
      * @param ModelFinder $finder
      * @param BoomManager $boom
-     * @param Display $dataTable
+     * @param BoomGenerator $generator
      */
-    public function __construct(ModelFinder $finder, BoomManager $boom, Display $dataTable)
+    public function __construct(ModelFinder $finder, BoomManager $boom, BoomGenerator $generator)
     {
         $this->modelFinder = $finder;
         $this->boom = $boom;
+        $this->generator = $generator;
     }
 
     /**
-     * @param Display $dataTable
+     * @param Display $display
      * @param array $requestParams
      * @param bool $dataFilter
      * @return array
      * @throws AnnotationException
      * @throws ReflectionException
      */
-    public function createDataTableQuery(Display $dataTable, $requestParams = [])
+    public function createDataTableQuery(Display $display, $requestParams = [])
     {
 
-        $this->appEntity = $this->boom->getGenerator()->getAppInspector()
-            ->getProjectEntity($dataTable->getCalcView());
-
-        $this->modelFinder->setDataTableEntity($dataTable);
-        $dataTable->getError()->setClassExist(true);
+        $this->appEntity = $this->generator->getAppInspector()
+            ->getProjectEntity($display->getCalcView());
+        $this->modelFinder->setDataTableEntity($display);
+        $display->getError()->setClassExist(true);
 
         try {
-            $repo = $this->boom->getRepository($dataTable->getEntity());
+            $repo = $this->boom->getRepository($display->getEntity());
         } catch (EntityNotFoundException $e) {
-            $dataTable->getError()->setClassExist(false);
+            $display->getError()->setClassExist(false);
             return null;
         }
-
         $params = $repo->createParams();
 
         // Si formulaire alors select pour GROUP BY (Si calcview est en mode aggregate)
-        if ($dataTable->isFilter) {
-            $this->addSelectForFilters($dataTable, $params);
+        if ($display->isFilter) {
+            $this->addSelectForFilters($display, $params);
             return $repo->findAll($params);
         }
 
-        $this->addSelectForColumns($dataTable, $params);
-        $this->addSelectForFilters($dataTable, $params);
-        $this->addSelectForLink($dataTable, $params);
-        $this->addGetParamsRequest($dataTable, $requestParams, $params);
-        $this->addPreFilter($dataTable, $params);
-        $params->setTop($dataTable->getMaxLength());
-
+        $this->addSelectForColumns($display, $params);
+        $this->addSelectForFilters($display, $params);
+        $this->addSelectForLink($display, $params);
+        $this->addGetParamsRequest($display, $requestParams, $params);
+        $this->addPreFilter($display, $params);
+        $params->setTop($display->getMaxLength());
         return $repo->findAll($params);
+
     }
 
     /**
@@ -220,9 +225,7 @@ class QueryManager
     private function addGetParamsRequest(Display $dataTable, $getRequestParams, Parameters $parameters)
     {
 
-        $odsEntity = $this->boom->getGenerator()->getOdsInspector()->getOdsEntity(
-            $dataTable->getCalcView()
-        );
+        $odsEntity = $this->generator->getOdsInspector()->getOdsEntity($dataTable->getCalcView());
 
         if ($getRequestParams instanceof ParameterBag) {
             $arrayGetParams = $getRequestParams->all();

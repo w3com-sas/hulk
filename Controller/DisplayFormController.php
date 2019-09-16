@@ -40,7 +40,6 @@ class DisplayFormController extends AbstractController
         $form = $this->createForm(DisplayFilterType::class, $display);
         $form->handleRequest($this->request->getCurrentRequest());
         if ($form->isSubmitted() && $form->isValid()) {
-
             $formData = $this->request->getCurrentRequest()->request->all();
             $routeParams = $this->urlManager->createRouteParams($formData, $display);
             return $this->redirectToRoute('w3com_display', $routeParams);

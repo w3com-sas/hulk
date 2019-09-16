@@ -31,34 +31,11 @@ class DisplayController extends AbstractController
      * @return Response
      * @throws \Exception
      */
-    public function displayDev($filename)
+    public function display($filename)
     {
-        $table = $this->displayInit($filename);
+        $display = $this->displayProvider->getDisplay($filename, $this->request->getCurrentRequest()->query);
         return $this->render('@W3comHulk/display/all.html.twig',
-            ['table' => $table, 'filename' => $filename, 'debug' => true]);
+            ['display' => $display, 'filename' => $filename]);
     }
 
-    /**
-     * @param $filename
-     * @return Response
-     * @throws \Exception
-     */
-    public function displayProd($filename)
-    {
-        $table = $this->displayInit($filename);
-        return $this->render('@W3comHulk/display/all.html.twig',
-            ['table' => $table, 'filename' => $filename]);
-    }
-
-    /**
-     * @param $filename
-     * @return RedirectResponse|Display
-     * @throws \Exception
-     */
-    private function displayInit($filename)
-    {
-        $getRequestParams = $this->request->getCurrentRequest()->query;
-        $table = $this->displayProvider->getDisplay($filename, $getRequestParams);
-        return $table;
-    }
 }

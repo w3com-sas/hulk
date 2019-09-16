@@ -2,6 +2,7 @@
 
 namespace W3com\HulkBundle\Finder;
 
+use W3com\BoomBundle\Service\BoomGenerator;
 use W3com\HulkBundle\Model\Display;
 use W3com\BoomBundle\Generator\Model\Entity;
 use W3com\BoomBundle\Service\BoomManager;
@@ -9,23 +10,20 @@ use W3com\BoomBundle\Service\BoomManager;
 class ModelFinder
 {
 
-    private $boom;
+    private $generator;
 
-    public function __construct(BoomManager $boom)
+    public function __construct(BoomGenerator $generator)
     {
-        $this->boom = $boom;
+        $this->generator = $generator;
     }
 
     /**
      * @param Display $dataTable
      * @return Display
-     * @throws \Doctrine\Common\Annotations\AnnotationException
-     * @throws \ReflectionException
      */
     public function setDataTableEntity(Display $dataTable)
     {
-        $entities = $this->boom->getGenerator()->getAppInspector()->getProjectEntities();
-
+        $entities = $this->generator->getAppInspector()->getProjectEntities();
         /** @var Entity $entity */
         foreach ($entities as $entity){
             if ($entity->getTable() === $dataTable->getCalcView()){
@@ -38,12 +36,10 @@ class ModelFinder
     /**
      * @param Display $dataTable
      * @return array|mixed
-     * @throws \Doctrine\Common\Annotations\AnnotationException
-     * @throws \ReflectionException
      */
     public function getAvailableProperties(Display $dataTable)
     {
-        $entity = $this->boom->getGenerator()->getAppInspector()->getProjectEntity($dataTable->getEntity());
+        $entity = $this->generator->getAppInspector()->getProjectEntity($dataTable->getEntity());
 
         if ($entity === null){
             $dataTable->getError()->setClassExist(false);

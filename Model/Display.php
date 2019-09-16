@@ -66,7 +66,7 @@ class Display
     /**
      * @var integer
      */
-    private $pageLength;
+    private $pageLength = 10;
 
     /**
      * @var integer
@@ -189,7 +189,7 @@ class Display
     {
         $fields = [];
 
-        if (!empty($this->columns)){
+        if (!empty($this->columns)) {
             /** @var Column $column */
             foreach ($this->columns as $column) {
 
@@ -198,22 +198,22 @@ class Display
                 foreach ($entityFields as $property) {
                     if ($property->getField() === $column->getFieldName()) {
                         $fields[$column->getFieldName()] = $property;
-                    } elseif($property->getField() === $column->getIconFieldName()) {
+                    } elseif ($property->getField() === $column->getIconFieldName()) {
                         $fields[$column->getIconFieldName()] = $property;
-                    } elseif($property->getField() === $column->getLabelFieldName()){
+                    } elseif ($property->getField() === $column->getLabelFieldName()) {
                         $fields[$column->getLabelFieldName()] = $property;
-                    } elseif ($column->getCellAction() !== null){
+                    } elseif ($column->getCellAction() !== null) {
 
-                        if (!empty($column->getCellAction()->getParams())){
-                            foreach ($column->getCellAction()->getParams() as $key => $value){
-                                if ($key === $property->getField()){
+                        if (!empty($column->getCellAction()->getParams())) {
+                            foreach ($column->getCellAction()->getParams() as $key => $value) {
+                                if ($key === $property->getField()) {
                                     $fields[$key] = $property;
                                 }
                             }
                         }
 
-                        if($column->getCellAction()->getRenderFieldName() != ''){
-                            if($column->getCellAction()->getRenderFieldName() == $property->getField()){
+                        if ($column->getCellAction()->getRenderFieldName() != '') {
+                            if ($column->getCellAction()->getRenderFieldName() == $property->getField()) {
                                 $fields[$column->getCellAction()->getRenderFieldName()] = $property;
                             }
                         }
@@ -223,7 +223,7 @@ class Display
         }
 
 
-        if (!empty($this->filters)){
+        if (!empty($this->filters)) {
             /** @var Filter $filter */
             foreach ($this->filters as $filter) {
                 foreach ($entityFields as $property) {
@@ -264,9 +264,8 @@ class Display
     public function getFilterByFieldName($fieldName)
     {
         /** @var Filter $filter */
-        foreach ($this->filters as $filter){
-
-            if ($filter->getFieldName() == $fieldName){
+        foreach ($this->filters as $filter) {
+            if ($filter->getFieldName() == $fieldName) {
                 return $filter;
             }
         }
@@ -276,9 +275,8 @@ class Display
     public function getColumnByFieldName($fieldName)
     {
         /** @var Column $column */
-        foreach ($this->filters as $column){
-
-            if ($column->getFieldName() == $fieldName){
+        foreach ($this->filters as $column) {
+            if ($column->getFieldName() == $fieldName) {
                 return $column;
             }
         }
@@ -392,6 +390,15 @@ class Display
     public function setMenuName(string $menuName): void
     {
         $this->menuName = $menuName;
+    }
+
+    public function hasCriticalError()
+    {
+        if (
+            $this->error->hasErrorColumn() || $this->error->hasErrorFilter() || $this->error->isClassExist() || $this->error->isViewExist() || $this->error->isFileIsBroken()) {
+            return false;
+        }
+        return true;
     }
 
 }

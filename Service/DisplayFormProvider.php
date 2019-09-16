@@ -3,6 +3,7 @@
 namespace W3com\HulkBundle\Service;
 
 use Doctrine\Common\Annotations\AnnotationException;
+use W3com\BoomBundle\Service\BoomGenerator;
 use W3com\BoomBundle\Service\BoomManager;
 use W3com\HulkBundle\Filter\FilterManager;
 use W3com\HulkBundle\Finder\JsonFinder;
@@ -28,12 +29,12 @@ class DisplayFormProvider
 
     private $modelFinder;
 
-    public function __construct(BoomManager $boom, $config)
+    public function __construct(BoomManager $boom, BoomGenerator $generator, $config)
     {
         $this->display = new Display();
         $this->jsonFinder = new JsonFinder($boom, $config);
-        $this->modelFinder = new ModelFinder($boom);
-        $this->queryManager = new QueryManager($this->modelFinder, $boom, $this->display);
+        $this->modelFinder = new ModelFinder($generator);
+        $this->queryManager = new QueryManager($this->modelFinder, $boom, $generator);
         $this->displayConstructor = new DataTablesConstructor($boom);
         $this->filterManager = new FilterManager();
         $this->dataTransformer = new DataTransformer($this->modelFinder);
