@@ -42,12 +42,6 @@ function countSelectedRows(rows) {
     node.style.display = 'block';
 }
 
-function disableSubmitButton(obj) {
-    $(obj).attr('disabled', true);
-    $(obj).html('<i class="fas fa-spinner fa-spin"></i>');
-}
-
-
 function formatDataToUpdate(data) {
     var obj = {};
 
