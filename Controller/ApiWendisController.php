@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use W3com\HulkBundle\Service\ApiManager;
 
-class ApiRequestController extends AbstractController
+class ApiWendisController extends AbstractController
 {
 
     private $request;

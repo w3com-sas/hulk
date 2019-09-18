@@ -1,11 +1,18 @@
 {% extends '@W3comHulk/display/base.html.twig' %}
 
 {% block content %}
-    {% if display.criticalError %}
-        {% include '@W3comHulk/display/error/critical_error.html.twig' %}
-    {% else %}
-        {% include '@W3comHulk/display/display.html.twig' %}
-    {% endif %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                {% if display.criticalError %}
+                    {% include '@W3comHulk/display/error/critical_error.html.twig' %}
+                {% else %}
+                    {% include '@W3comHulk/display/display.html.twig' %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
 
 {% block javascripts %}

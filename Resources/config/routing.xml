@@ -33,4 +33,10 @@
     <route id="w3com_app_module" path="/app/{fileApp}/{screenName}" methods="GET POST">
         <default key="_controller">w3com_hulk.controller.app_controller::runApp</default>
     </route>
+    <route id="w3com_admin_login" path="/hulk-login" methods="GET POST">
+        <default key="_controller">w3com_hulk.controller.admin_controller::login</default>
+    </route>
+    <route id="w3com_admin_dashboard" path="/admin/dashboard" methods="GET">
+        <default key="_controller">w3com_hulk.controller.admin_controller::dashboard</default>
+    </route>
 </routes>

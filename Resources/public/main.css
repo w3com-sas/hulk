@@ -422,3 +422,11 @@ table th:nth-last-child(1) {
     -o-transition: all 0.3s ease-out;
 }
 
+.border-bottom-white {
+    border-bottom: 1px solid white;
+}
+
+.h-100-vh {
+    height: 100vh;
+}
+

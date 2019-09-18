@@ -84,7 +84,7 @@ class DataTransformer
     }
 
 
-    private function transformDateFormat($value)
+    public function transformDateFormat($value)
     {
         $dateTime = \DateTime::createFromFormat('Y-m-d H:i:s',
             str_replace('T', ' ', $value));

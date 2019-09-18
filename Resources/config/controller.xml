@@ -55,6 +55,7 @@
         <service id="w3com_hulk.controller.update_project_entity_controller"
                  class="W3com\HulkBundle\Controller\UpdateProjectEntityController" public="true">
             <argument type="service" id="W3com\BoomBundle\Service\BoomGenerator"/>
+            <argument type="service" id="cache.security_expression_language"/>
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>
@@ -69,7 +70,7 @@
             </call>
         </service>
         <service id="w3com_hulk.controller.api_request_controller"
-                 class="W3com\HulkBundle\Controller\ApiRequestController" public="true">
+                 class="W3com\HulkBundle\Controller\ApiWendisController" public="true">
             <argument type="service" id="request_stack"/>
             <argument type="service" id="monolog.logger"/>
             <call method="setContainer">
@@ -80,6 +81,13 @@
                  class="W3com\HulkBundle\Controller\ExportCsvController" public="true">
             <argument type="service" id="request_stack"/>
             <argument type="service" id="w3com_hulk.service.csv_manager"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        <service id="w3com_hulk.controller.admin_controller"
+                 class="W3com\HulkBundle\Controller\AdminController" public="true">
+            <argument type="service" id="security.authentication_utils"/>
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>

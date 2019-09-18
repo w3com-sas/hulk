@@ -80,7 +80,6 @@ class ApiManager
                 $response = ['valid' => false, 'data' => $data];
             }
 
-
             if ($response['valid']) {
                 $responses['success'][] = 'Réussie pour : '.implode(',', $dataLine['apiParams']['data']);
             } else {

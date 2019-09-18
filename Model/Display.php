@@ -142,11 +142,19 @@ class Display
     }
 
     /**
-     * @return mixed
+     * @return array
      */
-    public function getData()
+    public function getData():array
     {
         return $this->data;
+    }
+
+    public function getFirstLineData()
+    {
+        if (count($this->data) > 0){
+            return $this->data[0];
+        }
+        return [];
     }
 
     public function setCalcView($calcView)
