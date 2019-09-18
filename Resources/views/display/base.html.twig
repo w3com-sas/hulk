@@ -20,8 +20,13 @@
     {% block header %}
     {% endblock %}
 
-    {% block content %}
-    {% endblock %}
+<div class="container-fluid">
+    <div class="col">
+        {% block content %}
+        {% endblock %}
+    </div>
+</div>
+
 
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"
