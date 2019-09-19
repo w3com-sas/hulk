@@ -7,13 +7,29 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use W3com\BoomBundle\Service\BoomGenerator;
+use W3com\HulkBundle\Service\DisplayProvider;
 
 class AdminController extends AbstractController
 {
+    /**
+     * @var AuthenticationUtils
+     */
     private $authenticationUtils;
+    /**
+     * @var BoomGenerator
+     */
+    private $generator;
+    /**
+     * @var DisplayProvider
+     */
+    private $displayProvider;
 
-    public function __construct(AuthenticationUtils $authenticationUtils)
+    public function __construct(AuthenticationUtils $authenticationUtils, BoomGenerator $generator,
+                                DisplayProvider $displayProvider)
     {
+        $this->displayProvider = $displayProvider;
+        $this->generator = $generator;
         $this->authenticationUtils = $authenticationUtils;
     }
 
@@ -27,10 +43,17 @@ class AdminController extends AbstractController
         ]);
     }
 
-    public function dashboard()
+    public function calculationView()
     {
         $this->checkUser();
-        return $this->render('@W3comHulk/admin/admin.html.twig');
+        $this->generator->getAppInspector()->initProjectEntities();
+        $entities = $this->generator->getAppInspector()->getProjectEntities();
+        return $this->render('@W3comHulk/admin/admin.html.twig', ['entities' => $entities]);
+    }
+
+    public function displays()
+    {
+        $this->displayProvider->getDisplays();
     }
 
     private function checkUser()

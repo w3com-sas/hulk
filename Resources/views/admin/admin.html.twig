@@ -3,20 +3,21 @@
 {% block content %}
     <div class="container-fluid">
         <div class="row">
-            <div class="col-3 bg-primary h-100-vh">
+            <div class="col-3 h-100-vh bg-primary" style="position: fixed;">
                 <div class="flex-column text-white text-center p-2 border-bottom-white mb-4">
                     <i class="fas fa-user"></i>
                     <p class="mb-1">{{ app.user.username }}</p>
                 </div>
                 <div class="nav flex-column text-white">
                     <div class="nav-item">
-                        <a>
+                        <a href="{{ path('w3com_admin_calculation_views') }}" class="text-white">
                             <i class="fas fa-database mr-3"></i>
                             CalculationView
                         </a>
                     </div>
+                    {#
                     <div class="mt-3">
-                        <a>
+                        <a class="text-white" href="{{ path('w3com_admin_displays') }}">
                             <i class="fas fa-table mr-3"></i>
                             Display
                         </a>
@@ -26,12 +27,136 @@
                             <i class="fas fa-search mr-3"></i>
                             Formulaire
                         </a>
+                    </div>#}
+                    <div class="mt-3">
+                        <a href="{{ path('w3com_admin_logout') }}" class="text-white">
+                            <i class="fas fa-power-off mr-3"></i>
+                            Déconnexion
+                        </a>
                     </div>
                 </div>
             </div>
-            <div class="col-9">
+            <div class="col-9 ml-auto">
+                <h4 class="text-primary mt-3">Calculation Views ({{ entities|length }})</h4>
+                <div class="alert alert-info">
+                    <i class="fa fa-info mr-3"></i>
+                    Ci-dessous vous retrouverez les calculation views disponibles dans l'application.
+                </div>
+                <button class="btn btn-primary btn-block" onclick="updateProjectEntities(this)">
+                    <i class="fas fa-download mr-3"></i>
+                    Mettre à jour
+                </button>
 
+
+
+
+                <div class="py-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="#searchBar">
+                                <i class="fas fa-search"></i>
+                            </label>
+                        </div>
+                        <input type="text" class="form-control" id="searchBar">
+                    </div>
+                    <table class="table table-sm" id="calculationViewTable">
+                        <thead>
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col">Nom</th>
+                            <th scope="col">Clé primaire</th>
+                            <th scope="col">Nombre de champs</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+
+                </div>
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        function updateProjectEntities(obj) {
+            $(obj).html('<i class="fas fa-spinner fa-spin"></i>');
+
+            $.get({
+                url: '{{ path('w3com_update_project_entity') }}',
+                success: function () {
+                    window.location.reload();
+                }
+            })
+        }
+
+        function format(d) {
+            var tpl = '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
+            for (i = 0; i < d.length; i++){
+                tpl += '<tr><td>'+ d[i].name +'</td></tr>';
+            }
+            tpl += '</table>';
+            return tpl;
+        }
+
+        var data = [
+            {% for entity in entities %}
+
+            {
+                'table': '{{ entity.table }}',
+                'key': '{{ entity.key }}',
+                'propertiesLength': '{{ entity.properties|length }}',
+                'properties': [
+                    {% for property in entity.properties %}
+                    {'name': '{{ property.field }}'},
+                    {% endfor %}
+                ]
+            },
+            {% endfor %}
+        ];
+
+        var table = $('#calculationViewTable').DataTable({
+            language: {
+                search: "Rechercher&nbsp;:",
+                zeroRecords: "Aucun &eacute;l&eacute;ment &agrave; afficher",
+                emptyTable: "Aucune donnée disponible dans le tableau"
+            },
+            dom: 'tp',
+            "data": data,
+            "columns": [
+                {
+                    "className": 'details-control',
+                    "orderable": false,
+                    "data": null,
+                    "defaultContent": '<i class="fa fa-plus-circle text-success btn p-1">'
+                },
+                {"data": "table"},
+                {"data": "key"},
+                {"data": "propertiesLength"}
+            ]
+        });
+
+        $('#calculationViewTable tbody').on('click', 'td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+            if (row.child.isShown()) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+            } else {
+                // Open this row
+                row.child(format(row.data().properties)).show();
+                tr.addClass('shown');
+            }
+        });
+        $('#calculationViewTable_filter').addClass('d-flex');
+        $('#searchBar').on('keyup change', function () {
+            table.rows().deselect();
+            table
+                .search(this.value)
+                .draw();
+        });
+
+    </script>
 {% endblock %}

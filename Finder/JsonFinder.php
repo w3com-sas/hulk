@@ -8,6 +8,8 @@ use W3com\HulkBundle\Util\JsonInspector;
 
 class JsonFinder
 {
+    const UNWANTED_FILES = ['.', '..'];
+
     private $boom;
 
     private $config;
@@ -59,5 +61,18 @@ class JsonFinder
             return null;
         }
         return $file;
+    }
+
+    public function getAllJson()
+    {
+        $filenames = scandir($this->baseUri . $this->jsonUri, 1, $this->createContext());
+        $files = [];
+        foreach ($filenames as $filename){
+            if (!in_array($filename, $this::UNWANTED_FILES)){
+                $file = file_get_contents($this->baseUri . $this->jsonUri . $filename . '.json', false, $this->createContext());
+                $files[] = $file;
+            }
+        }
+        return $files;
     }
 }

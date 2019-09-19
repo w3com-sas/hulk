@@ -31,9 +31,6 @@ a:hover {
 tbody {
     background: #fff;
     color: #000;
-    -webkit-box-shadow: 0 0 8px -1px rgba(0,0,0,0.75);
-    -moz-box-shadow: 0 0 8px -1px rgba(0,0,0,0.75);
-    box-shadow: 0 0 8px -1px rgba(0,0,0,0.75);
 }
 
 table.dataTable td, table.dataTable th {

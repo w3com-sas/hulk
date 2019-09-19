@@ -137,6 +137,12 @@ class DisplayProvider
         return $this->display;
     }
 
+    public function getDisplays()
+    {
+        $files = $this->jsonFinder->getAllJson();
+        dump($files);
+    }
+
     /**
      * @return JsonFinder
      */

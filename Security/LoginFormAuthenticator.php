@@ -184,6 +184,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
-        return new RedirectResponse($this->router->generate('w3com_admin_dashboard'));
+        return new RedirectResponse($this->router->generate('w3com_admin_calculation_views'));
     }
 }

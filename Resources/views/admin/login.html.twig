@@ -1,19 +1,24 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-    {% if error %}
-        <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
-
-    <form action="{{ path('w3com_admin_login') }}" method="post">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="_username" value="{{ last_username }}"/>
-
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="_password"/>
-
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-
-        <button type="submit">login</button>
-    </form>
+    <div class="container">
+        <div class="row">
+            <div class="col-6 mx-auto d-flex flex-column">
+                <h3 class="text-primary my-4">Hana Utils Kit</h3>
+                {% if error %}
+                    <div class="alert alert-danger">
+                        {{ error.messageKey|trans(error.messageData, 'security') }}
+                    </div>
+                {% endif %}
+                <form action="{{ path('w3com_admin_login') }}" method="post" class="d-flex flex-column">
+                    <label for="username" class="text-gray">Username</label>
+                    <input type="text" id="username" name="_username" value="{{ last_username }}"/>
+                    <label for="password" class="text-gray mt-2">Password</label>
+                    <input type="password" id="password" name="_password"/>
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                    <button type="submit" class="btn btn-block btn-primary mt-2">login</button>
+                </form>
+            </div>
+        </div>
+    </div>
 {% endblock %}
