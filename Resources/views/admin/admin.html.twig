@@ -3,7 +3,7 @@
 {% block content %}
     <div class="container-fluid">
         <div class="row">
-            <div class="col-3 h-100-vh bg-primary" style="position: fixed;">
+            <div class="col-3 nav-admin-hulk">
                 <div class="flex-column text-white text-center p-2 border-bottom-white mb-4">
                     <i class="fas fa-user"></i>
                     <p class="mb-1">{{ app.user.username }}</p>
@@ -29,7 +29,7 @@
                         </a>
                     </div>#}
                     <div class="mt-3">
-                        <a href="{{ path('w3com_admin_logout') }}" class="text-white">
+                        <a href="{{ path('w3com_admin_logout') }}" class="title-admin-hulk">
                             <i class="fas fa-power-off mr-3"></i>
                             Déconnexion
                         </a>
@@ -124,7 +124,7 @@
                     "className": 'details-control',
                     "orderable": false,
                     "data": null,
-                    "defaultContent": '<i class="fa fa-plus-circle text-success btn p-1">'
+                    "defaultContent": '<i class="fa fa-plus-circle text-success">'
                 },
                 {"data": "table"},
                 {"data": "key"},
