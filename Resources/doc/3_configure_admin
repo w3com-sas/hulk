@@ -1,0 +1,26 @@
+Add users in_memory, add hulk guard in main firewall and logout path
+
+
+
+.. code:: yaml 
+
+security:
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+
+    encoders:
+        Symfony\Component\Security\Core\User\User: plaintext
+
+    providers:
+        in_memory: { memory: { users: {Corentin: {password: 123, roles: 'ROLE_ADMIN_HULK'}} }}
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            anonymous: true
+            logout:
+                path: w3com_admin_logout
+                target: w3com_admin_login
+            guard:
+                authenticator: w3com_hulk.security.login_form_authenticator
