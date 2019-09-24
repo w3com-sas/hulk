@@ -83,6 +83,9 @@ class UrlManager
                     if (isset($url)) {
                         $lines[$column->getCellAction()->getFunctionName() . $column->getCellAction()->getTargetEntity()]
                             = $url;
+                    } else {
+                        $lines[$column->getCellAction()->getFunctionName() . $column->getCellAction()->getTargetEntity()]
+                            = null;
                     }
                 }
             }
