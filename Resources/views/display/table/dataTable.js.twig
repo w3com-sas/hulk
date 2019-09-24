@@ -157,6 +157,10 @@ $(document).ready(function () {
                         "{{ column.cellAction.functionName }}{{ column.cellAction.targetEntity }}",
                     render:
                         function (data, type, row) {
+                            if (data == '') {
+                                return null;
+                            }
+
                             var idTpl = '#' + '{{ column.cellAction.functionName }}{{ column.cellAction.targetEntity }}';
                             var tpl = $(idTpl).html();
                             return tpl.replace('[[data]]', data);
@@ -200,6 +204,7 @@ $(document).ready(function () {
                     data: null,
                     render: function (data, type, row) {
                         var iconRenderer = '';
+
                         if (row.hasOwnProperty('{{ column.iconFieldName }}') && (row.{{ column.iconFieldName }} != '')) {
                             var tplIcon = $('#icon').html();
                             var prefixIcon = '';
