@@ -42,11 +42,6 @@ class DisplayProvider
     private $modelFinder;
 
     /**
-     * @var Display
-     */
-    private $display;
-
-    /**
      * @var array
      */
     private $config;
@@ -92,7 +87,6 @@ class DisplayProvider
     public function __construct($config, BoomManager $boom, BoomGenerator $generator, UrlGeneratorInterface $router, FilterSessionManager $filterSessionManager)
     {
         $this->filterSessionManager = $filterSessionManager;
-        $this->display = new Display();
         $this->config = $config;
         $this->constructor = new DataTablesConstructor($boom);
         $this->indexor = new Indexor();
@@ -108,40 +102,37 @@ class DisplayProvider
     /**
      * @param $filename
      * @param array $getRequestParams
+     * @param null $maxResults
      * @return Display
      * @throws AnnotationException
      * @throws \ReflectionException
      */
-    public function getDisplay($filename, $getRequestParams = [])
+    public function getDisplay($filename, $getRequestParams = [], $maxResults = null)
     {
-        $this->display->setFilename($filename);
-        $this->constructor->hydrateDataTable($this->jsonFinder->getOnlineJson($filename, $this->display), $this->display);
+        $display = new Display();
+        $display->setFilename($filename);
+        $this->constructor->hydrateDataTable($this->jsonFinder->getOnlineJson($filename, $display), $display);
 
-        if ($this->display->getError()->isFileExist()) {
+        if ($display->getError()->isFileExist()) {
 
-            $data = $this->queryManager->createDataTableQuery($this->display, $getRequestParams);
+            $data = $this->queryManager->createDataTableQuery($display, $getRequestParams, $maxResults);
 
-            if ($this->display->getError()->isClassExist()) {
+            if ($display->getError()->isClassExist()) {
 
-                $this->dataTransformer->addData($this->display, $data);
+                $this->dataTransformer->addData($display, $data);
 
-                $this->columnManager->initColumns($this->display);
+                $this->columnManager->initColumns($display);
 
-                $this->filterManager->initFilters($this->display);
+                $this->filterManager->initFilters($display);
 
-                $this->filterSessionManager->checkFiltersDefaultValue($this->display);
+                $this->filterSessionManager->checkFiltersDefaultValue($display);
 
-                $this->indexor->addIndex($this->display);
+                $this->indexor->addIndex($display);
             }
         }
-        return $this->display;
+        return $display;
     }
 
-    public function getDisplays()
-    {
-        $files = $this->jsonFinder->getAllJson();
-        dump($files);
-    }
 
     /**
      * @return JsonFinder

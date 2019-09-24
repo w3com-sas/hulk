@@ -23,7 +23,7 @@ class ModelFinder
      */
     public function setDataTableEntity(Display $dataTable)
     {
-        $entities = $this->generator->getAppInspector()->getProjectEntities();
+        $entities = $this->generator->getAppInspector()->getEntities();
         /** @var Entity $entity */
         foreach ($entities as $entity){
             if ($entity->getTable() === $dataTable->getCalcView()){
@@ -36,10 +36,11 @@ class ModelFinder
     /**
      * @param Display $dataTable
      * @return array|mixed
+     * @throws \ReflectionException
      */
     public function getAvailableProperties(Display $dataTable)
     {
-        $entity = $this->generator->getAppInspector()->getProjectEntity($dataTable->getEntity());
+        $entity = $this->generator->getAppInspector()->getEntity($dataTable->getEntity());
 
         if ($entity === null){
             $dataTable->getError()->setClassExist(false);

@@ -7,10 +7,12 @@ use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use W3com\BoomBundle\Service\BoomGenerator;
-use W3com\BoomBundle\Service\BoomManager;
 
 class UpdateProjectEntityController extends AbstractController
 {
+    const TYPE_SAP_TABLE = 'SAP_TABLE';
+    const TYPE_CV = 'CV';
+
     /**
      * @var BoomGenerator
      */
@@ -41,5 +43,19 @@ class UpdateProjectEntityController extends AbstractController
                 'updatedEntities' => $updatedEntities,
                 'createdEntities' => $createdEntities
             ]);
+    }
+
+    public function createTable($tableName, $type)
+    {
+        try {
+            if ($type === $this::TYPE_CV){
+                $this->generator->createViewEntity($tableName);
+            } else {
+                $this->generator->createSapEntity($tableName);
+            }
+        } catch (\Exception $e){
+            return new JsonResponse(['success' => false, 'error' => $e->getMessage()]);
+        }
+        return new JsonResponse(['success' => true]);
     }
 }

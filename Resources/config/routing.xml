@@ -15,6 +15,9 @@
     <route id="w3com_update_project_entity" path="/update-view" methods="GET">
         <default key="_controller">w3com_hulk.controller.update_project_entity_controller::updateView</default>
     </route>
+    <route id="w3com_create_entity" path="/create-entity/{tableName}" methods="GET">
+        <default key="_controller">w3com_hulk.controller.update_project_entity_controller::createTable</default>
+    </route>
     <route id="w3com_update_sap" path="/update-entity" methods="POST">
         <default key="_controller">w3com_hulk.controller.update_sap_controller::updateSap</default>
     </route>
@@ -39,10 +42,13 @@
     <route id="w3com_admin_logout" path="/hulk/logout" methods="GET POST">
         <default key="_controller">w3com_hulk.controller.admin_controller::login</default>
     </route>
-    <route id="w3com_admin_calculation_views" path="/hulk/admin/calculation_views" methods="GET">
-        <default key="_controller">w3com_hulk.controller.admin_controller::calculationView</default>
+    <route id="w3com_admin_entities" path="/hulk/admin/entities" methods="GET">
+        <default key="_controller">w3com_hulk.controller.admin_controller::checkEntities</default>
     </route>
     <route id="w3com_admin_displays" path="/hulk/admin/displays" methods="GET">
         <default key="_controller">w3com_hulk.controller.admin_controller::displays</default>
+    </route>
+    <route id="w3com_admin_remove_cache" path="/hulk/admin/remove-cache" methods="GET">
+        <default key="_controller">w3com_hulk.controller.admin_controller::removeCache</default>
     </route>
 </routes>

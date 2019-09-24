@@ -81,7 +81,7 @@ class ApiManager
             }
 
             if ($response['valid']) {
-                $responses['success'][] = 'Réussie pour : '.implode(',', $dataLine['apiParams']['data']);
+                $responses['success'][] = 'Réussie pour : '.$response['message'];
             } else {
                 $responses['errors'][] = $response['error'];
             }

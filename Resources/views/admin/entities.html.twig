@@ -1,0 +1,135 @@
+{% extends '@W3comHulk/admin/base.html.twig' %}
+
+{% set active = 'entities' %}
+
+{% block page %}
+    <h4 class="title-admin-hulk mt-3">Tables utilisateurs ({{ entities|length }})</h4>
+    <div class="text-gray py-3">
+        <i class="fa fa-info mr-3"></i>
+        Ci-dessous vous retrouverez les tables utilisateurs disponibles dans l'application.
+    </div>
+    <div class="d-flex p-1">
+        <button class="btn btn-secondary" onclick="removeCache(this)"><i class="fa fa-trash mr-3"></i>Supprimer le cache</button>
+    </div>
+
+    {% include '@W3comHulk/display/filter/search_bar.html.twig' %}
+    <table class="table table-sm" id="udtTable">
+        <thead>
+        <tr>
+            <th scope="col">Liste champs</th>
+            <th scope="col">Table</th>
+            <th scope="col">Clé primaire</th>
+            <th scope="col">Nbre champs</th>
+            <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block additionnalJs %}
+    <script>
+        function createUDTEntity(obj, tableName) {
+            addLoadingIcon(obj);
+            var url = '{{ path('w3com_create_entity', {'tableName' : 'toRpTable'}) }}';
+            var formattedUrl = url.replace('toRpTable', tableName);
+            $.get({
+                url: formattedUrl,
+                success: function () {
+                    window.location.reload();
+                }
+            });
+        }
+
+        function removeCache(obj){
+            addLoadingIcon(obj);
+            $.get({
+                url: '{{ path('w3com_admin_remove_cache') }}',
+                success: function () {
+                    window.location.reload();
+                }
+            })
+        }
+
+        var data = [
+            {% for entity in toCreate %}
+            {
+                'rowId': {{ loop.index }},
+                'table': '{{ entity.table }}',
+                'status': 'toCreate',
+                'key': '{{ entity.key }}',
+                'propertiesLength': '{{ entity.properties|length }}',
+                'properties': [
+                    {% for property in entity.properties %}
+                    {'name': '{{ property.field }}'},
+                    {% endfor %}
+                ]
+            },
+            {% endfor %}
+            {% for entity in upToDate %}
+            {
+                'rowId': {{ loop.index }},
+                'table': '{{ entity.table }}',
+                'tableId': '{{ entity.table }}',
+                'status': 'upToDate',
+                'key': '{{ entity.key }}',
+                'propertiesLength': '{{ entity.properties|length }}',
+                'properties': [
+                    {% for property in entity.properties %}
+                    {'name': '{{ property.field }}'},
+                    {% endfor %}
+                ]
+            },
+            {% endfor %}
+            {% for entity in toUpdate %}
+            {
+                'rowId': {{ loop.index }},
+                'table': '{{ entity.table }}',
+                'tableId': '{{ entity.table }}',
+                'status': 'toUpdate',
+                'key': '{{ entity.key }}',
+                'propertiesLength': '{{ entity.properties|length }}',
+                'properties': [
+                    {% for property in entity.properties %}
+                    {'name': '{{ property.field }}'},
+                    {% endfor %}
+                ]
+            },
+            {% endfor %}
+        ];
+
+        var table = $('#udtTable').DataTable({
+            language: {
+                search: "Rechercher&nbsp;:",
+                zeroRecords: "Aucun &eacute;l&eacute;ment &agrave; afficher",
+                emptyTable: "Aucune donnée disponible dans le tableau"
+            },
+            dom: 'tp',
+            data: data,
+            "columns": [
+                {
+                    "className": 'details-control',
+                    "orderable": false,
+                    "data": null,
+                    "defaultContent": '<i class="fa fa-plus-circle text-success properties-plus">'
+                },
+                {"data": "table"},
+                {"data": "key"},
+                {"data": "propertiesLength"},
+                {
+                    "data": "tableId",
+                    "render": function (data, type, row) {
+                        if (row.status === 'toCreate'){
+                            return '<button onclick="createUDTEntity(this,\'' + data + '\')" class="btn p-0 text-primary"><i class="fas fa-download"></i></button>';
+                        } else if (row.status === 'toUpdate'){
+                            return '<button onclick="createUDTEntity(this,\'' + data + '\')" class="btn p-0 text-primary"><i class="fas fa-sync-alt"></i></button>';
+                        } else  {
+                            return '<i class="fas fa-check text-success"></i>';
+                        }
+                    }
+                }
+            ],
+        });
+    </script>
+{% endblock %}

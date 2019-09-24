@@ -3,12 +3,16 @@
 namespace W3com\HulkBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Cache\Adapter\AdapterInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use W3com\BoomBundle\Service\BoomGenerator;
+use W3com\BoomBundle\Generator\SLInspector;
+use W3com\BoomBundle\RestClient\OdataRestClient;
+use W3com\BoomBundle\RestClient\SLRestClient;
 use W3com\HulkBundle\Service\DisplayProvider;
+use W3com\HulkBundle\Util\EntityProvider;
 
 class AdminController extends AbstractController
 {
@@ -17,19 +21,24 @@ class AdminController extends AbstractController
      */
     private $authenticationUtils;
     /**
-     * @var BoomGenerator
+     * @var EntityProvider
      */
-    private $generator;
+    private $entityProvider;
     /**
      * @var DisplayProvider
      */
     private $displayProvider;
+    /**
+     * @var AdapterInterface
+     */
+    private $cache;
 
-    public function __construct(AuthenticationUtils $authenticationUtils, BoomGenerator $generator,
-                                DisplayProvider $displayProvider)
+    public function __construct(AuthenticationUtils $authenticationUtils, EntityProvider $provider, DisplayProvider $displayProvider,
+                                AdapterInterface $adapter)
     {
+        $this->cache = $adapter;
         $this->displayProvider = $displayProvider;
-        $this->generator = $generator;
+        $this->entityProvider = $provider;
         $this->authenticationUtils = $authenticationUtils;
     }
 
@@ -37,23 +46,39 @@ class AdminController extends AbstractController
     {
         $lastUsername = $this->authenticationUtils->getLastUsername();
         $error = $this->authenticationUtils->getLastAuthenticationError();
-        return $this->render('@W3comHulk/admin/login.html.twig',[
+        return $this->render('@W3comHulk/admin/login.html.twig', [
             'last_username' => $lastUsername,
             'error' => $error
         ]);
     }
 
-    public function calculationView()
+    public function checkEntities()
     {
         $this->checkUser();
-        $this->generator->getAppInspector()->initProjectEntities();
-        $entities = $this->generator->getAppInspector()->getProjectEntities();
-        return $this->render('@W3comHulk/admin/admin.html.twig', ['entities' => $entities]);
+        dump($this->cache->getItem(SLInspector::STORAGE_KEY));
+        $entities = $this->entityProvider->getEntities();
+
+        return $this->render('@W3comHulk/admin/entities.html.twig', $entities);
     }
 
     public function displays()
     {
-        $this->displayProvider->getDisplays();
+        $data = json_decode($this->displayProvider->getJsonFinder()->getOnlineJson('configuration'), true);
+        $displays = [];
+        foreach ($data['displays'] as $display) {
+            $displays[] = $this->displayProvider->getDisplay($display, [], 1);
+        }
+        return $this->render('@W3comHulk/admin/displays.html.twig', ['displays' => $displays]);
+    }
+
+    public function removeCache()
+    {
+        try {
+            $this->cache->deleteItems([SLInspector::STORAGE_KEY, OdataRestClient::STORAGE_KEY, SLRestClient::STORAGE_KEY]);
+        } catch (\Exception $e) {
+            return new JsonResponse(['valid' => false, 'error' => $e->getMessage()], 500);
+        }
+        return new JsonResponse(['valid' => true]);
     }
 
     private function checkUser()

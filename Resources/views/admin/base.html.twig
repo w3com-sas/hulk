@@ -1,0 +1,53 @@
+{% extends '@W3comHulk/display/base.html.twig' %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-3 nav-admin-hulk">
+                {% include '@W3comHulk/admin/nav.html.twig' %}
+            </div>
+            <div class="col-9 ml-auto">
+                {% block page %}{% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        function addLoadingIcon(obj) {
+            $(obj).html('<i class="fas fa-spinner fa-spin mr-3"></i>' + $(obj).text());
+        }
+        function format(d) {
+            var tpl = '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
+            for (i = 0; i < d.length; i++) {
+                tpl += '<tr><td>' + d[i].name + '</td></tr>';
+            }
+            tpl += '</table></div>';
+            return tpl;
+        }
+        $('#searchBar').on('keyup change', function () {
+            table.rows().deselect();
+            table
+                .search(this.value)
+                .draw();
+        });
+        $('.input-group').removeClass('w-25 ml-3');
+
+        $('table tbody').on('click', 'td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+            if (row.child.isShown()) {
+                row.child.hide();
+                tr.removeClass('shown');
+                tr[0].firstChild.innerHTML = '<i class="fa fa-plus-circle text-success properties-plus">';
+            } else {
+                tr[0].firstChild.innerHTML = '<i class="fas fa-minus-circle text-success properties-plus"></i>';
+                row.child(format(row.data().properties)).show();
+                tr.addClass('shown');
+            }
+        });
+    </script>
+    {% block additionnalJs %}
+    {% endblock %}
+{% endblock %}

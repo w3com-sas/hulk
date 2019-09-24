@@ -194,4 +194,9 @@ class Error
     {
         $this->fileIsBroken = $fileIsBroken;
     }
+
+    public function getLength()
+    {
+        return count($this->columnErrors) + count($this->filterErrors) + count($this->getRequestParamsErrors());
+    }
 }

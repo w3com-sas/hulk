@@ -423,7 +423,10 @@ table th:nth-last-child(1) {
     border-bottom: 1px solid white;
 }
 
-.h-100-vh {
+
+.nav-admin-hulk {
+    position: fixed;
+    background: #2C3E50;
     height: 100vh;
 }
 

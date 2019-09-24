@@ -49,30 +49,19 @@ class JsonFinder
         return stream_context_create($opts);
     }
 
-    public function getOnlineJson($filename, Display $dataTable = null)
+    public function getOnlineJson($filename, Display $display = null)
     {
         $context = $this->createContext();
-        $dataTable->getError()->setFileExist(true);
+        $display = $display === null ? new Display() : $display;
+        $display->getError()->setFileExist(true);
 
         try {
             $file = file_get_contents($this->baseUri . $this->jsonUri . $filename . '.json', false, $context);
         } catch (\Exception $e){
-            $dataTable->getError()->setFileExist(false);
+            $display->getError()->setFileExist(false);
             return null;
         }
         return $file;
     }
 
-    public function getAllJson()
-    {
-        $filenames = scandir($this->baseUri . $this->jsonUri, 1, $this->createContext());
-        $files = [];
-        foreach ($filenames as $filename){
-            if (!in_array($filename, $this::UNWANTED_FILES)){
-                $file = file_get_contents($this->baseUri . $this->jsonUri . $filename . '.json', false, $this->createContext());
-                $files[] = $file;
-            }
-        }
-        return $files;
-    }
 }

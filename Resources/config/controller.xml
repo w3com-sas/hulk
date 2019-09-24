@@ -88,8 +88,9 @@
         <service id="w3com_hulk.controller.admin_controller"
                  class="W3com\HulkBundle\Controller\AdminController" public="true">
             <argument type="service" id="security.authentication_utils"/>
-            <argument type="service" id="W3com\BoomBundle\Service\BoomGenerator"/>
+            <argument type="service" id="w3com_hulk.util.entity_provider"/>
             <argument type="service" id="w3com_hulk.service.display_provider"/>
+            <argument type="service" id="cache.security_expression_language"/>
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>

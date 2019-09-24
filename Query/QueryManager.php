@@ -59,16 +59,16 @@ class QueryManager
     /**
      * @param Display $display
      * @param array $requestParams
-     * @param bool $dataFilter
+     * @param null $top
      * @return array
      * @throws AnnotationException
      * @throws ReflectionException
      */
-    public function createDataTableQuery(Display $display, $requestParams = [])
+    public function createDataTableQuery(Display $display, $requestParams = [], $top = null)
     {
 
         $this->appEntity = $this->generator->getAppInspector()
-            ->getProjectEntity($display->getCalcView());
+            ->getEntity($display->getCalcView());
         $this->modelFinder->setDataTableEntity($display);
         $display->getError()->setClassExist(true);
 
@@ -91,7 +91,7 @@ class QueryManager
         $this->addSelectForLink($display, $params);
         $this->addGetParamsRequest($display, $requestParams, $params);
         $this->addPreFilter($display, $params);
-        $params->setTop($display->getMaxLength());
+        $top === null ? $params->setTop($display->getMaxLength()) : $params->setTop($top);
         return $repo->findAll($params);
 
     }
@@ -132,7 +132,7 @@ class QueryManager
                         $atLeastOne = true;
                     }
 
-                    if(!$atLeastOne) {
+                    if (!$atLeastOne) {
                         $column->setActive('N');
                         $dataTable->getError()->addColumnError(
                             sprintf(Error::ERROR_MISSING_FIELD, $column->getFieldName(),
@@ -225,7 +225,7 @@ class QueryManager
     private function addGetParamsRequest(Display $dataTable, $getRequestParams, Parameters $parameters)
     {
 
-        $odsEntity = $this->generator->getOdsInspector()->getOdsEntity($dataTable->getCalcView());
+        $odsEntity = $this->generator->getOdsInspector()->getEntity($dataTable->getCalcView());
 
         if ($getRequestParams instanceof ParameterBag) {
             $arrayGetParams = $getRequestParams->all();
@@ -283,12 +283,12 @@ class QueryManager
                 $max = explode('|', $value)[1];
 
                 if ($min != null && $max != null) {
-                    $rawFilter .= sprintf(Clause::GREATER_THAN, $sapField, $sapDatetime.$sapQuote . $min . $sapQuote . ' and ');
-                    $rawFilter .= sprintf(Clause::LOWER_THAN, $sapField, $sapDatetime.$sapQuote . $max . $sapQuote . $filterOperator);
+                    $rawFilter .= sprintf(Clause::GREATER_THAN, $sapField, $sapDatetime . $sapQuote . $min . $sapQuote . ' and ');
+                    $rawFilter .= sprintf(Clause::LOWER_THAN, $sapField, $sapDatetime . $sapQuote . $max . $sapQuote . $filterOperator);
                 } elseif ($min != null) {
-                    $rawFilter .= sprintf(Clause::GREATER_THAN, $sapField, $sapDatetime.$sapQuote . $min . $sapQuote);
+                    $rawFilter .= sprintf(Clause::GREATER_THAN, $sapField, $sapDatetime . $sapQuote . $min . $sapQuote);
                 } elseif ($max != null) {
-                    $rawFilter .= sprintf(Clause::LOWER_THAN, $sapField, $sapDatetime.$sapQuote . $max . $sapQuote . $filterOperator);
+                    $rawFilter .= sprintf(Clause::LOWER_THAN, $sapField, $sapDatetime . $sapQuote . $max . $sapQuote . $filterOperator);
                 }
 
                 if ($min != null || $max != null) {
@@ -300,21 +300,28 @@ class QueryManager
     }
 
     /**
-     * @param Display $dataTable
+     * @param Display $display
      * @param Parameters $parameters
      * @return void
      * @throws \Exception
      */
-    private function addPreFilter(Display $dataTable, Parameters $parameters)
+    private function addPreFilter(Display $display, Parameters $parameters)
     {
-        if (!empty($dataTable->getFilters())) {
+        if (!empty($display->getFilters())) {
             /** @var Filter $filter */
-            foreach ($dataTable->getFilters() as $filter) {
+            foreach ($display->getFilters() as $filter) {
 
                 if ($filter->getType() === Filter::TYPE_PRE_FILTER) {
 
                     foreach ($filter->getParams() as $field => $value) {
-                        $parameters->addFilter($this->appEntity->getProperty($field)->getName(), $value);
+                        if ($this->appEntity->getProperty($field) !== null) {
+                            $parameters->addFilter($this->appEntity->getProperty($field)->getName(), $value);
+                        } else {
+                            $display->getError()
+                                ->addFilterError(
+                                    sprintf(Error::ERROR_MISSING_FIELD, $filter->getFieldName(), $display->getCalcView())
+                                );
+                        }
                     }
                 }
             }

@@ -19,46 +19,46 @@
     }
 }(function ($, moment) {
 
-    $.fn.dataTable.moment = function ( format, locale ) {
+    $.fn.dataTable.moment = function (format, locale) {
         var types = $.fn.dataTable.ext.type;
 
         // Add type detection
-        types.detect.unshift( function ( d ) {
-            if ( d ) {
+        types.detect.unshift(function (d) {
+            if (d) {
                 // Strip HTML tags and newline characters if possible
-                if ( d.replace ) {
+                if (d.replace) {
                     d = d.replace(/(<.*?>)|(\r?\n|\r)/g, '');
                 }
 
                 // Strip out surrounding white space
-                d = $.trim( d );
+                d = $.trim(d);
             }
 
             // Null and empty values are acceptable
-            if ( d === '' || d === null ) {
-                return 'moment-'+format;
+            if (d === '' || d === null) {
+                return 'moment-' + format;
             }
 
-            return moment( d, format, locale, true ).isValid() ?
-                'moment-'+format :
+            return moment(d, format, locale, true).isValid() ?
+                'moment-' + format :
                 null;
-        } );
+        });
 
         // Add sorting method - use an integer for the sorting
-        types.order[ 'moment-'+format+'-pre' ] = function ( d ) {
-            if ( d ) {
+        types.order['moment-' + format + '-pre'] = function (d) {
+            if (d) {
                 // Strip HTML tags and newline characters if possible
-                if ( d.replace ) {
+                if (d.replace) {
                     d = d.replace(/(<.*?>)|(\r?\n|\r)/g, '');
                 }
 
                 // Strip out surrounding white space
-                d = $.trim( d );
+                d = $.trim(d);
             }
 
             return !moment(d, format, locale, true).isValid() ?
                 Infinity :
-                parseInt( moment( d, format, locale, true ).format( 'x' ), 10 );
+                parseInt(moment(d, format, locale, true).format('x'), 10);
         };
     };
 
@@ -68,7 +68,7 @@
 $(document).ready(function () {
 
     // Add all datetime format here
-    $.fn.dataTable.moment( 'DD/MM/YYYY');
+    $.fn.dataTable.moment('DD/MM/YYYY');
 
     var data = [
         {% for object in display.data %}
@@ -126,28 +126,26 @@ $(document).ready(function () {
                     {% if column.width is not null %}
                     width: "{{ column.width }}%",
                     {% endif %}
-                    data:
-                        "{{ column.fieldName }}",
-                    render:
 
-                        function (data, type, row) {
-                            var idTpl = '#' + '{{ column.cellAction.functionName }}{{ column.index }}';
-                            var tpl = $(idTpl).html();
+                    data: "{{ column.fieldName }}",
 
-                            if (data == '') {
-                                return null;
-                            }
+                    render: function (data, type, row) {
+                        var idTpl = '#' + '{{ column.cellAction.functionName }}{{ column.index }}';
+                        var tpl = $(idTpl).html();
 
-                            {% if column.cellAction.iconColumnIndex is not null %}
-                            var icon = row.{{ column.cellAction.iconFieldName }};
-
-
-
-                            return tpl.replace('[[icon]]', icon).replace('[[data]]', data);
-                            {% else %}
-                            return tpl.replace('[[data]]', data);
-                            {% endif %}
+                        if (data == '') {
+                            return null;
                         }
+
+                        {% if column.cellAction.iconColumnIndex is not null %}
+                        var icon = row.{{ column.cellAction.iconFieldName }};
+
+
+                        return tpl.replace('[[icon]]', icon).replace('[[data]]', data);
+                        {% else %}
+                        return tpl.replace('[[data]]', data);
+                        {% endif %}
+                    }
                 }
                 ,
                 {% elseif column.cellAction.functionName == 'displayLink' or column.cellAction.functionName == 'link' %}
@@ -158,7 +156,6 @@ $(document).ready(function () {
                     data:
                         "{{ column.cellAction.functionName }}{{ column.cellAction.targetEntity }}",
                     render:
-
                         function (data, type, row) {
                             var idTpl = '#' + '{{ column.cellAction.functionName }}{{ column.cellAction.targetEntity }}';
                             var tpl = $(idTpl).html();
@@ -188,7 +185,7 @@ $(document).ready(function () {
 
                         function (data, type, row) {
                             var tpl = $('#icon').html();
-                            if(data.split(' ').length == 1){
+                            if (data.split(' ').length == 1) {
                                 data = 'fa fa-' + data;
                             }
                             return tpl.replace('[[data]]', data);
@@ -201,32 +198,35 @@ $(document).ready(function () {
                     width: "{{ column.width }}%",
                     {% endif %}
                     data: null,
-                    render: function(data,type,row){
+                    render: function (data, type, row) {
                         var iconRenderer = '';
-                        if(row.hasOwnProperty('{{ column.iconFieldName }}') && (row.{{ column.iconFieldName }} != '')){
+                        if (row.hasOwnProperty('{{ column.iconFieldName }}') && (row.{{ column.iconFieldName }} != '')) {
                             var tplIcon = $('#icon').html();
                             var prefixIcon = '';
-                            if(row.{{ column.iconFieldName }}.split(' ').length == 1){
+                            if (row.{{ column.iconFieldName }}.
+                            split(' ').length == 1
+                        )
+                            {
                                 prefixIcon = 'fa fa-';
                             }
                             iconRenderer = tplIcon.replace('[[data]]', prefixIcon + row.{{ column.iconFieldName }});
 
                         }
                         var labelRenderer = '';
-                        if(row.hasOwnProperty('{{ column.labelFieldName }}') && row.{{ column.labelFieldName }} != ''){
+                        if (row.hasOwnProperty('{{ column.labelFieldName }}') && row.{{ column.labelFieldName }} != '') {
                             var tplLabel = $('#labelRenderer').html();
-                            labelRenderer = tplLabel.replace('[[data]]',row.{{ column.labelFieldName }});
+                            labelRenderer = tplLabel.replace('[[data]]', row.{{ column.labelFieldName }});
                         }
 
                         {% if column.cellAction is defined %}
                         var tplAction = $('#action{{ column.cellAction.functionName }}{{ column.index }}').html();
 
                         tplAction = tplAction
-                            .replace('[[globalRender]]',iconRenderer + labelRenderer)
-                            .replace('[[row]]',JSON.stringify(row).replace(/"/g,'&quot;'));
+                            .replace('[[globalRender]]', iconRenderer + labelRenderer)
+                            .replace('[[row]]', JSON.stringify(row).replace(/"/g, '&quot;'));
 
                         {% if column.cellAction.renderType is defined and column.cellAction.renderType == 'dynamic' %}
-                        tplAction = tplAction.replace('[[classRender]]',row.{{ column.cellAction.renderFieldName }})
+                        tplAction = tplAction.replace('[[classRender]]', row.{{ column.cellAction.renderFieldName }})
                         {% endif %}
 
                         return tplAction;

@@ -1,0 +1,32 @@
+{% extends '@W3comHulk/admin/base.html.twig' %}
+
+{% set active = 'displays' %}
+
+{% block page %}
+    <h4 class="title-admin-hulk mt-3">Display ({{ displays|length }})</h4>
+    <div class="alert alert-info">
+        <i class="fa fa-info mr-3"></i>
+        Ci-dessous vous retrouverez les displays disponibles dans l'application.
+    </div>
+    <table class="table table-sm" id="calculationViewTable">
+        <thead>
+        <tr>
+            <th scope="col">Fichier</th>
+            <th scope="col">Calculation View</th>
+            <th scope="col">Nombre d'erreurs</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for display in displays %}
+            <tr>
+                <td>{{ display.filename }}</td>
+                <td>{{ display.calcView }}</td>
+                <td>{{ display.error.length }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block additionnalJs %}
+{% endblock %}
