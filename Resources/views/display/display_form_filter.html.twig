@@ -3,7 +3,7 @@
 
 {% block content %}
     <div class="collapse" id="hulkNav">
-        {% set menu = knp_menu_get('main', [], {'displayName' : 'Formulaire '~display.entity, 'menuName' : display.menuName }) %}
+        {% set menu = knp_menu_get('main', [], {'displayName' : display.label, 'menuName' : display.menuName }) %}
         {{ knp_menu_render(menu, {'template' : '@W3comHulk/display/include/menu.html.twig'}) }}
     </div>
     {% if display.hasCriticalError %}
