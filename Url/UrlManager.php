@@ -105,8 +105,7 @@ class UrlManager
                     $fieldName = substr($field, 9);
                     $min = $this->reverseDateFormat(array_values($value)[0]);
                     $max = $this->reverseDateFormat(array_values($value)[1]);
-                    $routeParams[self::INTERVAL_URL_KEY . $fieldName] = $min . '|' .
-                        $max;
+                    $routeParams[self::INTERVAL_URL_KEY . $fieldName] = $min . '|' . $max;
                 }
 
             }
