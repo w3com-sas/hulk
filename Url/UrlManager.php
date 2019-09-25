@@ -45,7 +45,6 @@ class UrlManager
                         $column->getCellAction()->getFunctionName() === self::GLOBAL_LINK_NAME)) {
 
                     $urlParams = [];
-
                     foreach ($column->getCellAction()->getParams() as $fieldName => $targetFieldName) {
 
                         if ($targetFieldName === self::KEY_WORD_TODAY) {
@@ -53,7 +52,6 @@ class UrlManager
                         }
 
                         foreach ($lines as $nameField => $valueField) {
-
                             if ($nameField == $fieldName && $valueField != null) {
                                 $urlParams[$targetFieldName] = $valueField;
                             }
@@ -77,8 +75,8 @@ class UrlManager
                                 $urlParams);
                         } catch (\Exception $e) {
                             $dataTable->getError()->addUrlError($column->getFieldName(), $e->getMessage());
+                            $url = null;
                         }
-                        $url = isset($url) ? $url : null;
                     }
                     $lines[$column->getCellAction()->getFunctionName() . $column->getCellAction()->getTargetEntity()]
                         = $url;
