@@ -24,7 +24,7 @@ class DataTablesConstructor
 
             $decodedJson = json_decode($file, true);
 
-            if ($decodedJson === null){
+            if ($decodedJson === null) {
 
                 $dataTable->getError()->setFileIsBroken(true);
 
@@ -52,8 +52,11 @@ class DataTablesConstructor
                         case Display::FIELD_MENU_CONFIG:
                             $dataTable->setMenuConfig($value);
                             break;
-                            case Display::FIELD_MENU_NAME;
+                        case Display::FIELD_MENU_NAME;
                             $dataTable->setMenuName($value);
+                            break;
+                        case Display::FIELD_LABEL;
+                            $dataTable->setLabel($value);
                             break;
                     }
                 }
@@ -185,9 +188,9 @@ class DataTablesConstructor
                         $newGlobalAction->setType($value);
                         break;
                     case GlobalAction::FIELD_CONFIG:
-                        if(array_key_exists('Entity',$value) && array_key_exists('TargetField',$value)){
-                            $moreHydratation = $this->hydrateConfigWithBoom($value['Entity'],$value['TargetField']);
-                            $value = array_merge($value,$moreHydratation);
+                        if (array_key_exists('Entity', $value) && array_key_exists('TargetField', $value)) {
+                            $moreHydratation = $this->hydrateConfigWithBoom($value['Entity'], $value['TargetField']);
+                            $value = array_merge($value, $moreHydratation);
                         }
                         $config = $this->hydrateConfig($value);
                         $newGlobalAction->setConfig($config);
@@ -239,12 +242,12 @@ class DataTablesConstructor
         return $newConfig;
     }
 
-    private function hydrateConfigWithBoom($entity,$fieldname)
+    private function hydrateConfigWithBoom($entity, $fieldname)
     {
         $entityUtil = $this->boom->getRepository($entity);
-        if($entityUtil == null) return [];
+        if ($entityUtil == null) return [];
 
-        $instanceName = '\\App\\HanaENtity\\'.$entity;
+        $instanceName = '\\App\\HanaENtity\\' . $entity;
         $instance = new $instanceName();
 
         $property = $instance->getPropertyByColumn($fieldname);

@@ -15,6 +15,7 @@ class Display
     const FIELD_DISPLAY_NAME = 'DisplayName';
     const FIELD_MENU_CONFIG = 'MenuConfig';
     const FIELD_MENU_NAME = 'MenuName';
+    const FIELD_LABEL = 'Label';
 
     public function __construct()
     {
@@ -22,6 +23,11 @@ class Display
     }
 
     public $isFilter = false;
+
+    /**
+     * @var string
+     */
+    private $label;
 
     /**
      * @var string
@@ -407,6 +413,19 @@ class Display
             return false;
         }
         return true;
+    }
+
+    public function getLabel()
+    {
+        return $this->label;
+    }
+
+    /**
+     * @param string $label
+     */
+    public function setLabel(string $label): void
+    {
+        $this->label = $label;
     }
 
 }
