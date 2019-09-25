@@ -2,12 +2,14 @@
     <div class="collapse" id="hulkNav">
         {% set menu = knp_menu_get('main', [], {'displayName' : display.displayName, 'menuName' : display.menuName }) %}
         {{ knp_menu_render(menu, {'template' : '@W3comHulk/display/include/menu.html.twig'}) }}
+        {% dump menu %}
     </div>
 {% endblock %}
 
 {% block hulk_header %}
     {% include '@W3comHulk/display/include/header.html.twig' %}
 {% endblock %}
+
 {% if display.data|length == display.maxLength %}
     <div class="alert alert-warning m-3" role="alert">
         <i class="fal fa-info-circle mr-2"></i>
