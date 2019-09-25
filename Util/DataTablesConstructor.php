@@ -195,6 +195,12 @@ class DataTablesConstructor
                         $config = $this->hydrateConfig($value);
                         $newGlobalAction->setConfig($config);
                         break;
+                    case GlobalAction::FIELD_COLOR:
+                        $newGlobalAction->setColor($value);
+                        break;
+                        case GlobalAction::FIELD_ICON:
+                        $newGlobalAction->setIcon($value);
+                        break;
                 }
             }
             $dataTable->addGlobalAction($newGlobalAction);
