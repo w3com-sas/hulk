@@ -14,6 +14,7 @@
 
         <service class="W3com\HulkBundle\Url\UrlManager" id="w3com_hulk.url.url_manager">
             <argument type="service" id="router.default"/>
+            <argument type="service" id="monolog.logger"/>
         </service>
 
         <service id="w3com_hulk.service.display_form_provider"

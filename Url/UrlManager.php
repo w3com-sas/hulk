@@ -2,6 +2,7 @@
 
 namespace W3com\HulkBundle\Url;
 
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Exception\InvalidParameterException;
 use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -20,9 +21,14 @@ class UrlManager
     const INTERVAL_URL_KEY = 'interval_';
 
     private $router;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
-    public function __construct(UrlGeneratorInterface $router)
+    public function __construct(UrlGeneratorInterface $router, LoggerInterface $logger)
     {
+        $this->logger = $logger;
         $this->router = $router;
     }
 
@@ -73,12 +79,14 @@ class UrlManager
                                 $urlParams);
                         } catch (MissingMandatoryParametersException $e) {
                             $dataTable->getError()->addUrlError($column->getFieldName(), $e->getMessage());
+                            $this->logger->error('URL :'.$e->getMessage(), $e->getTrace());
                         } catch (InvalidParameterException $e) {
                             $dataTable->getError()->addUrlError($column->getFieldName(), $e->getMessage());
+                            $this->logger->error('URL :'.$e->getMessage(), $e->getTrace());
                         } catch (\Exception $e) {
                             $dataTable->getError()->addUrlError($column->getFieldName(), $e->getMessage());
+                            $this->logger->error('URL :'.$e->getMessage(), $e->getTrace());
                         }
-
                     }
                     if (isset($url)) {
                         $lines[$column->getCellAction()->getFunctionName() . $column->getCellAction()->getTargetEntity()]
