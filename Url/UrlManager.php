@@ -48,19 +48,18 @@ class UrlManager
 
                     foreach ($column->getCellAction()->getParams() as $fieldName => $targetFieldName) {
 
-                        if ($targetFieldName === self::KEY_WORD_TODAY){
+                        if ($targetFieldName === self::KEY_WORD_TODAY) {
                             $urlParams[$fieldName] = date('Y-m-d');
                         }
 
                         foreach ($lines as $nameField => $valueField) {
 
-                            if ($nameField == $fieldName) {
+                            if ($nameField == $fieldName && $valueField != null) {
                                 $urlParams[$targetFieldName] = $valueField;
                             }
-
                         }
 
-                        if (!isset($urlParams[$targetFieldName]) && !isset($urlParams[$fieldName])){
+                        if (!isset($urlParams[$targetFieldName]) && !isset($urlParams[$fieldName])) {
                             $urlParams[$fieldName] = $targetFieldName;
                         }
 
@@ -73,29 +72,16 @@ class UrlManager
                             $urlParams);
 
                     } else {
-
                         try {
                             $url = $this->router->generate($column->getCellAction()->getTargetEntity(),
                                 $urlParams);
-                        } catch (MissingMandatoryParametersException $e) {
-                            $dataTable->getError()->addUrlError($column->getFieldName(), $e->getMessage());
-                            $this->logger->error('URL :'.$e->getMessage(), $e->getTrace());
-                        } catch (InvalidParameterException $e) {
-                            $dataTable->getError()->addUrlError($column->getFieldName(), $e->getMessage());
-                            $this->logger->error('URL :'.$e->getMessage(), $e->getTrace());
                         } catch (\Exception $e) {
                             $dataTable->getError()->addUrlError($column->getFieldName(), $e->getMessage());
-                            $this->logger->error('URL :'.$e->getMessage(), $e->getTrace());
                         }
+                        $url = isset($url) ? $url : null;
                     }
-
-                    if (isset($url)) {
-                        $lines[$column->getCellAction()->getFunctionName() . $column->getCellAction()->getTargetEntity()]
-                            = $url;
-                    } else {
-                        $lines[$column->getCellAction()->getFunctionName() . $column->getCellAction()->getTargetEntity()]
-                            = null;
-                    }
+                    $lines[$column->getCellAction()->getFunctionName() . $column->getCellAction()->getTargetEntity()]
+                        = $url;
                 }
             }
             $newData[] = $lines;
@@ -117,11 +103,11 @@ class UrlManager
 
             if (substr($field, 0, 9) === '_interval') {
 
-                if ($value['min'] != "" ||$value['max'] != ""){
+                if ($value['min'] != "" || $value['max'] != "") {
                     $fieldName = substr($field, 9);
                     $min = $this->reverseDateFormat(array_values($value)[0]);
                     $max = $this->reverseDateFormat(array_values($value)[1]);
-                    $routeParams[self::INTERVAL_URL_KEY.$fieldName] = $min . '|' .
+                    $routeParams[self::INTERVAL_URL_KEY . $fieldName] = $min . '|' .
                         $max;
                 }
 
