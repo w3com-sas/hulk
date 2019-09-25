@@ -112,7 +112,7 @@ class UrlManager
             }
         }
 
-        $routeParams['filename'] = $dataTable->getLabel();
+        $routeParams['filename'] = $dataTable->getDisplayName();
         return $routeParams;
     }
 
