@@ -1,44 +1,45 @@
-{% for globalAction in display.globalActions %}
+{% block globalAction %}
+    {% for globalAction in display.globalActions %}
+        {% set color = (globalAction.color is not null) ? globalAction.color : 'primary' %}
+        {% set icon = (globalAction.icon is not null) ? '<i class="'~globalAction.icon~"\"></i>" : '' %}
 
-    {% set color = (globalAction.color is not null) ? globalAction.color : 'primary' %}
-    {% set icon = (globalAction.icon is not null) ? '<i class="'~globalAction.icon~"\"></i>" : '' %}
-
-    {% if globalAction.type == 'export-csv' %}
-        <button class="btn btn-{{ color }}" id="{{ globalAction.type }}">
-            {{ icon|raw }}
-            {{ globalAction.label }}
-        </button>
-    {% elseif globalAction.type == 'update-sap' and globalAction.config.targetDataType == 'static' or
-        globalAction.config.targetDataType == 'text' or globalAction.config.targetDataType == 'date' %}
-        <button class="btn btn-{{color}}"
-                id="btn{{ globalAction.type }}{{ globalAction.config.targetDataType }}{{ globalAction.index }}"
-                targetEntity="{{ globalAction.config.entity }}"
-                targetField="{{ globalAction.config.targetField }}"
-                targetDescription="{{ globalAction.config.targetDescription is defined ? globalAction.config.targetDescription : globalAction.config.targetField }}"
-                targetData="{{ globalAction.config.targetData }}"
-                entityKey="{{ globalAction.config.entityKey }}">
-            {{ icon|raw }}
-            {{ globalAction.label }}
-        </button>
-    {% elseif globalAction.config.targetDataType == 'array' %}
-        <button class="btn btn-{{color}}"
-                id="btn{{ globalAction.type }}{{ globalAction.config.targetDataType }}{{ globalAction.index }}"
-                targetEntity="{{ globalAction.config.entity }}"
-                targetField="{{ globalAction.config.targetField }}"
-                entityKey="{{ globalAction.config.entityKey }}">
-            {{ icon }}
-            {{ globalAction.label }}
-        </button>
-    {% elseif globalAction.type == 'api-request' %}
-        <button class="btn btn-{{color}}"
-                id="{{ globalAction.type~globalAction.index }}">
-            {{ icon }}
-            {{ globalAction.label }}
-        </button>
-    {% elseif globalAction.type == 'call-function' %}
-        <button class="btn btn-info"
-                id="{{ globalAction.type~globalAction.index }}">
-            {{ globalAction.label }}
-        </button>
-    {% endif %}
-{% endfor %}
+        {% if globalAction.type == 'export-csv' %}
+            <button class="btn btn-{{ color }}" id="{{ globalAction.type }}">
+                {{ icon|raw }}
+                {{ globalAction.label }}
+            </button>
+        {% elseif globalAction.type == 'update-sap' and globalAction.config.targetDataType == 'static' or
+            globalAction.config.targetDataType == 'text' or globalAction.config.targetDataType == 'date' %}
+            <button class="btn btn-{{ color }}"
+                    id="btn{{ globalAction.type }}{{ globalAction.config.targetDataType }}{{ globalAction.index }}"
+                    targetEntity="{{ globalAction.config.entity }}"
+                    targetField="{{ globalAction.config.targetField }}"
+                    targetDescription="{{ globalAction.config.targetDescription is defined ? globalAction.config.targetDescription : globalAction.config.targetField }}"
+                    targetData="{{ globalAction.config.targetData }}"
+                    entityKey="{{ globalAction.config.entityKey }}">
+                {{ icon|raw }}
+                {{ globalAction.label }}
+            </button>
+        {% elseif globalAction.config.targetDataType == 'array' %}
+            <button class="btn btn-{{ color }}"
+                    id="btn{{ globalAction.type }}{{ globalAction.config.targetDataType }}{{ globalAction.index }}"
+                    targetEntity="{{ globalAction.config.entity }}"
+                    targetField="{{ globalAction.config.targetField }}"
+                    entityKey="{{ globalAction.config.entityKey }}">
+                {{ icon }}
+                {{ globalAction.label }}
+            </button>
+        {% elseif globalAction.type == 'api-request' %}
+            <button class="btn btn-{{ color }}"
+                    id="{{ globalAction.type~globalAction.index }}">
+                {{ icon }}
+                {{ globalAction.label }}
+            </button>
+        {% elseif globalAction.type == 'call-function' %}
+            <button class="btn btn-info"
+                    id="{{ globalAction.type~globalAction.index }}">
+                {{ globalAction.label }}
+            </button>
+        {% endif %}
+    {% endfor %}
+{% endblock %}
