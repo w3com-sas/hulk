@@ -3,6 +3,7 @@
 namespace W3com\HulkBundle\Service;
 
 use Doctrine\Common\Annotations\AnnotationException;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use W3com\BoomBundle\Service\BoomGenerator;
 use W3com\HulkBundle\Column\ColumnManager;
@@ -76,6 +77,8 @@ class DisplayProvider
      */
     private $filterSessionManager;
 
+    private $logger;
+
     /**
      * DisplayProvider constructor.
      * @param $config
@@ -83,17 +86,20 @@ class DisplayProvider
      * @param BoomGenerator $generator
      * @param UrlGeneratorInterface $router
      * @param FilterSessionManager $filterSessionManager
+     * @param LoggerInterface $logger
      */
-    public function __construct($config, BoomManager $boom, BoomGenerator $generator, UrlGeneratorInterface $router, FilterSessionManager $filterSessionManager)
+    public function __construct($config, BoomManager $boom, BoomGenerator $generator, UrlGeneratorInterface $router, FilterSessionManager $filterSessionManager,
+                                LoggerInterface $logger)
     {
         $this->filterSessionManager = $filterSessionManager;
+        $this->logger = $logger;
         $this->config = $config;
         $this->constructor = new DataTablesConstructor($boom);
         $this->indexor = new Indexor();
         $this->filterManager = new FilterManager();
         $this->columnManager = new ColumnManager();
         $this->modelFinder = new ModelFinder($generator);
-        $this->urlManager = new UrlManager($router);
+        $this->urlManager = new UrlManager($router, $logger);
         $this->dataTransformer = new DataTransformer($this->modelFinder, $this->urlManager);
         $this->queryManager = new QueryManager($this->modelFinder, $boom, $generator);
         $this->jsonFinder = new JsonFinder($boom, $config);

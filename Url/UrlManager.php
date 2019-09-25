@@ -88,6 +88,7 @@ class UrlManager
                             $this->logger->error('URL :'.$e->getMessage(), $e->getTrace());
                         }
                     }
+
                     if (isset($url)) {
                         $lines[$column->getCellAction()->getFunctionName() . $column->getCellAction()->getTargetEntity()]
                             = $url;
