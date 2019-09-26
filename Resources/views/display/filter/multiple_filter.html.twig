@@ -1,3 +1,5 @@
+
+{% block multipleFilter %}
 <div class="input-group mt-1">
     {% for filter in display.filters if filter.active == 'Y' %}
         {% if filter.type == 'multiple' %}
@@ -33,3 +35,4 @@
         {% endif %}
     {% endfor %}
 </div>
+{% endblock %}

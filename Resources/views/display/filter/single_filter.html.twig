@@ -1,3 +1,4 @@
+{% block singleFilter %}
 <div class="input-group mb-3 single-filter mt-3">
     {% for filter in display.filters if filter.active == 'Y' and filter.type == 'single' %}
         <div class="input-group-prepend">
@@ -19,3 +20,4 @@
         </select>
     {% endfor %}
 </div>
+{% endblock %}
