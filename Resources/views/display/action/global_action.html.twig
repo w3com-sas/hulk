@@ -4,7 +4,7 @@
         {% set icon = (globalAction.icon is not null) ? '<i class="'~globalAction.icon~"\"></i>" : '' %}
 
         {% if globalAction.type == 'export-csv' %}
-            <button class="btn btn-{{ color }}" id="{{ globalAction.type }}">
+            <button class="btn btn-{{ color }} m-1" id="{{ globalAction.type }}">
                 {{ icon|raw }}
                 {{ globalAction.label }}
             </button>
@@ -21,7 +21,7 @@
                 {{ globalAction.label }}
             </button>
         {% elseif globalAction.config.targetDataType == 'array' %}
-            <button class="btn btn-{{ color }}"
+            <button class="btn btn-{{ color }} m-1"
                     id="btn{{ globalAction.type }}{{ globalAction.config.targetDataType }}{{ globalAction.index }}"
                     targetEntity="{{ globalAction.config.entity }}"
                     targetField="{{ globalAction.config.targetField }}"
@@ -30,14 +30,15 @@
                 {{ globalAction.label }}
             </button>
         {% elseif globalAction.type == 'api-request' %}
-            <button class="btn btn-{{ color }}"
+            <button class="btn btn-{{ color }} m-1"
                     id="{{ globalAction.type~globalAction.index }}">
                 {{ icon|raw }}
                 {{ globalAction.label }}
             </button>
         {% elseif globalAction.type == 'call-function' %}
-            <button class="btn btn-info"
+            <button class="btn btn-{{color}} m-1"
                     id="{{ globalAction.type~globalAction.index }}">
+                {{ icon|raw }}
                 {{ globalAction.label }}
             </button>
         {% endif %}
