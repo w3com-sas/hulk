@@ -73,8 +73,8 @@ $(document).ready(function () {
         {% for object in display.data %}
 
         {
+            'idLines': 'line{{ loop.index }}',
             {% for col, value in object %}
-
             '{{ col }}': '{{ value }}',
 
             {% endfor %}
@@ -169,11 +169,10 @@ $(document).ready(function () {
                 {% endif %}
                 {% elseif column.type == 'checkbox' %}
                 {
-                    data: null,
+                    data: 'idLines',
                     render:
-
                         function (data, type, row) {
-                            return $('#checkboxTpl').html();
+                            return $('#checkboxTpl').html().replace('idLine', data);
                         }
                 }
                 ,
