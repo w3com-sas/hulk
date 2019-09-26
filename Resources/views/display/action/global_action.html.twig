@@ -26,13 +26,13 @@
                     targetEntity="{{ globalAction.config.entity }}"
                     targetField="{{ globalAction.config.targetField }}"
                     entityKey="{{ globalAction.config.entityKey }}">
-                {{ icon }}
+                {{ icon|raw }}
                 {{ globalAction.label }}
             </button>
         {% elseif globalAction.type == 'api-request' %}
             <button class="btn btn-{{ color }}"
                     id="{{ globalAction.type~globalAction.index }}">
-                {{ icon }}
+                {{ icon|raw }}
                 {{ globalAction.label }}
             </button>
         {% elseif globalAction.type == 'call-function' %}

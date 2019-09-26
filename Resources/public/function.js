@@ -109,6 +109,8 @@ function apiRequest(data, params, urlApi, modal) {
         "apiParams": params,
         "urlApi": urlApi
     };
+    console.log('toto');
+
 
     $.ajax({
         method: 'POST',
@@ -147,12 +149,12 @@ function apiRequest(data, params, urlApi, modal) {
                 modal.find('.modal-body').find('p').remove();
             }
 
-
             modal.find('.modal-body').append(reportTpl);
-            var btn = modal.find('.modal-footer').find('.btn-success')[0];
-            btn.disabled = false;
-            btn.innerHTML = 'Actualiser';
+            var btn = document.createElement('button');
+            btn.innerText = 'Actualiser';
+            btn.attributes.class = 'btn btn-success btn-block';
             btn.onclick = () => window.location.reload();
+            modal.find('.modal-footer').innerHTML = btn;
             modal.on('hidden.bs.modal', function () {
                 window.location.reload();
             })
