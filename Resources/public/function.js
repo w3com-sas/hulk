@@ -176,3 +176,10 @@ function apiRequest(data, params, urlApi, modal) {
         }
     })
 }
+
+function goToLine(lineIndex, idLine) {
+    var table = $('#dataTable').DataTable();
+    var pageToGo =  Math.floor(lineIndex / table.page.len());
+    table.page(pageToGo).draw('page');
+    document.getElementById(idLine).scrollIntoView();
+}

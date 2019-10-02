@@ -76,7 +76,6 @@ $('#{{ globalAction.type }}').click(function () {
     var data = table.rows('.selected').data().toArray();
     var jsonData = Object.assign({}, data);
     var filename = '{{ display.filename }}' + '.csv';
-
     xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         var a;

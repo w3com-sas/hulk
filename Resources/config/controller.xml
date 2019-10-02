@@ -95,6 +95,14 @@
                 <argument type="service" id="service_container" />
             </call>
         </service>
+        <service id="w3com_hulk.controller.session_controller"
+                 class="W3com\HulkBundle\Controller\SessionController" public="true">
+            <argument type="service" id="w3com_hulk.filter.filter_session_manager"/>
+            <argument type="service" id="monolog.logger"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
     </services>
 
 </container>

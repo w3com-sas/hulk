@@ -7,7 +7,7 @@
         <default key="_controller">w3com_hulk.controller.display_controller::display</default>
     </route>
     <route id="w3com_save_filters" path="/save-filters" methods="POST">
-        <default key="_controller">w3com_hulk.controller.filter_controller::saveFilters</default>
+        <default key="_controller">w3com_hulk.controller.session_controller::saveFilter</default>
     </route>
     <route id="w3com_search_view" path="/search-view" methods="POST">
         <default key="_controller">w3com_hulk.controller.search_view_controller::searchView</default>

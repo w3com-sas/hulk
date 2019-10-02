@@ -25,6 +25,47 @@ class FilterSessionManager
 
     }
 
+    /**
+     * Return number of filters on the current page
+     * @return int
+     */
+    public function addFilter()
+    {
+        $filters = $this->request->getCurrentRequest()->request->get('filters');
+        $name = $this->request->getCurrentRequest()->request->get('currentRoute');
+
+
+        $sessionFilters = [];
+        $formatedFilters = [];
+
+        foreach ($filters as $filter => $value) {
+
+            // Single filter
+            if ($value !== "" && $value !== null) {
+
+                // Multiple filter
+                if (is_array($value) && ($value['min'] != "" || $value['max'] != "")) {
+                    $formatedFilters[$filter] = $value;
+
+                    // Single
+                } elseif (is_array($value) === false && $value !== "" && $value !== null) {
+                    $formatedFilters[$filter] = $value;
+                }
+            }
+        }
+        $sessionFilters[$name] = $formatedFilters;
+
+        if ($this->session->has('filters')) {
+            $oldFilters = $this->session->get('filters');
+            $sessionFilters = array_merge($oldFilters, $sessionFilters);
+        }
+        $this->session->set('filters', $sessionFilters);
+        return count($sessionFilters[$name]);
+    }
+
+    /**
+     * @param Display $dataTable
+     */
     public function checkFiltersDefaultValue(Display $dataTable)
     {
         if ($this->session->has('filters')) {
