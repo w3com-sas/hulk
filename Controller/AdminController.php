@@ -63,6 +63,7 @@ class AdminController extends AbstractController
 
     public function displays()
     {
+       // $this->checkUser();
         $data = json_decode($this->displayProvider->getJsonFinder()->getOnlineJson('configuration'), true);
         $displays = [];
         foreach ($data['displays'] as $display) {
