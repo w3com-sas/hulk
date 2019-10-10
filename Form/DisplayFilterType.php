@@ -48,7 +48,6 @@ class DisplayFilterType extends AbstractType
                     ]);
 
                 } elseif ($filter->getType() === Filter::TYPE_SINGLE) {
-
                     $form->add($filter->getFieldName(), ChoiceType::class, ['mapped' => false,
                         'label' => $filter->getLabel(), 'choices' => $filter->getValues(), 'required' => false,
                     ]);
@@ -68,6 +67,7 @@ class DisplayFilterType extends AbstractType
                 ['class' => 'btn btn-blue btn-block']]);
 
         });
+
     }
 
     public function configureOptions(OptionsResolver $resolver)

@@ -109,8 +109,6 @@ function apiRequest(data, params, urlApi, modal) {
         "apiParams": params,
         "urlApi": urlApi
     };
-    console.log('toto');
-
 
     $.ajax({
         method: 'POST',

@@ -34,7 +34,6 @@ class FilterSessionManager
         $filters = $this->request->getCurrentRequest()->request->get('filters');
         $name = $this->request->getCurrentRequest()->request->get('currentRoute');
 
-
         $sessionFilters = [];
         $formatedFilters = [];
 
@@ -48,7 +47,7 @@ class FilterSessionManager
                     $formatedFilters[$filter] = $value;
 
                     // Single
-                } elseif (is_array($value) === false && $value !== "" && $value !== null) {
+                } elseif (!is_array($value) && $value !== "" && $value !== null) {
                     $formatedFilters[$filter] = $value;
                 }
             }
@@ -76,6 +75,10 @@ class FilterSessionManager
 
                     foreach ($filters as $filterSessionName => $filterSessionValue) {
 
+                        if ($filterSessionName === 'searchBar'){
+                            $this->addSearchBarFilter($dataTable, $filterSessionValue);
+                        }
+
                         /** @var Filter $filter */
                         foreach ($dataTable->getFilters() as $filter) {
 
@@ -88,5 +91,13 @@ class FilterSessionManager
                 }
             }
         }
+    }
+
+    private function addSearchBarFilter(Display $dataTable, $filterSessionValue)
+    {
+        $filter = new Filter();
+        $filter->setDefaultValue($filterSessionValue);
+        $filter->setFieldName('searchBar');
+        $dataTable->addFilter($filter);
     }
 }

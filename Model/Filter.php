@@ -190,4 +190,12 @@ class Filter
     {
         $this->order = $order;
     }
+
+    /**
+     * @param $values
+     */
+    public function setValues(?array $values): void
+    {
+        $this->values = $values;
+    }
 }

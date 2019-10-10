@@ -128,7 +128,7 @@ class Display
      */
     public function addFilter(Filter $filter)
     {
-        $this->filters[] = $filter;
+        $this->filters[$filter->getFieldName()] = $filter;
     }
 
     /**

@@ -1,3 +1,4 @@
+{% block eventListener %}
 $('.single-filter .custom-select').on('change', function () {
     table.rows().deselect();
     table
@@ -24,9 +25,11 @@ $('.multiple-filter').on('keyup change', function () {
     saveFilters();
     countSelectedRows(table.rows('.selected').data());
 });
+{% endblock %}
 
+{% block dataTableApi %}
 {% for filter in display.filters if filter.defaultValue != null and filter.defaultValue != ""
- and filter.defaultValue is not iterable %}
+    and filter.defaultValue is not iterable %}
 {% if filter.type == 'single' %}
 table
     .column({{ filter.index }})
@@ -36,3 +39,7 @@ table
 table.draw();
 {% endif %}
 {% endfor %}
+{% endblock %}
+{% if display.filters.searchBar is defined %}
+table.search('{{ display.filters.searchBar.defaultValue }}').draw();
+{% endif %}

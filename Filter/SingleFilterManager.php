@@ -14,6 +14,19 @@ class SingleFilterManager extends AbstractFilterManager
         return $dataTable;
     }
 
+    function sortDate($x, $y)
+    {
+        $stampX = \DateTime::createFromFormat('d/m/Y', $x)->getTimestamp();
+        $stampY = \DateTime::createFromFormat('d/m/Y', $y)->getTimestamp();
+        if ($stampX > $stampY) {
+            return 1;
+        } elseif ($stampX < $stampY) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }
+
     public function addValues(Display $dataTable)
     {
 
@@ -23,24 +36,44 @@ class SingleFilterManager extends AbstractFilterManager
 
                 if ($filter->getType() === Filter::TYPE_SINGLE) {
 
+
                     if ($filter->getActive() == 'Y' && !$this->isColumnExist($filter, $dataTable)) {
                         $this->addHidenColumn($filter, $dataTable);
                     }
 
-                    // Can remove choice
-                    $filter->addValue("");
+                    $values = [];
                     foreach ($dataTable->getData() as $line) {
 
                         foreach ($line as $property => $value) {
 
                             if ($property == $filter->getFieldName()) {
-                                $filter->addValue($value);
+                                if (\DateTime::createFromFormat('d/m/Y', $value) !== false){
+                                    $isDate = true;
+                                }
+                                $values[$value] = $value;
                             }
                         }
                     }
+
+                    if (isset($isDate)) {
+                        usort($values, [$this, "sortDate"]);
+                        $values = $this->formatValuesForChoices($values);
+                        unset($isDate);
+                    }
+                    $filter->setValues($values);
                 }
             }
         }
-
     }
+
+    private function formatValuesForChoices(array $values)
+    {
+        $fValues= [];
+        foreach ($values as $value){
+            $fValues[$value] = $value;
+        }
+        return $fValues;
+    }
+
+
 }

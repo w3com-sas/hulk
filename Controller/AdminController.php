@@ -55,9 +55,7 @@ class AdminController extends AbstractController
     public function checkEntities()
     {
         $this->checkUser();
-        dump($this->cache->getItem(SLInspector::STORAGE_KEY));
         $entities = $this->entityProvider->getEntities();
-
         return $this->render('@W3comHulk/admin/entities.html.twig', $entities);
     }
 

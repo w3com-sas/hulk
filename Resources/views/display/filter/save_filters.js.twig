@@ -20,6 +20,7 @@ function saveFilters() {
     }
 
     {% endfor %}
+    data.filters.searchBar = $('#searchBar').val();
 
     $.ajax({
         method: "POST",
