@@ -42,6 +42,7 @@ class SingleFilterManager extends AbstractFilterManager
                     }
 
                     $values = [];
+                    $values[] = '';
                     foreach ($dataTable->getData() as $line) {
 
                         foreach ($line as $property => $value) {
