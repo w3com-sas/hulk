@@ -16,8 +16,14 @@ class SingleFilterManager extends AbstractFilterManager
 
     function sortDate($x, $y)
     {
+        if ($x == null){
+            return -1;
+        } elseif ($y == null){
+            return 0;
+        }
         $stampX = \DateTime::createFromFormat('d/m/Y', $x)->getTimestamp();
         $stampY = \DateTime::createFromFormat('d/m/Y', $y)->getTimestamp();
+
         if ($stampX > $stampY) {
             return 1;
         } elseif ($stampX < $stampY) {
@@ -42,7 +48,7 @@ class SingleFilterManager extends AbstractFilterManager
                     }
 
                     $values = [];
-                    $values[] = '';
+                    $values[""] = '';
                     foreach ($dataTable->getData() as $line) {
 
                         foreach ($line as $property => $value) {
