@@ -57,7 +57,8 @@ class SingleFilterManager extends AbstractFilterManager
                                 if (\DateTime::createFromFormat('d/m/Y', $value) !== false){
                                     $isDate = true;
                                 }
-                                $values[$value] = $value;
+                                // Remove null values : select no support
+                                $values[$value] = $value === null ? "" : $value;
                             }
                         }
                     }
