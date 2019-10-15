@@ -202,19 +202,17 @@ $(document).ready(function () {
                     data: null,
                     render: function (data, type, row) {
                         var iconRenderer = '';
-
+                        var tplIcon = $('#icon').html();
                         if (row.hasOwnProperty('{{ column.iconFieldName }}') && (row.{{ column.iconFieldName }} != '')) {
-                            var tplIcon = $('#icon').html();
                             var prefixIcon = '';
-                            if (row.{{ column.iconFieldName }}.
-                            split(' ').length == 1
-                        )
-                            {
+                            if (row.{{ column.iconFieldName }}.split(' ').length == 1){
                                 prefixIcon = 'fa fa-';
                             }
                             iconRenderer = tplIcon.replace('[[data]]', prefixIcon + row.{{ column.iconFieldName }});
-
+                        } else {
+                            iconRenderer = tplIcon.replace('[[data]]','{{ column.cellAction.icon }}')
                         }
+
                         var labelRenderer = '';
                         if (row.hasOwnProperty('{{ column.labelFieldName }}') && row.{{ column.labelFieldName }} != '') {
                             var tplLabel = $('#labelRenderer').html();

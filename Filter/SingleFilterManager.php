@@ -14,7 +14,7 @@ class SingleFilterManager extends AbstractFilterManager
         return $dataTable;
     }
 
-    function sortDate($x, $y)
+    public function sortDate($x, $y)
     {
         if ($x == null){
             return -1;
