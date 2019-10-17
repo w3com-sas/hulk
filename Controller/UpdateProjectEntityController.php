@@ -2,10 +2,17 @@
 
 namespace W3com\HulkBundle\Controller;
 
+use Psr\Cache\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\KernelInterface;
+use W3com\BoomBundle\Generator\Model\Entity;
 use W3com\BoomBundle\Service\BoomGenerator;
 
 class UpdateProjectEntityController extends AbstractController
@@ -31,13 +38,21 @@ class UpdateProjectEntityController extends AbstractController
     /**
      * @return Response
      * @throws \Exception
-     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function updateView()
     {
+        $application = new Application();
+        $application->setAutoExit(false);
+        $input = new ArrayInput([
+            'command' => 'bool:cl',
+        ]);
+        $output = new NullOutput();
+        $application->run($input, $output);
         $this->cache->deleteItem('ods.metadata');
         $createdEntities = $this->generator->createViewSchema();
         $updatedEntities = $this->generator->updateViewSchema();
+
         return new JsonResponse(
             [
                 'updatedEntities' => $updatedEntities,
