@@ -73,9 +73,7 @@ class Indexor
                 foreach ($dataTable->getColumns() as $toCompareColumn){
 
                     if ($toCompareColumn->getFieldName() === $column->getCellAction()->getIconFieldName()){
-
                         $column->getCellAction()->setIconColumnIndex($toCompareColumn->getIndex());
-
                     }
 
                 }

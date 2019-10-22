@@ -11,6 +11,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use W3com\BoomBundle\Generator\SLInspector;
 use W3com\BoomBundle\RestClient\OdataRestClient;
 use W3com\BoomBundle\RestClient\SLRestClient;
+use W3com\BoomBundle\Service\BoomGenerator;
 use W3com\HulkBundle\Service\DisplayProvider;
 use W3com\HulkBundle\Util\EntityProvider;
 
@@ -32,11 +33,16 @@ class AdminController extends AbstractController
      * @var AdapterInterface
      */
     private $cache;
+    /**
+     * @var BoomGenerator
+     */
+    private $generator;
 
     public function __construct(AuthenticationUtils $authenticationUtils, EntityProvider $provider, DisplayProvider $displayProvider,
-                                AdapterInterface $adapter)
+                                AdapterInterface $adapter, BoomGenerator $generator)
     {
         $this->cache = $adapter;
+        $this->generator = $generator;
         $this->displayProvider = $displayProvider;
         $this->entityProvider = $provider;
         $this->authenticationUtils = $authenticationUtils;
@@ -50,6 +56,17 @@ class AdminController extends AbstractController
             'last_username' => $lastUsername,
             'error' => $error
         ]);
+    }
+
+    public function calculationViews()
+    {
+        $this->generator->getOdsInspector()->getEntities();
+
+    }
+
+    public function sapTables()
+    {
+
     }
 
     public function checkEntities()
@@ -70,15 +87,6 @@ class AdminController extends AbstractController
         return $this->render('@W3comHulk/admin/displays.html.twig', ['displays' => $displays]);
     }
 
-    public function removeCache()
-    {
-        try {
-            $this->cache->deleteItems([SLInspector::STORAGE_KEY, OdataRestClient::STORAGE_KEY, SLRestClient::STORAGE_KEY]);
-        } catch (\Exception $e) {
-            return new JsonResponse(['valid' => false, 'error' => $e->getMessage()], 500);
-        }
-        return new JsonResponse(['valid' => true]);
-    }
 
     private function checkUser()
     {

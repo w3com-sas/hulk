@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="w3com_hulk.command.update_display_cv_command"
+                 class="W3com\HulkBundle\Command\UpdateDisplayCVCommand" public="true">
+            <argument type="service" id="W3com\BoomBundle\Service\BoomGenerator"/>
+            <argument type="service" id="w3com_hulk.finder.json_finder"/>
+            <tag name="console.command" command="hulk:update:displays"/>
+        </service>
+    </services>
+</container>

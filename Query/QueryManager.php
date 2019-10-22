@@ -66,7 +66,6 @@ class QueryManager
      */
     public function createDataTableQuery(Display $display, $requestParams = [], $top = null)
     {
-
         $this->appEntity = $this->generator->getAppInspector()
             ->getEntity($display->getCalcView());
         $this->modelFinder->setDataTableEntity($display);
