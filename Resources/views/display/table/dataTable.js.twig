@@ -136,7 +136,7 @@ $(document).ready(function () {
                             return null;
                         }
 
-                        {% if column.cellAction.iconColumnIndex is not null %}
+                        {% if column.cellAction.iconFieldName is not null %}
                         var icon = row.{{ column.cellAction.iconFieldName }};
 
 
