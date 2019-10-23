@@ -27,6 +27,7 @@ class W3comHulkExtension extends Extension
         $loader->load('twig.xml');
         $loader->load('security.xml');
         $loader->load('controller.xml');
+        $loader->load('command.xml');
     }
 
 }
