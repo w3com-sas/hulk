@@ -6,6 +6,9 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use W3com\BoomBundle\Exception\EntityNotFoundException;
+use W3com\BoomBundle\Generator\AppInspector;
+use W3com\BoomBundle\HanaEntity\AbstractEntity;
+use W3com\BoomBundle\Service\BoomGenerator;
 use W3com\BoomBundle\Service\BoomManager;
 
 class DisplayPersister
@@ -15,12 +18,32 @@ class DisplayPersister
     private $request;
 
     private $logger;
+    /**
+     * @var BoomGenerator
+     */
+    private $generator;
 
-    public function __construct(BoomManager $boom, RequestStack $request, LoggerInterface $logger)
+    public function __construct(BoomManager $boom, RequestStack $request, LoggerInterface $logger,
+                                BoomGenerator $generator)
     {
+        $this->generator = $generator;
         $this->boom = $boom;
         $this->request = $request;
         $this->logger = $logger;
+    }
+
+    public function updateSapLine()
+    {
+        $entityName = $this->request->getCurrentRequest()->request->get('entity');
+        $keyValue = $this->request->getCurrentRequest()->request->get('key');
+        $targetData = $this->request->getCurrentRequest()->request->get('targetData');
+        $targetField = $this->request->getCurrentRequest()->request->get('targetField');
+        $entity = $this->generator->getAppInspector()->getEntity($entityName);
+        /** @var AbstractEntity $obj */
+        $obj = $this->boom->getRepository($entity->getName())->find($keyValue);
+        $obj->set($entity->getKey(), $keyValue);
+        $obj->set($obj->getPropertyByColumn($targetField), $targetData);
+        $this->boom->getRepository($entity->getName())->update($obj);
     }
 
     public function displayUpdate()

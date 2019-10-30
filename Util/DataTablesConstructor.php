@@ -101,6 +101,9 @@ class DataTablesConstructor
                     case Column::FIELD_ORDERABLE:
                         $column->setOrderable(true);
                         break;
+                    case GlobalAction::FIELD_CONFIG:
+                        $column->setConfig($this->hydrateConfig($value));
+                        break;
 
                 }
             }
@@ -243,6 +246,7 @@ class DataTablesConstructor
                 case Config::FIELD_TARGET_CHOICES:
                     $newConfig->setTargetChoices($value);
                     break;
+
             }
         }
         return $newConfig;

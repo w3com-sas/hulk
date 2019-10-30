@@ -28,12 +28,26 @@ class UpdateSapController extends AbstractController
     /**
      * @throws \Exception
      */
-    public function updateSap()
+    public function updateSapLines()
     {
         $this->manageRequest();
         try {
             $this->displayPersister->displayUpdate();
         } catch (EntityNotFoundException $exception){
+            return new JsonResponse(['valid' => false, 'error' => 'Entity not found']);
+        } catch (\Exception $exception){
+            $this->logger->error($exception->getMessage(), $exception->getTrace());
+            return new JsonResponse(['valid' => false, 'error' => 'Unknown']);
+        }
+        return new JsonResponse(['valid' => true], 200);
+    }
+
+    public function updateSapLine()
+    {
+        try {
+            $this->displayPersister->updateSapLine();
+        } catch (EntityNotFoundException $exception){
+            $this->logger->error('Impossible de trouver la table à mettre à jour.');
             return new JsonResponse(['valid' => false, 'error' => 'Entity not found']);
         } catch (\Exception $exception){
             $this->logger->error($exception->getMessage(), $exception->getTrace());

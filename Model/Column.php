@@ -77,6 +77,11 @@ class Column
      */
     private $orderable = false;
 
+    /**
+     * @var Config
+     */
+    private $config;
+
 
     public function setLabel($label)
     {
@@ -268,5 +273,21 @@ class Column
     public function setLabelFieldName($labelFieldName): void
     {
         $this->labelFieldName = $labelFieldName;
+    }
+
+    /**
+     * @return Config
+     */
+    public function getConfig(): Config
+    {
+        return $this->config;
+    }
+
+    /**
+     * @param Config $config
+     */
+    public function setConfig(Config $config): void
+    {
+        $this->config = $config;
     }
 }

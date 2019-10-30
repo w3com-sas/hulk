@@ -238,6 +238,18 @@ $(document).ready(function () {
                     }
                 }
                 ,
+                {% elseif column.type == 'update-sap' %}
+                {
+                    data: '{{ column.fieldName }}',
+                    render: function (data, type, row) {
+                        return  '<input type="text" value="'+data+'"'+
+                                'class="form-control form-control-sm"'+
+                                'data-entity="'+'{{ column.config.entity }}'+
+                                '" data-field-name="'+ '{{ column.fieldName }}'+
+                                '" data-key="'+ row.{{ column.config.entityKey }} +
+                                 '" onchange="updateSapLine(this)"/>';
+                    }
+                },
                 {% endif %}
 
                 {% endfor %}
@@ -304,6 +316,8 @@ $(document).ready(function () {
                 }
         })
     ;
+
+
 
     {% include '@W3comHulk/display/filter/filter.js.twig' %}
 

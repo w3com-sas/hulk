@@ -18,11 +18,14 @@
     <route id="w3com_create_entity" path="/create-entity/{tableName}" methods="GET">
         <default key="_controller">w3com_hulk.controller.update_project_entity_controller::createTable</default>
     </route>
-    <route id="w3com_update_sap" path="/update-entity" methods="POST">
+    <route id="w3com_update_sap" path="/update-sap" methods="POST">
         <default key="_controller">w3com_hulk.controller.update_sap_controller::updateSap</default>
     </route>
+    <route id="w3com_update_sap_line" path="/update-sap-line" methods="POST">
+        <default key="_controller">w3com_hulk.controller.update_sap_controller::updateSapLine</default>
+    </route>
     <route id="w3com_api_request" path="/api-request" methods="POST">
-        <default key="_controller">w3com_hulk.controller.api_request_controller::apiRequest</default>
+        <default key="_controller">w3com_hulk.controller.update_sap_controller::updateSapLine</default>
     </route>
     <route id="w3com_display_form" path="/display-form/{filename}" methods="GET POST">
         <default key="_controller">w3com_hulk.controller.display_form_controller::displayForm</default>

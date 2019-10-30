@@ -33,6 +33,29 @@ function formatDataToUpdate(data) {
     return obj;
 }
 
+function updateSapLine(input) {
+
+    var data = {
+        'entity' : input.dataset.entity,
+        'key' : input.dataset.key,
+        'targetField': input.dataset.fieldName,
+        'targetData' : input.value
+    };
+
+    $.ajax({
+        method: 'POST',
+        url: hulkUrls.updateSapLine,
+        data: data,
+        dataType: 'json',
+        success: function (resp) {
+            input.className += ' is-valid';
+        },
+        fail: function () {
+            input.className += ' is-invalid';
+        }
+    });
+}
+
 function updateSap(data, targetEntity, targetField, entityKey, targetData, modal) {
 
     var rows = this.formatDataToUpdate(data);
@@ -103,22 +126,22 @@ function apiRequest(data, params, urlApi, modal) {
             var modalSuccess = reportTpl.querySelectorAll('.card-body')[0];
             var modalError = reportTpl.querySelectorAll('.card-body')[1];
 
-            if (response.errors !== undefined){
+            if (response.errors !== undefined) {
 
-                reportTpl.querySelector('.text-danger').textContent = 'Nombre d\'erreur : '+response.errors.length;
+                reportTpl.querySelector('.text-danger').textContent = 'Nombre d\'erreur : ' + response.errors.length;
 
-                for (var i = 0; i < response.errors.length; i++){
+                for (var i = 0; i < response.errors.length; i++) {
                     var tpl = document.createElement('p');
                     tpl.textContent = response.errors[i];
                     modalError.innerHTML += tpl.outerHTML;
                 }
             }
 
-            if (response.success !== undefined){
+            if (response.success !== undefined) {
 
-                reportTpl.querySelector('.text-success').textContent = 'Nombre de réussite : '+response.success.length;
+                reportTpl.querySelector('.text-success').textContent = 'Nombre de réussite : ' + response.success.length;
 
-                for (var i = 0; i < response.success.length; i++){
+                for (var i = 0; i < response.success.length; i++) {
                     var tpl = document.createElement('p');
                     tpl.textContent = response.success[i];
                     modalSuccess.innerHTML += tpl.outerHTML;
@@ -159,7 +182,7 @@ function apiRequest(data, params, urlApi, modal) {
 
 function goToLine(lineIndex, idLine) {
     var table = $('#dataTable').DataTable();
-    var pageToGo =  Math.floor(lineIndex / table.page.len());
+    var pageToGo = Math.floor(lineIndex / table.page.len());
     table.page(pageToGo).draw('page');
     document.getElementById(idLine).scrollIntoView();
 }
