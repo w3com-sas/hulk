@@ -35,6 +35,12 @@ function formatDataToUpdate(data) {
 
 function updateSapLine(input) {
 
+    if (input.className.indexOf('is-valid') !== -1){
+        input.className = input.className.replace('is-valid', '');
+    }
+    if (input.className.indexOf('is-invalid') !== -1){
+        input.className = input.className.replace('is-invalid', '');
+    }
     var data = {
         'entity' : input.dataset.entity,
         'key' : input.dataset.key,
