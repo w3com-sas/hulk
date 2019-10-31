@@ -58,27 +58,8 @@ class AdminController extends AbstractController
         ]);
     }
 
-    public function calculationViews()
-    {
-        $this->generator->getOdsInspector()->getEntities();
-
-    }
-
-    public function sapTables()
-    {
-
-    }
-
-    public function checkEntities()
-    {
-        $this->checkUser();
-        $entities = $this->entityProvider->getEntities();
-        return $this->render('@W3comHulk/admin/entities.html.twig', $entities);
-    }
-
     public function displays()
     {
-       // $this->checkUser();
         $data = json_decode($this->displayProvider->getJsonFinder()->getOnlineJson('configuration'), true);
         $displays = [];
         foreach ($data['displays'] as $display) {
@@ -87,12 +68,22 @@ class AdminController extends AbstractController
         return $this->render('@W3comHulk/admin/displays.html.twig', ['displays' => $displays]);
     }
 
-
-    private function checkUser()
+    public function displayForms()
     {
-        $user = $this->getUser();
-        if (!is_object($user) || !$user instanceof UserInterface || !in_array('ROLE_ADMIN_HULK', $user->getRoles())) {
-            throw new AccessDeniedException('This user does not have access to this section.');
+        $data = json_decode($this->displayProvider->getJsonFinder()->getOnlineJson('configuration'), true);
+        $displays = [];
+        foreach ($data['displays-form'] as $display) {
+            $displays[] = $this->displayProvider->getDisplay($display, [], 1);
         }
+        return $this->render('@W3comHulk/admin/displays.html.twig', ['displays' => $displays]);
     }
+
+    public function entities()
+    {
+        $entities = $this->entityProvider->getEntities();
+        return $this->render('@W3comHulk/admin/entities.html.twig', $entities);
+    }
+
+
+
 }

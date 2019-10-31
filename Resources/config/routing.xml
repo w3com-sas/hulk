@@ -19,7 +19,7 @@
         <default key="_controller">w3com_hulk.controller.update_project_entity_controller::createTable</default>
     </route>
     <route id="w3com_update_sap" path="/update-sap" methods="POST">
-        <default key="_controller">w3com_hulk.controller.update_sap_controller::updateSap</default>
+        <default key="_controller">w3com_hulk.controller.update_sap_controller::updateSapLines</default>
     </route>
     <route id="w3com_update_sap_line" path="/update-sap-line" methods="POST">
         <default key="_controller">w3com_hulk.controller.update_sap_controller::updateSapLine</default>

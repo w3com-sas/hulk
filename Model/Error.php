@@ -33,6 +33,8 @@ class Error
     /** @var array */
     private $urlErrors = [];
 
+    private $entityErrors = [];
+
     /**
      * @param bool $fileExist
      * @return Error
@@ -195,8 +197,28 @@ class Error
         $this->fileIsBroken = $fileIsBroken;
     }
 
-    public function getLength()
+
+    /**
+     * @return array
+     */
+    public function getEntityErrors(): array
     {
-        return count($this->columnErrors) + count($this->filterErrors) + count($this->getRequestParamsErrors());
+        return $this->entityErrors;
     }
+
+    /**
+     * @param $entityError
+     */
+    public function addEntityErrors($entityError): void
+    {
+        $this->entityErrors[] = $entityError;
+    }
+
+
+    public function all()
+    {
+        return array_merge($this->entityErrors, $this->urlErrors, $this->columnErrors, $this->filterErrors);
+    }
+
+
 }

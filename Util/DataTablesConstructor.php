@@ -2,6 +2,7 @@
 
 namespace W3com\HulkBundle\Util;
 
+use W3com\BoomBundle\Exception\EntityNotFoundException;
 use W3com\HulkBundle\Model\CellAction;
 use W3com\HulkBundle\Model\Column;
 use W3com\HulkBundle\Model\Config;
@@ -192,7 +193,7 @@ class DataTablesConstructor
                         break;
                     case GlobalAction::FIELD_CONFIG:
                         if (array_key_exists('Entity', $value) && array_key_exists('TargetField', $value)) {
-                            $moreHydratation = $this->hydrateConfigWithBoom($value['Entity'], $value['TargetField']);
+                            $moreHydratation = $this->hydrateConfigWithBoom($value['Entity'], $value['TargetField'], $dataTable);
                             $value = array_merge($value, $moreHydratation);
                         }
                         $config = $this->hydrateConfig($value);
@@ -252,9 +253,16 @@ class DataTablesConstructor
         return $newConfig;
     }
 
-    private function hydrateConfigWithBoom($entity, $fieldname)
+    private function hydrateConfigWithBoom($entity, $fieldname, Display $display)
     {
-        $entityUtil = $this->boom->getRepository($entity);
+        // TODO Utilisé AppInspector via BoomGenerator pour deviner la classe avec la table
+        try {
+            $entityUtil = $this->boom->getRepository($entity);
+        } catch (EntityNotFoundException $e){
+            $display->getError()->addEntityErrors('Impossible de trouver la table '.$entity);
+            return [];
+        }
+
         if ($entityUtil == null) return [];
 
         $instanceName = '\\App\\HanaENtity\\' . $entity;
