@@ -43,7 +43,7 @@ class CsvManager
                 /** @var Column $column */
                 foreach ($dataTable->getColumns() as $column) {
 
-                    if ($column->getFieldName() === $fieldName && $column->getType() === Column::TYPE_TEXT) {
+                    if ($column->getFieldName() === $fieldName && $column->getType() === Column::TYPE_TEXT && !$column->isHidden()) {
                         $line[$column->getLabel()] = $value;
                     }
                 }
