@@ -29,8 +29,8 @@ class DataTransformer
     public function addData(Display $dataTable, $data)
     {
 
-        $formatedData = $this->adaptKeyWithProperties($data, $dataTable);
-        $dataTable->setData($formatedData);
+        $formattedData = $this->adaptKeyWithProperties($data, $dataTable);
+        $dataTable->setData($formattedData);
 
         if ($this->urlManager !== null) {
             $this->urlManager->generateLink($dataTable, $dataTable->getData());

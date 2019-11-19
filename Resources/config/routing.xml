@@ -30,6 +30,9 @@
     <route id="w3com_display_form" path="/display-form/{filename}" methods="GET POST">
         <default key="_controller">w3com_hulk.controller.display_form_controller::displayForm</default>
     </route>
+    <route id="w3com_display_form_reload" path="/display-form-reload" methods="POST">
+        <default key="_controller">w3com_hulk.controller.display_form_controller::displayFormReload</default>
+    </route>
     <route id="w3com_export_csv" path="/export-csv" methods="POST">
         <default key="_controller">w3com_hulk.controller.export_csv_controller::exportCsv</default>
     </route>
@@ -51,7 +54,5 @@
     <route id="w3com_admin_displays" path="/hulk/admin/displays" methods="GET">
         <default key="_controller">w3com_hulk.controller.admin_controller::displays</default>
     </route>
-    <route id="w3com_admin_remove_cache" path="/hulk/admin/remove-cache" methods="GET">
-        <default key="_controller">w3com_hulk.controller.admin_controller::removeCache</default>
-    </route>
+
 </routes>

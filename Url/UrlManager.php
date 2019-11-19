@@ -91,7 +91,7 @@ class UrlManager
     {
 
         $routeParams = [];
-        foreach ($formData['display_filter'] as $field => $value) {
+        foreach ($formData['display'] as $field => $value) {
 
             if ($value != null && substr($field, 0, 9) !== '_interval' &&
                 $field !== 'submit' && $field !== '_token') {

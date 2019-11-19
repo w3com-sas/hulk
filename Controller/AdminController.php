@@ -2,15 +2,13 @@
 
 namespace W3com\HulkBundle\Controller;
 
+use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use W3com\BoomBundle\Generator\SLInspector;
-use W3com\BoomBundle\RestClient\OdataRestClient;
-use W3com\BoomBundle\RestClient\SLRestClient;
 use W3com\BoomBundle\Service\BoomGenerator;
 use W3com\HulkBundle\Service\DisplayProvider;
 use W3com\HulkBundle\Util\EntityProvider;
@@ -37,10 +35,15 @@ class AdminController extends AbstractController
      * @var BoomGenerator
      */
     private $generator;
+    /**
+     * @var KernelInterface
+     */
+    private $kernel;
 
     public function __construct(AuthenticationUtils $authenticationUtils, EntityProvider $provider, DisplayProvider $displayProvider,
-                                AdapterInterface $adapter, BoomGenerator $generator)
+                                AdapterInterface $adapter, BoomGenerator $generator, KernelInterface $kernel)
     {
+        $this->kernel = $kernel;
         $this->cache = $adapter;
         $this->generator = $generator;
         $this->displayProvider = $displayProvider;
@@ -66,6 +69,18 @@ class AdminController extends AbstractController
             $displays[] = $this->displayProvider->getDisplay($display, [], 1);
         }
         return $this->render('@W3comHulk/admin/displays.html.twig', ['displays' => $displays]);
+    }
+
+    public function updateDisplays()
+    {
+        $application = new Application($this->kernel);
+        $application->setAutoExit(true);
+        $clearCache = new ArrayInput(['command' => 'boom:cl']);
+        $updateDisplays = new ArrayInput(['command' => 'hulk:update:displays']);
+        $application->run($clearCache, new NullOutput());
+        $application->run($updateDisplays, new NullOutput());
+        die();
+        return $this->redirectToRoute('w3com_admin_displays');
     }
 
     public function displayForms()

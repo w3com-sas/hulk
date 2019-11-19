@@ -7,15 +7,15 @@
 {% endblock %}
 
 {% block form_rows %}
-
     <div class="row">
         {% for child in form if not child.rendered %}
             {# Single field #}
-
             {% if child.vars.name == 'submit' %}
                 <div class="col-12">
                     {{ form_row(child) }}
                 </div>
+            {% elseif child.vars.name in ['filename', 'calcView']  %}
+                {{ form_row(child) }}
             {% elseif child.children is empty %}
                 <div class="col-4">
                     {{ form_row(child) }}
@@ -29,29 +29,22 @@
             {% endif %}
         {% endfor %}
     </div>
-
 {% endblock form_rows %}
 
 {% block form_row %}
-
     {% if (form.vars.name == 'min') or (form.vars.name == 'max') %}
-
         <div class="form-group w-50">
             {{ form_label(form) }}
             {{ form_widget(form) }}
             {{ form_errors(form) }}
         </div>
-
     {% else %}
-
         <div class="form-group">
             {{ form_label(form) }}
             {{ form_widget(form) }}
             {{ form_errors(form) }}
         </div>
-
     {% endif %}
-
 {% endblock %}
 
 {% block display_filter_multiple_row %}

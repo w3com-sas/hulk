@@ -12,7 +12,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use W3com\HulkBundle\Model\Filter;
 
-class DisplayFilterMultipleType extends AbstractType
+class DisplayMultipleType extends AbstractType
 {
 
     public function buildForm(FormBuilderInterface $builder, array $options)

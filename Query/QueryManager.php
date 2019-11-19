@@ -82,6 +82,7 @@ class QueryManager
         // Si formulaire alors select pour GROUP BY (Si calcview est en mode aggregate)
         if ($display->isFilter) {
             $this->addSelectForFilters($display, $params);
+            $this->addGetParamsRequest($display, $requestParams, $params);
             return $repo->findAll($params);
         }
 
@@ -267,13 +268,6 @@ class QueryManager
                 }
 
                 $sapField = substr($key, strlen(UrlManager::INTERVAL_URL_KEY));
-
-                /*
-               if ($odsEntity->getProperty($sapField) === null){
-                    $dataTable->getError()->addColumnError('Unknown field '.$sapField.' maybe need a hulk/update-view/{display}');
-                    continue;
-                }*/
-
                 $sapQuote = ('Edm.Int32' === $odsEntity->getProperty($sapField)->getFieldType() || 'Edm.Decimal'
                     === $odsEntity->getProperty($sapField)->getFieldType() || 'Edm.Double' ===
                     $odsEntity->getProperty($sapField)->getFieldType()) ? "" : "'";

@@ -10,11 +10,19 @@ use W3com\HulkBundle\Service\ApiManager;
 
 class ApiWendisController extends AbstractController
 {
-
+    /**
+     * @var RequestStack
+     */
     private $request;
 
+    /**
+     * @var LoggerInterface
+     */
     private $logger;
 
+    /**
+     * @var ApiManager
+     */
     private $apiManager;
 
     public function __construct(RequestStack $request, LoggerInterface $logger)

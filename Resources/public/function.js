@@ -35,17 +35,17 @@ function formatDataToUpdate(data) {
 
 function updateSapLine(input) {
 
-    if (input.className.indexOf('is-valid') !== -1){
+    if (input.className.indexOf('is-valid') !== -1) {
         input.className = input.className.replace('is-valid', '');
     }
-    if (input.className.indexOf('is-invalid') !== -1){
+    if (input.className.indexOf('is-invalid') !== -1) {
         input.className = input.className.replace('is-invalid', '');
     }
     var data = {
-        'entity' : input.dataset.entity,
-        'key' : input.dataset.key,
+        'entity': input.dataset.entity,
+        'key': input.dataset.key,
         'targetField': input.dataset.fieldName,
-        'targetData' : input.value
+        'targetData': input.value
     };
 
     $.ajax({
@@ -193,6 +193,69 @@ function goToLine(lineIndex, idLine) {
     document.getElementById(idLine).scrollIntoView();
 }
 
-function saveLine(idLine) {
+function reloadDisplayForm() {
 
+    var data = {};
+    data.calcView = document.getElementById('display_calcView').value;
+    data.selectedChoices = {};
+
+    var elements = document.getElementsByTagName('select');
+    for (i = 0; i < elements.length; i++) {
+        if (elements[i].value !== "") {
+            // Get the real SAP field name
+            data.selectedChoices[elements[i].id.replace('display_', '')] = elements[i].value;
+        }
+    }
+
+    $.ajax({
+        url: hulkUrls.displayFormReload,
+        type: "POST",
+        data: data,
+        success: function (resp) {
+            if (resp.length > 0) {
+                var fieldsNotToUpdate = Object.keys(data.selectedChoices);
+                var toUpdateData = {};
+
+                // Organize data
+                for (var i = 0; i < resp.length; i++) {
+                    var properties = Object.keys(resp[i]);
+                    for (var l = 0; l < properties.length; l++) {
+                        if (!fieldsNotToUpdate.includes(properties[l])) {
+                            if (!toUpdateData.hasOwnProperty(properties[l])) {
+                                toUpdateData[properties[l]] = [];
+                            } else {
+                                if (!toUpdateData[properties[l]].includes(resp[i][properties[l]]) && resp[i][properties[l]] !== null) {
+                                    toUpdateData[properties[l]].push(resp[i][properties[l]]);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Update option
+                var toUpdateFields = Object.keys(toUpdateData);
+                for (var i = 0; i < elements.length; i++) {
+                    for (var l = 0; l < toUpdateFields.length; l++) {
+                        if (elements[i].id.replace('display_', '') === toUpdateFields[l]) {
+                            $(elements[i]).empty();
+                            var nullOption = document.createElement('option');
+                            nullOption.value = '';
+                            nullOption.text = '';
+                            elements[i].add(nullOption);
+                            for (var x = 0; x < toUpdateData[toUpdateFields[l]].length; x++) {
+                                var option = document.createElement('option');
+                                option.value = toUpdateData[toUpdateFields[l]][x];
+                                option.text = toUpdateData[toUpdateFields[l]][x];
+                                elements[i].add(option);
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        error: function () {
+            alert('Une erreur inconnue est survenue, merci de contacter le support.')
+        }
+    })
 }
+
