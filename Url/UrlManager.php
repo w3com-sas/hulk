@@ -94,7 +94,7 @@ class UrlManager
         foreach ($formData['display'] as $field => $value) {
 
             if ($value != null && substr($field, 0, 9) !== '_interval' &&
-                $field !== 'submit' && $field !== '_token') {
+                $field !== 'submit' && $field !== '_token' && $field !== 'calcView') {
                 $value = $this->reverseDateFormat($value);
                 $routeParams[$field] = $value;
             }
