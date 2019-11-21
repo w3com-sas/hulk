@@ -195,6 +195,9 @@ function goToLine(lineIndex, idLine) {
 
 function reloadDisplayForm() {
 
+    var event = new CustomEvent('LoadDisplayForm');
+    document.dispatchEvent(event);
+
     var data = {};
     data.calcView = document.getElementById('display_calcView').value;
     data.selectedChoices = {};
@@ -255,6 +258,10 @@ function reloadDisplayForm() {
         },
         error: function () {
             alert('Une erreur inconnue est survenue, merci de contacter le support.')
+        },
+        complete: function () {
+            var loadedDisplayFormEvent = new CustomEvent('DisplayFormLoaded');
+            document.dispatchEvent(loadedDisplayFormEvent);
         }
     })
 }
