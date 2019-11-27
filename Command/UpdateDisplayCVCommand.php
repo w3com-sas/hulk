@@ -70,7 +70,7 @@ class UpdateDisplayCVCommand extends Command
             foreach ($calculationViews as $calculationView) {
                 if (substr($calculationView, 0, 5) !== 'ERROR') {
                     try {
-                        $this->generator->createViewEntity($calculationView);
+                        $this->generator->createODSEntity($calculationView);
                     } catch (EntityNotFoundException $exception) {
                         $io->error('Unable to find ' . $calculationView);
                         continue;
