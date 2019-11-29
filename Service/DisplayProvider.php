@@ -15,7 +15,7 @@ use W3com\HulkBundle\Model\Display;
 use W3com\HulkBundle\Query\QueryManager;
 use W3com\BoomBundle\Service\BoomManager;
 use W3com\HulkBundle\Url\UrlManager;
-use W3com\HulkBundle\Util\DataTablesConstructor;
+use W3com\HulkBundle\Util\DisplayConstructor;
 use W3com\HulkBundle\Util\DataTransformer;
 use W3com\HulkBundle\Util\Indexor;
 
@@ -63,7 +63,7 @@ class DisplayProvider
     private $dataTransformer;
 
     /**
-     * @var DataTablesConstructor
+     * @var DisplayConstructor
      */
     private $constructor;
 
@@ -94,7 +94,7 @@ class DisplayProvider
         $this->filterSessionManager = $filterSessionManager;
         $this->logger = $logger;
         $this->config = $config;
-        $this->constructor = new DataTablesConstructor($boom);
+        $this->constructor = new DisplayConstructor($boom);
         $this->indexor = new Indexor();
         $this->filterManager = new FilterManager();
         $this->columnManager = new ColumnManager();
@@ -149,9 +149,9 @@ class DisplayProvider
     }
 
     /**
-     * @return DataTablesConstructor
+     * @return DisplayConstructor
      */
-    public function getConstructor(): DataTablesConstructor
+    public function getConstructor(): DisplayConstructor
     {
         return $this->constructor;
     }

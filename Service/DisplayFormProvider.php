@@ -13,7 +13,7 @@ use W3com\HulkBundle\Finder\JsonFinder;
 use W3com\HulkBundle\Finder\ModelFinder;
 use W3com\HulkBundle\Model\Display;
 use W3com\HulkBundle\Query\QueryManager;
-use W3com\HulkBundle\Util\DataTablesConstructor;
+use W3com\HulkBundle\Util\DisplayConstructor;
 use W3com\HulkBundle\Util\DataTransformer;
 
 class DisplayFormProvider
@@ -48,7 +48,7 @@ class DisplayFormProvider
         $this->jsonFinder = new JsonFinder($boom, $config);
         $this->modelFinder = new ModelFinder($generator);
         $this->queryManager = new QueryManager($this->modelFinder, $boom, $generator);
-        $this->displayConstructor = new DataTablesConstructor($boom);
+        $this->displayConstructor = new DisplayConstructor($boom);
         $this->filterManager = new FilterManager();
         $this->dataTransformer = new DataTransformer($this->modelFinder);
         $this->display->isFilter = true;

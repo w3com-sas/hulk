@@ -10,7 +10,7 @@ use W3com\HulkBundle\Model\Display;
 use W3com\HulkBundle\Model\Filter;
 use W3com\HulkBundle\Model\GlobalAction;
 
-class DataTablesConstructor
+class DisplayConstructor
 {
     private $boom;
 
@@ -22,13 +22,9 @@ class DataTablesConstructor
     public function hydrateDataTable($file, Display $dataTable)
     {
         if ($dataTable->getError()->isFileExist()) {
-
             $decodedJson = json_decode($file, true);
-
             if ($decodedJson === null) {
-
                 $dataTable->getError()->setFileIsBroken(true);
-
             } else {
                 foreach ($decodedJson as $key => $value) {
                     switch ($key) {

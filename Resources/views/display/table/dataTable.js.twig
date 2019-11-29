@@ -139,7 +139,6 @@ $(document).ready(function () {
                         {% if column.cellAction.iconFieldName is not null %}
                         var icon = row.{{ column.cellAction.iconFieldName }};
 
-
                         return tpl.replace('[[icon]]', icon).replace('[[data]]', data);
                         {% else %}
                         return tpl.replace('[[data]]', data);
@@ -205,12 +204,15 @@ $(document).ready(function () {
                         var tplIcon = $('#icon').html();
                         if (row.hasOwnProperty('{{ column.iconFieldName }}') && (row.{{ column.iconFieldName }} != '')) {
                             var prefixIcon = '';
-                            if (row.{{ column.iconFieldName }}.split(' ').length == 1){
+                            if (row.{{ column.iconFieldName }}.
+                            split(' ').length == 1
+                        )
+                            {
                                 prefixIcon = 'fa fa-';
                             }
                             iconRenderer = tplIcon.replace('[[data]]', prefixIcon + row.{{ column.iconFieldName }});
                         } else {
-                            iconRenderer = tplIcon.replace('[[data]]','{{ column.cellAction.icon }}')
+                            iconRenderer = tplIcon.replace('[[data]]', '{{ column.cellAction.icon }}')
                         }
 
                         var labelRenderer = '';
@@ -242,12 +244,12 @@ $(document).ready(function () {
                 {
                     data: '{{ column.fieldName }}',
                     render: function (data, type, row) {
-                        return  '<input type="text" value="'+data+'"'+
-                                'class="form-control form-control-sm"'+
-                                'data-entity="'+'{{ column.config.entity }}'+
-                                '" data-field-name="'+ '{{ column.fieldName }}'+
-                                '" data-key="'+ row.{{ column.config.entityKey }} +
-                                 '" onchange="updateSapLine(this)"/>';
+                        return '<input type="text" value="' + data + '"' +
+                            'class="form-control form-control-sm"' +
+                            'data-entity="' + '{{ column.config.entity }}' +
+                            '" data-field-name="' + '{{ column.fieldName }}' +
+                            '" data-key="' + row.{{ column.config.entityKey }} +
+                            '" onchange="updateSapLine(this)"/>';
                     }
                 },
                 {% endif %}

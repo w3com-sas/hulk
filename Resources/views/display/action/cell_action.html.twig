@@ -3,13 +3,10 @@
     {% if column.type == 'action' %}
 
         {% if column.cellAction.iconFieldName is not null %}
-
             {# For dynamic icon with field who provide it #}
             {% set btnClass =  'btn btn-sm' %}
             {% set iconTpl = '<i class="fa fa-[[icon]]"></i>' %}
-
         {% else %}
-
             {% if column.cellAction.icon != null %}
                 {% set btnClass =  'btn btn-primary btn-sm' %}
                 {% if column.cellAction.icon|split(' ')|length == 2 %}
@@ -19,7 +16,6 @@
                 {% endif %}
                 {% set iconTpl = '<i class="'~iconRender~'"></i>' %}
             {% endif %}
-
         {% endif %}
 
         {% if column.cellAction.functionName == 'openForm' %}

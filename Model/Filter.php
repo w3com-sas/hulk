@@ -24,7 +24,7 @@ class Filter
 
     private $label;
 
-    private $values;
+    private $values = [];
 
     private $active;
 
