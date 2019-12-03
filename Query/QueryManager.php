@@ -218,8 +218,6 @@ class QueryManager
      * @param Display $dataTable
      * @param array $getRequestParams
      * @param Parameters $parameters
-     * @throws AnnotationException
-     * @throws ReflectionException
      * @throws \Exception
      */
     private function addGetParamsRequest(Display $dataTable, $getRequestParams, Parameters $parameters)
@@ -300,24 +298,23 @@ class QueryManager
      */
     private function addPreFilter(Display $display, Parameters $parameters)
     {
-        if (!empty($display->getFilters())) {
-            /** @var Filter $filter */
-            foreach ($display->getFilters() as $filter) {
+        /** @var Filter $filter */
+        foreach ($display->getFilters() as $filter) {
 
-                if ($filter->getType() === Filter::TYPE_PRE_FILTER) {
+            if ($filter->getType() === Filter::TYPE_PRE_FILTER) {
 
-                    foreach ($filter->getParams() as $field => $value) {
-                        if ($this->appEntity->getProperty($field) !== null) {
-                            $parameters->addFilter($this->appEntity->getProperty($field)->getName(), $value);
-                        } else {
-                            $display->getError()
-                                ->addFilterError(
-                                    sprintf(Error::ERROR_MISSING_FIELD, $filter->getFieldName(), $display->getCalcView())
-                                );
-                        }
+                foreach ($filter->getParams() as $field => $value) {
+                    if ($this->appEntity->getProperty($field) !== null) {
+                        $parameters->addFilter($this->appEntity->getProperty($field)->getName(), $value);
+                    } else {
+                        $display->getError()
+                            ->addFilterError(
+                                sprintf(Error::ERROR_MISSING_FIELD, $filter->getFieldName(), $display->getCalcView())
+                            );
                     }
                 }
             }
         }
     }
+
 }

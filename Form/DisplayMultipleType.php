@@ -44,7 +44,7 @@ class DisplayMultipleType extends AbstractType
                 $form->add('max', DateType::class, [
                     'format' => 'd/m/Y',
                     'label' => false, 'widget' => 'single_text',
-                    'html5' => false,'required' => false, 'mapped' => false
+                    'html5' => false, 'required' => false, 'mapped' => false
                 ]);
             }
 

@@ -1,38 +1,3 @@
-function openForm(obj, id) {
-    sap.sbo.webbridge.openForm(obj, id)
-}
-
-function formatDataToCsv(rows) {
-    var formatedData = [];
-    // On passe le header (Les entêtes)
-    formatedData.push(Object.keys(rows[0]));
-    // On transform l'objet en tableau pour qu'il puisse être traité.
-    $.each(rows, function (indexObj, obj) {
-        var line = [];
-        $.each(obj, function (index, value) {
-            line.push(value)
-        });
-        formatedData.push(line);
-    });
-
-    return formatedData;
-}
-
-function countSelectedRows(rows) {
-    var node = document.getElementById('countSelectedRows');
-    node.innerText = rows.length + ' ligne(s) sélectionnée(s)';
-    node.style.display = 'block';
-}
-
-function formatDataToUpdate(data) {
-    var obj = {};
-
-    $.each(data, function (index, value) {
-        obj[String(index)] = value
-    });
-    return obj;
-}
-
 function updateSapLine(input) {
 
     if (input.className.indexOf('is-valid') !== -1) {
@@ -74,7 +39,6 @@ function updateSap(data, targetEntity, targetField, entityKey, targetData, modal
         "targetData": targetData
     };
 
-
     $.ajax({
         method: 'POST',
         url: url,
@@ -112,9 +76,7 @@ function updateSap(data, targetEntity, targetField, entityKey, targetData, modal
 }
 
 function apiRequest(data, params, urlApi, modal) {
-
     var rows = this.formatDataToUpdate(data);
-
     var postData = {
         "data": rows,
         "apiParams": params,
@@ -186,13 +148,6 @@ function apiRequest(data, params, urlApi, modal) {
     })
 }
 
-function goToLine(lineIndex, idLine) {
-    var table = $('#dataTable').DataTable();
-    var pageToGo = Math.floor(lineIndex / table.page.len());
-    table.page(pageToGo).draw('page');
-    document.getElementById(idLine).scrollIntoView();
-}
-
 function reloadDisplayForm() {
 
     var event = new CustomEvent('LoadDisplayForm');
@@ -234,7 +189,6 @@ function reloadDisplayForm() {
                         }
                     }
                 }
-
                 // Update option
                 var toUpdateFields = Object.keys(toUpdateData);
                 for (var i = 0; i < elements.length; i++) {
