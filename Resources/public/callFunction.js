@@ -1,4 +1,4 @@
-class CallFunction {
+global.CallFunction = class {
     constructor(functionName, headerIconClass) {
         this.modal = document.getElementById(functionName);
         this.modalBody = document.getElementById(functionName + 'Body');
@@ -107,9 +107,9 @@ class CallFunction {
         errors.innerText = 'Une erreur inconnue est survenue.';
         this.modalBody.appendChild(errors);
     }
-}
+};
 
-function checkRowsLength(rows, minLength, callFunction) {
+global.checkRowsLength = function(rows, minLength, callFunction) {
     if (rows.length < minLength) {
         var errors = document.createElement('div');
         errors.className = 'alert alert-danger';
@@ -118,4 +118,4 @@ function checkRowsLength(rows, minLength, callFunction) {
         return false;
     }
     return true;
-}
+};

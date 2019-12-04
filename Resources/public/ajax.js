@@ -1,4 +1,4 @@
-function updateSapLine(input) {
+global.updateSapLine = function (input) {
 
     if (input.className.indexOf('is-valid') !== -1) {
         input.className = input.className.replace('is-valid', '');
@@ -25,9 +25,9 @@ function updateSapLine(input) {
             input.className += ' is-invalid';
         }
     });
-}
+};
 
-function updateSap(data, targetEntity, targetField, entityKey, targetData, modal) {
+global.updateSap = function(data, targetEntity, targetField, entityKey, targetData, modal) {
 
     var rows = this.formatDataToUpdate(data);
     var url = hulkUrls.updateSap;
@@ -73,9 +73,9 @@ function updateSap(data, targetEntity, targetField, entityKey, targetData, modal
 
         }
     })
-}
+};
 
-function apiRequest(data, params, urlApi, modal) {
+global.apiRequest = function(data, params, urlApi, modal) {
     var rows = this.formatDataToUpdate(data);
     var postData = {
         "data": rows,
@@ -146,9 +146,9 @@ function apiRequest(data, params, urlApi, modal) {
             modal.find('.btn-success').html('<i class="far fa-paper-plane mr-2"></i>Valider').removeAttr('disabled');
         }
     })
-}
+};
 
-function reloadDisplayForm() {
+global.reloadDisplayForm = function() {
 
     var event = new CustomEvent('LoadDisplayForm');
     document.dispatchEvent(event);
@@ -218,5 +218,5 @@ function reloadDisplayForm() {
             document.dispatchEvent(loadedDisplayFormEvent);
         }
     })
-}
+};
 
