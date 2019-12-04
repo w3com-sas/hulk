@@ -108,3 +108,14 @@ class CallFunction {
         this.modalBody.appendChild(errors);
     }
 }
+
+function checkRowsLength(rows, minLength, callFunction) {
+    if (rows.length < minLength) {
+        var errors = document.createElement('div');
+        errors.className = 'alert alert-danger';
+        errors.innerText = 'Vous devez sélectionner au moins ' + minLength + ' ligne' + (minLength > 1 ? 's.' : '.');
+        callFunction.modalBody.appendChild(errors);
+        return false;
+    }
+    return true;
+}

@@ -22,3 +22,5 @@ function goToLine(lineIndex, idLine) {
     table.page(pageToGo).draw('page');
     document.getElementById(idLine).scrollIntoView();
 }
+
+
