@@ -329,7 +329,9 @@ class QueryManager
         foreach ($this->appEntity->getProperties() as $property){
             if (in_array($property->getField(), $display->getColumnsFieldNames()) && ($property->getFieldType() === 'string' || $property->getFieldType() === 'int')){
                 $transformFunction = $property->getFieldType() === 'string'? Clause::TO_LOWER : null;
-                $parameters->addFilter($property->getName(), $value, Clause::EQUALS, Clause::OR, $transformFunction);
+                if (!($property->getFieldType() === 'int' && intval($value) === 0)){
+                    $parameters->addFilter($property->getName(), $value, Clause::EQUALS, Clause::OR, $transformFunction);
+                }
             }
         }
     }
