@@ -62,6 +62,7 @@ class UpdateDisplayCVCommand extends Command
 
         $continue = true;
         if (count($errors) > 0) {
+            dump($errors);
             $continue = $io->confirm('There are nonexistent display in configuration file. Do 
             you want to continue ?');
         }
