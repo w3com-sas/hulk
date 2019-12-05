@@ -192,6 +192,16 @@ class Display
         $this->entity = $entity;
     }
 
+    public function getColumnsFieldNames()
+    {
+        $fieldNames = [];
+        /** @var Column $column */
+        foreach ($this->columns as $column){
+            $fieldNames[] = $column->getFieldName();
+        }
+        return $fieldNames;
+    }
+
 
     /**
      * @param $entityFields

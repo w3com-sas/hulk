@@ -7,6 +7,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -31,8 +32,10 @@ class DisplayType extends AbstractType
             /** @var Display $display */
             $display = $formEvent->getData();
             $form = $formEvent->getForm();
-            $form->add('filename', HiddenType::class)->add('calcView', HiddenType::class);
-
+            $form->add('filename', HiddenType::class)->add('calcView', HiddenType::class)
+                ->add('all', TextType::class, [
+                    'mapped' => false, 'label' => 'Recherche générale', 'required' => false
+                ]);
             /** @var Filter $filter */
             foreach ($display->getFilters() as $filter) {
 
@@ -45,8 +48,7 @@ class DisplayType extends AbstractType
                 } elseif ($filter->getType() === Filter::TYPE_MULTIPLE) {
 
                     $form->add('_interval' . $filter->getFieldName(), DisplayMultipleType::class, [
-                        'data' => $filter, 'filter_type' => Filter::TYPE_MULTIPLE, 'mapped' => false
-                    ]);
+                        'data' => $filter, 'filter_type' => Filter::TYPE_MULTIPLE, 'mapped' => false]);
 
                 } elseif ($filter->getType() === Filter::TYPE_SINGLE) {
                     $form->add($filter->getFieldName(), ChoiceType::class, ['mapped' => false,

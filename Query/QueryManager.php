@@ -5,6 +5,7 @@ namespace W3com\HulkBundle\Query;
 use Doctrine\Common\Annotations\AnnotationException;
 use ReflectionException;
 use Symfony\Component\HttpFoundation\ParameterBag;
+use W3com\BoomBundle\Generator\Model\Property;
 use W3com\BoomBundle\Parameters\Clause;
 use W3com\BoomBundle\Service\BoomGenerator;
 use W3com\HulkBundle\Controller\DisplayFormController;
@@ -215,15 +216,16 @@ class QueryManager
     }
 
     /**
-     * @param Display $dataTable
+     * @param Display $display
      * @param array $getRequestParams
      * @param Parameters $parameters
      * @throws \Exception
      */
-    private function addGetParamsRequest(Display $dataTable, $getRequestParams, Parameters $parameters)
+    private function addGetParamsRequest(Display $display, $getRequestParams, Parameters $parameters)
     {
 
-        $odsEntity = $this->generator->getOdsInspector()->getEntity($dataTable->getCalcView());
+
+        $odsEntity = $this->generator->getOdsInspector()->getEntity($display->getCalcView());
 
         if ($getRequestParams instanceof ParameterBag) {
             $arrayGetParams = $getRequestParams->all();
@@ -234,6 +236,10 @@ class QueryManager
         $paramsExist = false;
 
         foreach ($arrayGetParams as $key => $value) {
+
+            if ($key === 'all'){
+                $this->addFilterOnAllProperties($value, $parameters, $display);
+            }
 
             if ($this->appEntity->getProperty($key) !== null) {
 
@@ -313,6 +319,17 @@ class QueryManager
                             );
                     }
                 }
+            }
+        }
+    }
+
+    private function addFilterOnAllProperties($value, Parameters $parameters, Display $display)
+    {
+        /** @var Property $property */
+        foreach ($this->appEntity->getProperties() as $property){
+            if (in_array($property->getField(), $display->getColumnsFieldNames()) && ($property->getFieldType() === 'string' || $property->getFieldType() === 'int')){
+                $transformFunction = $property->getFieldType() === 'string'? Clause::TO_LOWER : null;
+                $parameters->addFilter($property->getName(), $value, Clause::EQUALS, Clause::OR, $transformFunction);
             }
         }
     }

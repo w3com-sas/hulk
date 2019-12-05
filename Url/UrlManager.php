@@ -6,6 +6,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Exception\InvalidParameterException;
 use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use W3com\BoomBundle\Service\BoomGenerator;
 use W3com\HulkBundle\Model\Column;
 use W3com\HulkBundle\Model\Display;
 use W3com\HulkBundle\Util\DataTransformer;
@@ -92,6 +93,7 @@ class UrlManager
 
         $routeParams = [];
         foreach ($formData['display'] as $field => $value) {
+
 
             if ($value != null && substr($field, 0, 9) !== '_interval' &&
                 $field !== 'submit' && $field !== '_token' && $field !== 'calcView') {

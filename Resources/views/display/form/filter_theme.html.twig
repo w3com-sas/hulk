@@ -14,8 +14,12 @@
                 <div class="col-12">
                     {{ form_row(child) }}
                 </div>
-            {% elseif child.vars.name in ['filename', 'calcView']  %}
+            {% elseif child.vars.name in ['filename', 'calcView'] %}
                 {{ form_row(child) }}
+            {% elseif child.vars.name == 'all' %}
+                <div class="col-12">
+                    {{ form_row(child) }}
+                </div>
             {% elseif child.children is empty %}
                 <div class="col-4">
                     {{ form_row(child) }}
