@@ -3,28 +3,21 @@
 namespace W3com\HulkBundle\Url;
 
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Routing\Exception\InvalidParameterException;
-use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use W3com\BoomBundle\Service\BoomGenerator;
 use W3com\HulkBundle\Model\Column;
 use W3com\HulkBundle\Model\Display;
 use W3com\HulkBundle\Util\DataTransformer;
 
 class UrlManager
 {
-    const DISPLAY_LINK_NAME = 'displayLink';
-
-    const GLOBAL_LINK_NAME = 'link';
-
     const KEY_WORD_TODAY = 'today';
 
     const INTERVAL_URL_KEY = 'interval_';
 
+    /** @var UrlGeneratorInterface */
     private $router;
-    /**
-     * @var LoggerInterface
-     */
+
+    /*** @var LoggerInterface */
     private $logger;
 
     public function __construct(UrlGeneratorInterface $router, LoggerInterface $logger)
@@ -33,96 +26,77 @@ class UrlManager
         $this->router = $router;
     }
 
-    public function generateLink(Display $dataTable, $data)
+    public function generateLinks(Display $display, $data)
     {
-        $newData = [];
-        foreach ($data as $lines) {
-
+        $dataTransform = [];
+        foreach ($data as $line) {
             /** @var Column $column */
-            foreach ($dataTable->getColumns() as $column) {
-
-                if ($column->getCellAction() !== null &&
-                    ($column->getCellAction()->getFunctionName() === self::DISPLAY_LINK_NAME ||
-                        $column->getCellAction()->getFunctionName() === self::GLOBAL_LINK_NAME)) {
-
-                    $urlParams = [];
-                    foreach ($column->getCellAction()->getParams() as $fieldName => $targetFieldName) {
-
-                        if ($targetFieldName === self::KEY_WORD_TODAY) {
-                            $urlParams[$fieldName] = date('Y-m-d');
-                        }
-
-                        foreach ($lines as $nameField => $valueField) {
-                            if ($nameField == $fieldName && $valueField != null) {
-                                $urlParams[$targetFieldName] = $valueField;
-                            }
-                        }
-
-                        if (!isset($urlParams[$targetFieldName]) && !isset($urlParams[$fieldName])) {
-                            $urlParams[$fieldName] = $targetFieldName;
-                        }
-
+            foreach ($display->getColumnsWithLinks() as $column) {
+                $urlParams = [];
+                foreach ($line as $property => $value) {
+                    if (array_key_exists($property, $column->getCellAction()->getParams())) {
+                        $value = $this->transformKeyword($value);
+                        $urlParams[$column->getCellAction()->getParams()[$property]] = $value;
                     }
-
-                    if ($column->getCellAction()->getFunctionName() === self::DISPLAY_LINK_NAME) {
-
-                        $urlParams['filename'] = $column->getCellAction()->getTargetEntity();
-                        $url = $this->router->generate('w3com_display',
-                            $urlParams);
-
-                    } else {
-                        try {
-                            $url = $this->router->generate($column->getCellAction()->getTargetEntity(),
-                                $urlParams);
-                        } catch (\Exception $e) {
-                            $dataTable->getError()->addUrlError($column->getFieldName(), $e->getMessage());
-                            $url = null;
-                        }
-                    }
-                    $lines[$column->getCellAction()->getFunctionName() . $column->getCellAction()->getTargetEntity()]
-                        = $url;
                 }
+                $urlParams = $this->addFilenameParam($column, $urlParams);
+                $url = $this->generateLink($column, $urlParams, $display);
+                $line[$column->getCellAction()->getFunctionName() . $column->getCellAction()->getTargetEntity()] = $url;
             }
-            $newData[] = $lines;
+            $dataTransform[] = $line;
         }
-        $dataTable->setData($newData);
+        $display->setData($dataTransform);
     }
 
     public function createRouteParams(array $formData, Display $dataTable)
     {
-
         $routeParams = [];
         foreach ($formData['display'] as $field => $value) {
-
-
-            if ($value != null && substr($field, 0, 9) !== '_interval' &&
-                $field !== 'submit' && $field !== '_token' && $field !== 'calcView') {
-                $value = $this->reverseDateFormat($value);
+            if ($value != null && substr($field, 0, 9) !== '_interval' && $field !== 'submit' && $field !== '_token' && $field !== 'calcView') {
+                $value = DataTransformer::reverseDateFormat($value);
                 $routeParams[$field] = $value;
             }
 
             if (substr($field, 0, 9) === '_interval') {
-
                 if ($value['min'] != "" || $value['max'] != "") {
                     $fieldName = substr($field, 9);
-                    $min = $this->reverseDateFormat(array_values($value)[0]);
-                    $max = $this->reverseDateFormat(array_values($value)[1]);
+                    $min = DataTransformer::reverseDateFormat(array_values($value)[0]);
+                    $max = DataTransformer::reverseDateFormat(array_values($value)[1]);
                     $routeParams[self::INTERVAL_URL_KEY . $fieldName] = $min . '|' . $max;
                 }
-
             }
         }
-
         $routeParams['filename'] = $dataTable->getDisplayName();
         return $routeParams;
     }
 
-    private function reverseDateFormat($value)
+    private function addFilenameParam(Column $column, $urlParams)
     {
-        $date = \DateTime::createFromFormat('d/m/Y', $value);
-        if ($date !== false) {
-            return $date->format('Y-m-d');
+        if ($column->getCellAction()->getFunctionName() === Column::FUNCTION_NAME_DISPLAY_LINK) {
+            $urlParams['filename'] = $column->getCellAction()->getTargetEntity();
         }
-        return $value;
+        return $urlParams;
+    }
+
+    private function generateLink(Column $column, array $urlParams, Display $display)
+    {
+        try {
+            $url = $this->router->generate($column->getCellAction()->getTargetEntity(),
+                $urlParams);
+        } catch (\Exception $e) {
+            $display->getError()->addUrlError($column->getFieldName(), $e->getMessage());
+            $url = null;
+        }
+        return $url;
+    }
+
+    private function transformKeyword($value)
+    {
+        switch ($value) {
+            case self::KEY_WORD_TODAY:
+                return date('Y-m-d');
+            default:
+                return $value;
+        }
     }
 }

@@ -2,21 +2,19 @@
 
 namespace W3com\HulkBundle\Util;
 
-use W3com\BoomBundle\Generator\Model\Property;
+use Doctrine\Common\Annotations\AnnotationException;
+use ReflectionException;
 use W3com\BoomBundle\HanaEntity\AbstractEntity;
-use W3com\HulkBundle\Finder\ModelFinder;
 use W3com\HulkBundle\Model\Display;
 use W3com\HulkBundle\Url\UrlManager;
 
 class DataTransformer
 {
-    private $modelFinder;
-
+    /** @var UrlManager */
     private $urlManager;
 
-    public function __construct(ModelFinder $finder, UrlManager $manager = null)
+    public function __construct(UrlManager $manager)
     {
-        $this->modelFinder = $finder;
         $this->urlManager = $manager;
     }
 
@@ -28,63 +26,34 @@ class DataTransformer
      */
     public function addData(Display $dataTable, $data)
     {
-
-        $formattedData = $this->adaptKeyWithProperties($data, $dataTable);
-        $dataTable->setData($formattedData);
-
-        if ($this->urlManager !== null) {
-            $this->urlManager->generateLink($dataTable, $dataTable->getData());
-        }
-
+        $dataTable->setData($this->transformData($data));
+        $this->urlManager->generateLinks($dataTable, $dataTable->getData());
         return $dataTable;
     }
 
     /**
-     * @param $data
-     * @param Display $dataTable
+     * @param array $hanaEntities
      * @return array
-     * @throws \Exception
+     * @throws AnnotationException
+     * @throws ReflectionException
      */
-    private function adaptKeyWithProperties($data, Display $dataTable)
+    private function transformData(array $hanaEntities)
     {
-
-        // Boom return all fields of object, even if their selects
-
-        $requiredFields = $this->modelFinder->getAvailableProperties($dataTable);
-
-        $newData = [];
+        $data = [];
         /** @var AbstractEntity $boomObj */
-        foreach ($data as $boomObj) {
-            $data = [];
-
+        foreach ($hanaEntities as $boomObj) {
             // Cast entity
-            foreach ((array)$boomObj as $property => $value) {
-
-                // Cast add /00* (Because entity have protected property)
-                // Need to remove it
-                $realProperty = substr($property, 3);
-
-                /**
-                 * @var string $field
-                 * @var Property $requiredProperty
-                 */
-                foreach ($requiredFields as $field => $requiredProperty) {
-
-                    // Match with json Required property
-                    if ($realProperty == $requiredProperty->getName()) {
-
-                        $value = $this->transformDateFormat($value);
-                        $data[$field] = $value;
-                    }
-                }
+            $entityArray = json_decode($boomObj->getEntityJson(), true);
+            foreach ($entityArray as $property => $value) {
+                $value = $this->transformDateFormat($value);
+                $entityArray[$property] = $value;
             }
-            $newData[] = $data;
+            $data[] = $entityArray;
         }
-        return $newData;
+        return $data;
     }
 
-
-    public function transformDateFormat($value)
+    public static function transformDateFormat($value)
     {
         $dateTime = \DateTime::createFromFormat('Y-m-d H:i:s',
             str_replace('T', ' ', $value));
@@ -98,7 +67,7 @@ class DataTransformer
         }
     }
 
-    public function reverseDateFormat($value)
+    public static function reverseDateFormat($value)
     {
         $date = \DateTime::createFromFormat('d/m/Y', $value);
         if ($date !== false) {

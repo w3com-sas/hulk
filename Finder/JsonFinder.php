@@ -4,7 +4,6 @@ namespace W3com\HulkBundle\Finder;
 
 use W3com\BoomBundle\Service\BoomManager;
 use W3com\HulkBundle\Model\Display;
-use W3com\HulkBundle\Util\JsonInspector;
 
 class JsonFinder
 {

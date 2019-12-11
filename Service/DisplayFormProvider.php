@@ -13,6 +13,7 @@ use W3com\HulkBundle\Finder\JsonFinder;
 use W3com\HulkBundle\Finder\ModelFinder;
 use W3com\HulkBundle\Model\Display;
 use W3com\HulkBundle\Query\QueryManager;
+use W3com\HulkBundle\Url\UrlManager;
 use W3com\HulkBundle\Util\DisplayConstructor;
 use W3com\HulkBundle\Util\DataTransformer;
 
@@ -42,15 +43,14 @@ class DisplayFormProvider
      */
     private $generator;
 
-    public function __construct(BoomManager $boom, BoomGenerator $generator, $config)
+    public function __construct(BoomManager $boom, BoomGenerator $generator, UrlManager $urlManager, $config)
     {
         $this->display = new Display();
         $this->jsonFinder = new JsonFinder($boom, $config);
-        $this->modelFinder = new ModelFinder($generator);
-        $this->queryManager = new QueryManager($this->modelFinder, $boom, $generator);
-        $this->displayConstructor = new DisplayConstructor($boom);
+        $this->queryManager = new QueryManager($boom, $generator);
+        $this->displayConstructor = new DisplayConstructor($boom, $generator);
         $this->filterManager = new FilterManager();
-        $this->dataTransformer = new DataTransformer($this->modelFinder);
+        $this->dataTransformer = new DataTransformer($urlManager);
         $this->display->isFilter = true;
         $this->boom = $boom;
         $this->generator = $generator;

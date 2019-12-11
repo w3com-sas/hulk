@@ -12,18 +12,14 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use W3com\BoomBundle\Generator\Model\Entity;
+use W3com\BoomBundle\Generator\Model\Property;
 use W3com\HulkBundle\Model\Display;
 use W3com\HulkBundle\Model\Filter;
 
 class DisplayType extends AbstractType
 {
-    private $todayDate;
-
-    public function __construct()
-    {
-        $dateTime = new \DateTime('now');
-        $this->todayDate = $dateTime->format('dd MM yyyy');
-    }
+    const FIELD_GLOBAL_SEARCH = 'SEARCH';
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -32,10 +28,17 @@ class DisplayType extends AbstractType
             /** @var Display $display */
             $display = $formEvent->getData();
             $form = $formEvent->getForm();
-            $form->add('filename', HiddenType::class)->add('calcView', HiddenType::class)
-                ->add('all', TextType::class, [
+            $form->add('filename', HiddenType::class)->add('calcView', HiddenType::class);
+
+            /** @var Property $globalSearchProperty */
+            $globalSearchProperty = $display->getEntity()->getProperty(self::FIELD_GLOBAL_SEARCH);
+
+            if ($globalSearchProperty !== null){
+                $form->add($globalSearchProperty->getField(), TextType::class, [
                     'mapped' => false, 'label' => 'Recherche générale', 'required' => false
                 ]);
+            }
+
             /** @var Filter $filter */
             foreach ($display->getFilters() as $filter) {
 

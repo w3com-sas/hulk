@@ -3,7 +3,11 @@
 namespace W3com\HulkBundle\Model;
 
 
+use W3com\BoomBundle\Generator\Model\Entity;
 use W3com\BoomBundle\Generator\Model\Property;
+use W3com\BoomBundle\HanaEntity\AbstractEntity;
+use W3com\BoomBundle\Service\BoomGenerator;
+use W3com\HulkBundle\Url\UrlManager;
 
 class Display
 {
@@ -436,6 +440,28 @@ class Display
     public function setLabel(string $label): void
     {
         $this->label = $label;
+    }
+
+    public function getEntityName()
+    {
+        if ($this->entity instanceof Entity){
+            return $this->entity->getName();
+        }
+        return null;
+    }
+
+    public function getColumnsWithLinks()
+    {
+        $columns = [];
+        /** @var Column $column */
+        foreach ($this->columns as $column){
+            if ($column->getCellAction() !== null){
+                if (in_array($column->getCellAction()->getFunctionName(), [Column::FUNCTION_NAME_DISPLAY_LINK, Column::FUNCTION_NAME_LINK])){
+                    $columns[] = $column;
+                }
+            }
+        }
+        return $columns;
     }
 
 }

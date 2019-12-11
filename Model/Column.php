@@ -17,6 +17,9 @@ class Column
     const COL_TYPE_CHECKBOX = 'checkbox';
     const TYPE_TEXT = 'text';
 
+    const FUNCTION_NAME_DISPLAY_LINK = 'displayLink';
+    const FUNCTION_NAME_LINK = 'link';
+
     /**
      * @var integer
      */

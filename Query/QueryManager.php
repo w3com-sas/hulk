@@ -8,8 +8,7 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 use W3com\BoomBundle\Generator\Model\Property;
 use W3com\BoomBundle\Parameters\Clause;
 use W3com\BoomBundle\Service\BoomGenerator;
-use W3com\HulkBundle\Controller\DisplayFormController;
-use W3com\HulkBundle\Finder\ModelFinder;
+use W3com\HulkBundle\Form\DisplayType;
 use W3com\HulkBundle\Model\CellAction;
 use W3com\HulkBundle\Model\Column;
 use W3com\HulkBundle\Model\Display;
@@ -20,39 +19,26 @@ use W3com\BoomBundle\Generator\Model\Entity;
 use W3com\BoomBundle\Parameters\Parameters;
 use W3com\BoomBundle\Service\BoomManager;
 use W3com\HulkBundle\Url\UrlManager;
+use function GuzzleHttp\Psr7\str;
 
 class QueryManager
 {
 
-    /**
-     * @var ModelFinder
-     */
-    private $modelFinder;
-
-    /**
-     * @var BoomManager
-     */
+    /** @var BoomManager */
     private $boom;
 
-    /**
-     * @var Entity
-     */
+    /** @var Entity */
     private $appEntity;
 
-    /**
-     * @var BoomGenerator
-     */
+    /*** @var BoomGenerator */
     private $generator;
 
     /**
-     * QueryManager constructor.
-     * @param ModelFinder $finder
      * @param BoomManager $boom
      * @param BoomGenerator $generator
      */
-    public function __construct(ModelFinder $finder, BoomManager $boom, BoomGenerator $generator)
+    public function __construct(BoomManager $boom, BoomGenerator $generator)
     {
-        $this->modelFinder = $finder;
         $this->boom = $boom;
         $this->generator = $generator;
     }
@@ -62,18 +48,15 @@ class QueryManager
      * @param array $requestParams
      * @param null $top
      * @return array
-     * @throws AnnotationException
      * @throws ReflectionException
      */
     public function createDataTableQuery(Display $display, $requestParams = [], $top = null)
     {
-        $this->appEntity = $this->generator->getAppInspector()
-            ->getEntity($display->getCalcView());
-        $this->modelFinder->setDataTableEntity($display);
+        $this->appEntity = $this->generator->getAppInspector()->getEntity($display->getCalcView());
         $display->getError()->setClassExist(true);
 
         try {
-            $repo = $this->boom->getRepository($display->getEntity());
+            $repo = $this->boom->getRepository($display->getEntityName());
         } catch (EntityNotFoundException $e) {
             $display->getError()->setClassExist(false);
             return null;
@@ -83,7 +66,6 @@ class QueryManager
         // Si formulaire alors select pour GROUP BY (Si calcview est en mode aggregate)
         if ($display->isFilter) {
             $this->addSelectForFilters($display, $params);
-            $this->addGetParamsRequest($display, $requestParams, $params);
             return $repo->findAll($params);
         }
 
@@ -104,43 +86,41 @@ class QueryManager
      */
     private function addSelectForColumns(Display $dataTable, Parameters $params)
     {
-        if (!empty($dataTable->getColumns())) {
-            /** @var Column $column */
-            foreach ($dataTable->getColumns() as $column) {
+        /** @var Column $column */
+        foreach ($dataTable->getColumns() as $column) {
 
-                if ($column->getType() === Column::TYPE_TEXT || $column->getFieldName() !== null
-                    || $column->getIconFieldName() !== null || $column->getLabelFieldName() !== null) {
+            if ($column->getType() === Column::TYPE_TEXT || $column->getFieldName() !== null
+                || $column->getIconFieldName() !== null || $column->getLabelFieldName() !== null) {
 
-                    $atLeastOne = false;
+                $atLeastOne = false;
 
-                    if ($this->appEntity->getProperty($column->getFieldName()) !== null) {
-                        $params->addSelect($this->appEntity->getProperty($column->getFieldName())->getName());
-                        $atLeastOne = true;
-                    }
+                if ($this->appEntity->getProperty($column->getFieldName()) !== null) {
+                    $params->addSelect($this->appEntity->getProperty($column->getFieldName())->getName());
+                    $atLeastOne = true;
+                }
 
-                    if ($this->appEntity->getProperty($column->getIconFieldName()) !== null) {
-                        $params->addSelect($this->appEntity->getProperty($column->getIconFieldName())->getName());
-                        $atLeastOne = true;
-                    }
+                if ($this->appEntity->getProperty($column->getIconFieldName()) !== null) {
+                    $params->addSelect($this->appEntity->getProperty($column->getIconFieldName())->getName());
+                    $atLeastOne = true;
+                }
 
-                    if ($this->appEntity->getProperty($column->getLabelFieldName()) !== null) {
-                        $params->addSelect($this->appEntity->getProperty($column->getLabelFieldName())->getName());
-                        $atLeastOne = true;
-                    }
+                if ($this->appEntity->getProperty($column->getLabelFieldName()) !== null) {
+                    $params->addSelect($this->appEntity->getProperty($column->getLabelFieldName())->getName());
+                    $atLeastOne = true;
+                }
 
-                    if ($column->getCellAction() != null && $this->appEntity->getProperty($column->getCellAction()->getRenderFieldName()) !== null) {
-                        $params->addSelect($this->appEntity->getProperty($column->getCellAction()->getRenderFieldName())->getName());
-                        $atLeastOne = true;
-                    }
+                if ($column->getCellAction() != null && $this->appEntity->getProperty($column->getCellAction()->getRenderFieldName()) !== null) {
+                    $params->addSelect($this->appEntity->getProperty($column->getCellAction()->getRenderFieldName())->getName());
+                    $atLeastOne = true;
+                }
 
-                    if (!$atLeastOne) {
-                        $column->setActive('N');
-                        $dataTable->getError()->addColumnError(
-                            sprintf(Error::ERROR_MISSING_FIELD, $column->getFieldName(),
-                                $dataTable->getCalcView()
-                            )
-                        );
-                    }
+                if (!$atLeastOne) {
+                    $column->setActive('N');
+                    $dataTable->getError()->addColumnError(
+                        sprintf(Error::ERROR_MISSING_FIELD, $column->getFieldName(),
+                            $dataTable->getCalcView()
+                        )
+                    );
                 }
             }
         }
@@ -237,8 +217,9 @@ class QueryManager
 
         foreach ($arrayGetParams as $key => $value) {
 
-            if ($key === 'all'){
-                $this->addFilterOnAllProperties($value, $parameters, $display);
+            if ($key === 'SEARCH') {
+                $this->addGlobalSearchFilter($value, $parameters, $display);
+                break;
             }
 
             if ($this->appEntity->getProperty($key) !== null) {
@@ -256,8 +237,7 @@ class QueryManager
         foreach ($arrayGetParams as $key => $value) {
 
 
-            if (substr($key, 0, strlen(UrlManager::INTERVAL_URL_KEY))
-                === UrlManager::INTERVAL_URL_KEY) {
+            if (substr($key, 0, strlen(UrlManager::INTERVAL_URL_KEY)) === UrlManager::INTERVAL_URL_KEY) {
 
                 if ($paramsExist && !isset($rawFilter)) {
                     $rawFilter = ' and ';
@@ -323,16 +303,12 @@ class QueryManager
         }
     }
 
-    private function addFilterOnAllProperties($value, Parameters $parameters, Display $display)
+    private function addGlobalSearchFilter($value, Parameters $parameters, Display $display)
     {
-        /** @var Property $property */
-        foreach ($this->appEntity->getProperties() as $property){
-            if (in_array($property->getField(), $display->getColumnsFieldNames()) && ($property->getFieldType() === 'string' || $property->getFieldType() === 'int')){
-                $transformFunction = $property->getFieldType() === 'string'? Clause::TO_LOWER : null;
-                if (!($property->getFieldType() === 'int' && intval($value) === 0)){
-                    $parameters->addFilter($property->getName(), $value, Clause::EQUALS, Clause::OR, $transformFunction);
-                }
-            }
+        $property = $display->getEntity()->getProperty(DisplayType::FIELD_GLOBAL_SEARCH);
+        if ($property instanceof Property){
+            $parameters->addFilter($property->getName(), $value,
+                Clause::SUBSTRING_OF, null, Clause::TO_LOWER);
         }
     }
 

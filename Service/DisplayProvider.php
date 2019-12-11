@@ -94,14 +94,13 @@ class DisplayProvider
         $this->filterSessionManager = $filterSessionManager;
         $this->logger = $logger;
         $this->config = $config;
-        $this->constructor = new DisplayConstructor($boom);
+        $this->constructor = new DisplayConstructor($boom, $generator);
         $this->indexor = new Indexor();
         $this->filterManager = new FilterManager();
         $this->columnManager = new ColumnManager();
-        $this->modelFinder = new ModelFinder($generator);
         $this->urlManager = new UrlManager($router, $logger);
-        $this->dataTransformer = new DataTransformer($this->modelFinder, $this->urlManager);
-        $this->queryManager = new QueryManager($this->modelFinder, $boom, $generator);
+        $this->dataTransformer = new DataTransformer($this->urlManager);
+        $this->queryManager = new QueryManager($boom, $generator);
         $this->jsonFinder = new JsonFinder($boom, $config);
     }
 

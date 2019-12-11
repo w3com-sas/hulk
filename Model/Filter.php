@@ -5,16 +5,18 @@ namespace W3com\HulkBundle\Model;
 
 class Filter
 {
-    const FIELD_FIELDNAME = 'FieldName';
+    const FIELD_FIELD_NAME = 'FieldName';
     const FIELD_LABEL = 'Label';
     const FIELD_TYPE = 'Type';
 
     const TYPE_SINGLE = 'single';
+    const TYPE_SELECT = 'select';
     const TYPE_MULTIPLE = 'multiple';
     const TYPE_MULTIPLE_DATE = 'multiple-date';
     const TYPE_PRE_FILTER = 'pre-filter';
-    const FIELD_PARAMS = 'Params';
     const TYPE_DATE = 'date';
+
+    const FIELD_PARAMS = 'Params';
     const FIELD_ORDER = 'Order';
 
     const ORDER_ASC = 'ASC';

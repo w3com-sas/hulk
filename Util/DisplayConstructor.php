@@ -3,6 +3,9 @@
 namespace W3com\HulkBundle\Util;
 
 use W3com\BoomBundle\Exception\EntityNotFoundException;
+use W3com\BoomBundle\Generator\AppInspector;
+use W3com\BoomBundle\Service\BoomGenerator;
+use W3com\BoomBundle\Service\BoomManager;
 use W3com\HulkBundle\Model\CellAction;
 use W3com\HulkBundle\Model\Column;
 use W3com\HulkBundle\Model\Config;
@@ -12,57 +15,66 @@ use W3com\HulkBundle\Model\GlobalAction;
 
 class DisplayConstructor
 {
+    /** @var BoomManager  */
     private $boom;
 
-    public function __construct($boom)
+    /** @var AppInspector  */
+    private $appInspector;
+
+    public function __construct(BoomManager $boom, BoomGenerator $boomGenerator)
     {
         $this->boom = $boom;
+        $this->appInspector = $boomGenerator->getAppInspector();
     }
 
-    public function hydrateDataTable($file, Display $dataTable)
+    public function hydrateDataTable($file, Display $display)
     {
-        if ($dataTable->getError()->isFileExist()) {
+        if ($display->getError()->isFileExist()) {
             $decodedJson = json_decode($file, true);
             if ($decodedJson === null) {
-                $dataTable->getError()->setFileIsBroken(true);
+                $display->getError()->setFileIsBroken(true);
             } else {
                 foreach ($decodedJson as $key => $value) {
                     switch ($key) {
                         case Display::FIELD_CALCVIEW:
-                            $dataTable->setCalcView($value);
+                            $display->setCalcView($value);
+                            $display->setEntity($this->appInspector->getEntity($value));
+                            if ($display->getEntity() === null){
+                                $display->getError()->addEntityErrors('Impossible de trouver l\'entité '.$value);
+                            }
                             break;
                         case Display::FIELD_GLOBAL_ACTION:
-                            $this->hydrateGlobalAction($dataTable, $value);
+                            $this->hydrateGlobalAction($display, $value);
                             break;
                         case Display::FIELD_COLUMNS:
-                            $this->hydrateColumns($dataTable, $value);
+                            $this->hydrateColumns($display, $value);
                             break;
                         case Display::FIELD_FILTERS:
-                            $this->hydrateFilters($dataTable, $value);
+                            $this->hydrateFilters($display, $value);
                             break;
                         case Display::FIELD_PAGE_LENGTH:
-                            $dataTable->setPageLength(intval($value));
+                            $display->setPageLength(intval($value));
                             break;
                         case Display::FIELD_DISPLAY_NAME:
-                            $dataTable->setDisplayName($value);
+                            $display->setDisplayName($value);
                             break;
                         case Display::FIELD_MENU_CONFIG:
-                            $dataTable->setMenuConfig($value);
+                            $display->setMenuConfig($value);
                             break;
                         case Display::FIELD_MENU_NAME;
-                            $dataTable->setMenuName($value);
+                            $display->setMenuName($value);
                             break;
                         case Display::FIELD_LABEL;
-                            $dataTable->setLabel($value);
+                            $display->setLabel($value);
                             break;
                     }
                 }
-                if ($dataTable->getPageLength() === null) {
-                    $dataTable->setPageLength(10000);
+                if ($display->getPageLength() === null) {
+                    $display->setPageLength(10000);
                 }
             }
         }
-        return $dataTable;
+        return $display;
     }
 
     private function hydrateColumns(Display $dataTable, $columns)
@@ -114,7 +126,7 @@ class DisplayConstructor
             $filter = new Filter();
             foreach ($jsonFilter as $field => $value) {
                 switch ($field) {
-                    case Filter::FIELD_FIELDNAME:
+                    case Filter::FIELD_FIELD_NAME:
                         $filter->setFieldName($value);
                         break;
                     case Filter::FIELD_LABEL:
@@ -249,7 +261,7 @@ class DisplayConstructor
         return $newConfig;
     }
 
-    private function hydrateConfigWithBoom($entity, $fieldname, Display $display)
+    private function hydrateConfigWithBoom($entity, $fieldName, Display $display)
     {
         // TODO Utilisé AppInspector via BoomGenerator pour deviner la classe avec la table
         try {
@@ -264,7 +276,7 @@ class DisplayConstructor
         $instanceName = '\\App\\HanaENtity\\' . $entity;
         $instance = new $instanceName();
 
-        $property = $instance->getPropertyByColumn($fieldname);
+        $property = $instance->getPropertyByColumn($fieldName);
         $description = $instance->getDescriptionByProperty($property);
         $type = $instance->getTypeByField($property);
         $choices = $instance->getChoicesByProperty($property);

@@ -85,10 +85,12 @@ class Error
 
     /**
      * @param bool $classExist
+     * @return Error
      */
-    public function setClassExist(bool $classExist): void
+    public function setClassExist(bool $classExist): Error
     {
         $this->classExist = $classExist;
+        return $this;
     }
 
     /**
