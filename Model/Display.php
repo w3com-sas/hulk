@@ -7,6 +7,7 @@ use W3com\BoomBundle\Generator\Model\Entity;
 use W3com\BoomBundle\Generator\Model\Property;
 use W3com\BoomBundle\HanaEntity\AbstractEntity;
 use W3com\BoomBundle\Service\BoomGenerator;
+use W3com\HulkBundle\Form\DisplayType;
 use W3com\HulkBundle\Url\UrlManager;
 
 class Display
@@ -20,6 +21,7 @@ class Display
     const FIELD_MENU_CONFIG = 'MenuConfig';
     const FIELD_MENU_NAME = 'MenuName';
     const FIELD_LABEL = 'Label';
+    const FIELD_GLOBAL_SEARCH = 'SEARCH';
 
     public function __construct()
     {
@@ -49,7 +51,7 @@ class Display
     private $calcView;
 
     /**
-     * @var mixed
+     * @var Entity|null
      */
     private $entity;
 
@@ -154,14 +156,14 @@ class Display
     /**
      * @return array
      */
-    public function getData():array
+    public function getData(): array
     {
         return $this->data;
     }
 
     public function getFirstLineData()
     {
-        if (count($this->data) > 0){
+        if (count($this->data) > 0) {
             return $this->data[0];
         }
         return [];
@@ -200,7 +202,7 @@ class Display
     {
         $fieldNames = [];
         /** @var Column $column */
-        foreach ($this->columns as $column){
+        foreach ($this->columns as $column) {
             $fieldNames[] = $column->getFieldName();
         }
         return $fieldNames;
@@ -444,7 +446,7 @@ class Display
 
     public function getEntityName()
     {
-        if ($this->entity instanceof Entity){
+        if ($this->entity instanceof Entity) {
             return $this->entity->getName();
         }
         return null;
@@ -454,14 +456,22 @@ class Display
     {
         $columns = [];
         /** @var Column $column */
-        foreach ($this->columns as $column){
-            if ($column->getCellAction() !== null){
-                if (in_array($column->getCellAction()->getFunctionName(), [Column::FUNCTION_NAME_DISPLAY_LINK, Column::FUNCTION_NAME_LINK])){
+        foreach ($this->columns as $column) {
+            if ($column->getCellAction() !== null) {
+                if (in_array($column->getCellAction()->getFunctionName(), [Column::FUNCTION_NAME_DISPLAY_LINK, Column::FUNCTION_NAME_LINK])) {
                     $columns[] = $column;
                 }
             }
         }
         return $columns;
+    }
+
+    public function getSearchProperty()
+    {
+        if ($this->entity !== null && $this->entity->getProperty(self::FIELD_GLOBAL_SEARCH) !== null) {
+            return $this->entity->getProperty(self::FIELD_GLOBAL_SEARCH);
+        }
+        return null;
     }
 
 }

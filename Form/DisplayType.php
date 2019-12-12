@@ -19,7 +19,6 @@ use W3com\HulkBundle\Model\Filter;
 
 class DisplayType extends AbstractType
 {
-    const FIELD_GLOBAL_SEARCH = 'SEARCH';
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -31,7 +30,7 @@ class DisplayType extends AbstractType
             $form->add('filename', HiddenType::class)->add('calcView', HiddenType::class);
 
             /** @var Property $globalSearchProperty */
-            $globalSearchProperty = $display->getEntity()->getProperty(self::FIELD_GLOBAL_SEARCH);
+            $globalSearchProperty = $display->getSearchProperty();
 
             if ($globalSearchProperty !== null){
                 $form->add($globalSearchProperty->getField(), TextType::class, [
