@@ -2,6 +2,7 @@
 
 namespace W3com\HulkBundle\Service;
 
+use DateTime;
 use Doctrine\Common\Annotations\AnnotationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use W3com\BoomBundle\Exception\EntityNotFoundException;
@@ -81,12 +82,13 @@ class DisplayFormProvider
 
     /**
      * @param $calculationView
-     * @param $choices
+     * @param array $choices
+     * @param array $allFields
      * @return array
      * @throws AnnotationException
      * @throws \ReflectionException
      */
-    public function getDataFromChoices($calculationView, $choices = [])
+    public function getDataFromChoices($calculationView, $choices = [], $allFields = [])
     {
         $appInspector = $this->generator->getAppInspector();
         $entity = $appInspector->getEntity($calculationView);
@@ -96,19 +98,57 @@ class DisplayFormProvider
             $value = DataTransformer::reverseDateFormat($value);
             $params->addFilter($entity->getProperty($field)->getName(), $value);
         }
-        $results = $repo->findAll($params);
 
-        $arrayResults = [];
+        foreach ($allFields as $field => $value){
+            $params->addSelect($entity->getProperty($field)->getName());
+        }
+
+        $results = $repo->findAll($params);
+        $formattedData = [];
         /** @var AbstractEntity $hanaEntity */
         foreach ($results as $hanaEntity) {
             $entityArray = json_decode($hanaEntity->getEntityJson(), true);
-            $formattedData = [];
-            foreach ($entityArray as $field => $value){
-                $formattedData[$field] = $this->dataTransformer->transformDateFormat($value);
+            foreach ($entityArray as $field => $value) {
+                if (!array_key_exists($field, $formattedData)) $formattedData[$field] = [];
+                $formattedData[$field][$value] = $this->dataTransformer->transformDateFormat($value);
             }
-            $arrayResults[] = $formattedData;
         }
-        return $arrayResults;
+
+        foreach ($formattedData as $field => $values) {
+            foreach ($values as $value) {
+                $isDate = Datetime::createFromFormat('d/m/Y', $value);
+                if (isset($isDate) && $isDate instanceof \DateTime) {
+                    usort($formattedData[$field], [$this, "sortDate"]);
+                } else {
+                    ksort($formattedData);
+                }
+                unset($isDate);
+            }
+        }
+        return $formattedData;
+    }
+
+    public function sortDate($x, $y)
+    {
+        if ($x == null) {
+            return -1;
+        } elseif ($y == null) {
+            return 0;
+        }
+        if (\DateTime::createFromFormat('d/m/Y', $x) === false || \DateTime::createFromFormat('d/m/Y', $y) === false) {
+            return 0;
+        }
+        $stampX = \DateTime::createFromFormat('d/m/Y', $x)->getTimestamp();
+        $stampY = \DateTime::createFromFormat('d/m/Y', $y)->getTimestamp();
+
+
+        if ($stampX > $stampY) {
+            return 1;
+        } elseif ($stampX < $stampY) {
+            return -1;
+        } else {
+            return 0;
+        }
     }
 
 

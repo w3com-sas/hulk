@@ -1,5 +1,4 @@
-global.updateSapLine = function (input) {
-
+function updateSapLine(input) {
     if (input.className.indexOf('is-valid') !== -1) {
         input.className = input.className.replace('is-valid', '');
     }
@@ -25,9 +24,10 @@ global.updateSapLine = function (input) {
             input.className += ' is-invalid';
         }
     });
-};
+}
 
-global.updateSap = function(data, targetEntity, targetField, entityKey, targetData, modal) {
+
+function updateSap(data, targetEntity, targetField, entityKey, targetData, modal) {
 
     var rows = this.formatDataToUpdate(data);
     var url = hulkUrls.updateSap;
@@ -75,7 +75,7 @@ global.updateSap = function(data, targetEntity, targetField, entityKey, targetDa
     })
 };
 
-global.apiRequest = function(data, params, urlApi, modal) {
+function apiRequest(data, params, urlApi, modal) {
     var rows = this.formatDataToUpdate(data);
     var postData = {
         "data": rows,
@@ -148,7 +148,7 @@ global.apiRequest = function(data, params, urlApi, modal) {
     })
 };
 
-global.reloadDisplayForm = function() {
+function reloadDisplayForm() {
 
     var event = new CustomEvent('LoadDisplayForm');
     document.dispatchEvent(event);
@@ -156,6 +156,7 @@ global.reloadDisplayForm = function() {
     var data = {};
     data.calcView = document.getElementById('display_calcView').value;
     data.selectedChoices = {};
+    data.allFields = {};
 
     var elements = document.getElementsByTagName('select');
     for (i = 0; i < elements.length; i++) {
@@ -163,6 +164,7 @@ global.reloadDisplayForm = function() {
             // Get the real SAP field name
             data.selectedChoices[elements[i].id.replace('display_', '')] = elements[i].value;
         }
+        data.allFields[elements[i].id.replace('display_', '')] = elements[i].value;
     }
 
     $.ajax({

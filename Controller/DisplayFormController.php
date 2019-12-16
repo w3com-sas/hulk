@@ -77,10 +77,11 @@ class DisplayFormController extends AbstractController
         }
 
         $choices = $postRequest->has('selectedChoices') ? $postRequest->get('selectedChoices') : [];
+        $allFields = $postRequest->has('allFields') ? $postRequest->get('allFields') : [];
         $calculationView = $postRequest->get('calcView');
 
         try {
-            $data = $this->displayProvider->getDataFromChoices($calculationView, $choices);
+            $data = $this->displayProvider->getDataFromChoices($calculationView, $choices, $allFields);
         } catch (EntityNotFoundException $e) {
             return new JsonResponse($e->getMessage(), 400);
         } catch (\Exception $e) {
