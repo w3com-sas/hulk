@@ -93,6 +93,7 @@ class DisplayFormProvider
         $repo = $this->boom->getRepository($entity->getName());
         $params = $repo->createParams();
         foreach ($choices as $field => $value) {
+            $value = DataTransformer::reverseDateFormat($value);
             $params->addFilter($entity->getProperty($field)->getName(), $value);
         }
         $results = $repo->findAll($params);
