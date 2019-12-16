@@ -1,4 +1,4 @@
-global.CallFunction = class {
+window.CallFunction = class {
     constructor(functionName, headerIconClass) {
         this.modal = document.getElementById(functionName);
         this.modalBody = document.getElementById(functionName + 'Body');
@@ -107,15 +107,16 @@ global.CallFunction = class {
         errors.innerText = 'Une erreur inconnue est survenue.';
         this.modalBody.appendChild(errors);
     }
+    checkRowsLength(rows, minLength, callFunction) {
+        if (rows.length < minLength) {
+            var errors = document.createElement('div');
+            errors.className = 'alert alert-danger';
+            errors.innerText = 'Vous devez sélectionner au moins ' + minLength + ' ligne' + (minLength > 1 ? 's.' : '.');
+            callFunction.modalBody.appendChild(errors);
+            return false;
+        }
+        return true;
+    };
 };
 
-global.checkRowsLength = function(rows, minLength, callFunction) {
-    if (rows.length < minLength) {
-        var errors = document.createElement('div');
-        errors.className = 'alert alert-danger';
-        errors.innerText = 'Vous devez sélectionner au moins ' + minLength + ' ligne' + (minLength > 1 ? 's.' : '.');
-        callFunction.modalBody.appendChild(errors);
-        return false;
-    }
-    return true;
-};
+
