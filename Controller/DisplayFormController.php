@@ -61,7 +61,7 @@ class DisplayFormController extends AbstractController
             $routeParams = $this->urlManager->createRouteParams($formData, $display);
             return $this->redirectToRoute('w3com_display', $routeParams);
         }
-        return $this->render('@W3comHulk/display/display_form_filter.html.twig', [
+        return $this->render('@W3comHulk/display_form/form.html.twig', [
             'form' => $form->createView(), 'filename' => $filename, 'display' => $display
         ]);
     }
