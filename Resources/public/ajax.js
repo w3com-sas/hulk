@@ -148,6 +148,7 @@ window.apiRequest = function (data, params, urlApi, modal) {
 };
 
 window.reloadDisplayForm = function () {
+
     var event = new CustomEvent('LoadDisplayForm');
     document.dispatchEvent(event);
 
@@ -180,7 +181,10 @@ window.reloadDisplayForm = function () {
                         toUpdateData[properties[l]] = [];
                     }
                     if (!toUpdateData[properties[l]].includes(resp[properties[l]]) && resp[properties[l]] !== null) {
-                        toUpdateData[properties[l]] = Object.values(resp[properties[l]]);
+                        toUpdateData[properties[l]] = Object.keys(resp[properties[l]]).map(function(e) {
+                            return resp[properties[l]][e]
+                        });
+                     //   Object.values(resp[properties[l]]);
                     }
 
                 }
