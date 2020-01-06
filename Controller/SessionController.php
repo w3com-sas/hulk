@@ -27,6 +27,7 @@ class SessionController extends AbstractController
 
     public function saveFilter()
     {
+        $yo = '';
         try {
             $countFilters = $this->filterSession->addFilter();
         } catch (\Exception $e){
