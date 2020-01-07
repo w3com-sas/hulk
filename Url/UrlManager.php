@@ -41,8 +41,7 @@ class UrlManager
                 }
                 $urlParams = $this->addFilenameParam($column, $urlParams);
                 $url = count(array_filter($urlParams)) > 0 ? $this->generateLink($column, $urlParams, $display) : null;
-                $line[$column->getFieldName()] = $url;
-                //$line[$column->getCellAction()->getFunctionName() . $column->getCellAction()->getTargetEntity()] = $url;
+                $line[$column->getCellAction()->getFunctionName() . $column->getCellAction()->getTargetEntity()] = $url;
             }
             $dataTransform[] = $line;
         }
