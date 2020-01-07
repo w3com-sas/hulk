@@ -153,11 +153,10 @@ $(document).ready(function () {
                     {% if column.width is not null %}
                     width: "{{ column.width }}%",
                     {% endif %}
-                    data:
-                        "{{ column.cellAction.functionName }}{{ column.cellAction.targetEntity }}",
+                    data: "{{ column.cellAction.functionName }}{{ column.cellAction.targetEntity }}",
                     render:
                         function (data, type, row) {
-                            if (data == '') {
+                            if (data === ''|| data === undefined||data === null) {
                                 return null;
                             }
 
