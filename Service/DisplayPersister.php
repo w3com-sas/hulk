@@ -41,7 +41,6 @@ class DisplayPersister
         $entity = $this->generator->getAppInspector()->getEntity($entityName);
         /** @var AbstractEntity $obj */
         $obj = $this->boom->getRepository($entity->getName())->find($keyValue);
-        $obj->set($entity->getKey(), $keyValue);
         $obj->set($obj->getPropertyByColumn($targetField), $targetData);
         $this->boom->getRepository($entity->getName())->update($obj);
     }
