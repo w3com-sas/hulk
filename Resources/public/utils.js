@@ -23,4 +23,8 @@ window.goToLine = function(lineIndex, idLine) {
     document.getElementById(idLine).scrollIntoView();
 };
 
+window.setDataTablesGlobalVar = function (dataTables) {
+    window.table = dataTables;
+};
+
 
