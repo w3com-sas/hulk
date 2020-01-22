@@ -161,7 +161,8 @@ $('#btn{{ globalAction.type~globalAction.index }}').click(function () {
     callFunction.showModal('{{ globalAction.label }}');
     callFunction.startLoading();
     $.ajax({
-        type: 'GET',
+        type: 'POST',
+        data: {data},
         url: '{{ globalAction.config.url }}',
         success: function (rep) {
             callFunction.modalBody.innerHTML = rep.template;
