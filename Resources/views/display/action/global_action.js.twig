@@ -56,7 +56,8 @@ $('{{ btnFormId }}').click(function () {
     {% if targetParam is iterable %}
     params.{{ param }} = {};
     {% for field, targetField in targetParam %}
-    params.{{ param }}.{{ field }} = '{{ targetField }}';
+    params
+.{{ param }}.{{ field }} = '{{ targetField }}';
     {% endfor %}
 
     {% else %}
@@ -107,6 +108,47 @@ $('#{{ globalAction.type~globalAction.index }}').click(function () {
     {% if globalAction.config.name is defined %}
     eval('{{ globalAction.config.name }}(data)');
     {% endif %}
-
 });
+{% endfor %}
+
+{% for globalAction in display.globalActions %}
+{% if globalAction.type == 'api-call' %}
+$('#btn{{ globalAction.type~globalAction.index }}').click(function () {
+    var callFunction = new CallFunction('{{ globalAction.type }}{{ globalAction.index }}', '{{ globalAction.icon }}');
+    callFunction.showModal('{{ globalAction.label }}');
+    var data = table.rows('.selected').data().toArray();
+    var ajaxCall = function () {
+        callFunction.startLoading();
+        $.ajax({
+            data: {data},
+            type: 'POST',
+            url: '{{ globalAction.config.url }}',
+            success: function (rep) {
+                callFunction.modalBody.innerHTML = '';
+                for (var i = 0; i < rep.success.length; i++){
+                    callFunction.addLineResult(rep.success[i], 'success')
+                }
+                for (var i = 0; i < rep.errors.length; i++){
+                    callFunction.addLineResult(rep.errors[i], 'danger')
+                }
+            },
+            error: function () {
+                callFunction.addUnknowError();
+            },
+            complete: function () {
+                callFunction.stopLoading();
+                callFunction.addReloadButton();
+            }
+        });
+    }
+    {% if globalAction.config.userConfirm %}
+    callFunction.showLinesSelected(data.length);
+    callFunction.addValidateBtn(function () {
+        ajaxCall();
+    });
+    {% else %}
+    ajaxCall();
+    {% endif %}
+})
+{% endif %}
 {% endfor %}

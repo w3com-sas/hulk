@@ -9,6 +9,7 @@ use W3com\BoomBundle\HanaEntity\AbstractEntity;
 use W3com\BoomBundle\Service\BoomGenerator;
 use W3com\HulkBundle\Form\DisplayType;
 use W3com\HulkBundle\Url\UrlManager;
+use W3com\HulkBundle\Util\DisplayConstructor;
 
 class Display
 {
@@ -23,87 +24,63 @@ class Display
     const FIELD_LABEL = 'Label';
     const FIELD_GLOBAL_SEARCH = 'SEARCH';
 
+    public $isFilter = false;
+
+    /** @var string */
+    private $label;
+
+    /** @var string */
+    private $filename;
+
+    /** @var string */
+    private $displayName;
+
+    /** @var string */
+    private $calcView;
+
+    /** @var Entity|null */
+    private $entity;
+
+    /** @var array */
+    private $globalActions;
+
+    /** @var array */
+    private $columns = [];
+
+    /** @var array */
+    private $filters = [];
+
+    /** @var array */
+    private $data = [];
+
+    /** @var array */
+    private $dataTablesColumns = [];
+
+    /** @var array */
+    private $dataTablesColumnDefs = [];
+
+    /** @var integer */
+    private $pageLength = 10;
+
+    /** @var integer */
+    private $countSavedFilters = 0;
+
+    /** @var Error */
+    private $error;
+
+    /** @var string */
+    private $menuConfig = '';
+
+    /** @var string */
+    private $menuName = '';
+
+    /** @var int */
+    private $maxLength = 6000;
+
     public function __construct()
     {
         $this->error = new Error();
     }
-
-    public $isFilter = false;
-
-    /**
-     * @var string
-     */
-    private $label;
-
-    /**
-     * @var string
-     */
-    private $filename;
-
-    /**
-     * @var string
-     */
-    private $displayName;
-
-    /**
-     * @var string
-     */
-    private $calcView;
-
-    /**
-     * @var Entity|null
-     */
-    private $entity;
-
-    /**
-     * @var array
-     */
-    private $globalActions;
-
-    /**
-     * @var array
-     */
-    private $columns = [];
-
-    /**
-     * @var array
-     */
-    private $filters = [];
-
-    /**
-     * @var array
-     */
-    private $data = [];
-
-    /**
-     * @var integer
-     */
-    private $pageLength = 10;
-
-    /**
-     * @var integer
-     */
-    private $countSavedFilters = 0;
-
-    /**
-     * @var Error
-     */
-    private $error;
-
-    /**
-     * @var string
-     */
-    private $menuConfig = '';
-
-    /**
-     * @var string
-     */
-    private $menuName = '';
-
-    /**
-     * @var int
-     */
-    private $maxLength = 6000;
 
     /**
      * @param Column $column
@@ -472,6 +449,71 @@ class Display
             return $this->entity->getProperty(self::FIELD_GLOBAL_SEARCH);
         }
         return null;
+    }
+
+    /**
+     * @return array
+     */
+    public function getDataTablesColumnDefs(): array
+    {
+        return $this->dataTablesColumnDefs;
+    }
+
+    /**
+     * @param array $dataTablesColumnDefs
+     * @return Display
+     */
+    public function setDataTablesColumnDefs(array $dataTablesColumnDefs)
+    {
+        $this->dataTablesColumnDefs = $dataTablesColumnDefs;
+        return $this;
+    }
+
+    /**
+     * @param array $dataTablesColumns
+     * @return $this
+     */
+    public function setDataTablesColumns(array $dataTablesColumns)
+    {
+        $this->dataTablesColumns = $dataTablesColumns;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getDataTablesColumns(): array
+    {
+        return $this->dataTablesColumns;
+    }
+
+    private function getColumnsByType(string $type)
+    {
+        $columns = [];
+        /** @var Column $column */
+        foreach ($this->columns as $column){
+            if ($column->getType() === $type){
+                $columns[] = $column;
+            }
+        }
+        return $columns;
+    }
+    public function getUpdateSapColumns(): array
+    {
+        return $this->getColumnsByType(Column::COL_TYPE_UPDATE_SAP);
+    }
+
+    public function getOpenFormColumns(): array
+    {
+       $columnsAction = $this->getColumnsByType(Column::COL_TYPE_ACTION);
+       $columns = [];
+       /** @var Column $columnAction */
+       foreach ($columnsAction as $columnAction){
+           if ($columnAction->getCellAction()->getFunctionName() === CellAction::FUNCTION_OPEN_FORM){
+               $columns[] = $columnAction;
+           }
+       }
+       return $columns;
     }
 
 }

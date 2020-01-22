@@ -15,76 +15,53 @@ class Column
     const FIELD_ORDERABLE = 'Orderable';
 
     const COL_TYPE_CHECKBOX = 'checkbox';
+    const COL_TYPE_ICON = 'icon';
     const TYPE_TEXT = 'text';
 
     const FUNCTION_NAME_DISPLAY_LINK = 'displayLink';
     const FUNCTION_NAME_LINK = 'link';
+    const COL_TYPE_UPDATE_SAP = 'update-sap';
+    const COL_TYPE_ACTION = 'action';
+    const COL_TYPE_UNIVERSAL = 'universal';
 
-    /**
-     * @var integer
-     */
+    /** @var integer */
     private $index;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $hidden;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $label;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $fieldName;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $iconFieldName;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $labelFieldName;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $type;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $icons;
 
-    /**
-     * @var CellAction
-     */
+    /** @var CellAction */
     private $cellAction;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $active;
 
-    /**
-     * @var integer
-     */
+    /** @var integer */
     private $width;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $orderable = false;
 
-    /**
-     * @var Config
-     */
+    /** @var Config */
     private $config;
-
 
     public function setLabel($label)
     {

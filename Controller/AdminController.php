@@ -40,14 +40,13 @@ class AdminController extends AbstractController
      */
     private $kernel;
 
-    public function __construct(AuthenticationUtils $authenticationUtils, EntityProvider $provider, DisplayProvider $displayProvider,
+    public function __construct(AuthenticationUtils $authenticationUtils, DisplayProvider $displayProvider,
                                 AdapterInterface $adapter, BoomGenerator $generator, KernelInterface $kernel)
     {
         $this->kernel = $kernel;
         $this->cache = $adapter;
         $this->generator = $generator;
         $this->displayProvider = $displayProvider;
-        $this->entityProvider = $provider;
         $this->authenticationUtils = $authenticationUtils;
     }
 

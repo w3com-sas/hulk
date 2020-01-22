@@ -4,18 +4,6 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="w3com_hulk.controller.app_controller"
-                 class="W3com\HulkBundle\Controller\AppController" public="true">
-            <argument type="service" id="request_stack"/>
-            <argument type="service" id="monolog.logger"/>
-            <argument type="service" id="w3com_hulk.finder.json_finder"/>
-            <argument type="service" id="w3com_hulk.service.display_provider"/>
-            <argument type="service" id="w3com_hulk.service.display_form_provider"/>
-            <argument type="service" id="w3com_hulk.url.url_manager"/>
-            <call method="setContainer">
-                <argument type="service" id="service_container" />
-            </call>
-        </service>
         <service id="w3com_hulk.controller.display_controller"
                  class="W3com\HulkBundle\Controller\DisplayController" public="true">
             <argument type="service" id="w3com_hulk.service.display_provider"/>
@@ -80,7 +68,6 @@
         <service id="w3com_hulk.controller.admin_controller"
                  class="W3com\HulkBundle\Controller\AdminController" public="true">
             <argument type="service" id="security.authentication_utils"/>
-            <argument type="service" id="w3com_hulk.util.entity_provider"/>
             <argument type="service" id="w3com_hulk.service.display_provider"/>
             <argument type="service" id="cache.security_expression_language"/>
             <argument type="service" id="W3com\BoomBundle\Service\BoomGenerator"/>

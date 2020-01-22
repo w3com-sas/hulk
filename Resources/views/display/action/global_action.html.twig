@@ -29,15 +29,10 @@
                 {{ icon|raw }}
                 {{ globalAction.label }}
             </button>
-        {% elseif globalAction.type == 'api-request' %}
+        {% elseif globalAction.type in ['api-request', 'call-function', 'api-call'] %}
+            {% set id = (globalAction.type == 'api-call') ? 'btn'~globalAction.type~globalAction.index : globalAction.type~globalAction.index %}
             <button class="btn btn-{{ color }} m-1"
-                    id="{{ globalAction.type~globalAction.index }}">
-                {{ icon|raw }}
-                {{ globalAction.label }}
-            </button>
-        {% elseif globalAction.type == 'call-function' %}
-            <button class="btn btn-{{color}} m-1"
-                    id="{{ globalAction.type~globalAction.index }}">
+                    id="{{ id }}">
                 {{ icon|raw }}
                 {{ globalAction.label }}
             </button>

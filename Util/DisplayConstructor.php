@@ -2,6 +2,7 @@
 
 namespace W3com\HulkBundle\Util;
 
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use W3com\BoomBundle\Exception\EntityNotFoundException;
 use W3com\BoomBundle\Generator\AppInspector;
 use W3com\BoomBundle\Service\BoomGenerator;
@@ -21,8 +22,12 @@ class DisplayConstructor
     /** @var AppInspector  */
     private $appInspector;
 
-    public function __construct(BoomManager $boom, BoomGenerator $boomGenerator)
+    /** @var UrlGeneratorInterface */
+    private $router;
+
+    public function __construct(BoomManager $boom, BoomGenerator $boomGenerator, UrlGeneratorInterface $router)
     {
+        $this->router = $router;
         $this->boom = $boom;
         $this->appInspector = $boomGenerator->getAppInspector();
     }
@@ -241,6 +246,11 @@ class DisplayConstructor
                     $newConfig->setTargetData($value);
                     break;
                 case Config::FIELD_URL:
+                    // TODO : faire mieux
+                    try {
+                        $value = $this->router->generate($value);
+                    } catch (\Exception $e){
+                    }
                     $newConfig->setUrl($value);
                     break;
                 case Config::FIELD_NAME:
@@ -254,6 +264,9 @@ class DisplayConstructor
                     break;
                 case Config::FIELD_TARGET_CHOICES:
                     $newConfig->setTargetChoices($value);
+                    break;
+                case Config::FIELD_USER_CONFIRM:
+                    $newConfig->setUserConfirm($value);
                     break;
 
             }
@@ -273,7 +286,7 @@ class DisplayConstructor
 
         if ($entityUtil == null) return [];
 
-        $instanceName = '\\App\\HanaENtity\\' . $entity;
+        $instanceName = '\\App\\HanaEntity\\' . $entity;
         $instance = new $instanceName();
 
         $property = $instance->getPropertyByColumn($fieldName);

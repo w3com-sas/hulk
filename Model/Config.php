@@ -15,6 +15,7 @@ class Config
     const FIELD_URL = 'Url';
     const FIELD_NAME = 'Name';
     const FIELD_LABEL = 'Label';
+    const FIELD_USER_CONFIRM = 'UserConfirm';
 
     const DATA_TYPE_STATIC = 'static';
     const DATA_TYPE_TEXT = 'text';
@@ -34,6 +35,8 @@ class Config
     private $targetData;
 
     private $targetChoices;
+
+    private $userConfirm;
 
     private $url;
 
@@ -199,6 +202,22 @@ class Config
     public function setTargetChoices($targetChoices): void
     {
         $this->targetChoices = $targetChoices;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserConfirm()
+    {
+        return $this->userConfirm;
+    }
+
+    /**
+     * @param mixed $userConfirm
+     */
+    public function setUserConfirm($userConfirm): void
+    {
+        $this->userConfirm = $userConfirm;
     }
 
 

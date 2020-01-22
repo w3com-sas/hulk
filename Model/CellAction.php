@@ -18,6 +18,7 @@ class CellAction
     const FUNCTION_CALL_FUNCTION = 'call-function';
 
     const FIELD_ICON_FIELDNAME = 'IconFieldName';
+    const FUNCTION_OPEN_FORM = 'openForm';
 
     private $label;
 

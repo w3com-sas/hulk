@@ -22,61 +22,37 @@ use W3com\HulkBundle\Util\Indexor;
 class DisplayProvider
 {
 
-    /**
-     * @var QueryManager
-     */
+    /** @var QueryManager */
     private $queryManager;
 
-    /**
-     * @var FilterManager
-     */
+    /** @var FilterManager */
     private $filterManager;
 
-    /**
-     * @var ColumnManager
-     */
+    /** @var ColumnManager */
     private $columnManager;
 
-    /**
-     * @var ModelFinder
-     */
-    private $modelFinder;
-
-    /**
-     * @var array
-     */
+    /** @var array */
     private $config;
 
-    /**
-     * @var JsonFinder
-     */
+    /** @var JsonFinder */
     private $jsonFinder;
 
-    /**
-     * @var Indexor
-     */
+    /** @var Indexor */
     private $indexor;
 
-    /**
-     * @var DataTransformer
-     */
+    /** @var DataTransformer */
     private $dataTransformer;
 
-    /**
-     * @var DisplayConstructor
-     */
+    /** @var DisplayConstructor */
     private $constructor;
 
-    /**
-     * @var UrlManager
-     */
+    /** @var UrlManager */
     private $urlManager;
 
-    /**
-     * @var FilterSessionManager
-     */
+    /** @var FilterSessionManager */
     private $filterSessionManager;
 
+    /** @var LoggerInterface */
     private $logger;
 
     /**
@@ -87,14 +63,15 @@ class DisplayProvider
      * @param UrlGeneratorInterface $router
      * @param FilterSessionManager $filterSessionManager
      * @param LoggerInterface $logger
+     * @param DisplayConstructor $constructor
      */
     public function __construct($config, BoomManager $boom, BoomGenerator $generator, UrlGeneratorInterface $router, FilterSessionManager $filterSessionManager,
-                                LoggerInterface $logger)
+                                LoggerInterface $logger, DisplayConstructor $constructor)
     {
         $this->filterSessionManager = $filterSessionManager;
         $this->logger = $logger;
         $this->config = $config;
-        $this->constructor = new DisplayConstructor($boom, $generator);
+        $this->constructor = $constructor;
         $this->indexor = new Indexor();
         $this->filterManager = new FilterManager();
         $this->columnManager = new ColumnManager();
@@ -109,7 +86,6 @@ class DisplayProvider
      * @param array $getRequestParams
      * @param null $maxResults
      * @return Display
-     * @throws AnnotationException
      * @throws \ReflectionException
      */
     public function getDisplay($filename, $getRequestParams = [], $maxResults = null)
