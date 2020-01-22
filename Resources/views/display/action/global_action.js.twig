@@ -168,7 +168,7 @@ $('#btn{{ globalAction.type~globalAction.index }}').click(function () {
             callFunction.modalBody.innerHTML = rep.template;
             if (typeof rep.callFunction !== 'undefined'){
                 callFunction.addValidateBtn(function () {
-                    eval(rep.callFunction+'(data)');
+                    eval(rep.callFunction+'(data, callFunction)');
                 });
             }
         },
