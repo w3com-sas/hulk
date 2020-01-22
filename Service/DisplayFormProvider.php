@@ -32,24 +32,18 @@ class DisplayFormProvider
 
     private $dataTransformer;
 
-    private $modelFinder;
-
-    /**
-     * @var BoomManager
-     */
+    /** @var BoomManager */
     private $boom;
 
-    /**
-     * @var BoomGenerator
-     */
+    /** @var BoomGenerator */
     private $generator;
 
-    public function __construct(BoomManager $boom, BoomGenerator $generator, UrlManager $urlManager, $config)
+    public function __construct(BoomManager $boom, BoomGenerator $generator, UrlManager $urlManager, DisplayConstructor $constructor, $config)
     {
         $this->display = new Display();
         $this->jsonFinder = new JsonFinder($boom, $config);
         $this->queryManager = new QueryManager($boom, $generator);
-        $this->displayConstructor = new DisplayConstructor($boom, $generator);
+        $this->displayConstructor = $constructor;
         $this->filterManager = new FilterManager();
         $this->dataTransformer = new DataTransformer($urlManager);
         $this->display->isFilter = true;
