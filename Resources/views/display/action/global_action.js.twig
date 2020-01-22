@@ -125,10 +125,10 @@ $('#btn{{ globalAction.type~globalAction.index }}').click(function () {
             url: '{{ globalAction.config.url }}',
             success: function (rep) {
                 callFunction.modalBody.innerHTML = '';
-                for (var i = 0; i < rep.success.length; i++){
+                for (var i = 0; i < rep.success.length; i++) {
                     callFunction.addLineResult(rep.success[i], 'success')
                 }
-                for (var i = 0; i < rep.errors.length; i++){
+                for (var i = 0; i < rep.errors.length; i++) {
                     callFunction.addLineResult(rep.errors[i], 'danger')
                 }
             },
@@ -149,6 +149,35 @@ $('#btn{{ globalAction.type~globalAction.index }}').click(function () {
     {% else %}
     ajaxCall();
     {% endif %}
-})
+});
+{% endif %}
+{% endfor %}
+
+{% for globalAction in display.globalActions %}
+{% if globalAction.type == 'render-view' %}
+$('#btn{{ globalAction.type~globalAction.index }}').click(function () {
+    var data = table.rows('.selected').data().toArray();
+    var callFunction = new CallFunction('{{ globalAction.type }}{{ globalAction.index }}', '{{ globalAction.icon }}');
+    callFunction.showModal('{{ globalAction.label }}');
+    callFunction.startLoading();
+    $.ajax({
+        type: 'GET',
+        url: '{{ globalAction.config.url }}',
+        success: function (rep) {
+            callFunction.modalBody.innerHTML = rep.template;
+            if (typeof rep.callFunction !== 'undefined'){
+                callFunction.addValidateBtn(function () {
+                    eval(rep.callFunction+'(data)');
+                });
+            }
+        },
+        error: function () {
+            callFunction.addUnknowError();
+        },
+        complete: function () {
+            callFunction.stopLoading();
+        }
+    });
+});
 {% endif %}
 {% endfor %}

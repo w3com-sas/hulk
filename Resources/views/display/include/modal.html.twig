@@ -94,7 +94,7 @@
 {% endfor %}
 
 {% for action in display.globalActions %}
-    {% if action.type in ["call-function", "api-call"] %}
+    {% if action.type in ["call-function", "api-call", "render-view"] %}
         {% set id = (action.type == "call-function") ? action.config.name : action.type~action.index %}
         <div class="modal fade" id="{{ id }}" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">

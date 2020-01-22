@@ -29,8 +29,8 @@
                 {{ icon|raw }}
                 {{ globalAction.label }}
             </button>
-        {% elseif globalAction.type in ['api-request', 'call-function', 'api-call'] %}
-            {% set id = (globalAction.type == 'api-call') ? 'btn'~globalAction.type~globalAction.index : globalAction.type~globalAction.index %}
+        {% elseif globalAction.type in ['api-request', 'call-function', 'api-call', 'render-view'] %}
+            {% set id = (globalAction.type in ['api-call', 'render-view']) ? 'btn'~globalAction.type~globalAction.index : globalAction.type~globalAction.index %}
             <button class="btn btn-{{ color }} m-1"
                     id="{{ id }}">
                 {{ icon|raw }}

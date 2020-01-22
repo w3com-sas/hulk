@@ -64,6 +64,7 @@
             <argument type="service" id="W3com\BoomBundle\Service\BoomManager"/>
             <argument type="service" id="W3com\BoomBundle\Service\BoomGenerator"/>
             <argument type="service" id="router"/>
+            <argument type="service" id="monolog.logger"/>
         </service>
     </services>
 </container>

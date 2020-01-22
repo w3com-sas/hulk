@@ -2,6 +2,7 @@
 
 namespace W3com\HulkBundle\Util;
 
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use W3com\BoomBundle\Exception\EntityNotFoundException;
 use W3com\BoomBundle\Generator\AppInspector;
@@ -25,8 +26,12 @@ class DisplayConstructor
     /** @var UrlGeneratorInterface */
     private $router;
 
-    public function __construct(BoomManager $boom, BoomGenerator $boomGenerator, UrlGeneratorInterface $router)
+    /** @var LoggerInterface */
+    private $logger;
+
+    public function __construct(BoomManager $boom, BoomGenerator $boomGenerator, UrlGeneratorInterface $router, LoggerInterface $logger)
     {
+        $this->logger = $logger;
         $this->router = $router;
         $this->boom = $boom;
         $this->appInspector = $boomGenerator->getAppInspector();
@@ -246,10 +251,10 @@ class DisplayConstructor
                     $newConfig->setTargetData($value);
                     break;
                 case Config::FIELD_URL:
-                    // TODO : faire mieux
                     try {
                         $value = $this->router->generate($value);
                     } catch (\Exception $e){
+                        $this->logger->warning($e->getMessage(), $e->getTrace());
                     }
                     $newConfig->setUrl($value);
                     break;
