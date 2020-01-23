@@ -157,7 +157,7 @@ $('#btn{{ globalAction.type~globalAction.index }}').click(function () {
 {% if globalAction.type == 'render-view' %}
 $('#btn{{ globalAction.type~globalAction.index }}').click(function () {
     var data = table.rows('.selected').data().toArray();
-    var callFunction = new CallFunction('{{ globalAction.type }}{{ globalAction.index }}', '{{ globalAction.icon }}');
+    var callFunction = new CallFunction('{{ globalAction.type }}{{ globalAction.index }}', '{{ globalAction.icon }} fa-2x');
     callFunction.showModal('{{ globalAction.label }}');
     callFunction.startLoading();
     $.ajax({
