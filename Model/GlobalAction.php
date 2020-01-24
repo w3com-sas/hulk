@@ -17,130 +17,93 @@ class GlobalAction
     const TYPE_HTML_RENDER = 'html-render';
     const TYPE_API_CALL = 'api-call';
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $index;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $label;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $type;
 
-    /**
-     * @var Config
-     */
+    /** @var Config */
     private $config;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $icon;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $color;
 
-    /**
-     * @return mixed
-     */
+    /** @return mixed */
     public function getLabel()
     {
         return $this->label;
     }
 
-    /**
-     * @param mixed $label
-     */
+    /** @param mixed $label */
     public function setLabel($label): void
     {
         $this->label = $label;
     }
 
-    /**
-     * @return mixed
-     */
+    /** @return mixed */
     public function getType()
     {
         return $this->type;
     }
 
-    /**
-     * @param mixed $type
-     */
+    /** @param mixed $type */
     public function setType($type): void
     {
         $this->type = $type;
     }
 
-    /**
-     * @return Config
-     */
+    /** @return Config */
     public function getConfig(): ?Config
     {
         return $this->config;
     }
 
-    /**
-     * @param Config $config
-     */
+    /** @param Config $config */
     public function setConfig(Config $config): void
     {
         $this->config = $config;
     }
 
-    /**
-     * @return string
-     */
+    /** @return string */
     public function getIndex(): string
     {
         return $this->index;
     }
 
-    /**
-     * @param string $index
-     */
+    /** @param string $index */
     public function setIndex(string $index): void
     {
         $this->index = $index;
     }
 
-    /**
-     * @return string
-     */
+    /** @return string */
     public function getIcon(): ?string
     {
         return $this->icon;
     }
 
-    /**
-     * @param string $icon
-     */
+    /** @param string $icon */
     public function setIcon(string $icon): void
     {
         $this->icon = $icon;
     }
 
-    /**
-     * @return string
-     */
+    /** @return string */
     public function getColor(): ?string
     {
         return $this->color;
     }
 
-    /**
-     * @param string $color
-     */
+    /** @param string $color */
     public function setColor(string $color): void
     {
         $this->color = $color;
     }
-
 }

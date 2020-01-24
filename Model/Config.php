@@ -21,6 +21,7 @@ class Config
     const DATA_TYPE_TEXT = 'text';
     const DATA_TYPE_ARRAY = 'array';
     const DATA_TYPE_QUERY = 'query';
+    const FIELD_MESSAGE_CONFIRM = 'MessageConfirm';
 
     private $entity;
 
@@ -37,6 +38,8 @@ class Config
     private $targetChoices;
 
     private $userConfirm;
+
+    private $messageConfirm;
 
     private $url;
 
@@ -221,4 +224,19 @@ class Config
     }
 
 
+    /**
+     * @return mixed
+     */
+    public function getMessageConfirm()
+    {
+        return $this->messageConfirm;
+    }
+
+    /**
+     * @param mixed $messageConfirm
+     */
+    public function setMessageConfirm($messageConfirm): void
+    {
+        $this->messageConfirm = $messageConfirm;
+    }
 }

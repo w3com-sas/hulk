@@ -70,12 +70,19 @@ export const CallFunction = class {
     };
 
     showLinesSelected(rowsLength) {
-        var alertInfo = document.createElement('div');
-        alertInfo.className = 'text-gray my-3 text-center';
+        var p = document.createElement('p');
+        p.className = 'text-gray my-3 text-center';
         var iconInfo = document.createElement('i');
         iconInfo.className = 'fad fa-info-circle mr-2';
-        alertInfo.innerHTML = iconInfo.outerHTML + 'Vous avez sélectionné ' + rowsLength + ' ligne' + (rowsLength === 1 ? '' : 's') + ', voulez-vous continuer ?';
-        $(this.modalBody).html(alertInfo);
+        p.innerHTML = iconInfo.outerHTML + 'Vous avez sélectionné ' + rowsLength + ' ligne' + (rowsLength === 1 ? '' : 's') + ', voulez-vous continuer ?';
+        $(this.modalBody).html(p);
+    }
+
+    addMessage(message, className){
+        var p = document.createElement('p');
+        p.className = className;
+        p.innerText = message;
+        $(this.modalBody).html(p);
     }
 
     addLineResult(message, type) {

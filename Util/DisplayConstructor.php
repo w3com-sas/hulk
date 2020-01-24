@@ -258,6 +258,9 @@ class DisplayConstructor
                     }
                     $newConfig->setUrl($value);
                     break;
+                case Config::FIELD_MESSAGE_CONFIRM:
+                    $newConfig->setMessageConfirm($value);
+                    break;
                 case Config::FIELD_NAME:
                     $newConfig->setName($value);
                     break;
