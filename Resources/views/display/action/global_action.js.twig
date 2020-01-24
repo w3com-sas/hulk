@@ -144,7 +144,7 @@ $('#btn{{ globalAction.type~globalAction.index }}').click(function () {
     {% if globalAction.config.userConfirm %}
     callFunction.showLinesSelected(data.length);
     {% if globalAction.config.messageConfirm %}
-    callFunction.addMessage('{{ globalAction.config.messageConfig }}');
+    callFunction.addMessage('{{ globalAction.config.messageConfirm }}');
     {% endif %}
     callFunction.addValidateBtn(function () {
         ajaxCall();
