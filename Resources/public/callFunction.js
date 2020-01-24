@@ -99,13 +99,19 @@ window.CallFunction = class {
             window.location.reload();
         })
     }
-
     addUnknowError() {
         this.modalBody.innerHTML = '';
         var errors = document.createElement('div');
         errors.className = 'alert alert-danger';
         errors.innerText = 'Une erreur inconnue est survenue.';
         this.modalBody.appendChild(errors);
+    }
+    addGlobalSuccess(message){
+        this.modalBody.innerHTML = '';
+        var success = document.createElement('div');
+        success.className = 'alert alert-success';
+        success.innerText = message;
+        this.modalBody.appendChild(success);
     }
     checkRowsLength(rows, minLength, callFunction) {
         if (rows.length < minLength) {
