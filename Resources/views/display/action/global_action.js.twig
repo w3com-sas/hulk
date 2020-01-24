@@ -166,9 +166,9 @@ $('#btn{{ globalAction.type~globalAction.index }}').click(function () {
         url: '{{ globalAction.config.url }}',
         success: function (rep) {
             callFunction.modalBody.innerHTML = rep.template;
-            if (typeof rep.callFunction !== 'undefined'){
+            if (typeof rep.functionToCall !== 'undefined'){
                 callFunction.addValidateBtn(function () {
-                    eval(rep.callFunction+'(data, callFunction)');
+                    eval(rep.functionToCall+'(data, callFunction)');
                 });
             }
         },
