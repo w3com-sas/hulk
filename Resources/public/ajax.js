@@ -1,4 +1,4 @@
-window.updateSapLine = function (input) {
+export const updateSapLine = (input) => {
     if (input.className.indexOf('is-valid') !== -1) {
         input.className = input.className.replace('is-valid', '');
     }
@@ -26,8 +26,7 @@ window.updateSapLine = function (input) {
     });
 };
 
-window.updateSap = function (data, targetEntity, targetField, entityKey, targetData, modal) {
-
+export const updateSap = (data, targetEntity, targetField, entityKey, targetData, modal) => {
     var rows = this.formatDataToUpdate(data);
     var url = hulkUrls.updateSap;
     var postData = {
@@ -74,7 +73,7 @@ window.updateSap = function (data, targetEntity, targetField, entityKey, targetD
     })
 };
 
-window.apiRequest = function (data, params, urlApi, modal) {
+export const apiRequest = function (data, params, urlApi, modal) {
     var rows = this.formatDataToUpdate(data);
     var postData = {
         "data": rows,
@@ -147,7 +146,7 @@ window.apiRequest = function (data, params, urlApi, modal) {
     })
 };
 
-window.reloadDisplayForm = function () {
+export const reloadDisplayForm = () => {
 
     var event = new CustomEvent('LoadDisplayForm');
     document.dispatchEvent(event);

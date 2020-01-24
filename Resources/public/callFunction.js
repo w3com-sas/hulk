@@ -1,4 +1,4 @@
-window.CallFunction = class {
+export const CallFunction = class {
     constructor(functionName, headerIconClass) {
         this.modal = document.getElementById(functionName);
         this.modalBody = document.getElementById(functionName + 'Body');

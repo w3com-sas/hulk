@@ -1,10 +1,10 @@
-window.countSelectedRows = function(rows) {
+export const countSelectedRows = (rows) => {
     var node = document.getElementById('countSelectedRows');
     node.innerText = rows.length + ' ligne(s) sélectionnée(s)';
     node.style.display = 'block';
 };
 
-window.formatDataToUpdate =  function(data) {
+export const formatDataToUpdate = (data) => {
     var obj = {};
     $.each(data, function (index, value) {
         obj[String(index)] = value
@@ -12,19 +12,16 @@ window.formatDataToUpdate =  function(data) {
     return obj;
 };
 
-window.openForm = function(obj, id) {
+export const openForm = (obj, id) => {
     sap.sbo.webbridge.openForm(obj, id)
 };
 
-window.goToLine = function(lineIndex, idLine) {
+export const goToLine = (lineIndex, idLine) => {
     var table = $('#dataTable').DataTable();
     var pageToGo = Math.floor(lineIndex / table.page.len());
     table.page(pageToGo).draw('page');
     document.getElementById(idLine).scrollIntoView();
 };
 
-window.setDataTablesGlobalVar = function (dataTables) {
-    window.table = dataTables;
-};
 
 
