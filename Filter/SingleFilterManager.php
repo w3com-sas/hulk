@@ -16,21 +16,21 @@ class SingleFilterManager extends AbstractFilterManager
 
     public function sortDateAsc($x, $y)
     {
-        $this->sortDate($x, $y, 'asc');
+        return $this->sortDate($x, $y, 'asc');
     }
 
     public function sortDateDesc($x, $y)
     {
-        $this->sortDate($x, $y, 'desc');
+        return $this->sortDate($x, $y, 'desc');
     }
 
     public function sortDate($x, $y, $order)
     {
         $firstValue = $order === 'asc' ? 1 : -1;
-        $secondValue = $order === 'desc' ? -1 : 1;
+        $secondValue = $order === 'asc' ? -1 : 1;
 
         if ($x == null){
-            return -1;
+            return $secondValue;
         } elseif ($y == null){
             return 0;
         }
@@ -82,6 +82,7 @@ class SingleFilterManager extends AbstractFilterManager
                         } else {
                             usort($values, [$this, "sortDateDesc"]);
                         }
+                        dump($values);
                         $values = $this->formatValuesForChoices($values);
                         unset($isDate);
                     }
