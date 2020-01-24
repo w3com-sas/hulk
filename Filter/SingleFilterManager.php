@@ -14,8 +14,21 @@ class SingleFilterManager extends AbstractFilterManager
         return $dataTable;
     }
 
-    public function sortDate($x, $y)
+    public function sortDateAsc($x, $y)
     {
+        $this->sortDate($x, $y, 'asc');
+    }
+
+    public function sortDateDesc($x, $y)
+    {
+        $this->sortDate($x, $y, 'desc');
+    }
+
+    public function sortDate($x, $y, $order)
+    {
+        $firstValue = $order === 'asc' ? 1 : -1;
+        $secondValue = $order === 'desc' ? -1 : 1;
+
         if ($x == null){
             return -1;
         } elseif ($y == null){
@@ -25,9 +38,9 @@ class SingleFilterManager extends AbstractFilterManager
         $stampY = \DateTime::createFromFormat('d/m/Y', $y)->getTimestamp();
 
         if ($stampX > $stampY) {
-            return 1;
+            return $firstValue;
         } elseif ($stampX < $stampY) {
-            return -1;
+            return $secondValue;
         } else {
             return 0;
         }
@@ -64,7 +77,11 @@ class SingleFilterManager extends AbstractFilterManager
                     }
 
                     if (isset($isDate)) {
-                        usort($values, [$this, "sortDate"]);
+                        if ($filter->getOrder() !== null && $filter->getOrder() === Filter::ORDER_ASC){
+                            usort($values, [$this, "sortDateAsc"]);
+                        } else {
+                            usort($values, [$this, "sortDateDesc"]);
+                        }
                         $values = $this->formatValuesForChoices($values);
                         unset($isDate);
                     }
