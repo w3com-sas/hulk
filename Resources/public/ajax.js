@@ -157,7 +157,7 @@ export const reloadDisplayForm = () => {
     data.allFields = {};
 
     var elements = document.getElementsByTagName('select');
-    for (i = 0; i < elements.length; i++) {
+    for (var i = 0; i < elements.length; i++) {
         if (elements[i].value !== "") {
             // Get the real SAP field name
             data.selectedChoices[elements[i].id.replace('display_', '')] = elements[i].value;
