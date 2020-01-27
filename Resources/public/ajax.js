@@ -183,9 +183,7 @@ export const reloadDisplayForm = () => {
                         toUpdateData[properties[l]] = Object.keys(resp[properties[l]]).map(function(e) {
                             return resp[properties[l]][e]
                         });
-                     //   Object.values(resp[properties[l]]);
                     }
-
                 }
             }
 

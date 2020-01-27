@@ -125,12 +125,17 @@ $('#btn{{ globalAction.type~globalAction.index }}').click(function () {
             url: '{{ globalAction.config.url }}',
             success: function (rep) {
                 callFunction.modalBody.innerHTML = '';
-                for (var i = 0; i < rep.success.length; i++) {
-                    callFunction.addLineResult(rep.success[i], 'success')
+                if (typeof rep.success !== 'undefined'){
+                    for (var i = 0; i < rep.success.length; i++) {
+                        callFunction.addLineResult(rep.success[i], 'success')
+                    }
                 }
-                for (var i = 0; i < rep.errors.length; i++) {
-                    callFunction.addLineResult(rep.errors[i], 'danger')
+                if (typeof rep.errors !== 'undefined'){
+                    for (var i = 0; i < rep.errors.length; i++) {
+                        callFunction.addLineResult(rep.errors[i], 'danger')
+                    }
                 }
+
             },
             error: function () {
                 callFunction.addUnknowError();
