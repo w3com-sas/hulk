@@ -284,7 +284,7 @@ class QueryManager
 
     private function addGlobalSearchFilter($value, Parameters $parameters, Display $display)
     {
-        $property = $display->getEntity()->getProperty(DisplayType::FIELD_GLOBAL_SEARCH);
+        $property = $display->getEntity()->getProperty(Display::FIELD_GLOBAL_SEARCH);
         if ($property instanceof Property) {
             $parameters->addFilter($property->getName(), $value,
                 Clause::SUBSTRING_OF, null, Clause::TO_LOWER);
