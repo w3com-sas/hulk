@@ -156,7 +156,7 @@ $(document).ready(function () {
                     data: "{{ column.cellAction.functionName }}{{ column.cellAction.targetEntity }}",
                     render:
                         function (data, type, row) {
-                            if (data === ''|| data === undefined||data === null) {
+                            if (data === '' || data === undefined || data === null) {
                                 return null;
                             }
 
@@ -205,9 +205,7 @@ $(document).ready(function () {
                         var tplIcon = $('#icon').html();
                         if (row.hasOwnProperty('{{ column.iconFieldName }}') && (row.{{ column.iconFieldName }} != '')) {
                             var prefixIcon = '';
-                            if (row.{{ column.iconFieldName }}.
-                            split(' ').length == 1
-                        )
+                            if (row.{{ column.iconFieldName }}.split(' ').length == 1)
                             {
                                 prefixIcon = 'fa fa-';
                             }
@@ -253,8 +251,17 @@ $(document).ready(function () {
                             '" onchange="updateSapLine(this)"/>';
                     }
                 },
+                {% elseif column.type == 'input-text' %}
+                {
+                    data: '{{ column.fieldName }}',
+                    render: function (data, type, row) {
+                        var baseTpl = '<input type="text" value="'+data+'" class="form-control form-control-sm"/>';
+                        var renderTplClassName = (row.hasOwnProperty('{{ column.renderFieldName }}') && row['{{ column }}'] !== "")
+                            ? row.hasOwnProperty('{{ column.renderFieldName }}') : null;
+                        return '<div class="'+ renderTplClassName+'">'+baseTpl+'</div>'
+                    }
+                },
                 {% endif %}
-
                 {% endfor %}
             ],
             colReorder: false,
