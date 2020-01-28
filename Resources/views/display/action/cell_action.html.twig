@@ -36,7 +36,6 @@
 
     {% elseif column.type == 'universal' %}
         {% if column.cellAction is not null %}
-
             {% if column.cellAction.RenderType is defined %}
                 {% if column.cellAction.RenderType == 'static' %}
                     {% set classRender = column.cellAction.RenderValue %}

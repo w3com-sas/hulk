@@ -2,7 +2,6 @@
     {% for globalAction in display.globalActions %}
         {% set color = (globalAction.color is not null) ? globalAction.color : 'primary' %}
         {% set icon = (globalAction.icon is not null) ? '<i class="'~globalAction.icon~"\"></i>" : '' %}
-
         {% if globalAction.type == 'export-csv' %}
             <button class="btn btn-{{ color }} m-1" id="{{ globalAction.type }}">
                 {{ icon|raw }}

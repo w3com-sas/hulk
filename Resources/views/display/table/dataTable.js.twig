@@ -241,6 +241,27 @@ $(document).ready(function () {
                     }
                 }
                 ,
+                {% elseif column.type == 'call-function' %}
+                {
+                    {% if column.width is not null %}
+                    width: "{{ column.width }}%",
+                    {% endif %}
+                    data: null,
+                    render: function (data, type, row) {
+                        var baseIcon = document.createElement('i'),
+                            baseBtn = document.createElement('btn'),
+                            label = (row.hasOwnProperty('{{ column.iconFieldName }}') && row['{{ column.iconFieldName }}'] !== "") ?
+                                row['{{ column.iconFieldName }}'] : null;
+
+                        baseIcon.className = (row.hasOwnProperty('{{ column.iconFieldName }}') && row['{{ column.iconFieldName }}'] !== "") ?
+                            row['{{ column.iconFieldName }}'] : null;
+                        baseBtn.className = (row.hasOwnProperty('{{ column.iconFieldName }}') && row['{{ column.iconFieldName }}'] !== "") ?
+                            row['{{ column.iconFieldName }}'] : null;
+                       baseBtn.innerText = label;
+                       baseBtn.onclick = function (ev) { eval('{{ column.params.functionToCall }}(row)') };
+                       return baseBtn.outerHTML;
+                    }
+                },
                 {% elseif column.type == 'update-sap' %}
                 {
                     data: '{{ column.fieldName }}',

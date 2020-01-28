@@ -17,10 +17,10 @@ use W3com\HulkBundle\Model\GlobalAction;
 
 class DisplayConstructor
 {
-    /** @var BoomManager  */
+    /** @var BoomManager */
     private $boom;
 
-    /** @var AppInspector  */
+    /** @var AppInspector */
     private $appInspector;
 
     /** @var UrlGeneratorInterface */
@@ -49,8 +49,8 @@ class DisplayConstructor
                         case Display::FIELD_CALCVIEW:
                             $display->setCalcView($value);
                             $display->setEntity($this->appInspector->getEntity($value));
-                            if ($display->getEntity() === null){
-                                $display->getError()->addEntityErrors('Impossible de trouver l\'entité '.$value);
+                            if ($display->getEntity() === null) {
+                                $display->getError()->addEntityErrors('Impossible de trouver l\'entité ' . $value);
                             }
                             break;
                         case Display::FIELD_GLOBAL_ACTION:
@@ -105,6 +105,9 @@ class DisplayConstructor
                     case Column::FIELD_LABEL_FIELDNAME:
                         $column->setLabelFieldName($value);
                         break;
+                    case Column::FIELD_RENDER_FIELDNAME:
+                        $column->setRenderFieldName($value);
+                        break;
                     case Column::FIELD_TYPE:
                         $column->setType($value);
                         break;
@@ -119,9 +122,6 @@ class DisplayConstructor
                         break;
                     case Column::FIELD_ORDERABLE:
                         $column->setOrderable(true);
-                        break;
-                    case Column::FIELD_RENDER_FIELDNAME:
-                        $column->setRenderFieldName($value);
                         break;
                     case GlobalAction::FIELD_CONFIG:
                         $column->setConfig($this->hydrateConfig($value));
@@ -223,7 +223,7 @@ class DisplayConstructor
                     case GlobalAction::FIELD_COLOR:
                         $newGlobalAction->setColor($value);
                         break;
-                        case GlobalAction::FIELD_ICON:
+                    case GlobalAction::FIELD_ICON:
                         $newGlobalAction->setIcon($value);
                         break;
                 }
@@ -256,7 +256,7 @@ class DisplayConstructor
                 case Config::FIELD_URL:
                     try {
                         $value = $this->router->generate($value);
-                    } catch (\Exception $e){
+                    } catch (\Exception $e) {
                         $this->logger->warning($e->getMessage(), $e->getTrace());
                     }
                     $newConfig->setUrl($value);
@@ -290,8 +290,8 @@ class DisplayConstructor
         // TODO Utilisé AppInspector via BoomGenerator pour deviner la classe avec la table
         try {
             $entityUtil = $this->boom->getRepository($entity);
-        } catch (EntityNotFoundException $e){
-            $display->getError()->addEntityErrors('Impossible de trouver la table '.$entity);
+        } catch (EntityNotFoundException $e) {
+            $display->getError()->addEntityErrors('Impossible de trouver la table ' . $entity);
             return [];
         }
 
