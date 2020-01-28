@@ -63,7 +63,6 @@ class QueryManager
         }
         $params = $repo->createParams();
 
-        // Si formulaire alors select pour GROUP BY (Si calcview est en mode aggregate)
         if ($display->isFilter) {
             $this->addSelectForFilters($display, $params);
             return $repo->findAll($params);
@@ -79,6 +78,13 @@ class QueryManager
 
     }
 
+    private function addSelectProperty($fieldName, Parameters $params)
+    {
+        if ($this->appEntity->getProperty($fieldName) !== null) {
+            $params->addSelect($this->appEntity->getProperty($fieldName)->getName());
+        }
+    }
+
     /**
      * @param Display $dataTable
      * @param Parameters $params
@@ -88,42 +94,14 @@ class QueryManager
     {
         /** @var Column $column */
         foreach ($dataTable->getColumns() as $column) {
-
-            if ($column->getType() === Column::TYPE_TEXT || $column->getFieldName() !== null
-                || $column->getIconFieldName() !== null || $column->getLabelFieldName() !== null) {
-
-                $atLeastOne = false;
-
-                if ($this->appEntity->getProperty($column->getFieldName()) !== null) {
-                    $params->addSelect($this->appEntity->getProperty($column->getFieldName())->getName());
-                    $atLeastOne = true;
-                }
-
-                if ($this->appEntity->getProperty($column->getIconFieldName()) !== null) {
-                    $params->addSelect($this->appEntity->getProperty($column->getIconFieldName())->getName());
-                    $atLeastOne = true;
-                }
-
-                if ($this->appEntity->getProperty($column->getLabelFieldName()) !== null) {
-                    $params->addSelect($this->appEntity->getProperty($column->getLabelFieldName())->getName());
-                    $atLeastOne = true;
-                }
-
-                if ($column->getCellAction() != null && $this->appEntity->getProperty($column->getCellAction()->getRenderFieldName()) !== null) {
-                    $params->addSelect($this->appEntity->getProperty($column->getCellAction()->getRenderFieldName())->getName());
-                    $atLeastOne = true;
-                }
-
-                if (!$atLeastOne) {
-                    $column->setActive('N');
-                    $dataTable->getError()->addColumnError(
-                        sprintf(Error::ERROR_MISSING_FIELD, $column->getFieldName(),
-                            $dataTable->getCalcView()
-                        )
-                    );
-                }
+            $this->addSelectProperty($column->getFieldName(), $params);
+            $this->addSelectProperty($column->getIconFieldName(), $params);
+            $this->addSelectProperty($column->getLabelFieldName(), $params);
+            if ($column->getCellAction() != null && $this->appEntity->getProperty($column->getCellAction()->getRenderFieldName()) !== null) {
+                $this->addSelectProperty($column->getCellAction()->getRenderFieldName(), $params);
             }
         }
+
     }
 
     /**
@@ -306,7 +284,7 @@ class QueryManager
     private function addGlobalSearchFilter($value, Parameters $parameters, Display $display)
     {
         $property = $display->getEntity()->getProperty(DisplayType::FIELD_GLOBAL_SEARCH);
-        if ($property instanceof Property){
+        if ($property instanceof Property) {
             $parameters->addFilter($property->getName(), $value,
                 Clause::SUBSTRING_OF, null, Clause::TO_LOWER);
         }
