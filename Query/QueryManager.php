@@ -97,6 +97,7 @@ class QueryManager
             $this->addSelectProperty($column->getFieldName(), $params);
             $this->addSelectProperty($column->getIconFieldName(), $params);
             $this->addSelectProperty($column->getLabelFieldName(), $params);
+            $this->addSelectProperty($column->getRenderFieldName(), $params);
             if ($column->getCellAction() != null && $this->appEntity->getProperty($column->getCellAction()->getRenderFieldName()) !== null) {
                 $this->addSelectProperty($column->getCellAction()->getRenderFieldName(), $params);
             }
