@@ -277,7 +277,7 @@ class Column
     /**
      * @return string
      */
-    public function getRenderFieldName(): string
+    public function getRenderFieldName(): ?string
     {
         return $this->renderFieldName;
     }
