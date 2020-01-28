@@ -14,6 +14,7 @@ class Column
     const FIELD_WIDTH = 'Width';
     const FIELD_HIDDEN = 'Hidden';
     const FIELD_ORDERABLE = 'Orderable';
+    const FIELD_PARAMS = 'Params';
 
     const COL_TYPE_CHECKBOX = 'checkbox';
     const COL_TYPE_ICON = 'icon';
@@ -30,6 +31,9 @@ class Column
 
     /** @var bool */
     private $hidden;
+
+    /** @var array */
+    private $params;
 
     /** @var string */
     private $label;
@@ -289,5 +293,21 @@ class Column
     public function setRenderFieldName(string $renderFieldName): void
     {
         $this->renderFieldName = $renderFieldName;
+    }
+
+    /**
+     * @return array
+     */
+    public function getParams(): array
+    {
+        return $this->params;
+    }
+
+    /**
+     * @param array $params
+     */
+    public function setParams(array $params): void
+    {
+        $this->params = $params;
     }
 }

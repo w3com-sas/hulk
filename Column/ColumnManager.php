@@ -23,7 +23,7 @@ class ColumnManager
         /** @var Column $column */
         foreach ($display->getColumns() as $column) {
             foreach ($display->getFirstLineData() as $property => $value) {
-                if (in_array($property , [$column->getFieldName(),$column->getIconFieldName(),$column->getLabelFieldName()])) {
+                if (in_array($property , [$column->getFieldName(),$column->getIconFieldName(),$column->getLabelFieldName(), $column->getRenderFieldName()])) {
                     $column->setActive('Y');
                 } elseif ($column->hasCellAction()) {
                     if ($column->getCellAction()->getFunctionName() . $column->getCellAction()->getTargetEntity()

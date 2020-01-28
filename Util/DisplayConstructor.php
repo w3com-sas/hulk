@@ -123,6 +123,9 @@ class DisplayConstructor
                     case Column::FIELD_ORDERABLE:
                         $column->setOrderable(true);
                         break;
+                    case Column::FIELD_PARAMS:
+                        $column->setParams($value);
+                        break;
                     case GlobalAction::FIELD_CONFIG:
                         $column->setConfig($this->hydrateConfig($value));
                         break;
