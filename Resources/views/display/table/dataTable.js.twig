@@ -205,7 +205,9 @@ $(document).ready(function () {
                         var tplIcon = $('#icon').html();
                         if (row.hasOwnProperty('{{ column.iconFieldName }}') && (row.{{ column.iconFieldName }} != '')) {
                             var prefixIcon = '';
-                            if (row.{{ column.iconFieldName }}.split(' ').length == 1)
+                            if (row.{{ column.iconFieldName }}.
+                            split(' ').length == 1
+                        )
                             {
                                 prefixIcon = 'fa fa-';
                             }
@@ -255,9 +257,9 @@ $(document).ready(function () {
                 {
                     data: '{{ column.fieldName }}',
                     render: function (data, type, row) {
-                        var renderInputAttr = (row.hasOwnProperty('{{ column.renderFieldName }}') && row['{{ column.renderFieldName }}'] !== "")
-                            ? row.hasOwnProperty('{{ column.renderFieldName }}') : null;
-                        return '<input type="text" value="'+data+'" class="form-control form-control-sm" '+renderInputAttr+'/>'
+                        var input = '<input type="text" value="' + data + '" class="form-control form-control-sm"/>';
+                        return (row.hasOwnProperty('{{ column.renderFieldName }}') && row['{{ column.renderFieldName }}'] !== "")
+                            ? '<div class="' + row.hasOwnProperty('{{ column.renderFieldName }}') + '">' + input + '</div>' : input;
                     }
                 },
                 {% endif %}
