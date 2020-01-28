@@ -43,6 +43,9 @@ class Column
     private $labelFieldName;
 
     /** @var string */
+    private $renderFieldName;
+
+    /** @var string */
     private $type;
 
     /** @var array */
@@ -269,5 +272,21 @@ class Column
     public function setConfig(Config $config): void
     {
         $this->config = $config;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRenderFieldName(): string
+    {
+        return $this->renderFieldName;
+    }
+
+    /**
+     * @param string $renderFieldName
+     */
+    public function setRenderFieldName(string $renderFieldName): void
+    {
+        $this->renderFieldName = $renderFieldName;
     }
 }
