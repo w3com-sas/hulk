@@ -255,10 +255,9 @@ $(document).ready(function () {
                 {
                     data: '{{ column.fieldName }}',
                     render: function (data, type, row) {
-                        var baseTpl = '<input type="text" value="'+data+'" class="form-control form-control-sm"/>';
-                        var renderTplClassName = (row.hasOwnProperty('{{ column.renderFieldName }}') && row['{{ column }}'] !== "")
+                        var renderInputAttr = (row.hasOwnProperty('{{ column.renderFieldName }}') && row['{{ column.renderFieldName }}'] !== "")
                             ? row.hasOwnProperty('{{ column.renderFieldName }}') : null;
-                        return '<div class="'+ renderTplClassName+'">'+baseTpl+'</div>'
+                        return '<input type="text" value="'+data+'" class="form-control form-control-sm" '+renderInputAttr+'/>'
                     }
                 },
                 {% endif %}
