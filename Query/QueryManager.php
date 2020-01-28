@@ -80,6 +80,7 @@ class QueryManager
 
     private function addSelectProperty($fieldName, Parameters $params)
     {
+
         if ($this->appEntity->getProperty($fieldName) !== null) {
             $params->addSelect($this->appEntity->getProperty($fieldName)->getName());
         }

@@ -249,17 +249,15 @@ $(document).ready(function () {
                     data: null,
                     render: function (data, type, row) {
                         var baseIcon = document.createElement('i'),
-                            baseBtn = document.createElement('btn'),
-                            label = (row.hasOwnProperty('{{ column.iconFieldName }}') && row['{{ column.iconFieldName }}'] !== "") ?
-                                row['{{ column.iconFieldName }}'] : null;
-
+                            baseBtn = document.createElement('button'),
+                            label = (row.hasOwnProperty('{{ column.labelFieldName }}') && row['{{ column.labelFieldName }}'] !== "") ?
+                                row['{{ column.labelFieldName }}'] : null;
+                        baseBtn.className =  (row.hasOwnProperty('{{ column.renderFieldName }}') && row['{{ column.renderFieldName }}'] !== "") ?
+                            'btn '+row['{{ column.renderFieldName }}'] : null;
                         baseIcon.className = (row.hasOwnProperty('{{ column.iconFieldName }}') && row['{{ column.iconFieldName }}'] !== "") ?
                             row['{{ column.iconFieldName }}'] : null;
-                        baseBtn.className = (row.hasOwnProperty('{{ column.iconFieldName }}') && row['{{ column.iconFieldName }}'] !== "") ?
-                            row['{{ column.iconFieldName }}'] : null;
-                       baseBtn.innerText = label;
-                       baseBtn.onclick = function (ev) { eval('{{ column.params.functionToCall }}(row)') };
-                       return baseBtn.outerHTML;
+                        baseBtn.innerHTML = baseIcon.outerHTML + label;
+                        return baseBtn.outerHTML;
                     }
                 },
                 {% elseif column.type == 'update-sap' %}
