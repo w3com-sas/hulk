@@ -82,7 +82,6 @@ class SingleFilterManager extends AbstractFilterManager
                         } else {
                             usort($values, [$this, "sortDateDesc"]);
                         }
-                        dump($values);
                         $values = $this->formatValuesForChoices($values);
                         unset($isDate);
                     }
