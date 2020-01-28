@@ -187,6 +187,8 @@ class CellAction
      */
     public function getRenderFieldName()
     {
+        trigger_error("User renderFieldName in column object instead of CellAction. It's deprecated since 1.9.16 version 
+        and will be removed in 2.0", E_USER_DEPRECATED);
         return $this->renderFieldName;
     }
 
