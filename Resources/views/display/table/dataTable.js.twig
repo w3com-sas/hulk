@@ -259,7 +259,7 @@ $(document).ready(function () {
                     render: function (data, type, row) {
                         var input = '<input type="text" value="' + data + '" class="form-control form-control-sm"/>';
                         return (row.hasOwnProperty('{{ column.renderFieldName }}') && row['{{ column.renderFieldName }}'] !== "")
-                            ? '<div class="' + row.hasOwnProperty('{{ column.renderFieldName }}') + '">' + input + '</div>' : input;
+                            ? '<div class="' + row['{{ column.renderFieldName }}'] + '">' + input + '</div>' : input;
                     }
                 },
                 {% endif %}
