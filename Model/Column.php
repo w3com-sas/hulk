@@ -8,6 +8,7 @@ class Column
     const FIELD_FIELDNAME = 'FieldName';
     const FIELD_ICON_FIELDNAME = 'IconFieldName';
     const FIELD_LABEL_FIELDNAME = 'LabelFieldName';
+    const FIELD_RENDER_FIELDNAME = 'RenderFieldName';
     const FIELD_TYPE = 'Type';
     const FIELD_CELL_ACTION = 'CellAction';
     const FIELD_WIDTH = 'Width';
