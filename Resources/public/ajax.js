@@ -26,6 +26,10 @@ export const updateSapLine = (input) => {
     });
 };
 
+export const disableSubmitButton = function (obj) {
+    $(obj).html('<i class="fas fa-spinner fa-spin"></i>');
+};
+
 export const updateSap = (data, targetEntity, targetField, entityKey, targetData, modal) => {
     var url = hulkUrls.updateSap;
     var postData = {
@@ -78,7 +82,7 @@ export const apiRequest = function (data, params, urlApi, modal) {
         "apiParams": params,
         "urlApi": urlApi
     };
-
+    disableSubmitButton($(modal).find('.btn-success'));
     $.ajax({
         method: 'POST',
         url: hulkUrls.apiRequest,
