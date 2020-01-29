@@ -4,14 +4,6 @@ export const countSelectedRows = (rows) => {
     node.style.display = 'block';
 };
 
-export const formatDataToUpdate = (data) => {
-    var obj = {};
-    $.each(data, function (index, value) {
-        obj[String(index)] = value
-    });
-    return obj;
-};
-
 export const openForm = (obj, id) => {
     sap.sbo.webbridge.openForm(obj, id)
 };

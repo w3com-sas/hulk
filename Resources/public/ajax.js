@@ -27,10 +27,9 @@ export const updateSapLine = (input) => {
 };
 
 export const updateSap = (data, targetEntity, targetField, entityKey, targetData, modal) => {
-    var rows = this.formatDataToUpdate(data);
     var url = hulkUrls.updateSap;
     var postData = {
-        "data": rows,
+        "data": {data},
         "targetEntity": targetEntity,
         "targetField": targetField,
         "entityKey": entityKey,
@@ -74,9 +73,8 @@ export const updateSap = (data, targetEntity, targetField, entityKey, targetData
 };
 
 export const apiRequest = function (data, params, urlApi, modal) {
-    var rows = this.formatDataToUpdate(data);
     var postData = {
-        "data": rows,
+        data,
         "apiParams": params,
         "urlApi": urlApi
     };
@@ -180,7 +178,7 @@ export const reloadDisplayForm = () => {
                         toUpdateData[properties[l]] = [];
                     }
                     if (!toUpdateData[properties[l]].includes(resp[properties[l]]) && resp[properties[l]] !== null) {
-                        toUpdateData[properties[l]] = Object.keys(resp[properties[l]]).map(function(e) {
+                        toUpdateData[properties[l]] = Object.keys(resp[properties[l]]).map(function (e) {
                             return resp[properties[l]][e]
                         });
                     }
@@ -198,7 +196,7 @@ export const reloadDisplayForm = () => {
                         nullOption.text = '';
                         elements[i].add(nullOption);
                         for (var x = 0; x < toUpdateData[toUpdateFields[l]].length; x++) {
-                            if (toUpdateData[toUpdateFields[l]][x] !== null){
+                            if (toUpdateData[toUpdateFields[l]][x] !== null) {
                                 var option = document.createElement('option');
                                 option.value = toUpdateData[toUpdateFields[l]][x];
                                 option.text = toUpdateData[toUpdateFields[l]][x];

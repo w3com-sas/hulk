@@ -41,7 +41,6 @@ class ApiManager
                 foreach ($data['apiParams']['data'] as $targetField => $targetKey){
 
                     if ($targetKey === $field){
-
                         $dataLine['data'][$targetField] = $value;
                         $toRemoveFields[] = $field;
                     }

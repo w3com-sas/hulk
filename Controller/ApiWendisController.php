@@ -10,19 +10,13 @@ use W3com\HulkBundle\Service\ApiManager;
 
 class ApiWendisController extends AbstractController
 {
-    /**
-     * @var RequestStack
-     */
+    /** @var RequestStack */
     private $request;
 
-    /**
-     * @var LoggerInterface
-     */
+    /** @var LoggerInterface */
     private $logger;
 
-    /**
-     * @var ApiManager
-     */
+    /** @var ApiManager */
     private $apiManager;
 
     public function __construct(RequestStack $request, LoggerInterface $logger)
@@ -32,9 +26,6 @@ class ApiWendisController extends AbstractController
         $this->apiManager = new ApiManager($logger);
     }
 
-    /**
-     * @return JsonResponse
-     */
     public function apiRequest()
     {
         $this->manageRequest();

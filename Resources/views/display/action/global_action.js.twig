@@ -14,7 +14,6 @@
 
 $('{{ btnModalId }}').click(function () {
 
-
     if (table.rows('.selected').data().length === 0) {
         var modal = $('#anyLines');
     } else {
@@ -34,39 +33,21 @@ $('{{ btnModalId }}').click(function () {
 $('{{ btnFormId }}').click(function () {
 
     var modal = $('{{ modalId }}');
-
-    var data = table.rows('.selected').data();
+    var data = table.rows('.selected').data().toArray();
     var targetEntity = $(this).attr('targetEntity');
     var targetField = $(this).attr('targetField');
     var entityKey = $(this).attr('entityKey');
 
     {% if globalAction.config.targetDataType == 'static' %}
     var targetData = $(this).attr('targetData');
-    updateSap(data, targetEntity, targetField, entityKey, targetData, modal, true);
-
+    updateSap(data, targetEntity, targetField, entityKey, targetData, modal);
     {% elseif globalAction.type == 'update-sap' %}
     var targetData = $('{{ inputId }}').val();
     updateSap(data, targetEntity, targetField, entityKey, targetData, modal);
-
     {% elseif globalAction.type == 'api-request' %}
-
-    var params = {};
-    {% for param, targetParam in globalAction.config.targetData %}
-
-    {% if targetParam is iterable %}
-    params.{{ param }} = {};
-    {% for field, targetField in targetParam %}
-    params
-.{{ param }}.{{ field }} = '{{ targetField }}';
-    {% endfor %}
-
-    {% else %}
-    params.{{ param }} = '{{ targetParam }}';
-    {% endif %}
-    {% endfor %}
-    var url = '{{ globalAction.config.url }}'
-    apiRequest(data, params, url, modal)
-
+    var params = {{ globalAction.config.targetData|json_encode|raw }};
+    var url = '{{ globalAction.config.url }}';
+    apiRequest(data, params, url, modal);
     {% endif %}
 });
 {% endfor %}
