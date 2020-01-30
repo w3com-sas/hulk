@@ -491,13 +491,14 @@ class Display
     {
         $columns = [];
         /** @var Column $column */
-        foreach ($this->columns as $column){
-            if ($column->getType() === $type){
+        foreach ($this->columns as $column) {
+            if ($column->getType() === $type) {
                 $columns[] = $column;
             }
         }
         return $columns;
     }
+
     public function getUpdateSapColumns(): array
     {
         return $this->getColumnsByType(Column::COL_TYPE_UPDATE_SAP);
@@ -505,15 +506,26 @@ class Display
 
     public function getOpenFormColumns(): array
     {
-       $columnsAction = $this->getColumnsByType(Column::COL_TYPE_ACTION);
-       $columns = [];
-       /** @var Column $columnAction */
-       foreach ($columnsAction as $columnAction){
-           if ($columnAction->getCellAction()->getFunctionName() === CellAction::FUNCTION_OPEN_FORM){
-               $columns[] = $columnAction;
-           }
-       }
-       return $columns;
+        $columnsAction = $this->getColumnsByType(Column::COL_TYPE_ACTION);
+        $columns = [];
+        /** @var Column $columnAction */
+        foreach ($columnsAction as $columnAction) {
+            if ($columnAction->getCellAction()->getFunctionName() === CellAction::FUNCTION_OPEN_FORM) {
+                $columns[] = $columnAction;
+            }
+        }
+        return $columns;
+    }
+
+    public function getRenderElements()
+    {
+        $renderElements = [];
+        foreach ($this->getColumns() as $column) {
+            if ($column->getRenderElement() !== null){
+                $renderElements[] = $column->getRenderElement();
+            }
+        }
+        return $renderElements;
     }
 
 }

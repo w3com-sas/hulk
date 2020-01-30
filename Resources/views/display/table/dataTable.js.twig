@@ -272,11 +272,12 @@ $(document).ready(function () {
                             '" onchange="updateSapLine(this)"/>';
                     }
                 },
-                {% elseif column.type == 'input-text' %}
+                {% elseif column.type == 'render-element' %}
                 {
                     data: '{{ column.fieldName }}',
                     render: function (data, type, row) {
-                        var input = '<input type="text" value="' + data + '" class="form-control form-control-sm"/>';
+                        var template = document.getElementById('{{ column.renderElement.elementId }}').innerHTML;
+                        var input = template.replace('[[data]]', data);
                         return (row.hasOwnProperty('{{ column.renderFieldName }}') && row['{{ column.renderFieldName }}'] !== "")
                             ? '<div class="' + row['{{ column.renderFieldName }}'] + '">' + input + '</div>' : input;
                     }

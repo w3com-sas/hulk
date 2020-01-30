@@ -14,6 +14,7 @@ use W3com\HulkBundle\Finder\ModelFinder;
 use W3com\HulkBundle\Model\Display;
 use W3com\HulkBundle\Query\QueryManager;
 use W3com\BoomBundle\Service\BoomManager;
+use W3com\HulkBundle\Renderer\Renderer;
 use W3com\HulkBundle\Url\UrlManager;
 use W3com\HulkBundle\Util\DisplayConstructor;
 use W3com\HulkBundle\Util\DataTransformer;
@@ -55,6 +56,9 @@ class DisplayProvider
     /** @var LoggerInterface */
     private $logger;
 
+    /** @var Renderer */
+    private $renderer;
+
     /**
      * DisplayProvider constructor.
      * @param $config
@@ -64,6 +68,7 @@ class DisplayProvider
      * @param FilterSessionManager $filterSessionManager
      * @param LoggerInterface $logger
      * @param DisplayConstructor $constructor
+     * @param Renderer $renderer
      */
     public function __construct($config, BoomManager $boom, BoomGenerator $generator, UrlGeneratorInterface $router, FilterSessionManager $filterSessionManager,
                                 LoggerInterface $logger, DisplayConstructor $constructor)
@@ -79,6 +84,7 @@ class DisplayProvider
         $this->dataTransformer = new DataTransformer($this->urlManager);
         $this->queryManager = new QueryManager($boom, $generator);
         $this->jsonFinder = new JsonFinder($boom, $config);
+        $this->renderer = new Renderer();
     }
 
     /**
@@ -92,7 +98,8 @@ class DisplayProvider
     {
         $display = new Display();
         $display->setFilename($filename);
-        $this->constructor->hydrateDataTable($this->jsonFinder->getOnlineJson($filename, $display), $display);
+        $this->constructor->hydrate($display, $this->jsonFinder->getOnlineJson($filename, $display));
+        $this->renderer->buildTemplate($display);
 
         if ($display->getError()->isFileExist()) {
 

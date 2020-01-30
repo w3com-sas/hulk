@@ -15,16 +15,20 @@ class Column
     const FIELD_HIDDEN = 'Hidden';
     const FIELD_ORDERABLE = 'Orderable';
     const FIELD_PARAMS = 'Params';
-
-    const COL_TYPE_CHECKBOX = 'checkbox';
-    const COL_TYPE_ICON = 'icon';
-    const TYPE_TEXT = 'text';
+    const FIELD_RENDER_ELEMENT_OPTIONS = 'RenderElementOptions';
 
     const FUNCTION_NAME_DISPLAY_LINK = 'displayLink';
     const FUNCTION_NAME_LINK = 'link';
+
+    const COL_TYPE_TEXT = 'text';
+    const COL_TYPE_CHECKBOX = 'checkbox';
+    const COL_TYPE_ICON = 'icon';
     const COL_TYPE_UPDATE_SAP = 'update-sap';
     const COL_TYPE_ACTION = 'action';
     const COL_TYPE_UNIVERSAL = 'universal';
+    const COL_TYPE_INPUT_TEXT = 'input-text';
+    const COL_TYPE_INPUT_NUMBER = 'input-number';
+    const COL_TYPE_RENDER_ELEMENT = 'render-element';
 
     /** @var integer */
     private $index;
@@ -70,6 +74,14 @@ class Column
 
     /** @var Config */
     private $config;
+
+    /** @var array */
+    private $renderElements = [];
+
+    private $renderElement;
+
+    /** @var array */
+    private $renderElementOptions = [];
 
     public function setLabel($label)
     {
@@ -310,4 +322,32 @@ class Column
     {
         $this->params = $params;
     }
+
+    /**
+     * @return array
+     */
+    public function getRenderElementOptions(): array
+    {
+        return $this->renderElementOptions;
+    }
+
+    /**
+     * @param array $renderElementOptions
+     */
+    public function setRenderElementOptions(array $renderElementOptions): void
+    {
+        $this->renderElementOptions = $renderElementOptions;
+    }
+
+    public function getRenderElement()
+    {
+        return $this->renderElement;
+    }
+
+    public function setRenderElement($renderElement): void
+    {
+        $this->renderElement = $renderElement;
+    }
+
+
 }

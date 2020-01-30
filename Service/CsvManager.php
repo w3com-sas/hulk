@@ -32,25 +32,21 @@ class CsvManager
 
         //$data = $this->request->getCurrentRequest()->request->all();
         $file = $this->displayProvider->getJsonFinder()->getOnlineJson($filename, $this->dataTable);
-        $dataTable = $this->displayProvider->getConstructor()->hydrateDataTable($file, $this->dataTable);
-
+        $dataTable = $this->displayProvider->getConstructor()->hydrate($this->dataTable, $file);
         $formattedData = [];
 
         foreach ($data as $dataLine) {
             $line = [];
             foreach ($dataLine as $fieldName => $value){
-
                 /** @var Column $column */
                 foreach ($dataTable->getColumns() as $column) {
-
-                    if ($column->getFieldName() === $fieldName && $column->getType() === Column::TYPE_TEXT && !$column->isHidden()) {
+                    if ($column->getFieldName() === $fieldName && $column->getType() === Column::COL_TYPE_TEXT && !$column->isHidden()) {
                         $line[$column->getLabel()] = $value;
                     }
                 }
             }
             $formattedData[] = $line;
         }
-
         return $this->serializer->encode($formattedData, 'csv', [CsvEncoder::DELIMITER_KEY => ';']);
     }
 

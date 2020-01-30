@@ -37,47 +37,15 @@ class DisplayConstructor
         $this->appInspector = $boomGenerator->getAppInspector();
     }
 
-    public function hydrateDataTable($file, Display $display)
+    public function hydrate(Display $display, $json)
     {
         if ($display->getError()->isFileExist()) {
-            $decodedJson = json_decode($file, true);
+            $decodedJson = json_decode($json, true);
             if ($decodedJson === null) {
                 $display->getError()->setFileIsBroken(true);
             } else {
                 foreach ($decodedJson as $key => $value) {
-                    switch ($key) {
-                        case Display::FIELD_CALCVIEW:
-                            $display->setCalcView($value);
-                            $display->setEntity($this->appInspector->getEntity($value));
-                            if ($display->getEntity() === null) {
-                                $display->getError()->addEntityErrors('Impossible de trouver l\'entité ' . $value);
-                            }
-                            break;
-                        case Display::FIELD_GLOBAL_ACTION:
-                            $this->hydrateGlobalAction($display, $value);
-                            break;
-                        case Display::FIELD_COLUMNS:
-                            $this->hydrateColumns($display, $value);
-                            break;
-                        case Display::FIELD_FILTERS:
-                            $this->hydrateFilters($display, $value);
-                            break;
-                        case Display::FIELD_PAGE_LENGTH:
-                            $display->setPageLength(intval($value));
-                            break;
-                        case Display::FIELD_DISPLAY_NAME:
-                            $display->setDisplayName($value);
-                            break;
-                        case Display::FIELD_MENU_CONFIG:
-                            $display->setMenuConfig($value);
-                            break;
-                        case Display::FIELD_MENU_NAME;
-                            $display->setMenuName($value);
-                            break;
-                        case Display::FIELD_LABEL;
-                            $display->setLabel($value);
-                            break;
-                    }
+                    $this->hydrateDisplay($display, $key, $value);
                 }
                 if ($display->getPageLength() === null) {
                     $display->setPageLength(10000);
@@ -85,6 +53,43 @@ class DisplayConstructor
             }
         }
         return $display;
+    }
+
+    public function hydrateDisplay(Display $display, $key, $value)
+    {
+        switch ($key) {
+            case Display::FIELD_CALCVIEW:
+                $display->setCalcView($value);
+                $display->setEntity($this->appInspector->getEntity($value));
+                if ($display->getEntity() === null) {
+                    $display->getError()->addEntityErrors('Impossible de trouver l\'entité ' . $value);
+                }
+                break;
+            case Display::FIELD_GLOBAL_ACTION:
+                $this->hydrateGlobalAction($display, $value);
+                break;
+            case Display::FIELD_COLUMNS:
+                $this->hydrateColumns($display, $value);
+                break;
+            case Display::FIELD_FILTERS:
+                $this->hydrateFilters($display, $value);
+                break;
+            case Display::FIELD_PAGE_LENGTH:
+                $display->setPageLength(intval($value));
+                break;
+            case Display::FIELD_DISPLAY_NAME:
+                $display->setDisplayName($value);
+                break;
+            case Display::FIELD_MENU_CONFIG:
+                $display->setMenuConfig($value);
+                break;
+            case Display::FIELD_MENU_NAME;
+                $display->setMenuName($value);
+                break;
+            case Display::FIELD_LABEL;
+                $display->setLabel($value);
+                break;
+        }
     }
 
     private function hydrateColumns(Display $dataTable, $columns)
@@ -125,6 +130,9 @@ class DisplayConstructor
                         break;
                     case Column::FIELD_PARAMS:
                         $column->setParams($value);
+                        break;
+                    case Column::FIELD_RENDER_ELEMENT_OPTIONS:
+                        $column->setRenderElementOptions($value);
                         break;
                     case GlobalAction::FIELD_CONFIG:
                         $column->setConfig($this->hydrateConfig($value));
@@ -282,7 +290,6 @@ class DisplayConstructor
                 case Config::FIELD_USER_CONFIRM:
                     $newConfig->setUserConfirm($value);
                     break;
-
             }
         }
         return $newConfig;
@@ -316,4 +323,5 @@ class DisplayConstructor
         ];
 
     }
+
 }

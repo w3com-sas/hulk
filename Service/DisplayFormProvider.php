@@ -62,7 +62,7 @@ class DisplayFormProvider
     {
         $json = $this->jsonFinder->getOnlineJson($filename, $this->display);
         $this->display->setFilename($filename);
-        $this->displayConstructor->hydrateDataTable($json, $this->display);
+        $this->displayConstructor->hydrate($this->display, $json);
         $data = $this->queryManager->createDataTableQuery($this->display, $getParamsRequest);
 
         if (!$this->display->getError()->isClassExist()) {
