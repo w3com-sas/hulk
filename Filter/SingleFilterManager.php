@@ -61,7 +61,6 @@ class SingleFilterManager extends AbstractFilterManager
                     }
 
                     $values = [];
-                    $values[""] = "";
                     foreach ($dataTable->getData() as $line) {
 
                         foreach ($line as $property => $value) {
@@ -71,10 +70,13 @@ class SingleFilterManager extends AbstractFilterManager
                                     $isDate = true;
                                 }
                                 // Remove null values : select no support
-                                $values[$value] = $value === null ? "" : $value;
+                                if ($value != null){
+                                    $values[$value] = $value;
+                                }
                             }
                         }
                     }
+
 
                     if (isset($isDate)) {
                         if ($filter->getOrder() !== null && $filter->getOrder() === Filter::ORDER_ASC){
