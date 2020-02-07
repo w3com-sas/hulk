@@ -48,16 +48,16 @@ class DisplayPersister
     public function displayUpdate()
     {
         $data = [];
-        $data['rows'] = $this->request->getCurrentRequest()->request->get('data');
+        $data['data'] = $this->request->getCurrentRequest()->request->get('data');
         $data['targetEntity'] = $this->request->getCurrentRequest()->request->get('targetEntity');
         $data['targetField'] = $this->request->getCurrentRequest()->request->get('targetField');
         $data['entityKey'] = $this->request->getCurrentRequest()->request->get('entityKey');
         $data['targetData'] = $this->request->getCurrentRequest()->request->get('targetData');
 
-        if ($data['rows'] === null) {
+        if ($data['data'] === null) {
             return new JsonResponse(['error' => 'no lines selected'], 422);
         } else {
-            foreach ($data['rows'] as $row) {
+            foreach ($data['data'] as $row) {
 
                 $entityKey = null;
                 foreach ($row as $field => $value) {
@@ -95,8 +95,8 @@ class DisplayPersister
                 }
 
                 if (!isset($entityKey)) {
-                    $this->logger->error('Error : missing ID of ' . $data['targetEntity'] . 'in 
-                    the lines of the table.');
+                    $this->logger->error('Error : missing ID of ' . $data['targetEntity'] . ' in 
+                    the data in the display.');
                     return new JsonResponse(['error' => 'Missing mandatory ID key to update'], 400);
                 }
             }
