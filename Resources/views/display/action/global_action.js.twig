@@ -118,7 +118,8 @@ $('#btn{{ globalAction.type~globalAction.index }}').click(function () {
                 }
 
             },
-            error: function () {
+            error: function (rep) {
+                console.log(rep);
                 callFunction.addUnknowError();
             },
             complete: function () {
