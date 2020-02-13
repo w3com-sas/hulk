@@ -40,7 +40,7 @@
             </call>
         </service>
         <service id="w3com_hulk.controller.update_sap_controller"
-                 class="W3com\HulkBundle\Controller\UpdateSapController" public="true">
+                 class="W3com\HulkBundle\Controller\PersistenceController" public="true">
             <argument type="service" id="monolog.logger"/>
             <argument type="service" id="request_stack"/>
             <argument type="service" id="w3com_hulk.service.display_persister"/>

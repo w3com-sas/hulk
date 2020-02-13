@@ -49,8 +49,8 @@
         </service>
         <service class="W3com\HulkBundle\Service\DisplayPersister" id="w3com_hulk.service.display_persister">
             <argument type="service" id="W3com\BoomBundle\Service\BoomManager"/>
-            <argument type="service" id="request_stack"/>
             <argument type="service" id="monolog.logger"/>
+            <argument type="service" id="W3com\BoomBundle\Generator\AppInspector"/>
             <argument type="service" id="W3com\BoomBundle\Service\BoomGenerator"/>
         </service>
         <service class="W3com\HulkBundle\Service\CsvManager" id="w3com_hulk.service.csv_manager">

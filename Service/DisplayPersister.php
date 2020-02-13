@@ -2,105 +2,82 @@
 
 namespace W3com\HulkBundle\Service;
 
+use Doctrine\Common\Annotations\AnnotationException;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use W3com\BoomBundle\Exception\EntityNotFoundException;
 use W3com\BoomBundle\Generator\AppInspector;
 use W3com\BoomBundle\HanaEntity\AbstractEntity;
-use W3com\BoomBundle\Service\BoomGenerator;
 use W3com\BoomBundle\Service\BoomManager;
 
 class DisplayPersister
 {
+    /** @var BoomManager */
     private $boom;
 
-    private $request;
-
+    /** @var LoggerInterface */
     private $logger;
-    /**
-     * @var BoomGenerator
-     */
-    private $generator;
 
-    public function __construct(BoomManager $boom, RequestStack $request, LoggerInterface $logger,
-                                BoomGenerator $generator)
+    /** @var AppInspector */
+    private $appInspector;
+
+    public function __construct(BoomManager $boom, LoggerInterface $logger, AppInspector $appInspector)
     {
-        $this->generator = $generator;
+        $this->appInspector = $appInspector;
         $this->boom = $boom;
-        $this->request = $request;
         $this->logger = $logger;
     }
 
-    public function updateSapLine()
+    /**
+     * @param $entityName
+     * @param $key
+     * @param $affectedField
+     * @param $affectedValue
+     * @throws AnnotationException
+     * @throws EntityNotFoundException
+     * @throws \ReflectionException
+     */
+    public function updateSapLine($entityName, $key, $affectedField, $affectedValue)
     {
-        $entityName = $this->request->getCurrentRequest()->request->get('entity');
-        $keyValue = $this->request->getCurrentRequest()->request->get('key');
-        $targetData = $this->request->getCurrentRequest()->request->get('targetData');
-        $targetField = $this->request->getCurrentRequest()->request->get('targetField');
-        $entity = $this->generator->getAppInspector()->getEntity($entityName);
+        $entity = $this->getEntity($entityName);
         /** @var AbstractEntity $obj */
-        $obj = $this->boom->getRepository($entity->getName())->find($keyValue);
-        $obj->set($obj->getPropertyByColumn($targetField), $targetData);
+        $obj = $this->boom->getRepository($entity->getName())->find($key);
+        $obj->set($obj->getPropertyByColumn($affectedField), $affectedValue);
         $this->boom->getRepository($entity->getName())->update($obj);
     }
 
-    public function displayUpdate()
+    /**
+     * @param $lines
+     * @param $entityName
+     * @param $displayEntityKey
+     * @param $affectedField
+     * @param $affectedValue
+     * @throws AnnotationException
+     * @throws EntityNotFoundException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ReflectionException
+     */
+    public function displayUpdate($lines, $entityName, $displayEntityKey, $affectedField, $affectedValue)
     {
-        $data = [];
-        $data['data'] = $this->request->getCurrentRequest()->request->get('data');
-        $data['targetEntity'] = $this->request->getCurrentRequest()->request->get('targetEntity');
-        $data['targetField'] = $this->request->getCurrentRequest()->request->get('targetField');
-        $data['entityKey'] = $this->request->getCurrentRequest()->request->get('entityKey');
-        $data['targetData'] = $this->request->getCurrentRequest()->request->get('targetData');
+        $entity = $this->getEntity($entityName);
 
-        if ($data['data'] === null) {
-            return new JsonResponse(['error' => 'no lines selected'], 422);
-        } else {
-            foreach ($data['data'] as $row) {
+        foreach ($lines as $row) {
 
-                $entityKey = null;
-                foreach ($row as $field => $value) {
-
-                    if ($field === $data['entityKey']) {
-                        $entityKey = $value;
-                    }
-
-                    if ($entityKey !== null) {
-
-                        // Get
-                        try {
-                            $obj = $this->boom->getRepository($data['targetEntity'])->find($entityKey);
-                        } catch (EntityNotFoundException $exception) {
-                            $this->logger->error('Error when try to get ' . $data['targetEntity'] .
-                                ' : ' . $entityKey,
-                                $exception->getTrace());
-                            return new JsonResponse(['error' => 'Unexistent entity ' . $data['targetEntity']],
-                                400);
-                        }
-
-                        $property = $obj->getPropertyByColumn($data['targetField']);
-                        $dataToSet = $this->formatData($data['targetData']);
-                        $obj->set($property, $dataToSet);
-
-                        // Update
-                        try {
-                            $this->boom->getRepository($data['targetEntity'])->update($obj);
-                        } catch (\Exception $e) {
-                            $this->logger->error('Failed to update : ' . $e->getMessage(),
-                                $e->getTrace());
-                        }
-                        break;
-                    }
-                }
-
-                if (!isset($entityKey)) {
-                    $this->logger->error('Error : missing ID of ' . $data['targetEntity'] . ' in 
-                    the data in the display.');
-                    return new JsonResponse(['error' => 'Missing mandatory ID key to update'], 400);
-                }
+            if (!array_key_exists($displayEntityKey, $row)) {
+                throw new ResourceNotFoundException('Unable to find key ' . $displayEntityKey . ' in display');
             }
+
+            $obj = $this->boom->getRepository($entity->getName())->find($row[$displayEntityKey]);
+            $affectedProperty = $obj->getPropertyByColumn($affectedField);
+
+            if ($affectedProperty === "") {
+                throw new ResourceNotFoundException('Unable to property ' . $displayEntityKey . ' in display');
+            }
+
+            $obj->set($affectedProperty, $this->formatData($affectedValue));
+            $this->boom->update($obj);
         }
+        $this->boom->flush();
     }
 
     private function formatData($targetData)
@@ -110,5 +87,14 @@ class DisplayPersister
             return $dateTime->format('Y-m-d');
         }
         return $targetData;
+    }
+
+    private function getEntity($entityName)
+    {
+        $entity = $this->appInspector->getEntity($entityName);
+        if ($entity === null) {
+            throw new EntityNotFoundException('Unable to find ' . $entity . ' to update sap line.');
+        }
+        return $entity;
     }
 }

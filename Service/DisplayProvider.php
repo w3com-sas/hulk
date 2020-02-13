@@ -2,7 +2,6 @@
 
 namespace W3com\HulkBundle\Service;
 
-use Doctrine\Common\Annotations\AnnotationException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use W3com\BoomBundle\Service\BoomGenerator;
@@ -10,7 +9,6 @@ use W3com\HulkBundle\Column\ColumnManager;
 use W3com\HulkBundle\Filter\FilterManager;
 use W3com\HulkBundle\Filter\FilterSessionManager;
 use W3com\HulkBundle\Finder\JsonFinder;
-use W3com\HulkBundle\Finder\ModelFinder;
 use W3com\HulkBundle\Model\Display;
 use W3com\HulkBundle\Query\QueryManager;
 use W3com\BoomBundle\Service\BoomManager;
@@ -106,15 +104,10 @@ class DisplayProvider
             $data = $this->queryManager->createDataTableQuery($display, $getRequestParams, $maxResults);
 
             if ($display->getError()->isClassExist()) {
-
                 $this->dataTransformer->addData($display, $data);
-
                 $this->columnManager->initColumns($display);
-
                 $this->filterManager->initFilters($display);
-
                 $this->filterSessionManager->checkFiltersDefaultValue($display);
-
                 $this->indexor->addIndex($display);
             }
         }

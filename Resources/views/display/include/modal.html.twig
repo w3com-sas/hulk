@@ -3,9 +3,17 @@
 
     {% if globalAction.type == 'update-sap' %}
         {% set modalId = globalAction.type~globalAction.config.targetDataType~globalAction.index %}
-        {% set btnFormId = 'form'~globalAction.type~globalAction.config.targetDataType~globalAction.index %}
         {% set inputId = 'input'~globalAction.type~globalAction.config.targetField~globalAction.config.targetDataType %}
         {% set title = 'Mise à jour SAP :'~globalAction.config.entity %}
+        {% set btnAttr = {
+            'id' : 'form'~globalAction.type~globalAction.config.targetDataType~globalAction.index,
+            'data-entity-name' : globalAction.config.entity,
+            'data-affected-field': globalAction.config.targetField,
+            'data-display-field-key': globalAction.config.entityKey
+        } %}
+
+        {% set btnAttr = globalAction.config.targetDataType == "static" ? btnAttr|merge({
+            'data-affected-value' : globalAction.config.targetData }) %}
 
         {% if globalAction.config.label != '' %}
             {% set labelField = globalAction.config.label %}
@@ -77,13 +85,12 @@
                         Fermer
                     </button>
                     <button type="button" class="btn btn-success"
-                            id="{{ btnFormId }}"
-                            targetEntity="{{ globalAction.config.entity }}"
-                            targetField="{{ globalAction.config.targetField }}"
-                            entityKey="{{ globalAction.config.entityKey }}"
-                            {% if globalAction.config.targetDataType == 'static' %}
-                        targetData="{{ globalAction.config.targetData }}"
-                            {% endif %}>
+
+                            {% for attr, value in btnAttr %}
+                                {{ " " }}
+                                {{attr|raw }}="{{ value|raw }}"
+                            {% endfor %}
+                    >
                         <i class="far fa-paper-plane mr-2"></i>
                         Valider
                     </button>

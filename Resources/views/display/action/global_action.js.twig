@@ -34,12 +34,12 @@ $('{{ btnFormId }}').click(function () {
 
     var modal = $('{{ modalId }}');
     var data = table.rows('.selected').data().toArray();
-    var targetEntity = $(this).attr('targetEntity');
-    var targetField = $(this).attr('targetField');
-    var entityKey = $(this).attr('entityKey');
+    var targetEntity = $(this).data('entity-name');
+    var entityKey = $(this).data('display-field-key');
+    var targetField = $(this).data('affected-field');
 
     {% if globalAction.config.targetDataType == 'static' %}
-    var targetData = $(this).attr('targetData');
+    var targetData = $(this).data('affected-value');
     updateSap(data, targetEntity, targetField, entityKey, targetData, modal);
     {% elseif globalAction.type == 'update-sap' %}
     var targetData = $('{{ inputId }}').val();

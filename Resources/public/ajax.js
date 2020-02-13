@@ -8,8 +8,8 @@ export const updateSapLine = (input) => {
     var data = {
         'entity': input.dataset.entity,
         'key': input.dataset.key,
-        'targetField': input.dataset.fieldName,
-        'targetData': input.value
+        'affectedField': input.dataset.fieldName,
+        'affectedValue': input.value
     };
 
     $.ajax({
@@ -20,7 +20,8 @@ export const updateSapLine = (input) => {
         success: function (resp) {
             input.className += ' is-valid';
         },
-        fail: function () {
+        error: function (r) {
+            console.log(r);
             input.className += ' is-invalid';
         }
     });
@@ -33,11 +34,11 @@ export const disableSubmitButton = function (obj) {
 export const updateSap = (data, targetEntity, targetField, entityKey, targetData, modal) => {
     var url = hulkUrls.updateSap;
     var postData = {
-        "data": {data},
-        "targetEntity": targetEntity,
-        "targetField": targetField,
+        "lines": data,
+        "entityName": targetEntity,
         "entityKey": entityKey,
-        "targetData": targetData
+        "affectedField": targetField,
+        "affectedValue": targetData
     };
 
     $.ajax({
