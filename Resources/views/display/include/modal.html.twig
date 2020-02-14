@@ -24,6 +24,7 @@
     {% elseif globalAction.type == 'api-request' %}
         {% set modalId = 'modal'~globalAction.type~globalAction.index %}
         {% set btnFormId = 'form'~globalAction.type~globalAction.index %}
+        {% set btnAttr = {'id' : btnFormId} %}
         {% set title = globalAction.label %}
     {% endif %}
 
