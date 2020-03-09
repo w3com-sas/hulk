@@ -59,7 +59,7 @@
         </service>
         <service class="W3com\HulkBundle\Util\DisplayConstructor" id="W3com\HulkBundle\Util\DisplayConstructor">
             <argument type="service" id="W3com\BoomBundle\Service\BoomManager"/>
-            <argument type="service" id="W3com\BoomBundle\Service\BoomGenerator"/>
+            <argument type="service" id="W3com\BoomBundle\Generator\AppInspector"/>
             <argument type="service" id="router"/>
             <argument type="service" id="monolog.logger"/>
         </service>
