@@ -120,6 +120,14 @@ class DisplayConstructor
                         $column->setRenderFieldName($value);
                         break;
                     case Column::FIELD_TYPE:
+
+                        if ($value === Column::COL_TYPE_UPDATE_SAP){
+                            $additionalData = $this->hydrateConfigWithBoom($dataColumn['CellAction']['Entity'], $dataColumn['FieldName']);
+                            if (array_key_exists('TargetChoices', $additionalData)){
+                                $column->getConfig()->setTargetData($additionalData['TargetChoices']);
+                            }
+                        }
+
                         $column->setType($value);
                         break;
                     case Column::FIELD_CELL_ACTION:

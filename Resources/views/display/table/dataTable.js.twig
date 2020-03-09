@@ -263,13 +263,13 @@ $(document).ready(function () {
                 {
                     data: '{{ column.fieldName }}',
                     render: function (data, type, row) {
-                        {% if column.config.targetData is defined %}
+                        {% if column.config.targetData is iterable %}
                         var choices = {{ column.config.targetChoices|json_encode|raw }};
                         var template = '<select class="form-control" onchange="updateSapLine(this)">';
                         {% for key, value in column.config.targetData %}
-                        template+= '<option value="{{ value }}">{{ key }}</option>'
+                        template += '<option value="{{ value }}">{{ key }}</option>'
                         {% endfor %}
-                        template+='</select>'
+                        template += '</select>'
                         return template;
                         {% else %}
                         return '<input type="text" value="' + data + '"' +
