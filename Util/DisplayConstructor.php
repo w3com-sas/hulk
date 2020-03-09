@@ -2,6 +2,7 @@
 
 namespace W3com\HulkBundle\Util;
 
+use phpDocumentor\Reflection\Types\Mixed_;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use W3com\BoomBundle\Exception\EntityNotFoundException;
@@ -29,70 +30,75 @@ class DisplayConstructor
     /** @var LoggerInterface */
     private $logger;
 
-    public function __construct(BoomManager $boom, BoomGenerator $boomGenerator, UrlGeneratorInterface $router, LoggerInterface $logger)
+    /** @var Display */
+    private $display;
+
+    public function __construct(BoomManager $boom, AppInspector $appInspector, UrlGeneratorInterface $router, LoggerInterface $logger)
     {
         $this->logger = $logger;
         $this->router = $router;
         $this->boom = $boom;
-        $this->appInspector = $boomGenerator->getAppInspector();
+        $this->appInspector = $appInspector;
     }
 
     public function hydrate(Display $display, $json)
     {
-        if ($display->getError()->isFileExist()) {
+        $this->display = $display;
+
+        if ($this->display->getError()->isFileExist()) {
             $decodedJson = json_decode($json, true);
             if ($decodedJson === null) {
-                $display->getError()->setFileIsBroken(true);
+                $this->display->getError()->setFileIsBroken(true);
             } else {
                 foreach ($decodedJson as $key => $value) {
-                    $this->hydrateDisplay($display, $key, $value);
+                    $this->hydrateDisplay($key, $value);
                 }
-                if ($display->getPageLength() === null) {
-                    $display->setPageLength(10000);
+                if ($this->display->getPageLength() === null) {
+                    $this->display->setPageLength(10000);
                 }
             }
         }
-        return $display;
+        return $this->display;
     }
 
-    public function hydrateDisplay(Display $display, $key, $value)
+    public function hydrateDisplay($key, $value)
     {
         switch ($key) {
             case Display::FIELD_CALCVIEW:
-                $display->setCalcView($value);
-                $display->setEntity($this->appInspector->getEntity($value));
-                if ($display->getEntity() === null) {
-                    $display->getError()->addEntityErrors('Impossible de trouver l\'entité ' . $value);
+                $this->display->setCalcView($value);
+                $this->display->setEntity($this->appInspector->getEntity($value));
+                if ($this->display->getEntity() === null) {
+                    $this->display->getError()->addEntityErrors('Impossible de trouver l\'entité ' . $value);
                 }
                 break;
             case Display::FIELD_GLOBAL_ACTION:
-                $this->hydrateGlobalAction($display, $value);
+                $this->hydrateGlobalAction($value);
                 break;
             case Display::FIELD_COLUMNS:
-                $this->hydrateColumns($display, $value);
+                $this->hydrateColumns($value);
                 break;
             case Display::FIELD_FILTERS:
-                $this->hydrateFilters($display, $value);
+                $this->hydrateFilters($value);
                 break;
             case Display::FIELD_PAGE_LENGTH:
-                $display->setPageLength(intval($value));
+                $this->display->setPageLength(intval($value));
                 break;
             case Display::FIELD_DISPLAY_NAME:
-                $display->setDisplayName($value);
+                $this->display->setDisplayName($value);
                 break;
             case Display::FIELD_MENU_CONFIG:
-                $display->setMenuConfig($value);
+                $this->display->setMenuConfig($value);
                 break;
             case Display::FIELD_MENU_NAME;
-                $display->setMenuName($value);
+                $this->display->setMenuName($value);
                 break;
             case Display::FIELD_LABEL;
-                $display->setLabel($value);
+                $this->display->setLabel($value);
                 break;
         }
     }
 
-    private function hydrateColumns(Display $dataTable, $columns)
+    private function hydrateColumns($columns)
     {
         foreach ($columns as $dataColumn) {
             $column = new Column();
@@ -135,16 +141,21 @@ class DisplayConstructor
                         $column->setRenderElementOptions($value);
                         break;
                     case GlobalAction::FIELD_CONFIG:
+                        if ($value === Column::COL_TYPE_UPDATE_SAP){
+                            $value = array_merge($value, $this->hydrateConfigWithBoom(
+                                $this->display->getEntity()->getTable(),
+                                $value['TargetField']
+                            ));
+                        }
                         $column->setConfig($this->hydrateConfig($value));
                         break;
-
                 }
             }
-            $dataTable->addColumn($column);
+            $this->display->addColumn($column);
         }
     }
 
-    private function hydrateFilters(Display $dataTable, $filters)
+    private function hydrateFilters($filters)
     {
         foreach ($filters as $jsonFilter) {
             $filter = new Filter();
@@ -168,7 +179,7 @@ class DisplayConstructor
 
                 }
             }
-            $dataTable->addFilter($filter);
+            $this->display->addFilter($filter);
         }
     }
 
@@ -211,7 +222,7 @@ class DisplayConstructor
         return $action;
     }
 
-    private function hydrateGlobalAction(Display $dataTable, array $dataGlobalActions)
+    private function hydrateGlobalAction(array $dataGlobalActions)
     {
         foreach ($dataGlobalActions as $globalAction) {
             $newGlobalAction = new GlobalAction();
@@ -225,8 +236,7 @@ class DisplayConstructor
                         break;
                     case GlobalAction::FIELD_CONFIG:
                         if (array_key_exists('Entity', $value) && array_key_exists('TargetField', $value)) {
-                            $moreHydratation = $this->hydrateConfigWithBoom($value['Entity'], $value['TargetField'], $dataTable);
-                            $value = array_merge($value, $moreHydratation);
+                            $value = array_merge($value, $this->hydrateConfigWithBoom($value['Entity'], $value['TargetField']));
                         }
                         $config = $this->hydrateConfig($value);
                         $newGlobalAction->setConfig($config);
@@ -239,7 +249,7 @@ class DisplayConstructor
                         break;
                 }
             }
-            $dataTable->addGlobalAction($newGlobalAction);
+            $this->display->addGlobalAction($newGlobalAction);
         }
     }
 
@@ -295,13 +305,13 @@ class DisplayConstructor
         return $newConfig;
     }
 
-    private function hydrateConfigWithBoom($entity, $fieldName, Display $display)
+    private function hydrateConfigWithBoom($entity, $fieldName)
     {
         // TODO Utilisé AppInspector via BoomGenerator pour deviner la classe avec la table
         try {
             $entityUtil = $this->boom->getRepository($entity);
         } catch (EntityNotFoundException $e) {
-            $display->getError()->addEntityErrors('Impossible de trouver la table ' . $entity);
+            $this->display->getError()->addEntityErrors('Impossible de trouver la table ' . $entity);
             return [];
         }
 

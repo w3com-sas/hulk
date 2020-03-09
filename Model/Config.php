@@ -204,6 +204,13 @@ class Config
      */
     public function setTargetChoices($targetChoices): void
     {
+        if ($targetChoices !== ""){
+            $targetData = [];
+            foreach (explode("#", $targetChoices) as $choice){
+                $targetData[explode("|", $choice)[0]] = explode("|", $choice)[1];
+            }
+            $this->targetData = $targetData;
+        }
         $this->targetChoices = $targetChoices;
     }
 

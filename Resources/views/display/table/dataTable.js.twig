@@ -140,7 +140,6 @@ $(document).ready(function () {
 
                         {% if column.cellAction.iconFieldName is not null %}
                         var icon = row.{{ column.cellAction.iconFieldName }};
-
                         return tpl.replace('[[icon]]', icon).replace('[[data]]', data);
                         {% else %}
                         return tpl.replace('[[data]]', data);
@@ -264,12 +263,22 @@ $(document).ready(function () {
                 {
                     data: '{{ column.fieldName }}',
                     render: function (data, type, row) {
+                        {% if column.config.targetData is defined %}
+                        var choices = {{ column.config.targetChoices|json_encode|raw }};
+                        var template = '<select class="form-control" onchange="updateSapLine(this)">';
+                        {% for key, value in column.config.targetData %}
+                        template+= '<option value="{{ value }}">{{ key }}</option>'
+                        {% endfor %}
+                        template+='</select>'
+                        return template;
+                        {% else %}
                         return '<input type="text" value="' + data + '"' +
                             'class="form-control form-control-sm"' +
                             'data-entity="' + '{{ column.config.entity }}' +
                             '" data-field-name="' + '{{ column.fieldName }}' +
                             '" data-key="' + row.{{ column.config.entityKey }} +
                             '" onchange="updateSapLine(this)"/>';
+                        {% endif %}
                     }
                 },
                 {% elseif column.type == 'render-element' %}

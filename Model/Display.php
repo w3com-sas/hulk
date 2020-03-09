@@ -162,7 +162,7 @@ class Display
     /**
      * @return mixed
      */
-    public function getEntity()
+    public function getEntity(): Entity
     {
         return $this->entity;
     }
