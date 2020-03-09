@@ -121,10 +121,12 @@ class DisplayConstructor
                         break;
                     case Column::FIELD_TYPE:
 
-                        if ($value === Column::COL_TYPE_UPDATE_SAP){
-                            $additionalData = $this->hydrateConfigWithBoom($dataColumn['CellAction']['Entity'], $dataColumn['FieldName']);
-                            if (array_key_exists('TargetChoices', $additionalData)){
-                                $column->getConfig()->setTargetData($additionalData['TargetChoices']);
+                        if ($value === Column::COL_TYPE_UPDATE_SAP) {
+                            $additionalData = $this->hydrateConfigWithBoom($dataColumn['Config']['Entity'], $dataColumn['FieldName']);
+                            if (array_key_exists('TargetChoices', $additionalData)) {
+                                $config = new Config();
+                                $config->setTargetChoices($additionalData['TargetChoices']);
+                                $column->setConfig($config);
                             }
                         }
 
@@ -149,13 +151,7 @@ class DisplayConstructor
                         $column->setRenderElementOptions($value);
                         break;
                     case GlobalAction::FIELD_CONFIG:
-                        if ($value === Column::COL_TYPE_UPDATE_SAP){
-                            $value = array_merge($value, $this->hydrateConfigWithBoom(
-                                $this->display->getEntity()->getTable(),
-                                $value['TargetField']
-                            ));
-                        }
-                        $column->setConfig($this->hydrateConfig($value));
+                        $this->hydrateConfig($value, $column);
                         break;
                 }
             }
@@ -261,11 +257,10 @@ class DisplayConstructor
         }
     }
 
-    private function hydrateConfig($arrayConfig)
+    private function hydrateConfig($arrayConfig, $column = null)
     {
-        $newConfig = new Config();
+        $newConfig = $column === null ? new Config() : $column->getConfig();
         foreach ($arrayConfig as $field => $value) {
-
             switch ($field) {
                 case Config::FIELD_ENTITY:
                     $newConfig->setEntity($value);

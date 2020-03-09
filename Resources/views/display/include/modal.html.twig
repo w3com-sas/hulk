@@ -87,13 +87,15 @@
                     </button>
                     <button type="button" class="btn btn-success"
 
-                            {% for attr, value in btnAttr %}
-                                {{ " " }}
-                                {{attr|raw }}="{{ value|raw }}"
-                            {% endfor %}
+                    {% for attr, value in btnAttr %}
+                        {% if value is not iterable %}
+                            {{ " " }}
+                            {{ attr|raw }}="{{ value|raw }}"
+                        {% endif %}
+                    {% endfor %}
                     >
-                        <i class="far fa-paper-plane mr-2"></i>
-                        Valider
+                    <i class="far fa-paper-plane mr-2"></i>
+                    Valider
                     </button>
                 </div>
             </div>

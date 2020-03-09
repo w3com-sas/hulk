@@ -209,7 +209,7 @@ class Config
             foreach (explode("#", $targetChoices) as $choice){
                 $targetData[explode("|", $choice)[0]] = explode("|", $choice)[1];
             }
-            $this->targetData = $targetData;
+            $targetChoices = $targetData;
         }
         $this->targetChoices = $targetChoices;
     }

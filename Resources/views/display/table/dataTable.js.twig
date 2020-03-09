@@ -263,14 +263,19 @@ $(document).ready(function () {
                 {
                     data: '{{ column.fieldName }}',
                     render: function (data, type, row) {
-                        {% if column.config.targetData is iterable %}
+                        {% if column.config.targetChoices is iterable %}
                         var choices = {{ column.config.targetChoices|json_encode|raw }};
-                        var template = '<select class="form-control" onchange="updateSapLine(this)">';
-                        {% for key, value in column.config.targetData %}
-                        template += '<option value="{{ value }}">{{ key }}</option>'
-                        {% endfor %}
+                        var template = '<select class="form-control custom-select" onchange="updateSapLine(this)">';
+                        Object.keys(choices).forEach(function (key) {
+                            if (data === choices[key]){
+                                template += '<option value="'+ choices[key]+ '" selected="selected">'+key+'</option>'
+                            } else {
+                                template += '<option value="'+ choices[key]+ '">'+key+'</option>'
+                            }
+                        })
                         template += '</select>'
                         return template;
+
                         {% else %}
                         return '<input type="text" value="' + data + '"' +
                             'class="form-control form-control-sm"' +
