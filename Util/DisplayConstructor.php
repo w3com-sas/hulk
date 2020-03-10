@@ -259,7 +259,7 @@ class DisplayConstructor
 
     private function hydrateConfig($arrayConfig, $column = null)
     {
-        $newConfig = $column === null ? new Config() : $column->getConfig();
+        $newConfig = ($column === null || $column->getConfig() === null) ? new Config() : $column->getConfig();
         foreach ($arrayConfig as $field => $value) {
             switch ($field) {
                 case Config::FIELD_ENTITY:
@@ -308,19 +308,19 @@ class DisplayConstructor
         return $newConfig;
     }
 
-    private function hydrateConfigWithBoom($entity, $fieldName)
+    private function hydrateConfigWithBoom($entityName, $fieldName)
     {
-        // TODO Utilisé AppInspector via BoomGenerator pour deviner la classe avec la table
+        $entity = $this->appInspector->getEntity($entityName);
         try {
-            $entityUtil = $this->boom->getRepository($entity);
+            $entityUtil = $this->boom->getRepository($entity->getName());
         } catch (EntityNotFoundException $e) {
-            $this->display->getError()->addEntityErrors('Impossible de trouver la table ' . $entity);
+            $this->display->getError()->addEntityErrors('Impossible de trouver la table ' . $entityName);
             return [];
         }
 
         if ($entityUtil == null) return [];
 
-        $instanceName = '\\App\\HanaEntity\\' . $entity;
+        $instanceName = '\\App\\HanaEntity\\' . $entity->getName();
         $instance = new $instanceName();
 
         $property = $instance->getPropertyByColumn($fieldName);
