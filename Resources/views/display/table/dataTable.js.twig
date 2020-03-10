@@ -265,12 +265,15 @@ $(document).ready(function () {
                     render: function (data, type, row) {
                         {% if column.config.targetChoices is iterable %}
                         var choices = {{ column.config.targetChoices|json_encode|raw }};
-                        var template = '<select class="form-control custom-select" onchange="updateSapLine(this)">';
+                        var template = '<select data-entity="{{ column.config.entity }}"'
+                            + 'data-field-name="{{ column.fieldName }}"'
+                            + 'data-key="' + row['{{ column.config.entityKey }}']
+                            + '"class="form-control custom-select" onchange="updateSapLine(this)">';
                         Object.keys(choices).forEach(function (key) {
-                            if (data === choices[key]){
-                                template += '<option value="'+ choices[key]+ '" selected="selected">'+key+'</option>'
+                            if (data === choices[key]) {
+                                template += '<option value="' + choices[key] + '" selected="selected">' + key + '</option>'
                             } else {
-                                template += '<option value="'+ choices[key]+ '">'+key+'</option>'
+                                template += '<option value="' + choices[key] + '">' + key + '</option>'
                             }
                         })
                         template += '</select>'
