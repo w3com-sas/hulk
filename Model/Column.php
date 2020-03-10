@@ -278,7 +278,7 @@ class Column
     /**
      * @return Config
      */
-    public function getConfig(): Config
+    public function getConfig(): ?Config
     {
         return $this->config;
     }
