@@ -83,6 +83,7 @@ class MenuBuilder
             if ($currentIndex === null && $child->getName() === $currentDisplayName) {
                 $this->setLastChild($menu, $currentDisplayName, $child->getExtra('index'));
             }
+
             if ($currentIndex - $child->getExtra('index') === 1) {
                 return $menu->setExtra('lastChild', $child);
             }

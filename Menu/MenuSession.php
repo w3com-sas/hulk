@@ -19,7 +19,7 @@ class MenuSession
 
     public function getHulkMenu($currentDisplayName, $currentMenuName)
     {
-        if ($currentMenuName == null){
+        if ($currentMenuName === null) {
             return [];
         }
 
@@ -59,20 +59,18 @@ class MenuSession
     {
         $newMenu = [];
         $newMenu[$currentMenuName] = [];
+        foreach ($this->getCurrentMenu($currentMenuName) as $menu) {
 
-        foreach ($this->session->get('menu') as $menuName => $menus) {
-
-            foreach ($menus as $menu) {
-
-                if ($menuName === $currentMenuName) {
-                    // Remove useless item
-                    if ($menu['index'] < $currentMenu['index']) {
-                        $newMenu[$currentMenuName][$menu['uniqId']] = $menu;
-                    }
-                } else {
-                    $newMenu[$currentMenuName][$menu['uniqId']] = $menu;
-                }
+            if ($menu['index'] > $currentMenu['index']) {
+                continue;
             }
+
+            if (!$this->isHulkRoute($menu['route']) && $menu['route'] === $currentMenu['route']) {
+                $currentMenu['index']--;
+                continue;
+            }
+
+            $newMenu[$currentMenuName][$menu['uniqId']] = $menu;
         }
         $newMenu[$currentMenuName][$currentMenu['uniqId']] = $currentMenu;
         $this->session->set('menu', $newMenu);
@@ -82,6 +80,21 @@ class MenuSession
     private function getLastItemIndex($currentMenuName)
     {
         return max(array_column($this->session->get('menu')[$currentMenuName], 'index'));
+    }
+
+    private function getCurrentMenu($searchMenu)
+    {
+        foreach ($this->session->get('menu') as $menuName => $menu) {
+            if ($searchMenu === $menuName) {
+                return $menu;
+            }
+        }
+        return [];
+    }
+
+    private function isHulkRoute($route)
+    {
+        return ($route === "w3com_display" || $route === "w3com_display_form");
     }
 
     private function getRouteParams()
