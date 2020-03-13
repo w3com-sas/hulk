@@ -14,6 +14,7 @@ use W3com\HulkBundle\Util\DisplayConstructor;
 class Display
 {
     const FIELD_CALCVIEW = 'CalculationView';
+    const FIELD_DEFAULT_ORDER = 'DefaultOrder';
     const FIELD_GLOBAL_ACTION = 'GlobalActions';
     const FIELD_FILTERS = 'Filters';
     const FIELD_COLUMNS = 'Columns';
@@ -38,7 +39,12 @@ class Display
     /** @var string */
     private $calcView;
 
-    /** @var Entity|null */
+    /** @var array  */
+    private $defaultOrder = [];
+
+    /**
+     * @var mixed
+     */
     private $entity;
 
     /** @var array */
@@ -120,6 +126,16 @@ class Display
     public function getFilters()
     {
         return $this->filters;
+    }
+
+    public function setDefaultOrder($defaultOrder)
+    {
+        return $this->defaultOrder = $defaultOrder;
+    }
+
+    public function getDefaultOrder()
+    {
+        return $this->defaultOrder;
     }
 
     /**

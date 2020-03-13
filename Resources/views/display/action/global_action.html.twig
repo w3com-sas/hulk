@@ -7,6 +7,13 @@
                 {{ icon|raw }}
                 {{ globalAction.label }}
             </button>
+        {% elseif globalAction.type == 'print' %}
+            <button class="btn btn-{{ color }}"
+                    id="btn{{ globalAction.type }}{{ globalAction.config.targetDataType }}{{ globalAction.index }}"
+                    targetField="{{ globalAction.config.targetField }}">
+                {{ icon|raw }}
+                {{ globalAction.label }}
+            </button>
         {% elseif globalAction.type == 'update-sap' and globalAction.config.targetDataType == 'static' or
             globalAction.config.targetDataType == 'text' or globalAction.config.targetDataType == 'date' %}
             <button class="btn btn-{{ color }}"

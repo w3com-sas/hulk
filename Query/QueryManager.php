@@ -73,6 +73,7 @@ class QueryManager
         $this->addSelectForLink($display, $params);
         $this->addGetParamsRequest($display, $requestParams, $params);
         $this->addPreFilter($display, $params);
+        $this->addDefaultOrder($display, $params);
         $top === null ? $params->setTop($display->getMaxLength()) : $params->setTop($top);
         return $repo->findAll($params);
 
@@ -80,9 +81,16 @@ class QueryManager
 
     private function addSelectProperty($fieldName, Parameters $params)
     {
-
         if ($this->appEntity->getProperty($fieldName) !== null) {
             $params->addSelect($this->appEntity->getProperty($fieldName)->getName());
+        }
+    }
+
+    private function addDefaultOrder(Display $dataTable, Parameters $params)
+    {
+        if(count($dataTable->getDefaultOrder()) > 0){
+            $property = $this->appEntity->getProperty($dataTable->getDefaultOrder()['FieldName'])->getName();
+            $params->addOrder($property,strtolower($dataTable->getDefaultOrder()['Direction']));
         }
     }
 

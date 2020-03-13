@@ -71,6 +71,9 @@ class DisplayConstructor
                     $this->display->getError()->addEntityErrors('Impossible de trouver l\'entité ' . $value);
                 }
                 break;
+            case Display::FIELD_DEFAULT_ORDER:
+                $this->display->setDefaultOrder($value);
+                break;
             case Display::FIELD_GLOBAL_ACTION:
                 $this->hydrateGlobalAction($value);
                 break;

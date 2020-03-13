@@ -13,6 +13,7 @@ class GlobalAction
     const TYPE_UPDATE_SAP = 'update-sap';
     const TYPE_CREATE_SAP = 'create-sap';
     const TYPE_EXPORT_CSV = 'export-csv';
+    const TYPE_PRINT = 'print';
     const TYPE_ANONYME = 'anonyme';
     const TYPE_HTML_RENDER = 'html-render';
     const TYPE_API_CALL = 'api-call';
