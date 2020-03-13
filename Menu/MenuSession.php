@@ -66,7 +66,7 @@ class MenuSession
             }
 
             if (!$this->isHulkRoute($menu['route']) && $menu['route'] === $currentMenu['route']) {
-                $currentMenu['index']--;
+                $currentMenu['index'] = $menu['index'];
                 continue;
             }
 
