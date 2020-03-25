@@ -21,7 +21,6 @@ class JsonFinder
     {
         $this->boom = $boom;
         $this->config = $config;
-        $currentConnection = $boom->getCurrentConnection();
         $this->baseUri = $this->boom->config['odata_service']['base_uri'];
         $this->jsonUri = $this->config['json_display']['url_files'];
 
