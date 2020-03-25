@@ -29,7 +29,6 @@ class JsonFinder
 
     private function createContext()
     {
-        $currentConnection = $this->boom->getCurrentConnection();
         $login = $this->boom->config['odata_service']['login']['username']
             . ':' . $this->boom->config['odata_service']['login']['password'];
 
