@@ -4,6 +4,8 @@
             <i class="fas fa-search"></i>
         </label>
     </div>
+    <select class="form-control" id="targetColumn">
+    </select>
     <input type="text" class="form-control" id="searchBar" placeholder="Recherche générale"
     {{ (display.filters.searchBar is defined) ? 'value='~display.filters.searchBar.defaultValue~'' : '' }}>
 </div>

@@ -70,6 +70,9 @@ class Column
     private $width;
 
     /** @var bool */
+    private $searchable = true;
+
+    /** @var bool */
     private $orderable = false;
 
     /** @var Config */
@@ -225,6 +228,22 @@ class Column
     public function setWidth(int $width): void
     {
         $this->width = $width;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSearchable(): bool
+    {
+        return $this->searchable;
+    }
+
+    /**
+     * @param bool $searchable
+     */
+    public function setSearchable(bool $searchable): void
+    {
+        $this->searchable = $searchable;
     }
 
     /**
