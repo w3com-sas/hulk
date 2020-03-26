@@ -75,8 +75,8 @@ class FilterSessionManager
 
                     foreach ($filters as $filterSessionName => $filterSessionValue) {
 
-                        if ($filterSessionName === 'searchBar'){
-                            $this->addSearchBarFilter($dataTable, $filterSessionValue);
+                        if ($filterSessionName === 'searchBar' || $filterSessionName === 'targetColumn'){
+                            $this->addSearchFilter($dataTable, $filterSessionName, $filterSessionValue);
                         }
 
                         /** @var Filter $filter */
@@ -93,11 +93,11 @@ class FilterSessionManager
         }
     }
 
-    private function addSearchBarFilter(Display $dataTable, $filterSessionValue)
+    private function addSearchFilter(Display $dataTable, $filterSessionName, $filterSessionValue)
     {
         $filter = new Filter();
         $filter->setDefaultValue($filterSessionValue);
-        $filter->setFieldName('searchBar');
+        $filter->setFieldName($filterSessionName);
         $dataTable->addFilter($filter);
     }
 }

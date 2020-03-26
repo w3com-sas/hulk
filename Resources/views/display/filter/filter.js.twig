@@ -56,5 +56,10 @@ table.draw();
 {% endfor %}
 {% endblock %}
 {% if display.filters.searchBar is defined %}
-table.search('{{ display.filters.searchBar.defaultValue }}').draw();
+{% if display.filters.targetColumn is defined and display.filters.targetColumn.defaultValue != 'all' %}
+var element = table.column({{ display.filters.targetColumn.defaultValue }});
+{% else %}
+var element = table;
+{% endif %}
+element.search('{{ display.filters.searchBar.defaultValue }}').draw();
 {% endif %}
