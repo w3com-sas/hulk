@@ -14,6 +14,7 @@ class Column
     const FIELD_WIDTH = 'Width';
     const FIELD_HIDDEN = 'Hidden';
     const FIELD_ORDERABLE = 'Orderable';
+    const FIELD_SEARCHABLE = 'Searchable';
     const FIELD_PARAMS = 'Params';
     const FIELD_RENDER_ELEMENT_OPTIONS = 'RenderElementOptions';
 
