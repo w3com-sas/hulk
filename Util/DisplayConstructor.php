@@ -148,7 +148,7 @@ class DisplayConstructor
                         $column->setOrderable(true);
                         break;
                     case Column::FIELD_SEARCHABLE:
-                        $column->setSearchable(true);
+                        $column->setSearchable($value);
                         break;
                     case Column::FIELD_PARAMS:
                         $column->setParams($value);
