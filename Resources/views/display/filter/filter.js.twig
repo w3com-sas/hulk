@@ -10,9 +10,24 @@ $('.single-filter .custom-select').on('change', function () {
 
 });
 $('#searchBar').on('keyup change', function () {
+    var colIndex = $('#targetColumn').val();
+    table.search('').columns().search('').draw();
     table.rows().deselect();
-    table
+    var element = colIndex === 'all' ? table : table.column(colIndex);
+    element
         .search(this.value)
+        .draw();
+    saveFilters();
+    countSelectedRows(table.rows('.selected').data());
+});
+
+$('#targetColumn').on('change', function () {
+    var searchVal = $('#searchBar').val();
+    table.search('').columns().search('').draw();
+    table.rows().deselect();
+    var element = this.value === 'all' ? table : table.column(this.value);
+    element
+        .search(searchVal)
         .draw();
     saveFilters();
     countSelectedRows(table.rows('.selected').data());
@@ -41,5 +56,10 @@ table.draw();
 {% endfor %}
 {% endblock %}
 {% if display.filters.searchBar is defined %}
-table.search('{{ display.filters.searchBar.defaultValue }}').draw();
+{% if display.filters.targetColumn is defined and display.filters.targetColumn.defaultValue != 'all' %}
+var element = table.column({{ display.filters.targetColumn.defaultValue }});
+{% else %}
+var element = table;
+{% endif %}
+element.search('{{ display.filters.searchBar.defaultValue }}').draw();
 {% endif %}

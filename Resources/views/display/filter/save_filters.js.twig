@@ -21,6 +21,7 @@ function saveFilters() {
 
     {% endfor %}
     data.filters.searchBar = $('#searchBar').val();
+    data.filters.targetColumn = $('#targetColumn').val();
 
     $.ajax({
         method: "POST",
@@ -31,7 +32,7 @@ function saveFilters() {
             var startSubstr = countFilter.innerHTML.indexOf('(');
             var endSubstr = countFilter.innerHTML.indexOf(')');
             countFilter.innerHTML = countFilter.innerHTML.replace(countFilter.innerHTML.substr(startSubstr, endSubstr),
-            '('+data.countFilters+')')
+                '('+data.countFilters+')')
         }
 
     })

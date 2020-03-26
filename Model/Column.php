@@ -14,6 +14,7 @@ class Column
     const FIELD_WIDTH = 'Width';
     const FIELD_HIDDEN = 'Hidden';
     const FIELD_ORDERABLE = 'Orderable';
+    const FIELD_SEARCHABLE = 'Searchable';
     const FIELD_PARAMS = 'Params';
     const FIELD_RENDER_ELEMENT_OPTIONS = 'RenderElementOptions';
 
@@ -68,6 +69,9 @@ class Column
 
     /** @var integer */
     private $width;
+
+    /** @var bool */
+    private $searchable = true;
 
     /** @var bool */
     private $orderable = false;
@@ -225,6 +229,22 @@ class Column
     public function setWidth(int $width): void
     {
         $this->width = $width;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSearchable(): bool
+    {
+        return $this->searchable;
+    }
+
+    /**
+     * @param bool $searchable
+     */
+    public function setSearchable(bool $searchable): void
+    {
+        $this->searchable = $searchable;
     }
 
     /**
