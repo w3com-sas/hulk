@@ -55,7 +55,7 @@ table th:nth-last-child(1) {
 
 @keyframes highlight {
     0% {
-        background-color: #ff8f87;
+        background-color: #888888;
         opacity: 0.3;
     }
     100% {
