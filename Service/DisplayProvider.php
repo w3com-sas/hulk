@@ -51,6 +51,9 @@ class DisplayProvider
     /** @var FilterSessionManager */
     private $filterSessionManager;
 
+    /** @var SessionManager */
+    private $session;
+
     /** @var LoggerInterface */
     private $logger;
 
@@ -66,12 +69,13 @@ class DisplayProvider
      * @param FilterSessionManager $filterSessionManager
      * @param LoggerInterface $logger
      * @param DisplayConstructor $constructor
-     * @param Renderer $renderer
+     * @param SessionManager $sessionManager
      */
     public function __construct($config, BoomManager $boom, BoomGenerator $generator, UrlGeneratorInterface $router, FilterSessionManager $filterSessionManager,
-                                LoggerInterface $logger, DisplayConstructor $constructor)
+                                LoggerInterface $logger, DisplayConstructor $constructor, SessionManager $sessionManager)
     {
         $this->filterSessionManager = $filterSessionManager;
+        $this->session = $sessionManager;
         $this->logger = $logger;
         $this->config = $config;
         $this->constructor = $constructor;
@@ -108,6 +112,7 @@ class DisplayProvider
                 $this->columnManager->initColumns($display);
                 $this->filterManager->initFilters($display);
                 $this->filterSessionManager->checkFiltersDefaultValue($display);
+                $this->session->setLastRowIndex($display);
                 $this->indexor->addIndex($display);
             }
         }
