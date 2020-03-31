@@ -12,6 +12,7 @@
             <argument type="service" id="w3com_hulk.filter.filter_session_manager"/>
             <argument type="service" id="monolog.logger"/>
             <argument type="service" id="W3com\HulkBundle\Util\DisplayConstructor"/>
+            <argument type="service" id="w3com_hulk.service.session_manager"/>
         </service>
 
         <service class="W3com\HulkBundle\Url\UrlManager" id="w3com_hulk.url.url_manager">
@@ -62,6 +63,10 @@
             <argument type="service" id="W3com\BoomBundle\Generator\AppInspector"/>
             <argument type="service" id="router"/>
             <argument type="service" id="monolog.logger"/>
+        </service>
+        <service class="W3com\HulkBundle\Service\SessionManager" id="w3com_hulk.service.session_manager">
+            <argument type="service" id="session" />
+            <argument type="service" id="request_stack"/>
         </service>
     </services>
 </container>

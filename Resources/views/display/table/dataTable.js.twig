@@ -346,6 +346,13 @@ $(document).ready(function () {
                     {targets: 'no-sort', orderable: false},
                     {% endfor %}
                 ],
+            {% if display.lastRowIndex %}
+            createdRow: function( row, data, dataIndex ) {
+                if (dataIndex === {{ display.lastRowIndex }})  {
+                    $(row).addClass('highlighting');
+                }
+            },
+            {% endif %}
             drawCallback:
 
                 function () {
@@ -400,6 +407,22 @@ $(document).ready(function () {
         $('#dataTable tbody tr label input').prop('checked', this.checked)
         countSelectedRows(table.rows('.selected').data());
     });
+
+    $('#dataTable tbody').on( 'click', 'tr', function () {
+        var data = {};
+        data.currentRoute = '{{ app.request.get('_route') }}{{ app.request.get('filename') }}';
+        data.scrollY = window.scrollY;
+        data.rowIndex = table.row(this).index();
+        $.ajax({
+            method: "POST",
+            data: data,
+            url: '{{ url('w3com_save_row_index') }}'
+        })
+    } );
+
+    {% if display.lastScrollY %}
+    window.scrollTo(0, {{ display.lastScrollY }});
+    {% endif %}
 
     {% include '@W3comHulk/display/action/global_action.js.twig' %}
 })

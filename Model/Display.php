@@ -83,6 +83,12 @@ class Display
     /** @var int */
     private $maxLength = 6000;
 
+    /** @var int */
+    private $lastScrollY = null;
+
+    /** @var int */
+    private $lastRowIndex = null;
+
     public function __construct()
     {
         $this->error = new Error();
@@ -542,6 +548,38 @@ class Display
             }
         }
         return $renderElements;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLastScrollY(): ?int
+    {
+        return $this->lastScrollY;
+    }
+
+    /**
+     * @param int $lastScrollYPos
+     */
+    public function setLastScrollY(int $lastScrollY): void
+    {
+        $this->lastScrollY = $lastScrollY;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLastRowIndex(): ?int
+    {
+        return $this->lastRowIndex;
+    }
+
+    /**
+     * @param int $lastRowIndex
+     */
+    public function setLastRowIndex(int $lastRowIndex): void
+    {
+        $this->lastRowIndex = $lastRowIndex;
     }
 
 }
