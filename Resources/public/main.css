@@ -49,6 +49,20 @@ table th:nth-last-child(1) {
     border-radius: 0 5px 5px 0;
 }
 
+.highlighting {
+    animation: highlight 1000ms ease-out;
+}
+
+@keyframes highlight {
+    0% {
+        background-color: #ff8f87;
+        opacity: 0.3;
+    }
+    100% {
+        background-color: inherit;
+        opacity: 1;
+    }
+}
 
 /* Styling Checkbox Starts */
 .checkbox-label {
