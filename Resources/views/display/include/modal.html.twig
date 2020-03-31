@@ -1,6 +1,4 @@
-{% for globalAction in display.globalActions if globalAction.type == 'update-sap'
-    or globalAction.type == 'api-request' %}
-
+{% for globalAction in display.globalActions %}
     {% if globalAction.type == 'update-sap' %}
         {% set modalId = globalAction.type~globalAction.config.targetDataType~globalAction.index %}
         {% set inputId = 'input'~globalAction.type~globalAction.config.targetField~globalAction.config.targetDataType %}
@@ -27,7 +25,6 @@
         {% set btnAttr = {'id' : btnFormId} %}
         {% set title = globalAction.label %}
     {% endif %}
-
 
     <div class="modal fade"
          id="{{ modalId }}"

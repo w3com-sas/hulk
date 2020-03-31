@@ -230,6 +230,9 @@ class DisplayConstructor
                 case CellAction::FIELD_RENDER_FIELDNAME:
                     $action->setRenderFieldName($value);
                     break;
+                case CellAction::FIELD_MODAL:
+                    $action->setModal($value);
+                    break;
             }
         }
         return $action;

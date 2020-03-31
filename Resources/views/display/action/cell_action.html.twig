@@ -1,7 +1,5 @@
 {% for column in display.columns if column.active == 'Y' %}
-
     {% if column.type == 'action' %}
-
         {% if column.cellAction.iconFieldName is not null %}
             {# For dynamic icon with field who provide it #}
             {% set btnClass =  'btn btn-sm' %}
@@ -50,7 +48,7 @@
                 {% set hrefAction = "[[data]]" %}
             {% elseif column.cellAction.functionName == 'openForm' %}
                 {% set hrefAction = "javascript:" ~ column.cellAction.functionName ~ "('" ~ column.cellAction.targetEntity ~ "', '[[data]]')" %}
-            {%  elseif column.cellAction.functionName == 'call-function' %}
+            {% elseif column.cellAction.functionName == 'call-function' %}
                 {% if "(" in column.cellAction.params['FunctionToCall'] %}
                     {% set hrefAction = "javascript:" ~ column.cellAction.params['FunctionToCall'] %}
                 {% else %}
@@ -68,5 +66,26 @@
             </template>
         {% endif %}
     {% endif %}
+{% endfor %}
 
+{% for column in display.columns %}
+    {% if column.type == 'call-function' and column.cellAction is not null %}
+        {% set id = column.cellAction.functionName %}
+        <div class="modal fade" id="{{ id }}" tabindex="-1" role="dialog">
+            <div class="modal-dialog large-modal" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" id="{{ id }}Header">
+                        <h5 class="modal-title my-auto" id="{{ id }}TextLoading">Texte</h5>
+                        <div class="d-none icon-loading">
+                            <i class="fad fa-circle-notch fa-3x text-success fa-spin"></i>
+                        </div>
+                        <div class="d-none icon-item">
+                        </div>
+                    </div>
+                    <div class="modal-body d-none" id="{{ id }}Body"></div>
+                    <div class="modal-footer d-none" id="{{ id }}Footer"></div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 {% endfor %}
