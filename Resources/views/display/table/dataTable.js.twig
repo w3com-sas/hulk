@@ -410,6 +410,22 @@ $(document).ready(function () {
         countSelectedRows(table.rows('.selected').data())
     });
 
+    $('#dataTable tbody').on( 'click', 'tr', function () {
+        var index = table.row(this).index();
+        var data = {};
+        data.currentRoute = '{{ app.request.get('_route') }}{{ app.request.get('filename') }}';
+        data.rowIndex = index;
+        $.ajax({
+            method: "POST",
+            data: data,
+            url: '{{ url('w3com_save_row_index') }}'
+        })
+    } );
+
+    {% if display.lastRowIndex %}
+        table.row({{ lastRowIndex }}).scrollTo();
+    {% endif %}
+
     {% include '@W3comHulk/display/action/global_action.js.twig' %}
 })
 {% include '@W3comHulk/display/filter/save_filters.js.twig' %}
