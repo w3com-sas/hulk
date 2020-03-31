@@ -28,15 +28,15 @@ class SessionManager
      */
     public function saveRowIndex()
     {
-        $row = $this->request->getCurrentRequest()->request->get('rowIndex');
+        $scrollY = $this->request->getCurrentRequest()->request->get('scrollY');
         $name = $this->request->getCurrentRequest()->request->get('currentRoute');
 
-        if ($this->session->has('rows')) {
-            $oldRows = $this->session->get('rows');
-            $oldRows[$name] = $row;
-            $this->session->set('rows', $oldRows);
+        if ($this->session->has('yPos')) {
+            $oldRows = $this->session->get('yPos');
+            $oldRows[$name] = $scrollY;
+            $this->session->set('yPos', $oldRows);
         } else {
-            $this->session->set('rows', [$name => $row]);
+            $this->session->set('yPos', [$name => $scrollY]);
         }
     }
 
@@ -45,12 +45,12 @@ class SessionManager
      */
     public function setLastRowIndex(Display $dataTable)
     {
-        if ($this->session->has('rows')) {
+        if ($this->session->has('yPos')) {
 
-            foreach ($this->session->get('rows') as $display => $index) {
+            foreach ($this->session->get('yPos') as $display => $scrollY) {
 
                 if ($display === $this->concernedPage) {
-                    $dataTable->setLastRowIndex($index);
+                    $dataTable->setLastScrollY($scrollY);
                     break;
                 }
             }

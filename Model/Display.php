@@ -84,7 +84,7 @@ class Display
     private $maxLength = 6000;
 
     /** @var int */
-    private $lastRowIndex = null;
+    private $lastScrollY = null;
 
     public function __construct()
     {
@@ -550,17 +550,17 @@ class Display
     /**
      * @return int
      */
-    public function getLastRowIndex(): ?int
+    public function getLastScrollY(): ?int
     {
-        return $this->lastRowIndex;
+        return $this->lastScrollY;
     }
 
     /**
-     * @param int $lastRowIndex
+     * @param int $lastScrollYPos
      */
-    public function setLastRowIndex(int $lastRowIndex): void
+    public function setLastScrollY(int $lastScrollY): void
     {
-        $this->lastRowIndex = $lastRowIndex;
+        $this->lastScrollY = $lastScrollY;
     }
 
 }
