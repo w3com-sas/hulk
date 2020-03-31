@@ -550,7 +550,7 @@ class Display
     /**
      * @return int
      */
-    public function getLastRowIndex(): int
+    public function getLastRowIndex(): ?int
     {
         return $this->lastRowIndex;
     }
