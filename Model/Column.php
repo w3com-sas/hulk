@@ -80,7 +80,8 @@ class Column
     /** @var Config */
     private $config;
 
-    /** @var array */
+    private $renderElement;
+
     private $renderElementOptions = [];
 
     public function setLabel($label)
@@ -92,7 +93,6 @@ class Column
     {
         $this->fieldName = $fieldName;
     }
-
 
     public function getFieldName()
     {
@@ -109,66 +109,41 @@ class Column
         return $this->active;
     }
 
-    /**
-     * @return mixed
-     */
     public function getLabel()
     {
         return $this->label;
     }
 
-    /**
-     * @return bool
-     */
     public function isHidden(): ?bool
     {
         return $this->hidden;
     }
 
-    /**
-     * @param bool $hidden
-     */
     public function setHidden(bool $hidden): void
     {
         $this->hidden = $hidden;
     }
 
-    /**
-     * @return mixed
-     */
     public function getIndex()
     {
         return $this->index;
     }
 
-    /**
-     * @param mixed $index
-     */
     public function setIndex($index): void
     {
         $this->index = $index;
     }
 
-    /**
-     * @return mixed
-     */
     public function getType()
     {
         return $this->type;
     }
 
-    /**
-     * @param mixed $type
-     */
     public function setType($type): void
     {
         $this->type = $type;
     }
 
-
-    /**
-     * @return CellAction
-     */
     public function getCellAction(): ?CellAction
     {
         return $this->cellAction;
@@ -179,172 +154,109 @@ class Column
         return $this->cellAction instanceof CellAction;
     }
 
-    /**
-     * @param CellAction $cellAction
-     */
     public function setCellAction(CellAction $cellAction): void
     {
         $this->cellAction = $cellAction;
     }
 
-    /**
-     * @return int
-     */
     public function getWidth(): ?int
     {
         return $this->width;
     }
 
-    /**
-     * @param int $width
-     */
     public function setWidth(int $width): void
     {
         $this->width = $width;
     }
 
-    /**
-     * @return bool
-     */
     public function isSearchable(): bool
     {
         return $this->searchable;
     }
 
-    /**
-     * @param bool $searchable
-     */
     public function setSearchable(bool $searchable): void
     {
         $this->searchable = $searchable;
     }
 
-    /**
-     * @return bool
-     */
     public function isOrderable(): bool
     {
         return $this->orderable;
     }
 
-    /**
-     * @param bool $orderable
-     */
     public function setOrderable(bool $orderable): void
     {
         $this->orderable = $orderable;
     }
 
-    /**
-     * @return string
-     */
     public function getIconFieldName()
     {
         return $this->iconFieldName;
     }
 
-    /**
-     * @param string $iconFieldName
-     */
     public function setIconFieldName($iconFieldName): void
     {
         $this->iconFieldName = $iconFieldName;
     }
 
-    /**
-     * @return string
-     */
     public function getLabelFieldName()
     {
         return $this->labelFieldName;
     }
 
-    /**
-     * @param string $labelFieldName
-     */
     public function setLabelFieldName($labelFieldName): void
     {
         $this->labelFieldName = $labelFieldName;
     }
 
-    /**
-     * @return Config
-     */
     public function getConfig(): ?Config
     {
         return $this->config;
     }
 
-    /**
-     * @param Config $config
-     */
     public function setConfig(Config $config): void
     {
         $this->config = $config;
     }
 
-    /**
-     * @return string
-     */
     public function getRenderFieldName(): ?string
     {
         return $this->renderFieldName;
     }
 
-    /**
-     * @param string $renderFieldName
-     */
     public function setRenderFieldName(string $renderFieldName): void
     {
         $this->renderFieldName = $renderFieldName;
     }
 
-    /**
-     * @return array
-     */
     public function getParams(): array
     {
         return $this->params;
     }
 
-    /**
-     * @param array $params
-     */
     public function setParams(array $params): void
     {
         $this->params = $params;
     }
 
-    /**
-     * @return array
-     */
     public function getRenderElementOptions(): array
     {
         return $this->renderElementOptions;
     }
 
-    /**
-     * @param array $renderElementOptions
-     */
     public function setRenderElementOptions(array $renderElementOptions): void
     {
         $this->renderElementOptions = $renderElementOptions;
     }
 
-    /**
-     * @return string
-     */
-    public function getIcon(): string
+    public function getRenderElement(): ?RenderElement
     {
-        return $this->icon;
+        return $this->renderElement;
     }
 
-    /**
-     * @param string $icon
-     */
-    public function setIcon(string $icon): void
+    public function setRenderElement(RenderElement $renderElement): void
     {
-        $this->icon = $icon;
+        $this->renderElement = $renderElement;
     }
 
 }

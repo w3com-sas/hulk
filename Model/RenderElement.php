@@ -10,8 +10,6 @@ class RenderElement
 
     private $elementAttr = [];
 
-    private $elementEvent = "";
-
     public function __construct(Column $column, $name = "", $elementAttr = [])
     {
         $this->elementId = 'template'.$column->getFieldName();
@@ -49,17 +47,6 @@ class RenderElement
     public function setElementAttr(array $elementAttr): self
     {
         $this->elementAttr = $elementAttr;
-        return $this;
-    }
-
-    public function getElementEvent(): string
-    {
-        return $this->elementEvent;
-    }
-
-    public function setElementEvent(string $elementEvent): self
-    {
-        $this->elementEvent = $elementEvent;
         return $this;
     }
 }
