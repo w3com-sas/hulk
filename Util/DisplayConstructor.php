@@ -113,6 +113,9 @@ class DisplayConstructor
                     case Column::FIELD_FIELDNAME:
                         $column->setFieldName($value);
                         break;
+                    case Column::FIELD_ICON:
+                        $column->setIcon($value);
+                        break;
                     case Column::FIELD_ICON_FIELDNAME:
                         $column->setIconFieldName($value);
                         break;

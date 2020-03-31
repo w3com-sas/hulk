@@ -17,6 +17,7 @@ class Column
     const FIELD_SEARCHABLE = 'Searchable';
     const FIELD_PARAMS = 'Params';
     const FIELD_RENDER_ELEMENT_OPTIONS = 'RenderElementOptions';
+    const FIELD_ICON = 'Icon';
 
     const FUNCTION_NAME_DISPLAY_LINK = 'displayLink';
     const FUNCTION_NAME_LINK = 'link';
@@ -56,10 +57,10 @@ class Column
     private $renderFieldName;
 
     /** @var string */
-    private $type;
+    private $icon;
 
-    /** @var array */
-    private $icons;
+    /** @var string */
+    private $type;
 
     /** @var CellAction */
     private $cellAction;
@@ -78,11 +79,6 @@ class Column
 
     /** @var Config */
     private $config;
-
-    /** @var array */
-    private $renderElements = [];
-
-    private $renderElement;
 
     /** @var array */
     private $renderElementOptions = [];
@@ -171,14 +167,6 @@ class Column
 
 
     /**
-     * @param mixed $icon
-     */
-    public function setIcon($icon): void
-    {
-        $this->icon = $icon;
-    }
-
-    /**
      * @return CellAction
      */
     public function getCellAction(): ?CellAction
@@ -197,22 +185,6 @@ class Column
     public function setCellAction(CellAction $cellAction): void
     {
         $this->cellAction = $cellAction;
-    }
-
-    /**
-     * @return array
-     */
-    public function getIcons(): array
-    {
-        return $this->icons;
-    }
-
-    /**
-     * @param array $icons
-     */
-    public function setIcons(array $icons): void
-    {
-        $this->icons = $icons;
     }
 
     /**
@@ -359,15 +331,20 @@ class Column
         $this->renderElementOptions = $renderElementOptions;
     }
 
-    public function getRenderElement()
+    /**
+     * @return string
+     */
+    public function getIcon(): string
     {
-        return $this->renderElement;
+        return $this->icon;
     }
 
-    public function setRenderElement($renderElement): void
+    /**
+     * @param string $icon
+     */
+    public function setIcon(string $icon): void
     {
-        $this->renderElement = $renderElement;
+        $this->icon = $icon;
     }
-
 
 }

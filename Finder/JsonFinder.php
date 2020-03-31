@@ -23,8 +23,6 @@ class JsonFinder
         $this->config = $config;
         $this->baseUri = $this->boom->config['odata_service']['base_uri'];
         $this->jsonUri = $this->config['json_display']['url_files'];
-
-
     }
 
     private function createContext()
