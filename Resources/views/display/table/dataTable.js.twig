@@ -410,10 +410,11 @@ $(document).ready(function () {
         countSelectedRows(table.rows('.selected').data())
     });
 
-    $('#dataTable tbody').on( 'click', function () {
+    $('#dataTable tbody').on( 'click', 'tr', function () {
         var data = {};
         data.currentRoute = '{{ app.request.get('_route') }}{{ app.request.get('filename') }}';
         data.scrollY = window.scrollY;
+        data.rowIndex = table.row(this).index();
         $.ajax({
             method: "POST",
             data: data,
@@ -423,6 +424,10 @@ $(document).ready(function () {
 
     {% if display.lastScrollY %}
     window.scrollTo(0, {{ display.lastScrollY }});
+    {% endif %}
+
+    {% if display.lastRowIndex %}
+    $(table.row({{ lastRowIndex }})).css('background-color', 'red');
     {% endif %}
 
     {% include '@W3comHulk/display/action/global_action.js.twig' %}

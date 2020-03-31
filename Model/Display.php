@@ -86,6 +86,9 @@ class Display
     /** @var int */
     private $lastScrollY = null;
 
+    /** @var int */
+    private $lastRowIndex = null;
+
     public function __construct()
     {
         $this->error = new Error();
@@ -561,6 +564,22 @@ class Display
     public function setLastScrollY(int $lastScrollY): void
     {
         $this->lastScrollY = $lastScrollY;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLastRowIndex(): ?int
+    {
+        return $this->lastRowIndex;
+    }
+
+    /**
+     * @param int $lastRowIndex
+     */
+    public function setLastRowIndex(int $lastRowIndex): void
+    {
+        $this->lastRowIndex = $lastRowIndex;
     }
 
 }
