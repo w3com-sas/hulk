@@ -410,7 +410,7 @@ $(document).ready(function () {
 
     $('#dataTable tbody').on( 'click', 'tr', function () {
         var data = {};
-        data.currentRoute = '{{ app.request.get('_route') }}{{ app.request.get('filename') }}';
+        data.currentRoute = '{{ app.request.getRequestUri() }}';
         data.scrollY = window.scrollY;
         data.rowIndex = table.row(this).index();
         $.ajax({
