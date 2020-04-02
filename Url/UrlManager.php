@@ -83,7 +83,7 @@ class UrlManager
     {
         try {
             $url = $this->router->generate($column->getCellAction()->getTargetEntity(),
-                $urlParams);
+                array_filter($urlParams));
         } catch (\Exception $e) {
             $display->getError()->addUrlError($column->getFieldName(), $e->getMessage());
             $url = null;
