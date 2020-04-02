@@ -253,6 +253,7 @@ $(document).ready(function () {
                                 row['{{ column.labelFieldName }}'] : '';
                         baseBtn.className = (row.hasOwnProperty('{{ column.renderFieldName }}') && row['{{ column.renderFieldName }}'] !== "") ?
                             'btn ' + row['{{ column.renderFieldName }}'] : '';
+                        baseBtn.className = (baseBtn.className === '' && '{{ column.render }}' !== '') ? '{{ column.render }}' : '';
                         baseIcon.className = (row.hasOwnProperty('{{ column.iconFieldName }}') && row['{{ column.iconFieldName }}'] !== "") ?
                             row['{{ column.iconFieldName }}'] : '';
                         baseIcon.className = (baseIcon.className === '' && '{{ column.icon }}' !== '') ? '{{ column.icon }}' : baseIcon.className;

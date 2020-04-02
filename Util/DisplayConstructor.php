@@ -125,6 +125,9 @@ class DisplayConstructor
                     case Column::FIELD_RENDER_FIELDNAME:
                         $column->setRenderFieldName($value);
                         break;
+                    case Column::FIELD_RENDER:
+                        $column->setRender($value);
+                        break;
                     case Column::FIELD_TYPE:
 
                         if ($value === Column::COL_TYPE_UPDATE_SAP) {

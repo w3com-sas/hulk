@@ -18,6 +18,7 @@ class Column
     const FIELD_PARAMS = 'Params';
     const FIELD_RENDER_ELEMENT_OPTIONS = 'RenderElementOptions';
     const FIELD_ICON = 'Icon';
+    const FIELD_RENDER = 'Render';
 
     const FUNCTION_NAME_DISPLAY_LINK = 'displayLink';
     const FUNCTION_NAME_LINK = 'link';
@@ -31,6 +32,7 @@ class Column
     const COL_TYPE_INPUT_TEXT = 'input-text';
     const COL_TYPE_INPUT_NUMBER = 'input-number';
     const COL_TYPE_RENDER_ELEMENT = 'render-element';
+    const COL_TYPE_CALL_FUNCTION = 'call-function';
 
     /** @var integer */
     private $index;
@@ -55,6 +57,9 @@ class Column
 
     /** @var string */
     private $renderFieldName;
+
+    /** @var string */
+    private $render;
 
     /** @var string */
     private $icon;
@@ -274,5 +279,23 @@ class Column
     {
         $this->icon = $icon;
     }
+
+    /**
+     * @return string
+     */
+    public function getRender(): ?string
+    {
+        return $this->render;
+    }
+
+    /**
+     * @param string $render
+     */
+    public function setRender(string $render): void
+    {
+        $this->render = $render;
+    }
+
+
 
 }
