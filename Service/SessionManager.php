@@ -18,8 +18,7 @@ class SessionManager
     {
         $this->session = $session;
         $this->request = $request;
-        $this->concernedPage = $this->request->getCurrentRequest()->get('_route') .
-            $this->request->getCurrentRequest()->get('filename');
+        $this->concernedPage = $this->request->getCurrentRequest()->getRequestUri();
 
     }
 
