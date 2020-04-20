@@ -17,9 +17,14 @@ class MenuSession
         $this->request = $request;
     }
 
+    public function getMenuNameInQuery()
+    {
+        return $this->request->getMasterRequest()->query->get('menuName');
+    }
+
     public function getHulkMenu($currentDisplayName, $currentMenuName)
     {
-        if ($currentMenuName === null) {
+        if (!$currentMenuName) {
             return [];
         }
 

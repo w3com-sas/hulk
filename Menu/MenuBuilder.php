@@ -24,12 +24,13 @@ class MenuBuilder
     public function createMainMenu(array $options)
     {
         // RootName                 Item
-        $menuSession = $this->menuSession->getHulkMenu($options['displayName'], $options['menuName']);
+        $currentMenuName = $options['menuName'] ?? $this->menuSession->getMenuNameInQuery();
+        $menuSession = $this->menuSession->getHulkMenu($options['displayName'], $currentMenuName);
         $menu = $this->factory->createItem('root');
 
         foreach ($menuSession as $menuName => $menuItems) {
 
-            if ($options['menuName'] === $menuName) {
+            if ($currentMenuName === $menuName) {
 
                 foreach ($menuItems as $menuItem) {
 
