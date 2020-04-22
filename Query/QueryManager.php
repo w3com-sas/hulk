@@ -191,9 +191,10 @@ class QueryManager
      */
     private function addGetParamsRequest(Display $display, $getRequestParams, Parameters $parameters)
     {
+        $odsInspector = $this->generator->getOdsInspector();
+        $odsInspector->initEntities();
 
-
-        $odsEntity = $this->generator->getOdsInspector()->getEntity($display->getCalcView());
+        $odsEntity = $odsInspector->getEntity($display->getCalcView());
 
         if ($getRequestParams instanceof ParameterBag) {
             $arrayGetParams = $getRequestParams->all();
