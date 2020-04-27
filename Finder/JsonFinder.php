@@ -21,15 +21,14 @@ class JsonFinder
     {
         $this->boom = $boom;
         $this->config = $config;
-        $this->baseUri = $this->boom->config['odata_service']['connections'][$boom->getCurrentSLConnection()]['uri'];
+        $this->baseUri = $this->boom->config['odata_service']['connections']['default']['uri'];
         $this->jsonUri = $this->config['json_display']['url_files'];
     }
 
     private function createContext()
     {
-        $currentConnection = $this->boom->getCurrentSLConnection();
-        $login = $this->boom->config['odata_service']['connections'][$currentConnection]['username']
-            . ':' . $this->boom->config['odata_service']['connections'][$currentConnection]['password'];
+        $login = $this->boom->config['odata_service']['connections']['default']['username']
+            . ':' . $this->boom->config['odata_service']['connections']['default']['password'];
 
         $encodedLogin = base64_encode($login);
         $opts = array(
