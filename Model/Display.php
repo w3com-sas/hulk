@@ -20,6 +20,7 @@ class Display
     const FIELD_COLUMNS = 'Columns';
     const FIELD_PAGE_LENGTH = 'PageLength';
     const FIELD_DISPLAY_NAME = 'DisplayName';
+    const FIELD_DISPLAY_NAMES = 'DisplayNames';
     const FIELD_MENU_CONFIG = 'MenuConfig';
     const FIELD_MENU_NAME = 'MenuName';
     const FIELD_LABEL = 'Label';
@@ -88,6 +89,9 @@ class Display
 
     /** @var int */
     private $lastRowIndex = null;
+
+    /** @var array */
+    private $displayNames = [];
 
     public function __construct()
     {
@@ -580,6 +584,22 @@ class Display
     public function setLastRowIndex(int $lastRowIndex): void
     {
         $this->lastRowIndex = $lastRowIndex;
+    }
+
+    /**
+     * @param $value
+     */
+    public function setDisplayNames($value)
+    {
+        $this->displayNames = $value;
+    }
+
+    /**
+     * @return array
+     */
+    public function getDisplayNames()
+    {
+        return $this->displayNames;
     }
 
 }

@@ -89,6 +89,9 @@ class DisplayConstructor
             case Display::FIELD_DISPLAY_NAME:
                 $this->display->setDisplayName($value);
                 break;
+            case Display::FIELD_DISPLAY_NAMES:
+                $this->display->setDisplayNames($value);
+                break;
             case Display::FIELD_MENU_CONFIG:
                 $this->display->setMenuConfig($value);
                 break;

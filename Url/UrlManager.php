@@ -67,7 +67,7 @@ class UrlManager
                 }
             }
         }
-        $routeParams['filename'] = $dataTable->getDisplayName();
+        $routeParams['filename'] = $formData['display']['filename'];
         return $routeParams;
     }
 
