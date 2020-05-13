@@ -84,6 +84,8 @@ class DisplayFormProvider
      */
     public function getDataFromChoices($calculationView, $choices = [], $allFields = [])
     {
+        $this->removeFilenameInChoices($choices);
+        $this->removeFilenameInChoices($allFields);
         $appInspector = $this->generator->getAppInspector();
         $entity = $appInspector->getEntity($calculationView);
         $repo = $this->boom->getRepository($entity->getName());
@@ -142,6 +144,13 @@ class DisplayFormProvider
             return -1;
         } else {
             return 0;
+        }
+    }
+
+    private function removeFilenameInChoices(array &$choices)
+    {
+        if (array_key_exists('filename', $choices)){
+            unset($choices['filename']);
         }
     }
 
