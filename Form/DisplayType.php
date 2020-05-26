@@ -29,7 +29,7 @@ class DisplayType extends AbstractType
             $form = $formEvent->getForm();
 
             $filenameType = !empty($display->getDisplayNames()) ? ChoiceType::class : HiddenType::class;
-            $filenameOptions = !empty($display->getDisplayNames()) ? ['choices' => $display->getDisplayNames(), 'label' => 'Display :'] : [];
+            $filenameOptions = !empty($display->getDisplayNames()) ? ['choices' => $display->getDisplayNames(), 'label' => 'Display'] : [];
             $form->add('filename', $filenameType, $filenameOptions);
 
             /** @var Property $globalSearchProperty */
