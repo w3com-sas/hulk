@@ -24,7 +24,6 @@
     "symfony/console": "*",
     "symfony/serializer-pack": "*",
     "symfony/http-foundation": "*",
-    "twig/extensions": "*",
     "knplabs/knp-menu-bundle": "*"
   },
   "require-dev": {
