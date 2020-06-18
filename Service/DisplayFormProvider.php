@@ -4,14 +4,11 @@ namespace W3com\HulkBundle\Service;
 
 use DateTime;
 use Doctrine\Common\Annotations\AnnotationException;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use W3com\BoomBundle\Exception\EntityNotFoundException;
 use W3com\BoomBundle\HanaEntity\AbstractEntity;
 use W3com\BoomBundle\Service\BoomGenerator;
 use W3com\BoomBundle\Service\BoomManager;
 use W3com\HulkBundle\Filter\FilterManager;
 use W3com\HulkBundle\Finder\JsonFinder;
-use W3com\HulkBundle\Finder\ModelFinder;
 use W3com\HulkBundle\Model\Display;
 use W3com\HulkBundle\Query\QueryManager;
 use W3com\HulkBundle\Url\UrlManager;

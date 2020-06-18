@@ -106,9 +106,9 @@ $(document).ready(function () {
 
 
 
-                {% for column in display.columns if column.active == 'Y' %}
+                {% for column in display.columns %}
                 {# Set dynamic icon #}
-
+                {% if column.active == 'Y' %}
 
                 {% if column.type == 'text' or column.hidden %}
 
@@ -301,6 +301,7 @@ $(document).ready(function () {
                             ? '<div class="' + row['{{ column.renderFieldName }}'] + '">' + input + '</div>' : input;
                     }
                 },
+                {% endif %}
                 {% endif %}
                 {% endfor %}
             ],

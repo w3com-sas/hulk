@@ -3,22 +3,23 @@ function saveFilters() {
     data.currentRoute = '{{ app.request.get('_route') }}{{ app.request.get('filename') }}';
     data.filters = {};
 
-    {% for filter in display.filters if filter.active == 'Y' and filter.type == 'single' %}
+    {% for filter in display.filters %}
+    {% if filter.active == 'Y' and filter.type == 'single' %}
 
     data.filters.{{ filter.fieldName }} = $('#select{{ filter.fieldName }}').val();
-
+    {% endif %}
     {% endfor %}
 
 
-    {% for filter in display.filters if filter.active == 'Y' and
-        (filter.type == 'multiple' or filter.type == 'multiple-date') %}
-
+    {% for filter in display.filters %}
+    {% if filter.active == 'Y' and (filter.type == 'multiple' or filter.type == 'multiple-date') %}
 
     data.filters.{{ filter.fieldName }} = {
         min: $('#min{{ filter.fieldName }}').val(),
         max: $('#max{{ filter.fieldName }}').val()
     }
 
+    {% endif %}
     {% endfor %}
     data.filters.searchBar = $('#searchBar').val();
     data.filters.targetColumn = $('#targetColumn').val();
@@ -32,7 +33,7 @@ function saveFilters() {
             var startSubstr = countFilter.innerHTML.indexOf('(');
             var endSubstr = countFilter.innerHTML.indexOf(')');
             countFilter.innerHTML = countFilter.innerHTML.replace(countFilter.innerHTML.substr(startSubstr, endSubstr),
-                '('+data.countFilters+')')
+                '(' + data.countFilters + ')')
         }
 
     })
