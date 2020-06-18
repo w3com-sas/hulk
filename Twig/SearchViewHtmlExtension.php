@@ -3,13 +3,14 @@
 namespace W3com\HulkBundle\Twig;
 
 use Twig\Extension\AbstractExtension;
+use Twig\Environment;
 use Twig\TwigFunction;
 
 class SearchViewHtmlExtension extends AbstractExtension
 {
     private $template;
 
-    public function __construct(\Twig_Environment $template)
+    public function __construct(Environment $template)
     {
         $this->template = $template;
     }
@@ -25,9 +26,6 @@ class SearchViewHtmlExtension extends AbstractExtension
      * @param $params
      * @return string
      * @throws \Throwable
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
      */
     public function render($params)
     {
