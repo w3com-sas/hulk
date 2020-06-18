@@ -53,7 +53,8 @@ $('{{ btnFormId }}').click(function () {
 {% endfor %}
 
 
-{% for globalAction in display.globalActions if globalAction.type == 'export-csv' %}
+{% for globalAction in display.globalActions %}
+{% if globalAction.type == 'export-csv' %}
 $('#{{ globalAction.type }}').click(function () {
     var data = table.rows('.selected').data().toArray();
     var jsonData = Object.assign({}, data);
@@ -81,6 +82,7 @@ $('#{{ globalAction.type }}').click(function () {
     xhttp.send(JSON.stringify(jsonData));
 
 });
+{% endif %}
 {% endfor %}
 
 {% for globalAction in display.globalActions if globalAction.type == 'call-function' %}
@@ -106,12 +108,12 @@ $('#btn{{ globalAction.type~globalAction.index }}').click(function () {
             url: '{{ globalAction.config.url }}',
             success: function (rep) {
                 callFunction.modalBody.innerHTML = '';
-                if (typeof rep.success !== 'undefined'){
+                if (typeof rep.success !== 'undefined') {
                     for (var i = 0; i < rep.success.length; i++) {
                         callFunction.addLineResult(rep.success[i], 'success')
                     }
                 }
-                if (typeof rep.errors !== 'undefined'){
+                if (typeof rep.errors !== 'undefined') {
                     for (var i = 0; i < rep.errors.length; i++) {
                         callFunction.addLineResult(rep.errors[i], 'danger')
                     }
@@ -156,9 +158,9 @@ $('#btn{{ globalAction.type~globalAction.index }}').click(function () {
         url: '{{ globalAction.config.url }}',
         success: function (rep) {
             callFunction.modalBody.innerHTML = rep.template;
-            if (typeof rep.functionToCall !== 'undefined'){
+            if (typeof rep.functionToCall !== 'undefined') {
                 callFunction.addValidateBtn(function () {
-                    eval(rep.functionToCall+'(data, callFunction)');
+                    eval(rep.functionToCall + '(data, callFunction)');
                 });
             }
         },
