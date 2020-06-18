@@ -50,6 +50,7 @@ $('{{ btnFormId }}').click(function () {
     apiRequest(data, params, url, modal);
     {% endif %}
 });
+{% endif %}
 {% endfor %}
 
 
@@ -172,6 +173,5 @@ $('#btn{{ globalAction.type~globalAction.index }}').click(function () {
         }
     });
 });
-{% endif %}
 {% endif %}
 {% endfor %}
