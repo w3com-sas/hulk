@@ -86,13 +86,15 @@ $('#{{ globalAction.type }}').click(function () {
 {% endif %}
 {% endfor %}
 
-{% for globalAction in display.globalActions if globalAction.type == 'call-function' %}
+{% for globalAction in display.globalActions %}
+{% if globalAction.type == 'call-function' %}
 $('#{{ globalAction.type~globalAction.index }}').click(function () {
     var data = table.rows('.selected').data();
     {% if globalAction.config.name is defined %}
     eval('{{ globalAction.config.name }}(data)');
     {% endif %}
 });
+{% endif %}
 {% endfor %}
 
 {% for globalAction in display.globalActions %}
