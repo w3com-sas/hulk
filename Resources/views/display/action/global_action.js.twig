@@ -1,5 +1,5 @@
-{% for globalAction in display.globalActions
-    if globalAction.type == 'update-sap' or globalAction.type == 'api-request' %}
+{% for globalAction in display.globalActions %}
+{% if globalAction.type == 'update-sap' or globalAction.type == 'api-request' %}
 
 {% if globalAction.type == 'update-sap' %}
 {% set btnModalId = '#btn'~globalAction.type~globalAction.config.targetDataType~globalAction.index %}
@@ -172,5 +172,6 @@ $('#btn{{ globalAction.type~globalAction.index }}').click(function () {
         }
     });
 });
+{% endif %}
 {% endif %}
 {% endfor %}
