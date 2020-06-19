@@ -13,7 +13,7 @@
             } %}
 
             {% set btnAttr = globalAction.config.targetDataType == "static" ? btnAttr|merge({
-                'data-affected-value' : globalAction.config.targetData }) %}
+                'data-affected-value' : globalAction.config.targetData }) : btnAttr %}
 
             {% if globalAction.config.label != '' %}
                 {% set labelField = globalAction.config.label %}
