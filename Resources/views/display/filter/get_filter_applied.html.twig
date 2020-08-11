@@ -1,7 +1,9 @@
-{% for filter in display.filters if filter.type == constant('W3com\\HulkBundle\\Model\\Filter::TYPE_PRE_FILTER') %}
-    {% for param in filter.params %}
-        <span class="badge badge-info">{{ param|formatIfDate }}</span>
-    {% endfor %}
+{% for filter in display.filters %}
+    {% if filter.type == constant('W3com\\HulkBundle\\Model\\Filter::TYPE_PRE_FILTER') %}
+        {% for param in filter.params %}
+            <span class="badge badge-info">{{ param|formatIfDate }}</span>
+        {% endfor %}
+    {% endif %}
 {% endfor %}
 {% for param, value in app.request.query.all %}
     <span class="badge badge-info">{{ value|formatIfDate }}</span>

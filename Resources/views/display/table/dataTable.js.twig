@@ -106,9 +106,9 @@ $(document).ready(function () {
 
 
 
-                {% for column in display.columns if column.active == 'Y' %}
+                {% for column in display.columns %}
                 {# Set dynamic icon #}
-
+                {% if column.active == 'Y' %}
 
                 {% if column.type == 'text' or column.hidden %}
 
@@ -251,10 +251,12 @@ $(document).ready(function () {
                             baseBtn = document.createElement('button'),
                             label = (row.hasOwnProperty('{{ column.labelFieldName }}') && row['{{ column.labelFieldName }}'] !== "") ?
                                 row['{{ column.labelFieldName }}'] : '';
-                        baseBtn.className =  (row.hasOwnProperty('{{ column.renderFieldName }}') && row['{{ column.renderFieldName }}'] !== "") ?
-                            'btn '+row['{{ column.renderFieldName }}'] : '';
+                        baseBtn.className = (row.hasOwnProperty('{{ column.renderFieldName }}') && row['{{ column.renderFieldName }}'] !== "") ?
+                            'btn ' + row['{{ column.renderFieldName }}'] : '';
+                        baseBtn.className = (baseBtn.className === '' && '{{ column.render }}' !== '') ? '{{ column.render }}' : baseBtn.className;
                         baseIcon.className = (row.hasOwnProperty('{{ column.iconFieldName }}') && row['{{ column.iconFieldName }}'] !== "") ?
                             row['{{ column.iconFieldName }}'] : '';
+                        baseIcon.className = (baseIcon.className === '' && '{{ column.icon }}' !== '') ? '{{ column.icon }}' : baseIcon.className;
                         baseBtn.innerHTML = baseIcon.outerHTML + label;
                         return baseBtn.outerHTML;
                     }
@@ -299,6 +301,7 @@ $(document).ready(function () {
                             ? '<div class="' + row['{{ column.renderFieldName }}'] + '">' + input + '</div>' : input;
                     }
                 },
+                {% endif %}
                 {% endif %}
                 {% endfor %}
             ],
@@ -345,6 +348,13 @@ $(document).ready(function () {
                     {targets: 'no-sort', orderable: false},
                     {% endfor %}
                 ],
+            {% if display.lastRowIndex %}
+            createdRow: function( row, data, dataIndex ) {
+                if (dataIndex === {{ display.lastRowIndex }})  {
+                    $(row).addClass('highlighting');
+                }
+            },
+            {% endif %}
             drawCallback:
 
                 function () {
@@ -385,30 +395,36 @@ $(document).ready(function () {
 
         if (this.checked) {
             table.rows({search: 'applied'}).select();
-            $('#dataTable tbody tr label input').prop('checked', true)
-            $('#headerCheckbox input').prop('checked', true);
-
         } else {
             table.rows().deselect();
-            $('#dataTable tbody tr label input').prop('checked', false)
-            $('#headerCheckbox input').prop('checked', false);
-
         }
+
+        $('#dataTable tbody tr label input').prop('checked', this.checked)
+        $('#headerCheckbox input').prop('checked', this.checked);
         countSelectedRows(table.rows('.selected').data());
     });
 
     $('#headerCheckbox :checkbox').on('click', function () {
-
-        if (this.checked) {
-            $('#dataTable tbody tr').addClass('selected')
-            $('#dataTable tbody tr label input').prop('checked', true)
-        } else {
-            $('#dataTable tbody tr').removeClass('selected')
-            $('#dataTable tbody tr label input').prop('checked', false)
-
-        }
-        countSelectedRows(table.rows('.selected').data())
+        $('#dataTable tbody tr').toggleClass('selected')
+        $('#dataTable tbody tr label input').prop('checked', this.checked)
+        countSelectedRows(table.rows('.selected').data());
     });
+
+    $('#dataTable tbody').on( 'click', 'tr', function () {
+        var data = {};
+        data.currentRoute = '{{ app.request.getRequestUri() }}';
+        data.scrollY = window.scrollY;
+        data.rowIndex = table.row(this).index();
+        $.ajax({
+            method: "POST",
+            data: data,
+            url: '{{ url('w3com_save_row_index') }}'
+        })
+    } );
+
+    {% if display.lastScrollY %}
+    window.scrollTo(0, {{ display.lastScrollY }});
+    {% endif %}
 
     {% include '@W3comHulk/display/action/global_action.js.twig' %}
 })

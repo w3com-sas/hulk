@@ -1,106 +1,106 @@
-{% for globalAction in display.globalActions if globalAction.type == 'update-sap'
-    or globalAction.type == 'api-request' %}
+{% for globalAction in display.globalActions %}
+    {% if globalAction.type in ['update-sap', 'api-request'] %}
 
-    {% if globalAction.type == 'update-sap' %}
-        {% set modalId = globalAction.type~globalAction.config.targetDataType~globalAction.index %}
-        {% set inputId = 'input'~globalAction.type~globalAction.config.targetField~globalAction.config.targetDataType %}
-        {% set title = 'Mise à jour SAP :'~globalAction.config.entity %}
-        {% set btnAttr = {
-            'id' : 'form'~globalAction.type~globalAction.config.targetDataType~globalAction.index,
-            'data-entity-name' : globalAction.config.entity,
-            'data-affected-field': globalAction.config.targetField,
-            'data-display-field-key': globalAction.config.entityKey
-        } %}
+        {% if globalAction.type == 'update-sap' %}
+            {% set modalId = globalAction.type~globalAction.config.targetDataType~globalAction.index %}
+            {% set inputId = 'input'~globalAction.type~globalAction.config.targetField~globalAction.config.targetDataType %}
+            {% set title = 'Mise à jour SAP :'~globalAction.config.entity %}
+            {% set btnAttr = {
+                'id' : 'form'~globalAction.type~globalAction.config.targetDataType~globalAction.index,
+                'data-entity-name' : globalAction.config.entity,
+                'data-affected-field': globalAction.config.targetField,
+                'data-display-field-key': globalAction.config.entityKey
+            } %}
 
-        {% set btnAttr = globalAction.config.targetDataType == "static" ? btnAttr|merge({
-            'data-affected-value' : globalAction.config.targetData }) %}
+            {% set btnAttr = globalAction.config.targetDataType == "static" ? btnAttr|merge({
+                'data-affected-value' : globalAction.config.targetData }) : btnAttr %}
 
-        {% if globalAction.config.label != '' %}
-            {% set labelField = globalAction.config.label %}
-        {% else %}
-            {% set labelField = globalAction.config.targetDescription %}
+            {% if globalAction.config.label != '' %}
+                {% set labelField = globalAction.config.label %}
+            {% else %}
+                {% set labelField = globalAction.config.targetDescription %}
+            {% endif %}
+
+        {% elseif globalAction.type == 'api-request' %}
+            {% set modalId = 'modal'~globalAction.type~globalAction.index %}
+            {% set btnFormId = 'form'~globalAction.type~globalAction.index %}
+            {% set btnAttr = {'id' : btnFormId} %}
+            {% set title = globalAction.label %}
         {% endif %}
 
-    {% elseif globalAction.type == 'api-request' %}
-        {% set modalId = 'modal'~globalAction.type~globalAction.index %}
-        {% set btnFormId = 'form'~globalAction.type~globalAction.index %}
-        {% set btnAttr = {'id' : btnFormId} %}
-        {% set title = globalAction.label %}
-    {% endif %}
+        <div class="modal fade"
+             id="{{ modalId }}"
+             tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header flex-column">
+                        <h5 class="modal-title text-center">
+                            {{ title }}
+                        </h5>
+                    </div>
 
-
-    <div class="modal fade"
-         id="{{ modalId }}"
-         tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header flex-column">
-                    <h5 class="modal-title text-center">
-                        {{ title }}
-                    </h5>
-                </div>
-
-                <div class="modal-body">
-                    {% if globalAction.config.targetDataType == 'text' %}
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
+                    <div class="modal-body">
+                        {% if globalAction.config.targetDataType == 'text' %}
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
                             <span class="input-group-text">
                                 {{ labelField }} :
                             </span>
+                                </div>
+                                <input type="text" class="form-control"
+                                       id="{{ inputId }}">
                             </div>
-                            <input type="text" class="form-control"
-                                   id="{{ inputId }}">
-                        </div>
-                    {% elseif globalAction.config.targetDataType == 'array' %}
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <label class="input-group-text">
-                                    {{ labelField }}
-                                    :
-                                </label>
+                        {% elseif globalAction.config.targetDataType == 'array' %}
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <label class="input-group-text">
+                                        {{ labelField }}
+                                        :
+                                    </label>
+                                </div>
+                                <select class="custom-select"
+                                        id="{{ inputId }}">
+                                    {% for key, value in globalAction.config.targetData %}
+                                        <option value="{{ key }}">{{ value }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
-                            <select class="custom-select"
-                                    id="{{ inputId }}">
-                                {% for key, value in globalAction.config.targetData %}
-                                    <option value="{{ key }}">{{ value }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    {% elseif globalAction.config.targetDataType == 'date' %}
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <label class="input-group-text">
-                                    {{ labelField }}
-                                    :
-                                </label>
+                        {% elseif globalAction.config.targetDataType == 'date' %}
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <label class="input-group-text">
+                                        {{ labelField }}
+                                        :
+                                    </label>
+                                </div>
+                                <input type="text" class="form-control datepicker-here" data-language="fr"
+                                       id="{{ inputId }}">
                             </div>
-                            <input type="text" class="form-control datepicker-here" data-language="fr"
-                                   id="{{ inputId }}">
-                        </div>
-                    {% endif %}
-                </div>
-
-                <div class="modal-footer w-100 justify-content-between">
-                    <button type="button" class="btn btn-secondary float-left" data-dismiss="modal">
-                        <i class="fas fa-times mr-2"></i>
-                        Fermer
-                    </button>
-                    <button type="button" class="btn btn-success"
-
-                    {% for attr, value in btnAttr %}
-                        {% if value is not iterable %}
-                            {{ " " }}
-                            {{ attr|raw }}="{{ value|raw }}"
                         {% endif %}
-                    {% endfor %}
-                    >
-                    <i class="far fa-paper-plane mr-2"></i>
-                    Valider
-                    </button>
+                    </div>
+
+                    <div class="modal-footer w-100 justify-content-between">
+                        <button type="button" class="btn btn-secondary float-left" data-dismiss="modal">
+                            <i class="fas fa-times mr-2"></i>
+                            Fermer
+                        </button>
+                        <button type="button" class="btn btn-success"
+
+                        {% for attr, value in btnAttr %}
+                            {% if value is not iterable %}
+                                {{ " " }}
+                                {{ attr|raw }}="{{ value|raw }}"
+                            {% endif %}
+                        {% endfor %}
+                        >
+                        <i class="far fa-paper-plane mr-2"></i>
+                        Valider
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    {% endif %}
 {% endfor %}
 
 {% for action in display.globalActions %}

@@ -1,6 +1,7 @@
 {% block singleFilter %}
 <div class="input-group mb-3 single-filter mt-3">
-    {% for filter in display.filters if filter.active == 'Y' and filter.type == 'single' %}
+    {% for filter in display.filters %}
+        {% if filter.active == 'Y' and filter.type == 'single' %}
         <div class="input-group-prepend">
             <label class="input-group-text" for="select{{ filter.fieldName }}">{{ filter.label }}
                 :
@@ -18,6 +19,7 @@
 
             {% endfor %}
         </select>
+        {% endif %}
     {% endfor %}
 </div>
 {% endblock %}

@@ -27,7 +27,13 @@ class DisplayType extends AbstractType
             /** @var Display $display */
             $display = $formEvent->getData();
             $form = $formEvent->getForm();
-            $form->add('filename', HiddenType::class)->add('calcView', HiddenType::class);
+
+            $filenameType = !empty($display->getDisplayNames()) ? ChoiceType::class : HiddenType::class;
+            $filenameOptions = !empty($display->getDisplayNames())
+                ? ['choices' => $display->getDisplayNames(), 'label' => 'Display']
+                : ['data' => $display->getDisplayName()];
+
+            $form->add('filename', $filenameType, $filenameOptions);
 
             /** @var Property $globalSearchProperty */
             $globalSearchProperty = $display->getSearchProperty();
@@ -67,7 +73,7 @@ class DisplayType extends AbstractType
                 }
             }
             $form->add('submit', SubmitType::class, ['label' => 'Rechercher', 'attr' =>
-                ['class' => 'btn btn-blue btn-block']]);
+                ['class' => 'btn btn-blue btn-block']])->add('calcView', HiddenType::class);
 
         });
 

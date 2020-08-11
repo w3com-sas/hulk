@@ -89,6 +89,9 @@ class DisplayConstructor
             case Display::FIELD_DISPLAY_NAME:
                 $this->display->setDisplayName($value);
                 break;
+            case Display::FIELD_DISPLAY_NAMES:
+                $this->display->setDisplayNames($value);
+                break;
             case Display::FIELD_MENU_CONFIG:
                 $this->display->setMenuConfig($value);
                 break;
@@ -113,6 +116,9 @@ class DisplayConstructor
                     case Column::FIELD_FIELDNAME:
                         $column->setFieldName($value);
                         break;
+                    case Column::FIELD_ICON:
+                        $column->setIcon($value);
+                        break;
                     case Column::FIELD_ICON_FIELDNAME:
                         $column->setIconFieldName($value);
                         break;
@@ -121,6 +127,9 @@ class DisplayConstructor
                         break;
                     case Column::FIELD_RENDER_FIELDNAME:
                         $column->setRenderFieldName($value);
+                        break;
+                    case Column::FIELD_RENDER:
+                        $column->setRender($value);
                         break;
                     case Column::FIELD_TYPE:
 
@@ -226,6 +235,9 @@ class DisplayConstructor
                     break;
                 case CellAction::FIELD_RENDER_FIELDNAME:
                     $action->setRenderFieldName($value);
+                    break;
+                case CellAction::FIELD_MODAL:
+                    $action->setModal($value);
                     break;
             }
         }

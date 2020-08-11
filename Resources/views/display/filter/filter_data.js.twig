@@ -3,8 +3,8 @@ $.fn.dataTable.ext.search.push(
 
         {# Trie les data à chaque "draw()" du tableau #}
         {# data = ligne du tableau #}
-        {% for filter in display.filters if filter.active == 'Y' and (filter.type == 'multiple'
-            or filter.type == 'multiple-date') and display.data is not empty %}
+        {% for filter in display.filters %}
+        {% if filter.active == 'Y' and (filter.type == 'multiple' or filter.type == 'multiple-date') and display.data is not empty %}
 
         window['minId{{ filter.fieldName }}'] = '#min' + '{{ filter.fieldName }}';
         window['maxId{{ filter.fieldName }}'] = '#max' + '{{ filter.fieldName }}';
@@ -45,6 +45,7 @@ $.fn.dataTable.ext.search.push(
 
         }
 
+        {% endif %}
         {% endfor %}
 
         return true;

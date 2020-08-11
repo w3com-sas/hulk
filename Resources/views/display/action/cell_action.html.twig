@@ -1,72 +1,93 @@
-{% for column in display.columns if column.active == 'Y' %}
-
-    {% if column.type == 'action' %}
-
-        {% if column.cellAction.iconFieldName is not null %}
-            {# For dynamic icon with field who provide it #}
-            {% set btnClass =  'btn btn-sm' %}
-            {% set iconTpl = '<i class="fa fa-[[icon]]"></i>' %}
-        {% else %}
-            {% if column.cellAction.icon != null %}
-                {% set btnClass =  'btn btn-primary btn-sm' %}
-                {% if column.cellAction.icon|split(' ')|length == 2 %}
-                    {% set iconRender = column.cellAction.icon %}
-                {% else %}
-                    {% set iconRender = 'fa fa-'~column.cellAction.icon %}
-                {% endif %}
-                {% set iconTpl = '<i class="'~iconRender~'"></i>' %}
-            {% endif %}
-        {% endif %}
-
-        {% if column.cellAction.functionName == 'openForm' %}
-            <template id="{{ column.cellAction.functionName }}{{ column.index }}">
-                <button class="{{ btnClass }}"
-                        onclick="{{ column.cellAction.functionName }}('{{ column.cellAction.targetEntity }}', '[[data]]')">
-                    {{ iconTpl|raw }}
-                </button>
-            </template>
-        {% elseif column.cellAction.functionName == 'displayLink' or column.cellAction.functionName == 'link' %}
-            <template id="{{ column.cellAction.functionName }}{{ column.cellAction.targetEntity }}">
-                <a class="btn btn-primary btn-sm"
-                   href="[[data]]">
-                    {{ iconTpl|raw }}
-                </a>
-            </template>
-        {% endif %}
-
-    {% elseif column.type == 'universal' %}
-        {% if column.cellAction is not null %}
-            {% if column.cellAction.RenderType is defined %}
-                {% if column.cellAction.RenderType == 'static' %}
-                    {% set classRender = column.cellAction.RenderValue %}
-                {% else %}
-                    {% set classRender = '[[classRender]]' %}
-                {% endif %}
+{% for column in display.columns %}
+    {% if column.active == 'Y' %}
+        {% if column.type == 'action' %}
+            {% if column.cellAction.iconFieldName is not null %}
+                {# For dynamic icon with field who provide it #}
+                {% set btnClass =  'btn btn-sm' %}
+                {% set iconTpl = '<i class="fa fa-[[icon]]"></i>' %}
             {% else %}
-                {% set classRender = 'btn btn-link' %}
-            {% endif %}
-
-            {% if column.cellAction.functionName == 'displayLink' or column.cellAction.functionName == 'link' %}
-                {% set hrefAction = "[[data]]" %}
-            {% elseif column.cellAction.functionName == 'openForm' %}
-                {% set hrefAction = "javascript:" ~ column.cellAction.functionName ~ "('" ~ column.cellAction.targetEntity ~ "', '[[data]]')" %}
-            {%  elseif column.cellAction.functionName == 'call-function' %}
-                {% if "(" in column.cellAction.params['FunctionToCall'] %}
-                    {% set hrefAction = "javascript:" ~ column.cellAction.params['FunctionToCall'] %}
-                {% else %}
-                    {% set hrefAction = "javascript:" ~ column.cellAction.params['FunctionToCall'] ~ '([[row]])' %}
+                {% if column.cellAction.icon != null %}
+                    {% set btnClass =  'btn btn-primary btn-sm' %}
+                    {% if column.cellAction.icon|split(' ')|length == 2 %}
+                        {% set iconRender = column.cellAction.icon %}
+                    {% else %}
+                        {% set iconRender = 'fa fa-'~column.cellAction.icon %}
+                    {% endif %}
+                    {% set iconTpl = '<i class="'~iconRender~'"></i>' %}
                 {% endif %}
             {% endif %}
-            <template id="action{{ column.cellAction.functionName }}{{ column.index }}">
-                <a href="{{ hrefAction }}" class="{{ classRender }}">
+
+            {% if column.cellAction.functionName == 'openForm' %}
+                <template id="{{ column.cellAction.functionName }}{{ column.index }}">
+                    <button class="{{ btnClass }}"
+                            onclick="{{ column.cellAction.functionName }}('{{ column.cellAction.targetEntity }}', '[[data]]')">
+                        {{ iconTpl|raw }}
+                    </button>
+                </template>
+            {% elseif column.cellAction.functionName == 'displayLink' or column.cellAction.functionName == 'link' %}
+                <template id="{{ column.cellAction.functionName }}{{ column.cellAction.targetEntity }}">
+                    <a class="btn btn-primary btn-sm"
+                       href="[[data]]">
+                        {{ iconTpl|raw }}
+                    </a>
+                </template>
+            {% endif %}
+
+        {% elseif column.type == 'universal' %}
+            {% if column.cellAction is not null %}
+                {% if column.cellAction.RenderType is defined %}
+                    {% if column.cellAction.RenderType == 'static' %}
+                        {% set classRender = column.cellAction.RenderValue %}
+                    {% else %}
+                        {% set classRender = '[[classRender]]' %}
+                    {% endif %}
+                {% else %}
+                    {% set classRender = 'btn btn-link' %}
+                {% endif %}
+
+                {% if column.cellAction.functionName == 'displayLink' or column.cellAction.functionName == 'link' %}
+                    {% set hrefAction = "[[data]]" %}
+                {% elseif column.cellAction.functionName == 'openForm' %}
+                    {% set hrefAction = "javascript:" ~ column.cellAction.functionName ~ "('" ~ column.cellAction.targetEntity ~ "', '[[data]]')" %}
+                {% elseif column.cellAction.functionName == 'call-function' %}
+                    {% if "(" in column.cellAction.params['FunctionToCall'] %}
+                        {% set hrefAction = "javascript:" ~ column.cellAction.params['FunctionToCall'] %}
+                    {% else %}
+                        {% set hrefAction = "javascript:" ~ column.cellAction.params['FunctionToCall'] ~ '([[row]])' %}
+                    {% endif %}
+                {% endif %}
+                <template id="action{{ column.cellAction.functionName }}{{ column.index }}">
+                    <a href="{{ hrefAction }}" class="{{ classRender }}">
+                        [[globalRender]]
+                    </a>
+                </template>
+            {% else %}
+                <template id="action{{ column.cellAction.functionName }}{{ column.index }}">
                     [[globalRender]]
-                </a>
-            </template>
-        {% else %}
-            <template id="action{{ column.cellAction.functionName }}{{ column.index }}">
-                [[globalRender]]
-            </template>
+                </template>
+            {% endif %}
         {% endif %}
     {% endif %}
+{% endfor %}
 
+{% for column in display.columns %}
+    {% if column.type == 'call-function' and column.cellAction is not null %}
+        {% set id = column.cellAction.functionName %}
+        <div class="modal fade" id="{{ id }}" tabindex="-1" role="dialog">
+            <div class="modal-dialog large-modal" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" id="{{ id }}Header">
+                        <h5 class="modal-title my-auto" id="{{ id }}TextLoading">Texte</h5>
+                        <div class="d-none icon-loading">
+                            <i class="fad fa-circle-notch fa-3x text-success fa-spin"></i>
+                        </div>
+                        <div class="d-none icon-item">
+                        </div>
+                    </div>
+                    <div class="modal-body d-none" id="{{ id }}Body"></div>
+                    <div class="modal-footer d-none" id="{{ id }}Footer"></div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 {% endfor %}

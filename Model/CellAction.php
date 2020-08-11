@@ -12,6 +12,7 @@ class CellAction
     const FIELD_RENDER_TYPE = 'RenderType';
     const FIELD_RENDER_VALUE = 'RenderValue';
     const FIELD_RENDER_FIELDNAME = 'RenderFieldName';
+    const FIELD_MODAL = 'Modal';
 
     const FUNCTION_DISPLAY_LINK = 'displayLink';
     const FUNCTION_LINK = 'link';
@@ -22,7 +23,7 @@ class CellAction
 
     private $label;
 
-    private $functionName;
+    private $functionName = "";
 
     private $targetEntity;
 
@@ -39,6 +40,8 @@ class CellAction
     private $renderValue;
 
     private $renderFieldName;
+
+    private $modal = false;
 
     /**
      * @return mixed
@@ -199,4 +202,22 @@ class CellAction
     {
         $this->renderFieldName = $renderFieldName;
     }
+
+    /**
+     * @return bool
+     */
+    public function isModal(): bool
+    {
+        return $this->modal;
+    }
+
+    /**
+     * @param bool $modal
+     */
+    public function setModal(bool $modal): void
+    {
+        $this->modal = $modal;
+    }
+
+
 }

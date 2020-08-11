@@ -20,6 +20,7 @@ class Display
     const FIELD_COLUMNS = 'Columns';
     const FIELD_PAGE_LENGTH = 'PageLength';
     const FIELD_DISPLAY_NAME = 'DisplayName';
+    const FIELD_DISPLAY_NAMES = 'DisplayNames';
     const FIELD_MENU_CONFIG = 'MenuConfig';
     const FIELD_MENU_NAME = 'MenuName';
     const FIELD_LABEL = 'Label';
@@ -82,6 +83,15 @@ class Display
 
     /** @var int */
     private $maxLength = 6000;
+
+    /** @var int */
+    private $lastScrollY = null;
+
+    /** @var int */
+    private $lastRowIndex = null;
+
+    /** @var array */
+    private $displayNames = [];
 
     public function __construct()
     {
@@ -556,6 +566,54 @@ class Display
             }
         }
         return $renderElements;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLastScrollY(): ?int
+    {
+        return $this->lastScrollY;
+    }
+
+    /**
+     * @param int $lastScrollYPos
+     */
+    public function setLastScrollY(int $lastScrollY): void
+    {
+        $this->lastScrollY = $lastScrollY;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLastRowIndex(): ?int
+    {
+        return $this->lastRowIndex;
+    }
+
+    /**
+     * @param int $lastRowIndex
+     */
+    public function setLastRowIndex(int $lastRowIndex): void
+    {
+        $this->lastRowIndex = $lastRowIndex;
+    }
+
+    /**
+     * @param $value
+     */
+    public function setDisplayNames($value)
+    {
+        $this->displayNames = $value;
+    }
+
+    /**
+     * @return array
+     */
+    public function getDisplayNames()
+    {
+        return $this->displayNames;
     }
 
 }

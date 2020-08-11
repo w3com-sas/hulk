@@ -43,7 +43,8 @@ $('.multiple-filter').on('keyup change', function () {
 {% endblock %}
 
 {% block dataTableApi %}
-{% for filter in display.filters if filter.defaultValue != null and filter.defaultValue != ""
+{% for filter in display.filters %}
+{% if filter.defaultValue != null and filter.defaultValue != ""
     and filter.defaultValue is not iterable %}
 {% if filter.type == 'single' %}
 table
@@ -52,6 +53,7 @@ table
     .draw();
 {% else %}
 table.draw();
+{% endif %}
 {% endif %}
 {% endfor %}
 {% endblock %}

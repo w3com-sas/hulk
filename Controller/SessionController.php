@@ -6,6 +6,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use W3com\HulkBundle\Filter\FilterSessionManager;
+use W3com\HulkBundle\Service\SessionManager;
 
 class SessionController extends AbstractController
 {
@@ -15,14 +16,20 @@ class SessionController extends AbstractController
     private $filterSession;
 
     /**
+     * @var SessionManager
+     */
+    private $session;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
 
-    public function __construct(FilterSessionManager $filterSession, LoggerInterface $logger)
+    public function __construct(FilterSessionManager $filterSession, SessionManager $sessionManager, LoggerInterface $logger)
     {
         $this->logger = $logger;
         $this->filterSession = $filterSession;
+        $this->session = $sessionManager;
     }
 
     public function saveFilter()
@@ -36,9 +43,15 @@ class SessionController extends AbstractController
         return new JsonResponse(['success' => true, 'countFilters' => $countFilters]);
     }
 
-    public function  saveLastLine()
+    public function  saveRowIndex()
     {
-
+        try {
+            $this->session->saveRowIndex();
+        } catch (\Exception $e){
+            $this->logger->error($e->getMessage(), $e->getTrace());
+            return new JsonResponse(['success' => false]);
+        }
+        return new JsonResponse(['success' => true]);
     }
 
 }

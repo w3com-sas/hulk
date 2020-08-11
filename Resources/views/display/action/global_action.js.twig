@@ -1,5 +1,5 @@
-{% for globalAction in display.globalActions
-    if globalAction.type == 'update-sap' or globalAction.type == 'api-request' %}
+{% for globalAction in display.globalActions %}
+{% if globalAction.type == 'update-sap' or globalAction.type == 'api-request' %}
 
 {% if globalAction.type == 'update-sap' %}
 {% set btnModalId = '#btn'~globalAction.type~globalAction.config.targetDataType~globalAction.index %}
@@ -50,10 +50,12 @@ $('{{ btnFormId }}').click(function () {
     apiRequest(data, params, url, modal);
     {% endif %}
 });
+{% endif %}
 {% endfor %}
 
 
-{% for globalAction in display.globalActions if globalAction.type == 'export-csv' %}
+{% for globalAction in display.globalActions %}
+{% if globalAction.type == 'export-csv' %}
 $('#{{ globalAction.type }}').click(function () {
     var data = table.rows('.selected').data().toArray();
     var jsonData = Object.assign({}, data);
@@ -81,15 +83,18 @@ $('#{{ globalAction.type }}').click(function () {
     xhttp.send(JSON.stringify(jsonData));
 
 });
+{% endif %}
 {% endfor %}
 
-{% for globalAction in display.globalActions if globalAction.type == 'call-function' %}
+{% for globalAction in display.globalActions %}
+{% if globalAction.type == 'call-function' %}
 $('#{{ globalAction.type~globalAction.index }}').click(function () {
     var data = table.rows('.selected').data();
     {% if globalAction.config.name is defined %}
     eval('{{ globalAction.config.name }}(data)');
     {% endif %}
 });
+{% endif %}
 {% endfor %}
 
 {% for globalAction in display.globalActions %}
@@ -106,12 +111,12 @@ $('#btn{{ globalAction.type~globalAction.index }}').click(function () {
             url: '{{ globalAction.config.url }}',
             success: function (rep) {
                 callFunction.modalBody.innerHTML = '';
-                if (typeof rep.success !== 'undefined'){
+                if (typeof rep.success !== 'undefined') {
                     for (var i = 0; i < rep.success.length; i++) {
                         callFunction.addLineResult(rep.success[i], 'success')
                     }
                 }
-                if (typeof rep.errors !== 'undefined'){
+                if (typeof rep.errors !== 'undefined') {
                     for (var i = 0; i < rep.errors.length; i++) {
                         callFunction.addLineResult(rep.errors[i], 'danger')
                     }
@@ -156,9 +161,9 @@ $('#btn{{ globalAction.type~globalAction.index }}').click(function () {
         url: '{{ globalAction.config.url }}',
         success: function (rep) {
             callFunction.modalBody.innerHTML = rep.template;
-            if (typeof rep.functionToCall !== 'undefined'){
+            if (typeof rep.functionToCall !== 'undefined') {
                 callFunction.addValidateBtn(function () {
-                    eval(rep.functionToCall+'(data, callFunction)');
+                    eval(rep.functionToCall + '(data, callFunction)');
                 });
             }
         },
