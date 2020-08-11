@@ -81,9 +81,12 @@ class UrlManager
 
     private function generateLink(Column $column, array $urlParams, Display $display)
     {
+        $routeName = $column->getCellAction()->getFunctionName() === "displayLink"
+            ? "display"
+            : $column->getCellAction()->getTargetEntity();
+
         try {
-            $url = $this->router->generate($column->getCellAction()->getTargetEntity(),
-                array_filter($urlParams));
+            $url = $this->router->generate($routeName, array_filter($urlParams));
         } catch (\Exception $e) {
             $display->getError()->addUrlError($column->getFieldName(), $e->getMessage());
             $url = null;
