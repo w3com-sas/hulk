@@ -18,6 +18,8 @@ class CsvManager
 
     private $displayProvider;
 
+    private $displayName = 'export-csv';
+
     public function __construct(DisplayProvider $displayProvider, RequestStack $request)
     {
         $this->displayProvider = $displayProvider;
@@ -32,6 +34,9 @@ class CsvManager
         $display = new Display();
         $file = $this->displayProvider->getJsonFinder()->getOnlineJson($filename, $display);
         $display = $this->displayProvider->getConstructor()->hydrate($display, $file);
+
+        $this->displayName = $display->getDisplayName();
+
         $formattedData = [];
 
         // TODO : pour l'instant ne gère qu'un seul export csv. Si besoin de plusieurs passer la param index par exemple
@@ -64,6 +69,6 @@ class CsvManager
 
     public function getDisplayName()
     {
-        return $this->dataTable->getDisplayName();
+        return $this->displayName;
     }
 }
