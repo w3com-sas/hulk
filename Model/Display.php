@@ -268,6 +268,20 @@ class Display
         return $this->globalActions;
     }
 
+    public function getGlobalActionsByType($type): ?array
+    {
+        $return = [];
+        /** @var GlobalAction $globalAction */
+        foreach($this->globalActions as $globalAction){
+            if($globalAction->getType() == $type){
+                $return[] = $globalAction;
+            }
+        }
+        return $return;
+    }
+
+
+
     /**
      * @param GlobalAction $globalAction
      */

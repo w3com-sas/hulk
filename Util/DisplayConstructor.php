@@ -257,6 +257,9 @@ class DisplayConstructor
                     case GlobalAction::FIELD_ICON:
                         $newGlobalAction->setIcon($value);
                         break;
+                    case GlobalAction::FIELD_FIELDS:
+                        $newGlobalAction->setFields($value);
+                        break;
                 }
             }
             $this->display->addGlobalAction($newGlobalAction);

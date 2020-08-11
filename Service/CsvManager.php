@@ -8,14 +8,13 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use W3com\HulkBundle\Model\Column;
 use W3com\HulkBundle\Model\Display;
+use W3com\HulkBundle\Model\GlobalAction;
 
 class CsvManager
 {
     private $serializer;
 
     private $request;
-
-    private $dataTable;
 
     private $displayProvider;
 
@@ -24,27 +23,40 @@ class CsvManager
         $this->displayProvider = $displayProvider;
         $this->request = $request;
         $this->serializer = new Serializer([new ObjectNormalizer()], [new CsvEncoder()]);
-        $this->dataTable = new Display();
     }
 
     public function getCsv(array $data, string $filename)
     {
 
         //$data = $this->request->getCurrentRequest()->request->all();
-        $file = $this->displayProvider->getJsonFinder()->getOnlineJson($filename, $this->dataTable);
-        $dataTable = $this->displayProvider->getConstructor()->hydrate($this->dataTable, $file);
+        $display = new Display();
+        $file = $this->displayProvider->getJsonFinder()->getOnlineJson($filename, $display);
+        $display = $this->displayProvider->getConstructor()->hydrate($display, $file);
         $formattedData = [];
+
+        // TODO : pour l'instant ne gère qu'un seul export csv. Si besoin de plusieurs passer la param index par exemple
+        /** @var GlobalAction $globalAction */
+        $globalAction = $display->getGlobalActionsByType('export-csv')[0];
+
 
         foreach ($data as $dataLine) {
             $line = [];
-            foreach ($dataLine as $fieldName => $value){
-                /** @var Column $column */
-                foreach ($dataTable->getColumns() as $column) {
-                    if ($column->getFieldName() === $fieldName && $column->getType() === Column::COL_TYPE_TEXT && !$column->isHidden()) {
-                        $line[$column->getLabel()] = $value;
+
+            if(count($globalAction->getFields()) > 0){
+                foreach ($globalAction->getFields() as $field){
+                    $line[$field] = array_key_exists($field,$dataLine) ? $dataLine[$field] : 'Champ inconnu';
+                }
+            } else {
+                foreach ($dataLine as $fieldName => $value){
+                    /** @var Column $column */
+                    foreach ($display->getColumns() as $column) {
+                        if ($column->getFieldName() === $fieldName && $column->getType() === Column::COL_TYPE_TEXT && !$column->isHidden()) {
+                            $line[$column->getLabel()] = $value;
+                        }
                     }
                 }
             }
+
             $formattedData[] = $line;
         }
         return $this->serializer->encode($formattedData, 'csv', [CsvEncoder::DELIMITER_KEY => ';']);

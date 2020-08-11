@@ -9,6 +9,7 @@ class GlobalAction
     const FIELD_CONFIG = 'Config';
     const FIELD_COLOR = 'Color';
     const FIELD_ICON = 'Icon';
+    const FIELD_FIELDS = 'Fields';
 
     const TYPE_UPDATE_SAP = 'update-sap';
     const TYPE_CREATE_SAP = 'create-sap';
@@ -35,6 +36,9 @@ class GlobalAction
 
     /** @var string */
     private $color;
+
+    /** @var array */
+    private $fields = [];
 
     /** @return mixed */
     public function getLabel()
@@ -106,5 +110,21 @@ class GlobalAction
     public function setColor(string $color): void
     {
         $this->color = $color;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFields(): ?array
+    {
+        return $this->fields;
+    }
+
+    /**
+     * @param array $fields
+     */
+    public function setFields(array $fields): void
+    {
+        $this->fields = $fields;
     }
 }
