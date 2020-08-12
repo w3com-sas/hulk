@@ -82,7 +82,7 @@ class UrlManager
     private function generateLink(Column $column, array $urlParams, Display $display)
     {
         $routeName = $column->getCellAction()->getFunctionName() === "displayLink"
-            ? "display"
+            ? "w3com_display"
             : $column->getCellAction()->getTargetEntity();
 
         try {
