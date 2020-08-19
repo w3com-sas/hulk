@@ -79,6 +79,32 @@ class QueryManager
 
     }
 
+    public function getResultLength($entityName,$routeParams)
+    {
+        $repo = $this->boom->getRepository($entityName);
+
+        $params = $repo->createParams();
+        if(count($routeParams) > 0){
+            foreach($routeParams as $key=>$value){
+
+                if ($key === 'SEARCH') {
+                    $this->addGlobalSearchFilter($value, $params, $display);
+                    break;
+                }
+                if ($this->appEntity->getProperty($key) !== null) {
+                    $paramsExist = true;
+
+                    $params->addFilter($this->appEntity->getProperty($key)->getName(), $value,
+                        Clause::EQUALS, Clause:: AND);
+
+
+                }
+            }
+        }
+
+        return $repo->count($params);
+    }
+
     private function addSelectProperty($fieldName, Parameters $params)
     {
         if ($this->appEntity->getProperty($fieldName) !== null) {

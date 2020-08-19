@@ -27,6 +27,9 @@ class Configuration implements ConfigurationInterface
                         ->defaultValue('/Display/')->end()
                     ->end()
                 ->end()
+                ->scalarNode('max_result_returned')
+                    ->defaultValue('1000')
+                ->end()
             ->end();
 
         return $treeBuilder;

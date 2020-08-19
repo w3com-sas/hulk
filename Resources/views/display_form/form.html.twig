@@ -12,5 +12,16 @@
         {% else %}
             {{ form(form) }}
         {% endif %}
+        {% if hasExceededMaxNumberLines is defined and hasExceededMaxNumberLines %}
+            <div class="alert alert-danger">
+                {% if numberOfLineQuery == 0 %}
+                    Aucune données ne correspondent aux filtres sélectionnés.
+                {% else %}
+                    Les filtres sélectionnés représentes {{ numberOfLineQuery }} lignes.
+                    Ce module est limité à l'affichage de {{ numberOfLineMax }} résultats.
+                {% endif %}
+
+            </div>
+        {% endif %}
     </div>
 {% endblock %}

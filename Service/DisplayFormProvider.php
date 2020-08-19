@@ -29,6 +29,8 @@ class DisplayFormProvider
 
     private $dataTransformer;
 
+    private $max_result_returned = 500;
+
     /** @var BoomManager */
     private $boom;
 
@@ -37,6 +39,9 @@ class DisplayFormProvider
 
     public function __construct(BoomManager $boom, BoomGenerator $generator, UrlManager $urlManager, DisplayConstructor $constructor, $config)
     {
+        if(array_key_exists('max_result_returned',$config)){
+            $this->max_result_returned = $config['max_result_returned'];
+        }
         $this->display = new Display();
         $this->jsonFinder = new JsonFinder($boom, $config);
         $this->queryManager = new QueryManager($boom, $generator);
@@ -151,5 +156,18 @@ class DisplayFormProvider
         }
     }
 
+    public function getQueryManager():QueryManager
+    {
+        return $this->queryManager;
+    }
 
+    public function getJsonFinder():JsonFinder
+    {
+        return $this->jsonFinder;
+    }
+
+    public function getMaxResultReturned()
+    {
+        return $this->max_result_returned;
+    }
 }

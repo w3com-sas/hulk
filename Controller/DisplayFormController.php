@@ -59,6 +59,30 @@ class DisplayFormController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $formData = $this->request->getCurrentRequest()->request->all();
             $routeParams = $this->urlManager->createRouteParams($formData, $display);
+
+            // Analyse the number of results and if it's not what expected
+            // an error is threw and the redirection to display is not made
+            $numberOfLineMax = $this->displayFormProvider->getMaxResultReturned();
+            $jsonFinder = $this->displayFormProvider->getJsonFinder();
+            $configDisplay = $jsonFinder->getOnlineJson($routeParams['filename']);
+            if($configDisplay){
+                $config = json_decode($configDisplay,true);
+                $entityNameDisplay = $config['CalculationView'];
+            }
+            $queryManager = $this->displayFormProvider->getQueryManager();
+            $numberOfLineQuery = $queryManager->getResultLength($entityNameDisplay,$routeParams);
+
+            if($numberOfLineQuery > $numberOfLineMax || $numberOfLineQuery == 0){
+                return $this->render('@W3comHulk/display_form/form.html.twig', [
+                    'form' => $form->createView(),
+                    'filename' => $filename,
+                    'display' => $display,
+                    'hasExceededMaxNumberLines' => true,
+                    'numberOfLineMax' => $numberOfLineMax,
+                    'numberOfLineQuery' => $numberOfLineQuery
+                ]);
+            }
+
             return $this->redirectToRoute('w3com_display', $routeParams);
         }
         return $this->render('@W3comHulk/display_form/form.html.twig', [
