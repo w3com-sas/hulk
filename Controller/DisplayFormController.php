@@ -70,7 +70,7 @@ class DisplayFormController extends AbstractController
                 $entityNameDisplay = $config['CalculationView'];
             }
             $queryManager = $this->displayFormProvider->getQueryManager();
-            $numberOfLineQuery = $queryManager->getResultLength($entityNameDisplay,$routeParams);
+            $numberOfLineQuery = $queryManager->getResultLength($entityNameDisplay,$routeParams,$display);
 
             if($numberOfLineQuery > $numberOfLineMax || $numberOfLineQuery == 0){
                 return $this->render('@W3comHulk/display_form/form.html.twig', [

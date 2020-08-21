@@ -150,7 +150,7 @@ export const apiRequest = function (data, params, urlApi, modal) {
 };
 
 export const reloadDisplayForm = () => {
-
+    temporizeUpdate('display_submit',true);
     var event = new CustomEvent('LoadDisplayForm');
     document.dispatchEvent(event);
 
@@ -173,6 +173,7 @@ export const reloadDisplayForm = () => {
         type: "POST",
         data: data,
         success: function (resp) {
+            temporizeUpdate('display_submit',false);
             var fieldsNotToUpdate = Object.keys(data.selectedChoices);
             var toUpdateData = {};
             // Organize data

@@ -79,7 +79,7 @@ class QueryManager
 
     }
 
-    public function getResultLength($entityName,$routeParams)
+    public function getResultLength($entityName,$routeParams,$display)
     {
         $repo = $this->boom->getRepository($entityName);
 
@@ -322,8 +322,11 @@ class QueryManager
     {
         $property = $display->getEntity()->getProperty(Display::FIELD_GLOBAL_SEARCH);
         if ($property instanceof Property) {
-            $parameters->addFilter($property->getName(), $value,
-                Clause::SUBSTRING_OF, null, Clause::TO_LOWER);
+            $arr = explode(' ',$value);
+            foreach($arr as $subValue){
+                $parameters->addFilter($property->getName(), $subValue,
+                    Clause::SUBSTRING_OF, null, Clause::TO_LOWER);
+            }
         }
     }
 
