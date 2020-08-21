@@ -19,7 +19,7 @@ class DisplayFormController extends AbstractController
     /**
      * @var DisplayFormProvider
      */
-    private $displayProvider;
+    private $displayFormProvider;
 
     /**
      * @var RequestStack
@@ -36,11 +36,11 @@ class DisplayFormController extends AbstractController
      */
     private $logger;
 
-    public function __construct(DisplayFormProvider $displayProvider, RequestStack $requestStack, UrlManager $urlManager, LoggerInterface $logger)
+    public function __construct(DisplayFormProvider $displayFormProvider, RequestStack $requestStack, UrlManager $urlManager, LoggerInterface $logger)
     {
         $this->logger = $logger;
         $this->urlManager = $urlManager;
-        $this->displayProvider = $displayProvider;
+        $this->displayFormProvider = $displayFormProvider;
         $this->request = $requestStack;
     }
 
@@ -53,7 +53,7 @@ class DisplayFormController extends AbstractController
     public function displayForm($filename)
     {
         /** @var Display $display */
-        $display = $this->displayProvider->getDisplay($filename);
+        $display = $this->displayFormProvider->getDisplay($filename);
         $form = $this->createForm(DisplayType::class, $display);
         $form->handleRequest($this->request->getCurrentRequest());
         if ($form->isSubmitted() && $form->isValid()) {
@@ -105,7 +105,7 @@ class DisplayFormController extends AbstractController
         $calculationView = $postRequest->get('calcView');
 
         try {
-            $data = $this->displayProvider->getDataFromChoices($calculationView, $choices, $allFields);
+            $data = $this->displayFormProvider->getDataFromChoices($calculationView, $choices, $allFields);
         } catch (EntityNotFoundException $e) {
             return new JsonResponse($e->getMessage(), 400);
         } catch (\Exception $e) {
