@@ -131,8 +131,6 @@ export const CallFunction = class {
         return true;
     }
     addTwigTemplate(url, data){
-        console.log(url);
-        console.log(data);
         fetch(url, {
             method: "POST",
             headers: {"Accept": "application/json"},
@@ -140,7 +138,6 @@ export const CallFunction = class {
         })
         .then(res => res.json())
         .then(res => {
-            console.log(res)
             this.modalBody.innerHTML = res.template;
         });
     };
