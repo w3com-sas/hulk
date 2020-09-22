@@ -43,17 +43,8 @@ w3com_hulk:
 Declare routes in config/route.yaml
  
 ````yaml
-display_table:
-  resource: display.xml
-
-create_view:
-  resource: create_view_controller.xml
-
-update_view:
-  resource: update_project_entity_controller.xml
-  
-update_entity:
-  resource: update_sap_controller.xml
+hulk:
+  resource: '@W3comHulkBundle/Resources/config/routing.xml'
 ```` 
 
 #### Install front dependances
