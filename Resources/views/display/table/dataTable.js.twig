@@ -139,7 +139,7 @@ $(document).ready(function () {
                     {% if column.width is not null %}
                     width: "{{ column.width }}%",
                     {% endif %}
-                    data: "{{ column.cellAction.functionName }}{{ column.index }}",
+                    data: "{{ column.cellAction.functionName }}{{ column.cellAction.targetEntity }}",
                     render: function (data, type, row) {
                         if (data === '' || data === undefined || data === null) {
                             return null;
@@ -151,6 +151,7 @@ $(document).ready(function () {
                 },
                 {% elseif column.cellAction.functionName == 'displayLinks' %}
                 {
+                {% dump column %}
                     {% if column.width is not null %}
                     width: "{{ column.width }}%",
                     {% endif %}
