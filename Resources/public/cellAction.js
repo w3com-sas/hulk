@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
 }, false)
 
 const initDisplayChoicesType = () => {
-    let displayChoicesColumns = document.querySelectorAll('.display-choices-type');
+    let displayChoicesColumns = document.querySelectorAll('.display-links-choices');
 
     for (let i = 0; i < displayChoicesColumns.length; i++) {
         let choices = displayChoicesColumns[i].querySelectorAll('.dropdown-item');

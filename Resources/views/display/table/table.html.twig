@@ -12,12 +12,12 @@
                     </th>
                 {% elseif column.cellAction and column.cellAction.functionName == 'displayLinks' %}
                     <th>
-                        <div class="dropdown">
+                        <div class="dropdown dropdown-display-links">
                             <button class="dropdown-toggle btn" type="button" id="dropdownMenuButton{{ column.index }}"
                                     data-toggle="dropdown">
                                 {{ column.label }}
                             </button>
-                            <div class="dropdown-menu display-choices-type" id="dropDownMenu{{ column.index }}"
+                            <div class="dropdown-menu display-links-choices" id="dropDownMenu{{ column.index }}"
                                  data-display="{{ column.cellAction.params['Displays'][0] }}">
                                 {% for key,param in column.cellAction.params['Displays'] %}
                                     <button type="button" class="dropdown-item">{{ param }}</button>
