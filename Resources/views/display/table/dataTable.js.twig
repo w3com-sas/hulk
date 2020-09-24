@@ -151,7 +151,6 @@ $(document).ready(function () {
                 },
                 {% elseif column.cellAction.functionName == 'displayLinks' %}
                 {
-                {% dump column %}
                     {% if column.width is not null %}
                     width: "{{ column.width }}%",
                     {% endif %}
