@@ -21,6 +21,7 @@ class Column
     const FIELD_RENDER = 'Render';
 
     const FUNCTION_NAME_DISPLAY_LINK = 'displayLink';
+    const FUNCTION_NAME_DISPLAY_LINKS = 'displayLinks';
     const FUNCTION_NAME_LINK = 'link';
 
     const COL_TYPE_TEXT = 'text';

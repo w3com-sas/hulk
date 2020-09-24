@@ -475,7 +475,7 @@ class Display
         /** @var Column $column */
         foreach ($this->columns as $column) {
             if ($column->getCellAction() !== null) {
-                if (in_array($column->getCellAction()->getFunctionName(), [Column::FUNCTION_NAME_DISPLAY_LINK, Column::FUNCTION_NAME_LINK])) {
+                if (in_array($column->getCellAction()->getFunctionName(), [Column::FUNCTION_NAME_DISPLAY_LINK, Column::FUNCTION_NAME_LINK, Column::FUNCTION_NAME_DISPLAY_LINKS])) {
                     $columns[] = $column;
                 }
             }

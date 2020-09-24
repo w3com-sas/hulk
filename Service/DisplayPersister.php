@@ -71,7 +71,7 @@ class DisplayPersister
             $affectedProperty = $obj->getPropertyByColumn($affectedField);
 
             if ($affectedProperty === "") {
-                throw new ResourceNotFoundException('Unable to property ' . $displayEntityKey . ' in display');
+                throw new ResourceNotFoundException('Unable to find property ' . $displayEntityKey . ' in display');
             }
 
             $obj->set($affectedProperty, $this->formatData($affectedValue));

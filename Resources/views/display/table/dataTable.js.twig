@@ -7,7 +7,7 @@
     var icon = row[{{ column.cellAction.iconColumnIndex }}];
     tpl.replace('[[icon]]', icon);
     {% endif %}
-{% endmacro %}#}
+{% endmacro %} #}
 
 // Datatables plugin to sort datetime data with moment js
 
@@ -65,13 +65,11 @@
 
 
 $(document).ready(function () {
-
     // Add all datetime format here
     $.fn.dataTable.moment('DD/MM/YYYY');
 
     var data = [
         {% for object in display.data %}
-
         {
             'idLines': 'line{{ loop.index }}',
             {% for col, value in object %}
@@ -81,6 +79,7 @@ $(document).ready(function () {
         },
         {% endfor %}
     ];
+
     var table = $('#dataTable').DataTable({
             language: {
                 processing: "Traitement en cours...",
@@ -103,33 +102,23 @@ $(document).ready(function () {
             },
             data: data,
             columns: [
-
-
-
                 {% for column in display.columns %}
                 {# Set dynamic icon #}
                 {% if column.active == 'Y' %}
-
                 {% if column.type == 'text' or column.hidden %}
-
                 {
                     {% if column.width is not null %}
                     width: "{{ column.width }}%",
                     {% endif %}
-                    data:
-                        "{{ column.fieldName }}"
-                }
-                ,
-
+                    data: "{{ column.fieldName }}"
+                },
                 {% elseif column.type == 'action' %}
                 {% if column.cellAction.functionName == 'openForm' %}
                 {
                     {% if column.width is not null %}
                     width: "{{ column.width }}%",
                     {% endif %}
-
                     data: "{{ column.fieldName }}",
-
                     render: function (data, type, row) {
                         var idTpl = '#' + '{{ column.cellAction.functionName }}{{ column.index }}';
                         var tpl = $(idTpl).html();
@@ -137,7 +126,6 @@ $(document).ready(function () {
                         if (data == '') {
                             return null;
                         }
-
                         {% if column.cellAction.iconFieldName is not null %}
                         var icon = row.{{ column.cellAction.iconFieldName }};
                         return tpl.replace('[[icon]]', icon).replace('[[data]]', data);
@@ -145,54 +133,68 @@ $(document).ready(function () {
                         return tpl.replace('[[data]]', data);
                         {% endif %}
                     }
-                }
-                ,
+                },
                 {% elseif column.cellAction.functionName == 'displayLink' or column.cellAction.functionName == 'link' %}
                 {
                     {% if column.width is not null %}
                     width: "{{ column.width }}%",
                     {% endif %}
-                    data: "{{ column.cellAction.functionName }}{{ column.cellAction.targetEntity }}",
-                    render:
-                        function (data, type, row) {
-                            if (data === '' || data === undefined || data === null) {
-                                return null;
-                            }
-
-                            var idTpl = '#' + '{{ column.cellAction.functionName }}{{ column.cellAction.targetEntity }}';
-                            var tpl = $(idTpl).html();
-                            return tpl.replace('[[data]]', data);
+                    data: "{{ column.cellAction.functionName }}{{ column.index }}",
+                    render: function (data, type, row) {
+                        if (data === '' || data === undefined || data === null) {
+                            return null;
                         }
-                }
-                ,
+                        var idTpl = '#' + '{{ column.cellAction.functionName }}{{ column.cellAction.targetEntity }}';
+                        var tpl = $(idTpl).html();
+                        return tpl.replace('[[data]]', data);
+                    }
+                },
+                {% elseif column.cellAction.functionName == 'displayLinks' %}
+                {
+                    {% if column.width is not null %}
+                    width: "{{ column.width }}%",
+                    {% endif %}
+                    data: "{{ column.cellAction.functionName }}{{ column.cellAction.targetEntity }}",
+                    render: function (data, type, row) {
+                        if (data === '' || data === undefined || data === null) {
+                            return null;
+                        }
+
+                        var explodedLink = data.split('/'),
+                            explodedGetParams = explodedLink[2].split('?');
+
+                        explodedGetParams[0] = document.getElementById('dropDownMenu' + '{{ column.index }}').dataset.display;
+                        explodedLink[2] = explodedGetParams.join('?');
+
+                        var link = explodedLink.join('/'),
+                            idTpl = '#' + '{{ column.cellAction.functionName }}{{ column.index }}',
+                            tpl = $(idTpl).html();
+
+                        return tpl.replace('[[data]]', link);
+                    }
+                },
                 {% endif %}
                 {% elseif column.type == 'checkbox' %}
                 {
                     data: 'idLines',
-                    render:
-                        function (data, type, row) {
-                            return $('#checkboxTpl').html().replace('idLine', data);
-                        }
-                }
-                ,
+                    render: function (data, type, row) {
+                        return $('#checkboxTpl').html().replace('idLine', data);
+                    }
+                },
                 {% elseif column.type == 'icon' %}
                 {
                     {% if column.width is not null %}
                     width: "{{ column.width }}%",
                     {% endif %}
-                    data:
-                        "{{ column.fieldName }}",
-                    render:
-
-                        function (data, type, row) {
-                            var tpl = $('#icon').html();
-                            if (data.split(' ').length == 1) {
-                                data = 'fa fa-' + data;
-                            }
-                            return tpl.replace('[[data]]', data);
+                    data: "{{ column.fieldName }}",
+                    render: function (data, type, row) {
+                        var tpl = $('#icon').html();
+                        if (data.split(' ').length == 1) {
+                            data = 'fa fa-' + data;
                         }
-                }
-                ,
+                        return tpl.replace('[[data]]', data);
+                    }
+                },
                 {% elseif column.type == 'universal' %}
                 {
                     {% if column.width is not null %}
@@ -214,8 +216,8 @@ $(document).ready(function () {
                         } else {
                             iconRenderer = tplIcon.replace('[[data]]', '{{ column.cellAction.icon }}')
                         }
-
                         var labelRenderer = '';
+
                         if (row.hasOwnProperty('{{ column.labelFieldName }}') && row.{{ column.labelFieldName }} != '') {
                             var tplLabel = $('#labelRenderer').html();
                             labelRenderer = tplLabel.replace('[[data]]', row.{{ column.labelFieldName }});
@@ -223,7 +225,6 @@ $(document).ready(function () {
 
                         {% if column.cellAction is defined %}
                         var tplAction = $('#action{{ column.cellAction.functionName }}{{ column.index }}').html();
-
                         tplAction = tplAction
                             .replace('[[globalRender]]', iconRenderer + labelRenderer)
                             .replace('[[row]]', JSON.stringify(row).replace(/"/g, '&quot;'));
@@ -233,13 +234,11 @@ $(document).ready(function () {
                         {% endif %}
 
                         return tplAction;
-
                         {% else %}
                         return iconRenderer + labelRenderer;
                         {% endif %}
                     }
-                }
-                ,
+                },
                 {% elseif column.type == 'call-function' %}
                 {
                     {% if column.width is not null %}
@@ -271,19 +270,19 @@ $(document).ready(function () {
                             + 'data-field-name="{{ column.fieldName }}"'
                             + 'data-key="' + row['{{ column.config.entityKey }}']
                             + '"class="form-control custom-select" onchange="updateSapLine(this)">';
+
                         Object.keys(choices).forEach(function (key) {
-                            if (data === choices[key]) {
-                                template += '<option value="' + choices[key] + '" selected="selected">' + key + '</option>'
-                            } else {
-                                template += '<option value="' + choices[key] + '">' + key + '</option>'
+                                if (data === choices[key]) {
+                                    template += '<option value="' + choices[key] + '" selected="selected">' + key + '</option>'
+                                } else {
+                                    template += '<option value="' + choices[key] + '">' + key + '</option>'
+                                }
                             }
-                        })
+                        )
                         template += '</select>'
                         return template;
-
                         {% else %}
-                        return '<input type="text" value="' + data + '"' +
-                            'class="form-control form-control-sm"' +
+                        return '<input type="text" value="' + data + '"' + 'class="form-control form-control-sm"' +
                             'data-entity="' + '{{ column.config.entity }}' +
                             '" data-field-name="' + '{{ column.fieldName }}' +
                             '" data-key="' + row.{{ column.config.entityKey }} +
@@ -297,8 +296,7 @@ $(document).ready(function () {
                     render: function (data, type, row) {
                         var template = document.getElementById('{{ column.renderElement.elementId }}').innerHTML;
                         var input = template.replace('[[data]]', data);
-                        return (row.hasOwnProperty('{{ column.renderFieldName }}') && row['{{ column.renderFieldName }}'] !== "")
-                            ? '<div class="' + row['{{ column.renderFieldName }}'] + '">' + input + '</div>' : input;
+                        return (row.hasOwnProperty('{{ column.renderFieldName }}') && row['{{ column.renderFieldName }}'] !== "") ? '<div class="' + row['{{ column.renderFieldName }}'] + '">' + input + '</div>' : input;
                     }
                 },
                 {% endif %}
@@ -310,7 +308,6 @@ $(document).ready(function () {
             columnDefs:
                 [
                     {% for column in display.columns %}
-
                     {% if column.type == 'checkbox' %}
                     {
                         "targets": [ {{ column.index }} ],
@@ -348,13 +345,13 @@ $(document).ready(function () {
                     {targets: 'no-sort', orderable: false},
                     {% endfor %}
                 ],
-            {% if display.lastRowIndex %}
-            createdRow: function( row, data, dataIndex ) {
-                if (dataIndex === {{ display.lastRowIndex }})  {
+                {% if display.lastRowIndex %}
+            createdRow: function (row, data, dataIndex) {
+                if (dataIndex === {{ display.lastRowIndex }}) {
                     $(row).addClass('highlighting');
                 }
             },
-            {% endif %}
+                {% endif %}
             drawCallback:
 
                 function () {
@@ -410,7 +407,7 @@ $(document).ready(function () {
         countSelectedRows(table.rows('.selected').data());
     });
 
-    $('#dataTable tbody').on( 'click', 'tr', function () {
+    $('#dataTable tbody').on('click', 'tr', function () {
         var data = {};
         data.currentRoute = '{{ app.request.getRequestUri() }}';
         data.scrollY = window.scrollY;
@@ -420,7 +417,7 @@ $(document).ready(function () {
             data: data,
             url: '{{ url('w3com_save_row_index') }}'
         })
-    } );
+    });
 
     {% if display.lastScrollY %}
     window.scrollTo(0, {{ display.lastScrollY }});

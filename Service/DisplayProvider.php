@@ -104,7 +104,6 @@ class DisplayProvider
         $this->renderer->buildTemplate($display);
 
         if ($display->getError()->isFileExist()) {
-
             $data = $this->queryManager->createDataTableQuery($display, $getRequestParams, $maxResults);
 
             if ($display->getError()->isClassExist()) {

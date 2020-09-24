@@ -39,7 +39,14 @@ class UrlManager
                         $urlParams[$column->getCellAction()->getParams()[$property]] = $value;
                     }
                 }
-                $urlParams = array_merge($urlParams, array_diff_key($column->getCellAction()->getParams(), $line));
+
+                $additionalParams = array_diff_key($column->getCellAction()->getParams(), $line);
+
+                if (array_key_exists('Displays', $additionalParams)) {
+                    unset($additionalParams['Displays']);
+                }
+
+                $urlParams = array_merge($urlParams, $additionalParams);
                 $urlParams = $this->addFilenameParam($column, $urlParams);
                 $url = count(array_filter($urlParams)) > 0 ? $this->generateLink($column, $urlParams, $display) : null;
                 $line[$column->getCellAction()->getFunctionName() . $column->getCellAction()->getTargetEntity()] = $url;
@@ -73,15 +80,22 @@ class UrlManager
 
     private function addFilenameParam(Column $column, $urlParams)
     {
-        if ($column->getCellAction()->getFunctionName() === Column::FUNCTION_NAME_DISPLAY_LINK) {
+        $functionName = $column->getCellAction()->getFunctionName();
+
+        if ($functionName === Column::FUNCTION_NAME_DISPLAY_LINK) {
             $urlParams['filename'] = $column->getCellAction()->getTargetEntity();
         }
+
+        if ($functionName === Column::FUNCTION_NAME_DISPLAY_LINKS) {
+            $urlParams['filename'] = $column->getCellAction()->getParams()['Displays'][0];
+        }
+
         return $urlParams;
     }
 
     private function generateLink(Column $column, array $urlParams, Display $display)
     {
-        $routeName = $column->getCellAction()->getFunctionName() === "displayLink"
+        $routeName = in_array($column->getCellAction()->getFunctionName(), ['displayLink', 'displayLinks'])
             ? "w3com_display"
             : $column->getCellAction()->getTargetEntity();
 

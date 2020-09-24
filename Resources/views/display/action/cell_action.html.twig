@@ -24,8 +24,11 @@
                         {{ iconTpl|raw }}
                     </button>
                 </template>
-            {% elseif column.cellAction.functionName == 'displayLink' or column.cellAction.functionName == 'link' %}
-                <template id="{{ column.cellAction.functionName }}{{ column.cellAction.targetEntity }}">
+            {% elseif column.cellAction.functionName in ['displayLink', 'link', 'displayLinks'] %}
+                {% set id = column.cellAction.functionName == 'displayLinks'
+                    ? column.cellAction.functionName~column.index
+                    : column.cellAction.functionName~column.cellAction.targetEntity %}
+                <template id="{{ id }}">
                     <a class="btn btn-primary btn-sm"
                        href="[[data]]">
                         {{ iconTpl|raw }}
@@ -45,7 +48,7 @@
                     {% set classRender = 'btn btn-link' %}
                 {% endif %}
 
-                {% if column.cellAction.functionName == 'displayLink' or column.cellAction.functionName == 'link' %}
+                {% if column.cellAction.functionName in  ['displayLink', 'displayLinks', 'link'] %}
                     {% set hrefAction = "[[data]]" %}
                 {% elseif column.cellAction.functionName == 'openForm' %}
                     {% set hrefAction = "javascript:" ~ column.cellAction.functionName ~ "('" ~ column.cellAction.targetEntity ~ "', '[[data]]')" %}
