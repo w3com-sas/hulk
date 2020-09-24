@@ -5,6 +5,7 @@ namespace W3com\HulkBundle\Service;
 use Doctrine\Common\Annotations\AnnotationException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use W3com\BoomBundle\Exception\EntityNotFoundException;
 use W3com\BoomBundle\Generator\AppInspector;
@@ -50,8 +51,10 @@ class DisplayPersister
         $obj = $this->boom->getRepository($entity->getName())->find($key);
         $obj->set($obj->getPropertyByColumn($affectedField), $affectedValue);
 
-        $event = new PersistenceEvent($obj, PersistenceEvent::TYPE_PRE_UPDATE);
-        $this->dispatch->dispatch($event, PersistenceEvent::NAME);
+        if ($this->dispatch->hasListeners(PersistenceEvent::TYPE_PRE_UPDATE)) {
+            $event = new PersistenceEvent($obj, PersistenceEvent::TYPE_PRE_UPDATE);
+            $this->dispatch->dispatch($event, PersistenceEvent::NAME);
+        }
 
         $this->boom->getRepository($entity->getName())->update($obj);
     }
