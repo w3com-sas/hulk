@@ -52,7 +52,7 @@ class DisplayPersister
         $obj = $this->boom->getRepository($entity->getName())->find($key);
         $obj->set($obj->getPropertyByColumn($affectedField), $affectedValue);
 
-        if ($this->dispatcher->hasListeners(PersistenceEvent::TYPE_PRE_UPDATE)) {
+        if ($this->dispatcher->hasListeners(PersistenceEvent::NAME)) {
             $event = new PersistenceEvent($obj, PersistenceEvent::TYPE_PRE_UPDATE);
             $this->dispatcher->dispatch($event, PersistenceEvent::NAME);
         }
