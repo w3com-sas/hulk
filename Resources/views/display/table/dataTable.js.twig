@@ -284,7 +284,7 @@ $(document).ready(function () {
                         {% else %}
                         return '<input type="text" value="' + data + '"' + 'class="form-control form-control-sm"' +
                             'data-entity="' + '{{ column.config.entity }}' +
-                            '" data-field-name="' + '{{ column.fieldName }}' +
+                            '" data-field-name="' + '{{ column.config.targetField ? column.config.targetField  : column.fieldName }}' +
                             '" data-key="' + row.{{ column.config.entityKey }} +
                             '" onchange="updateSapLine(this)"/>';
                         {% endif %}
