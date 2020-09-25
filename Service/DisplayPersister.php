@@ -4,15 +4,11 @@ namespace W3com\HulkBundle\Service;
 
 use Doctrine\Common\Annotations\AnnotationException;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use W3com\BoomBundle\Exception\EntityNotFoundException;
 use W3com\BoomBundle\Generator\AppInspector;
 use W3com\BoomBundle\HanaEntity\AbstractEntity;
 use W3com\BoomBundle\Service\BoomManager;
-use W3com\HulkBundle\Event\PersistenceEvent;
 
 class DisplayPersister
 {
@@ -25,15 +21,11 @@ class DisplayPersister
     /** @var AppInspector */
     private $appInspector;
 
-    /** @var EventDispatcher */
-    private $dispatcher;
-
-    public function __construct(BoomManager $boom, LoggerInterface $logger, AppInspector $appInspector, EventDispatcherInterface  $dispatcher)
+    public function __construct(BoomManager $boom, LoggerInterface $logger, AppInspector $appInspector)
     {
         $this->appInspector = $appInspector;
         $this->boom = $boom;
         $this->logger = $logger;
-        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -51,12 +43,6 @@ class DisplayPersister
         /** @var AbstractEntity $obj */
         $obj = $this->boom->getRepository($entity->getName())->find($key);
         $obj->set($obj->getPropertyByColumn($affectedField), $affectedValue);
-
-        if ($this->dispatcher->hasListeners(PersistenceEvent::NAME)) {
-            $event = new PersistenceEvent($obj, PersistenceEvent::TYPE_PRE_UPDATE);
-            $this->dispatcher->dispatch($event, PersistenceEvent::NAME);
-        }
-
         $this->boom->getRepository($entity->getName())->update($obj);
     }
 

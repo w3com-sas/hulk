@@ -52,7 +52,6 @@
             <argument type="service" id="W3com\BoomBundle\Service\BoomManager"/>
             <argument type="service" id="logger"/>
             <argument type="service" id="W3com\BoomBundle\Generator\AppInspector"/>
-            <argument type="service" id="Symfony\Component\EventDispatcher\EventDispatcherInterface"/>
         </service>
         <service class="W3com\HulkBundle\Service\CsvManager" id="w3com_hulk.service.csv_manager">
             <argument type="service" id="w3com_hulk.service.display_provider"/>
