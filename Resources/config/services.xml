@@ -10,14 +10,14 @@
             <argument type="service" id="W3com\BoomBundle\Service\BoomGenerator"/>
             <argument type="service" id="router"/>
             <argument type="service" id="w3com_hulk.filter.filter_session_manager"/>
-            <argument type="service" id="monolog.logger"/>
+            <argument type="service" id="logger"/>
             <argument type="service" id="W3com\HulkBundle\Util\DisplayConstructor"/>
             <argument type="service" id="w3com_hulk.service.session_manager"/>
         </service>
 
         <service class="W3com\HulkBundle\Url\UrlManager" id="w3com_hulk.url.url_manager">
             <argument type="service" id="router.default"/>
-            <argument type="service" id="monolog.logger"/>
+            <argument type="service" id="logger"/>
         </service>
         <service id="w3com_hulk.service.display_form_provider" class="W3com\HulkBundle\Service\DisplayFormProvider" public="true">
             <argument type="service" id="W3com\BoomBundle\Service\BoomManager"/>
@@ -50,7 +50,7 @@
         </service>
         <service class="W3com\HulkBundle\Service\DisplayPersister" id="w3com_hulk.service.display_persister">
             <argument type="service" id="W3com\BoomBundle\Service\BoomManager"/>
-            <argument type="service" id="monolog.logger"/>
+            <argument type="service" id="logger"/>
             <argument type="service" id="W3com\BoomBundle\Generator\AppInspector"/>
             <argument type="service" id="Symfony\Component\EventDispatcher\EventDispatcherInterface"/>
         </service>
@@ -62,7 +62,7 @@
             <argument type="service" id="W3com\BoomBundle\Service\BoomManager"/>
             <argument type="service" id="W3com\BoomBundle\Generator\AppInspector"/>
             <argument type="service" id="router"/>
-            <argument type="service" id="monolog.logger"/>
+            <argument type="service" id="logger"/>
         </service>
         <service class="W3com\HulkBundle\Service\SessionManager" id="w3com_hulk.service.session_manager">
             <argument type="service" id="session" />
