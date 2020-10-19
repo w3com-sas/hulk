@@ -353,6 +353,9 @@ $(document).ready(function () {
                 if (dataIndex === {{ display.lastRowIndex }})  {
                     $(row).addClass('highlighting');
                 }
+                if (data.hasOwnProperty("RowClassHtml")) {
+                    $(row).addClass(data['RowClassHtml']);
+                }
             },
             {% endif %}
             drawCallback:
