@@ -345,16 +345,16 @@ $(document).ready(function () {
                     {targets: 'no-sort', orderable: false},
                     {% endfor %}
                 ],
-                {% if display.lastRowIndex %}
             createdRow: function (row, data, dataIndex) {
+                {% if display.lastRowIndex %}
                 if (dataIndex === {{ display.lastRowIndex }}) {
                     $(row).addClass('highlighting');
                 }
+                {% endif %}
                 if (data.hasOwnProperty("RowClassHtml")) {
                     $(row).addClass(data['RowClassHtml']);
                 }
             },
-                {% endif %}
             drawCallback:
 
                 function () {
