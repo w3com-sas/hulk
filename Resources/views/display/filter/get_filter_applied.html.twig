@@ -6,9 +6,11 @@
     {% endif %}
 {% endfor %}
 {% for param, value in app.request.query.all %}
-    {% if param == "SEARCH" %}
-        <span class="badge badge-info">{{ value|explodeSpace }}</span>
-    {% else %}
-        <span class="badge badge-info">{{ value|formatIfDate }}</span>
+    {% if param not in ['username','companydb','slcontext'] %}
+        {% if param == "SEARCH" %}
+            <span class="badge badge-info">{{ value|explodeSpace }}</span>
+        {% else %}
+            <span class="badge badge-info">{{ value|formatIfDate }}</span>
+        {% endif %}
     {% endif %}
-{% endfor %}
+{% endfor %}{
