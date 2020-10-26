@@ -120,9 +120,6 @@ class GlobalAction
         return $this->fields;
     }
 
-    /**
-     * @param array $fields
-     */
     public function setFields(array $fields): void
     {
         $this->fields = $fields;

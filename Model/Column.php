@@ -35,7 +35,7 @@ class Column
     const COL_TYPE_RENDER_ELEMENT = 'render-element';
     const COL_TYPE_CALL_FUNCTION = 'call-function';
 
-    /** @var integer */
+    /** @var int */
     private $index;
 
     /** @var bool */
@@ -74,7 +74,7 @@ class Column
     /** @var string */
     private $active;
 
-    /** @var integer */
+    /** @var int */
     private $width;
 
     /** @var bool */
@@ -273,9 +273,6 @@ class Column
         return $this->icon;
     }
 
-    /**
-     * @param string $icon
-     */
     public function setIcon(string $icon): void
     {
         $this->icon = $icon;
@@ -289,14 +286,8 @@ class Column
         return $this->render;
     }
 
-    /**
-     * @param string $render
-     */
     public function setRender(string $render): void
     {
         $this->render = $render;
     }
-
-
-
 }

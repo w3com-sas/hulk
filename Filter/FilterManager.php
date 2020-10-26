@@ -6,7 +6,6 @@ use W3com\HulkBundle\Model\Display;
 
 class FilterManager extends AbstractFilterManager
 {
-
     private $singleFilterManager;
 
     private $multilpleFilterManager;
@@ -21,8 +20,7 @@ class FilterManager extends AbstractFilterManager
     {
         $this->singleFilterManager->manageSingleFilters($dataTable);
         $this->multilpleFilterManager->manageMultipleFilters($dataTable);
+
         return $dataTable;
     }
-
-
 }

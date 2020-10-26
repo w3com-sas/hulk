@@ -2,10 +2,10 @@
 
 namespace W3com\HulkBundle\Command;
 
+use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use W3com\BoomBundle\Exception\EntityNotFoundException;
 use W3com\BoomBundle\Service\BoomGenerator;
@@ -46,7 +46,7 @@ class UpdateDisplayCVCommand extends Command
         $config = json_decode($this->jsonFinder->getOnlineJson('configuration', $display), true);
 
         if (!$display->getError()->isFileExist()) {
-            throw new \Exception('Impossible de retrouver le fichier de configuration des displays.');
+            throw new Exception('Impossible de retrouver le fichier de configuration des displays.');
         }
 
         $calculationViews = [];
@@ -69,17 +69,17 @@ class UpdateDisplayCVCommand extends Command
 
         if ($continue) {
             foreach ($calculationViews as $calculationView) {
-                if (substr($calculationView, 0, 5) !== 'ERROR') {
+                if ('ERROR' !== substr($calculationView, 0, 5)) {
                     try {
                         $this->generator->createODSEntity($calculationView);
                     } catch (EntityNotFoundException $exception) {
-                        $io->error('Unable to find ' . $calculationView);
+                        $io->error('Unable to find '.$calculationView);
                         continue;
-                    } catch (\Exception $e) {
-                        $io->error('Unknow error when trying to update ' . $calculationView);
+                    } catch (Exception $e) {
+                        $io->error('Unknow error when trying to update '.$calculationView);
                         continue;
                     }
-                    $io->success($calculationView . ' created.');
+                    $io->success($calculationView.' created.');
                 }
             }
         }

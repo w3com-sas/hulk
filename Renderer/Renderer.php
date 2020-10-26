@@ -8,20 +8,19 @@ use W3com\HulkBundle\Model\RenderElement;
 
 class Renderer
 {
-
     public function buildTemplate(Display $display)
     {
         /** @var Column $column */
-        foreach ($display->getColumns() as $column){
+        foreach ($display->getColumns() as $column) {
             $this->addColumnRenderElements($column, $column->getRenderElementOptions());
         }
     }
 
     private function addColumnRenderElements(Column $column, $renderElementOptions = [])
     {
-        switch ($column->getType()){
+        switch ($column->getType()) {
             case Column::COL_TYPE_INPUT_NUMBER:
-                $renderElement = new RenderElement($column,'input', array_merge(['type' => 'number'], $renderElementOptions));
+                $renderElement = new RenderElement($column, 'input', array_merge(['type' => 'number'], $renderElementOptions));
                 $column->setType(Column::COL_TYPE_RENDER_ELEMENT);
                 $column->setRenderElement($renderElement);
                 break;

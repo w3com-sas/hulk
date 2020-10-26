@@ -4,7 +4,6 @@ namespace W3com\HulkBundle\Model;
 
 class Config
 {
-
     const FIELD_ENTITY = 'Entity';
     const FIELD_ENTITY_KEY = 'EntityColumnKey';
     const FIELD_TARGET_FIELD = 'TargetField';
@@ -159,17 +158,11 @@ class Config
         $this->name = $name;
     }
 
-    /**
-     * @return string
-     */
     public function getLabel(): string
     {
         return $this->label;
     }
 
-    /**
-     * @param string $label
-     */
     public function setLabel(string $label): void
     {
         $this->label = $label;
@@ -204,10 +197,10 @@ class Config
      */
     public function setTargetChoices($targetChoices): void
     {
-        if ($targetChoices !== ""){
+        if ('' !== $targetChoices) {
             $targetData = [];
-            foreach (explode("#", $targetChoices) as $choice){
-                $targetData[explode("|", $choice)[0]] = explode("|", $choice)[1];
+            foreach (explode('#', $targetChoices) as $choice) {
+                $targetData[explode('|', $choice)[0]] = explode('|', $choice)[1];
             }
             $targetChoices = $targetData;
         }
@@ -229,7 +222,6 @@ class Config
     {
         $this->userConfirm = $userConfirm;
     }
-
 
     /**
      * @return mixed

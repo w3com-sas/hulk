@@ -31,6 +31,7 @@ class ApiWendisController extends AbstractController
         $this->manageRequest();
         $data = $this->request->getCurrentRequest()->request->all();
         $response = $this->apiManager->manageApiCalls($data);
+
         return new JsonResponse($response, 200);
     }
 
@@ -39,10 +40,9 @@ class ApiWendisController extends AbstractController
         if (!$this->request->getCurrentRequest()->request->has('data') ||
             !$this->request->getCurrentRequest()->request->has('apiParams') ||
             !$this->request->getCurrentRequest()->request->has('urlApi')) {
-
             $this->logger->error('Missing data to update in the Json file.');
+
             return new JsonResponse(['valid' => false], 400);
         }
     }
-
 }

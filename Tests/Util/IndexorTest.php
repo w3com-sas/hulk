@@ -13,7 +13,7 @@ class IndexorTest extends TestCase
     public function testIndexBetweenColAndFilter()
     {
         $dataTable = new Display();
-        for ($i = 0; $i < 5; $i++){
+        for ($i = 0; $i < 5; ++$i) {
             $col = new Column();
             $col->setActive('Y');
             $col->setFieldName('field'.$i);

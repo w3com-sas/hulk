@@ -29,7 +29,6 @@ class CsvManager
 
     public function getCsv(array $data, string $filename)
     {
-
         //$data = $this->request->getCurrentRequest()->request->all();
         $display = new Display();
         $file = $this->displayProvider->getJsonFinder()->getOnlineJson($filename, $display);
@@ -43,19 +42,18 @@ class CsvManager
         /** @var GlobalAction $globalAction */
         $globalAction = $display->getGlobalActionsByType('export-csv')[0];
 
-
         foreach ($data as $dataLine) {
             $line = [];
 
-            if(count($globalAction->getFields()) > 0){
-                foreach ($globalAction->getFields() as $field){
-                    $line[$field] = array_key_exists($field,$dataLine) ? $dataLine[$field] : 'Champ inconnu';
+            if (count($globalAction->getFields()) > 0) {
+                foreach ($globalAction->getFields() as $field) {
+                    $line[$field] = array_key_exists($field, $dataLine) ? $dataLine[$field] : 'Champ inconnu';
                 }
             } else {
-                foreach ($dataLine as $fieldName => $value){
+                foreach ($dataLine as $fieldName => $value) {
                     /** @var Column $column */
                     foreach ($display->getColumns() as $column) {
-                        if ($column->getFieldName() === $fieldName && $column->getType() === Column::COL_TYPE_TEXT && !$column->isHidden()) {
+                        if ($column->getFieldName() === $fieldName && Column::COL_TYPE_TEXT === $column->getType() && !$column->isHidden()) {
                             $line[$column->getLabel()] = $value;
                         }
                     }
@@ -64,6 +62,7 @@ class CsvManager
 
             $formattedData[] = $line;
         }
+
         return $this->serializer->encode($formattedData, 'csv', [CsvEncoder::DELIMITER_KEY => ';']);
     }
 

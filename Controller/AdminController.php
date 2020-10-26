@@ -54,9 +54,10 @@ class AdminController extends AbstractController
     {
         $lastUsername = $this->authenticationUtils->getLastUsername();
         $error = $this->authenticationUtils->getLastAuthenticationError();
+
         return $this->render('@W3comHulk/admin/login.html.twig', [
             'last_username' => $lastUsername,
-            'error' => $error
+            'error' => $error,
         ]);
     }
 
@@ -67,6 +68,7 @@ class AdminController extends AbstractController
         foreach ($data['displays'] as $display) {
             $displays[] = $this->displayProvider->getDisplay($display, [], 1);
         }
+
         return $this->render('@W3comHulk/admin/displays.html.twig', ['displays' => $displays]);
     }
 
@@ -79,6 +81,7 @@ class AdminController extends AbstractController
         $application->run($clearCache, new NullOutput());
         $application->run($updateDisplays, new NullOutput());
         die();
+
         return $this->redirectToRoute('w3com_admin_displays');
     }
 
@@ -89,15 +92,14 @@ class AdminController extends AbstractController
         foreach ($data['displays-form'] as $display) {
             $displays[] = $this->displayProvider->getDisplay($display, [], 1);
         }
+
         return $this->render('@W3comHulk/admin/displays.html.twig', ['displays' => $displays]);
     }
 
     public function entities()
     {
         $entities = $this->entityProvider->getEntities();
+
         return $this->render('@W3comHulk/admin/entities.html.twig', $entities);
     }
-
-
-
 }

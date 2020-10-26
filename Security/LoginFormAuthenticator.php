@@ -18,10 +18,10 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticator;
+use UnexpectedValueException;
 
 class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 {
-
     /**
      * @var InMemoryUserProvider
      */
@@ -52,21 +52,9 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     }
 
     /**
-     * Return the URL to the login page.
-     *
-     * @return string
-     */
-    protected function getLoginUrl()
-    {
-        return $this->router->generate('w3com_admin_login');
-    }
-
-    /**
      * Does the authenticator support the given Request?
      *
      * If this returns false, the authenticator will be skipped.
-     *
-     * @param Request $request
      *
      * @return bool
      */
@@ -93,18 +81,16 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      *
      *      return ['api_key' => $request->headers->get('X-API-TOKEN')];
      *
-     * @param Request $request
+     * @throws UnexpectedValueException If null is returned
      *
      * @return mixed Any non-null value
-     *
-     * @throws \UnexpectedValueException If null is returned
      */
     public function getCredentials(Request $request)
     {
         $credentials = [
             'username' => $request->request->get('_username'),
             'password' => $request->request->get('_password'),
-            'csrf_token' => $request->request->get('_csrf_token')
+            'csrf_token' => $request->request->get('_csrf_token'),
         ];
         $request->getSession()->set(
             Security::LAST_USERNAME,
@@ -123,11 +109,10 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      * null, then a UsernameNotFoundException is thrown for you.
      *
      * @param mixed $credentials
-     * @param UserProviderInterface $userProvider
      *
-     * @return UserInterface|null
      * @throws AuthenticationException
      *
+     * @return UserInterface|null
      */
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
@@ -156,11 +141,10 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      * The *credentials* are the return value from getCredentials()
      *
      * @param mixed $credentials
-     * @param UserInterface $user
-     *
-     * @return bool
      *
      * @throws AuthenticationException
+     *
+     * @return bool
      */
     public function checkCredentials($credentials, UserInterface $user)
     {
@@ -176,8 +160,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      * If you return null, the current request will continue, and the user
      * will be authenticated. This makes sense, for example, with an API.
      *
-     * @param Request $request
-     * @param TokenInterface $token
      * @param string $providerKey The provider (i.e. firewall) key
      *
      * @return Response|null
@@ -185,5 +167,15 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
         return new RedirectResponse($this->router->generate('w3com_admin_displays'));
+    }
+
+    /**
+     * Return the URL to the login page.
+     *
+     * @return string
+     */
+    protected function getLoginUrl()
+    {
+        return $this->router->generate('w3com_admin_login');
     }
 }

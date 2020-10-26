@@ -2,6 +2,7 @@
 
 namespace W3com\HulkBundle\Twig;
 
+use Throwable;
 use Twig\Environment;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -24,14 +25,17 @@ class DisplayJsExtension extends AbstractExtension
 
     /**
      * @param $params
+     *
+     * @throws Throwable
+     *
      * @return string
-     * @throws \Throwable
      */
     public function render($params)
     {
         $table = $params['display'];
+
         return $this->template->render('@W3comHulk/display/display.js.twig', [
-            'table' => $table
+            'table' => $table,
         ]);
     }
 }

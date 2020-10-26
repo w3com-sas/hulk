@@ -2,7 +2,6 @@
 
 namespace W3com\HulkBundle\Menu;
 
-
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
@@ -29,14 +28,10 @@ class MenuBuilder
         $menu = $this->factory->createItem('root');
 
         foreach ($menuSession as $menuName => $menuItems) {
-
             if ($currentMenuName === $menuName) {
-
                 foreach ($menuItems as $menuItem) {
-
                     $parameters = [];
                     foreach ($menuItem as $key => $value) {
-
                         switch ($key) {
                             case 'route':
                                 $parameters['route'] = $value;
@@ -56,39 +51,35 @@ class MenuBuilder
                     $displayName = !isset($displayName) ? $menuItem['uniqId'] : $displayName;
 
                     if (count($parameters['routeParameters']) > 1) {
-
                         $label = $displayName;
 
                         foreach ($parameters['routeParameters'] as $key => $parameter) {
-
-                            if ($key !== 'filename') {
-                                $label .= ' (' . $parameter . ')';
+                            if ('filename' !== $key) {
+                                $label .= ' ('.$parameter.')';
                             }
                         }
                     }
                     $menu->addChild($displayName, ['route' => $parameters['route'],
-                        'routeParameters' => $parameters['routeParameters']])->setExtra('index', $index)
+                        'routeParameters' => $parameters['routeParameters'], ])->setExtra('index', $index)
                         ->setLabel(isset($label) ? $label : $displayName);
-
                 }
             }
         }
         $this->setLastChild($menu, $options['displayName']);
+
         return $menu;
     }
 
     private function setLastChild(ItemInterface $menu, $currentDisplayName, $currentIndex = null)
     {
         foreach ($menu->getChildren() as $child) {
-
-            if ($currentIndex === null && $child->getName() === $currentDisplayName) {
+            if (null === $currentIndex && $child->getName() === $currentDisplayName) {
                 $this->setLastChild($menu, $currentDisplayName, $child->getExtra('index'));
             }
 
-            if ($currentIndex - $child->getExtra('index') === 1) {
+            if (1 === $currentIndex - $child->getExtra('index')) {
                 return $menu->setExtra('lastChild', $child);
             }
         }
     }
-
 }

@@ -4,13 +4,13 @@ namespace W3com\HulkBundle\Model;
 
 class RenderElement
 {
-    private $name = "";
+    private $name = '';
 
-    private $elementId = "";
+    private $elementId = '';
 
     private $elementAttr = [];
 
-    public function __construct(Column $column, $name = "", $elementAttr = [])
+    public function __construct(Column $column, $name = '', $elementAttr = [])
     {
         $this->elementId = 'template'.$column->getFieldName();
         $this->name = $name;
@@ -25,6 +25,7 @@ class RenderElement
     public function setName(string $name): self
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -36,6 +37,7 @@ class RenderElement
     public function setElementId(string $elementId): self
     {
         $this->elementId = $elementId;
+
         return $this;
     }
 
@@ -47,6 +49,7 @@ class RenderElement
     public function setElementAttr(array $elementAttr): self
     {
         $this->elementAttr = $elementAttr;
+
         return $this;
     }
 }

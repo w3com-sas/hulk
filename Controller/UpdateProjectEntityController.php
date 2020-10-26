@@ -2,17 +2,15 @@
 
 namespace W3com\HulkBundle\Controller;
 
+use Exception;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\KernelInterface;
-use W3com\BoomBundle\Generator\Model\Entity;
 use W3com\BoomBundle\Service\BoomGenerator;
 
 class UpdateProjectEntityController extends AbstractController
@@ -36,9 +34,10 @@ class UpdateProjectEntityController extends AbstractController
     }
 
     /**
-     * @return Response
-     * @throws \Exception
+     * @throws Exception
      * @throws InvalidArgumentException
+     *
+     * @return Response
      */
     public function updateView()
     {
@@ -56,21 +55,22 @@ class UpdateProjectEntityController extends AbstractController
         return new JsonResponse(
             [
                 'updatedEntities' => $updatedEntities,
-                'createdEntities' => $createdEntities
+                'createdEntities' => $createdEntities,
             ]);
     }
 
     public function createTable($tableName, $type)
     {
         try {
-            if ($type === $this::TYPE_CV){
+            if ($type === $this::TYPE_CV) {
                 $this->generator->createViewEntity($tableName);
             } else {
                 $this->generator->createSapEntity($tableName);
             }
-        } catch (\Exception $e){
+        } catch (Exception $e) {
             return new JsonResponse(['success' => false, 'error' => $e->getMessage()]);
         }
+
         return new JsonResponse(['success' => true]);
     }
 }

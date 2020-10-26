@@ -33,36 +33,23 @@ class SearchView
         $this->calcView = $calcView;
     }
 
-    /**
-     * @return array
-     */
     public function getColumns(): array
     {
         return $this->columns;
     }
 
-    /**
-     * @param array $columns
-     */
     public function setColumns(array $columns): void
     {
         $this->columns = $columns;
     }
 
-    /**
-     * @return array
-     */
     public function getFilters(): array
     {
         return $this->filters;
     }
 
-    /**
-     * @param array $filters
-     */
     public function setFilters(array $filters): void
     {
         $this->filters = $filters;
     }
-
 }

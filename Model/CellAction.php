@@ -23,7 +23,7 @@ class CellAction
 
     private $label;
 
-    private $functionName = "";
+    private $functionName = '';
 
     private $targetEntity;
 
@@ -192,6 +192,7 @@ class CellAction
     {
         trigger_error("Use renderFieldName in column object instead of CellAction. It's deprecated since 1.9.16 version 
         and will be removed in 2.0", E_USER_DEPRECATED);
+
         return $this->renderFieldName;
     }
 
@@ -203,21 +204,13 @@ class CellAction
         $this->renderFieldName = $renderFieldName;
     }
 
-    /**
-     * @return bool
-     */
     public function isModal(): bool
     {
         return $this->modal;
     }
 
-    /**
-     * @param bool $modal
-     */
     public function setModal(bool $modal): void
     {
         $this->modal = $modal;
     }
-
-
 }

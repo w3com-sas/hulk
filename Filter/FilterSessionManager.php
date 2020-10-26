@@ -9,7 +9,6 @@ use W3com\HulkBundle\Model\Filter;
 
 class FilterSessionManager
 {
-
     private $session;
 
     private $request;
@@ -20,13 +19,13 @@ class FilterSessionManager
     {
         $this->session = $session;
         $this->request = $request;
-        $this->concernedPage = $this->request->getCurrentRequest()->get('_route') .
+        $this->concernedPage = $this->request->getCurrentRequest()->get('_route').
             $this->request->getCurrentRequest()->get('filename');
-
     }
 
     /**
-     * Return number of filters on the current page
+     * Return number of filters on the current page.
+     *
      * @return int
      */
     public function addFilter()
@@ -38,16 +37,14 @@ class FilterSessionManager
         $formatedFilters = [];
 
         foreach ($filters as $filter => $value) {
-
             // Single filter
-            if ($value !== "" && $value !== null) {
-
+            if ('' !== $value && null !== $value) {
                 // Multiple filter
-                if (is_array($value) && ($value['min'] != "" || $value['max'] != "")) {
+                if (is_array($value) && ('' != $value['min'] || '' != $value['max'])) {
                     $formatedFilters[$filter] = $value;
 
-                    // Single
-                } elseif (!is_array($value) && $value !== "" && $value !== null) {
+                // Single
+                } elseif (!is_array($value) && '' !== $value && null !== $value) {
                     $formatedFilters[$filter] = $value;
                 }
             }
@@ -59,29 +56,22 @@ class FilterSessionManager
             $sessionFilters = array_merge($oldFilters, $sessionFilters);
         }
         $this->session->set('filters', $sessionFilters);
+
         return count($sessionFilters[$name]);
     }
 
-    /**
-     * @param Display $dataTable
-     */
     public function checkFiltersDefaultValue(Display $dataTable)
     {
         if ($this->session->has('filters')) {
-
             foreach ($this->session->get('filters') as $filterLocation => $filters) {
-
                 if ($filterLocation === $this->concernedPage) {
-
                     foreach ($filters as $filterSessionName => $filterSessionValue) {
-
-                        if ($filterSessionName === 'searchBar' || $filterSessionName === 'targetColumn'){
+                        if ('searchBar' === $filterSessionName || 'targetColumn' === $filterSessionName) {
                             $this->addSearchFilter($dataTable, $filterSessionName, $filterSessionValue);
                         }
 
                         /** @var Filter $filter */
                         foreach ($dataTable->getFilters() as $filter) {
-
                             if ($filter->getFieldName() === $filterSessionName) {
                                 $dataTable->addSavedFilters();
                                 $filter->setDefaultValue($filterSessionValue);

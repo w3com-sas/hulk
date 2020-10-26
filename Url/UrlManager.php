@@ -2,6 +2,7 @@
 
 namespace W3com\HulkBundle\Url;
 
+use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use W3com\HulkBundle\Model\Column;
@@ -49,7 +50,7 @@ class UrlManager
                 $urlParams = array_merge($urlParams, $additionalParams);
                 $urlParams = $this->addFilenameParam($column, $urlParams);
                 $url = count(array_filter($urlParams)) > 0 ? $this->generateLink($column, $urlParams, $display) : null;
-                $line[$column->getCellAction()->getFunctionName() . $column->getCellAction()->getTargetEntity()] = $url;
+                $line[$column->getCellAction()->getFunctionName().$column->getCellAction()->getTargetEntity()] = $url;
             }
             $dataTransform[] = $line;
         }
@@ -60,21 +61,22 @@ class UrlManager
     {
         $routeParams = [];
         foreach ($formData['display'] as $field => $value) {
-            if ($value != null && substr($field, 0, 9) !== '_interval' && $field !== 'submit' && $field !== '_token' && $field !== 'calcView') {
+            if (null != $value && '_interval' !== substr($field, 0, 9) && 'submit' !== $field && '_token' !== $field && 'calcView' !== $field) {
                 $value = DataTransformer::reverseDateFormat($value);
                 $routeParams[$field] = $value;
             }
 
-            if (substr($field, 0, 9) === '_interval') {
-                if ($value['min'] != "" || $value['max'] != "") {
+            if ('_interval' === substr($field, 0, 9)) {
+                if ('' != $value['min'] || '' != $value['max']) {
                     $fieldName = substr($field, 9);
                     $min = DataTransformer::reverseDateFormat(array_values($value)[0]);
                     $max = DataTransformer::reverseDateFormat(array_values($value)[1]);
-                    $routeParams[self::INTERVAL_URL_KEY . $fieldName] = $min . '|' . $max;
+                    $routeParams[self::INTERVAL_URL_KEY.$fieldName] = $min.'|'.$max;
                 }
             }
         }
         $routeParams['filename'] = $formData['display']['filename'];
+
         return $routeParams;
     }
 
@@ -82,11 +84,11 @@ class UrlManager
     {
         $functionName = $column->getCellAction()->getFunctionName();
 
-        if ($functionName === Column::FUNCTION_NAME_DISPLAY_LINK) {
+        if (Column::FUNCTION_NAME_DISPLAY_LINK === $functionName) {
             $urlParams['filename'] = $column->getCellAction()->getTargetEntity();
         }
 
-        if ($functionName === Column::FUNCTION_NAME_DISPLAY_LINKS) {
+        if (Column::FUNCTION_NAME_DISPLAY_LINKS === $functionName) {
             $urlParams['filename'] = $column->getCellAction()->getParams()['Displays'][0];
         }
 
@@ -96,15 +98,16 @@ class UrlManager
     private function generateLink(Column $column, array $urlParams, Display $display)
     {
         $routeName = in_array($column->getCellAction()->getFunctionName(), ['displayLink', 'displayLinks'])
-            ? "w3com_display"
+            ? 'w3com_display'
             : $column->getCellAction()->getTargetEntity();
 
         try {
             $url = $this->router->generate($routeName, array_filter($urlParams));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $display->getError()->addUrlError($column->getFieldName(), $e->getMessage());
             $url = null;
         }
+
         return $url;
     }
 

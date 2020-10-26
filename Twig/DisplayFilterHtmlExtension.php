@@ -2,9 +2,10 @@
 
 namespace W3com\HulkBundle\Twig;
 
+use Throwable;
+use Twig\Environment;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
-use Twig\Environment;
 
 class DisplayFilterHtmlExtension extends AbstractExtension
 {
@@ -24,15 +25,18 @@ class DisplayFilterHtmlExtension extends AbstractExtension
 
     /**
      * @param $params
+     *
+     * @throws Throwable
+     *
      * @return string
-     * @throws \Throwable
      */
     public function render($params)
     {
         $table = $params['display'];
         $form = $params['form'];
+
         return $this->template->render('@W3comHulk/display/display_form_filter.html.twig', [
-            'display' => $table, 'form' => $form
+            'display' => $table, 'form' => $form,
         ]);
     }
 }

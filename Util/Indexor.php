@@ -15,6 +15,7 @@ class Indexor
         $this->addFiltersIndex($dataTable);
         $this->addGlobalActionIndex($dataTable);
         $this->addIconFieldNameIndex($dataTable);
+
         return $dataTable;
     }
 
@@ -24,23 +25,21 @@ class Indexor
         $i = 0;
 
         foreach ($dataTable->getColumns() as $column) {
-            if ($column->getActive() == 'Y') {
+            if ('Y' == $column->getActive()) {
                 $column->setIndex($i);
-                $i++;
+                ++$i;
             }
         }
     }
 
     private function addFiltersIndex(Display $dataTable)
     {
-        if (!empty($dataTable->getFilters())){
+        if (!empty($dataTable->getFilters())) {
             /** @var Column $column */
-            foreach ($dataTable->getColumns() as $column){
-
+            foreach ($dataTable->getColumns() as $column) {
                 /** @var Filter $filter */
-                foreach ($dataTable->getFilters() as $filter){
-
-                    if ($filter->getFieldName() == $column->getFieldName()){
+                foreach ($dataTable->getFilters() as $filter) {
+                    if ($filter->getFieldName() == $column->getFieldName()) {
                         $filter->setIndex($column->getIndex());
                     }
                 }
@@ -50,36 +49,29 @@ class Indexor
 
     private function addGlobalActionIndex(Display $dataTable)
     {
-        $i=1;
+        $i = 1;
 
-        if (!empty($dataTable->getGlobalActions())){
+        if (!empty($dataTable->getGlobalActions())) {
             /** @var GlobalAction $globalAction */
-            foreach ($dataTable->getGlobalActions() as $globalAction){
+            foreach ($dataTable->getGlobalActions() as $globalAction) {
                 $globalAction->setIndex($i);
-                $i++;
+                ++$i;
             }
         }
-
     }
 
     private function addIconFieldNameIndex(Display $dataTable)
     {
         /** @var Column $column */
-        foreach ($dataTable->getColumns() as $column){
-
-            if ($column->getCellAction() !== null && $column->getCellAction()->getIconFieldName() !== null){
-
+        foreach ($dataTable->getColumns() as $column) {
+            if (null !== $column->getCellAction() && null !== $column->getCellAction()->getIconFieldName()) {
                 /** @var Column $toCompareColumn */
-                foreach ($dataTable->getColumns() as $toCompareColumn){
-
-                    if ($toCompareColumn->getFieldName() === $column->getCellAction()->getIconFieldName()){
+                foreach ($dataTable->getColumns() as $toCompareColumn) {
+                    if ($toCompareColumn->getFieldName() === $column->getCellAction()->getIconFieldName()) {
                         $column->getCellAction()->setIconColumnIndex($toCompareColumn->getIndex());
                     }
-
                 }
-
             }
-
         }
     }
 }

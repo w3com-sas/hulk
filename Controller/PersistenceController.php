@@ -2,11 +2,11 @@
 
 namespace W3com\HulkBundle\Controller;
 
+use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
-use W3com\BoomBundle\Exception\EntityNotFoundException;
 use W3com\HulkBundle\Service\DisplayPersister;
 
 class PersistenceController extends AbstractController
@@ -25,7 +25,7 @@ class PersistenceController extends AbstractController
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function updateSapLines()
@@ -39,10 +39,12 @@ class PersistenceController extends AbstractController
 
         try {
             $this->displayPersister->displayUpdate($lines, $entityName, $displayEntityKey, $affectedField, $affectedValue);
-        } catch (\Exception $exception){
+        } catch (Exception $exception) {
             $this->logger->error($exception->getMessage(), $exception->getTrace());
+
             return new JsonResponse(['valid' => false, 500]);
         }
+
         return new JsonResponse(['valid' => true], 200);
     }
 
@@ -55,22 +57,24 @@ class PersistenceController extends AbstractController
 
         try {
             $this->displayPersister->updateSapLine($entityName, $displayEntityKey, $affectedField, $affectedValue);
-        } catch (\Exception $exception){
+        } catch (Exception $exception) {
             $this->logger->error($exception->getMessage(), $exception->getTrace());
+
             return new JsonResponse(['valid' => false], 500);
         }
+
         return new JsonResponse(['valid' => true], 200);
     }
 
     private function checkRequest()
     {
         if (!$this->request->request->has('lines') ||
-            !$this->request->request->has('entityName')||
+            !$this->request->request->has('entityName') ||
             !$this->request->request->has('affectedField') ||
             !$this->request->request->has('affectedValue')) {
             $this->logger->error('Bad request');
+
             return new JsonResponse(['valid' => false], 400);
         }
     }
-
 }

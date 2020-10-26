@@ -2,28 +2,25 @@
 
 namespace W3com\HulkBundle\Query;
 
-use Doctrine\Common\Annotations\AnnotationException;
+use Exception;
 use ReflectionException;
 use Symfony\Component\HttpFoundation\ParameterBag;
+use W3com\BoomBundle\Exception\EntityNotFoundException;
+use W3com\BoomBundle\Generator\Model\Entity;
 use W3com\BoomBundle\Generator\Model\Property;
 use W3com\BoomBundle\Parameters\Clause;
+use W3com\BoomBundle\Parameters\Parameters;
 use W3com\BoomBundle\Service\BoomGenerator;
-use W3com\HulkBundle\Form\DisplayType;
+use W3com\BoomBundle\Service\BoomManager;
 use W3com\HulkBundle\Model\CellAction;
 use W3com\HulkBundle\Model\Column;
 use W3com\HulkBundle\Model\Display;
 use W3com\HulkBundle\Model\Error;
 use W3com\HulkBundle\Model\Filter;
-use W3com\BoomBundle\Exception\EntityNotFoundException;
-use W3com\BoomBundle\Generator\Model\Entity;
-use W3com\BoomBundle\Parameters\Parameters;
-use W3com\BoomBundle\Service\BoomManager;
 use W3com\HulkBundle\Url\UrlManager;
-use function GuzzleHttp\Psr7\str;
 
 class QueryManager
 {
-
     /** @var BoomManager */
     private $boom;
 
@@ -33,10 +30,6 @@ class QueryManager
     /*** @var BoomGenerator */
     private $generator;
 
-    /**
-     * @param BoomManager $boom
-     * @param BoomGenerator $generator
-     */
     public function __construct(BoomManager $boom, BoomGenerator $generator)
     {
         $this->boom = $boom;
@@ -44,11 +37,12 @@ class QueryManager
     }
 
     /**
-     * @param Display $display
      * @param array $requestParams
      * @param null $top
-     * @return array
+     *
      * @throws ReflectionException
+     *
+     * @return array
      */
     public function createDataTableQuery(Display $display, $requestParams = [], $top = null)
     {
@@ -59,12 +53,14 @@ class QueryManager
             $repo = $this->boom->getRepository($display->getEntityName());
         } catch (EntityNotFoundException $e) {
             $display->getError()->setClassExist(false);
+
             return null;
         }
         $params = $repo->createParams();
 
         if ($display->isFilter) {
             $this->addSelectForFilters($display, $params);
+
             return $repo->findAll($params);
         }
 
@@ -74,30 +70,27 @@ class QueryManager
         $this->addGetParamsRequest($display, $requestParams, $params);
         $this->addPreFilter($display, $params);
         $this->addDefaultOrder($display, $params);
-        $top === null ? $params->setTop($display->getMaxLength()) : $params->setTop($top);
-        return $repo->findAll($params);
+        null === $top ? $params->setTop($display->getMaxLength()) : $params->setTop($top);
 
+        return $repo->findAll($params);
     }
 
-    public function getResultLength($entityName,$routeParams,$display)
+    public function getResultLength($entityName, $routeParams, $display)
     {
         $repo = $this->boom->getRepository($entityName);
 
         $params = $repo->createParams();
-        if(count($routeParams) > 0){
-            foreach($routeParams as $key=>$value){
-
-                if ($key === 'SEARCH') {
+        if (count($routeParams) > 0) {
+            foreach ($routeParams as $key => $value) {
+                if ('SEARCH' === $key) {
                     $this->addGlobalSearchFilter($value, $params, $display);
                     break;
                 }
-                if ($this->appEntity->getProperty($key) !== null) {
+                if (null !== $this->appEntity->getProperty($key)) {
                     $paramsExist = true;
 
                     $params->addFilter($this->appEntity->getProperty($key)->getName(), $value,
                         Clause::EQUALS, Clause:: AND);
-
-
                 }
             }
         }
@@ -107,23 +100,21 @@ class QueryManager
 
     private function addSelectProperty($fieldName, Parameters $params)
     {
-        if ($this->appEntity->getProperty($fieldName) !== null) {
+        if (null !== $this->appEntity->getProperty($fieldName)) {
             $params->addSelect($this->appEntity->getProperty($fieldName)->getName());
         }
     }
 
     private function addDefaultOrder(Display $dataTable, Parameters $params)
     {
-        if(count($dataTable->getDefaultOrder()) > 0){
+        if (count($dataTable->getDefaultOrder()) > 0) {
             $property = $this->appEntity->getProperty($dataTable->getDefaultOrder()['FieldName'])->getName();
-            $params->addOrder($property,strtolower($dataTable->getDefaultOrder()['Direction']));
+            $params->addOrder($property, strtolower($dataTable->getDefaultOrder()['Direction']));
         }
     }
 
     /**
-     * @param Display $dataTable
-     * @param Parameters $params
-     * @throws \Exception
+     * @throws Exception
      */
     private function addSelectForColumns(Display $dataTable, Parameters $params)
     {
@@ -133,29 +124,23 @@ class QueryManager
             $this->addSelectProperty($column->getIconFieldName(), $params);
             $this->addSelectProperty($column->getLabelFieldName(), $params);
             $this->addSelectProperty($column->getRenderFieldName(), $params);
-            if ($column->getCellAction() != null && $this->appEntity->getProperty($column->getCellAction()->getRenderFieldName()) !== null) {
+            if (null != $column->getCellAction() && null !== $this->appEntity->getProperty($column->getCellAction()->getRenderFieldName())) {
                 $this->addSelectProperty($column->getCellAction()->getRenderFieldName(), $params);
             }
         }
-
     }
 
     /**
-     * This function allow Filter on hidden column
+     * This function allow Filter on hidden column.
      *
-     * @param Display $display
-     * @param Parameters $params
-     * @throws \Exception
+     * @throws Exception
      */
     private function addSelectForFilters(Display $display, Parameters $params)
     {
-
         if (!empty($display->getFilters())) {
-
             /** @var Filter $filter */
             foreach ($display->getFilters() as $filter) {
-
-                if ($this->appEntity->getProperty($filter->getFieldName()) === null) {
+                if (null === $this->appEntity->getProperty($filter->getFieldName())) {
                     $filter->setActive('N');
                     $display->getError()
                         ->addFilterError(
@@ -167,32 +152,22 @@ class QueryManager
                 }
             }
         }
-
     }
 
     /**
-     * @param Display $dataTable
-     * @param Parameters $params
-     * @throws \Exception
+     * @throws Exception
      */
     private function addSelectForLink(Display $dataTable, Parameters $params)
     {
         if (!empty($dataTable->getColumns())) {
-
             /** @var Column $column */
             foreach ($dataTable->getColumns() as $column) {
-
-                if ($column->getCellAction() !== null) {
-
-                    if ($column->getCellAction()->getFunctionName() == CellAction::FUNCTION_DISPLAY_LINK
-                        || $column->getCellAction()->getFunctionName() == CellAction::FUNCTION_LINK) {
-
+                if (null !== $column->getCellAction()) {
+                    if (CellAction::FUNCTION_DISPLAY_LINK == $column->getCellAction()->getFunctionName()
+                        || CellAction::FUNCTION_LINK == $column->getCellAction()->getFunctionName()) {
                         foreach ($column->getCellAction()->getParams() as $fieldKey => $targetFieldKey) {
-
-                            if ($this->appEntity->getProperty($fieldKey) !== null) {
-
+                            if (null !== $this->appEntity->getProperty($fieldKey)) {
                                 $params->addSelect($this->appEntity->getProperty($fieldKey)->getName());
-
                             } /*else {
 
                                 $dataTable->getError()->addColumnError(
@@ -200,20 +175,17 @@ class QueryManager
                                 );
 
                             }*/
-
                         }
                     }
                 }
-
             }
         }
     }
 
     /**
-     * @param Display $display
      * @param array $getRequestParams
-     * @param Parameters $parameters
-     * @throws \Exception
+     *
+     * @throws Exception
      */
     private function addGetParamsRequest(Display $display, $getRequestParams, Parameters $parameters)
     {
@@ -231,29 +203,23 @@ class QueryManager
         $paramsExist = false;
 
         foreach ($arrayGetParams as $key => $value) {
-
-            if ($key === 'SEARCH') {
+            if ('SEARCH' === $key) {
                 $this->addGlobalSearchFilter($value, $parameters, $display);
                 break;
             }
 
-            if ($this->appEntity->getProperty($key) !== null) {
-
+            if (null !== $this->appEntity->getProperty($key)) {
                 $paramsExist = true;
 
                 $parameters->addFilter($this->appEntity->getProperty($key)->getName(), $value,
                     Clause::EQUALS, Clause:: AND);
 
                 unset($arrayGetParams[$key]);
-
             }
         }
 
         foreach ($arrayGetParams as $key => $value) {
-
-
-            if (substr($key, 0, strlen(UrlManager::INTERVAL_URL_KEY)) === UrlManager::INTERVAL_URL_KEY) {
-
+            if (UrlManager::INTERVAL_URL_KEY === substr($key, 0, strlen(UrlManager::INTERVAL_URL_KEY))) {
                 if ($paramsExist && !isset($rawFilter)) {
                     $rawFilter = ' and ';
                 } elseif (!$paramsExist && !isset($rawFilter)) {
@@ -269,43 +235,39 @@ class QueryManager
                 $sapField = substr($key, strlen(UrlManager::INTERVAL_URL_KEY));
                 $sapQuote = ('Edm.Int32' === $odsEntity->getProperty($sapField)->getFieldType() || 'Edm.Decimal'
                     === $odsEntity->getProperty($sapField)->getFieldType() || 'Edm.Double' ===
-                    $odsEntity->getProperty($sapField)->getFieldType()) ? "" : "'";
-                $sapDatetime = $odsEntity->getProperty($sapField)->getFieldType() === 'Edm.DateTime' ? 'datetime' : null;
+                    $odsEntity->getProperty($sapField)->getFieldType()) ? '' : "'";
+                $sapDatetime = 'Edm.DateTime' === $odsEntity->getProperty($sapField)->getFieldType() ? 'datetime' : null;
                 $min = explode('|', $value)[0];
                 $max = explode('|', $value)[1];
 
-                if ($min != null && $max != null) {
-                    $rawFilter .= sprintf(Clause::GREATER_THAN, $sapField, $sapDatetime . $sapQuote . $min . $sapQuote . ' and ');
-                    $rawFilter .= sprintf(Clause::LOWER_THAN, $sapField, $sapDatetime . $sapQuote . $max . $sapQuote . $filterOperator);
-                } elseif ($min != null) {
-                    $rawFilter .= sprintf(Clause::GREATER_THAN, $sapField, $sapDatetime . $sapQuote . $min . $sapQuote);
-                } elseif ($max != null) {
-                    $rawFilter .= sprintf(Clause::LOWER_THAN, $sapField, $sapDatetime . $sapQuote . $max . $sapQuote . $filterOperator);
+                if (null != $min && null != $max) {
+                    $rawFilter .= sprintf(Clause::GREATER_THAN, $sapField, $sapDatetime.$sapQuote.$min.$sapQuote.' and ');
+                    $rawFilter .= sprintf(Clause::LOWER_THAN, $sapField, $sapDatetime.$sapQuote.$max.$sapQuote.$filterOperator);
+                } elseif (null != $min) {
+                    $rawFilter .= sprintf(Clause::GREATER_THAN, $sapField, $sapDatetime.$sapQuote.$min.$sapQuote);
+                } elseif (null != $max) {
+                    $rawFilter .= sprintf(Clause::LOWER_THAN, $sapField, $sapDatetime.$sapQuote.$max.$sapQuote.$filterOperator);
                 }
 
-                if ($min != null || $max != null) {
+                if (null != $min || null != $max) {
                     $parameters->addRawFilter($rawFilter);
                 }
-
             }
         }
     }
 
     /**
-     * @param Display $display
-     * @param Parameters $parameters
+     * @throws Exception
+     *
      * @return void
-     * @throws \Exception
      */
     private function addPreFilter(Display $display, Parameters $parameters)
     {
         /** @var Filter $filter */
         foreach ($display->getFilters() as $filter) {
-
-            if ($filter->getType() === Filter::TYPE_PRE_FILTER) {
-
+            if (Filter::TYPE_PRE_FILTER === $filter->getType()) {
                 foreach ($filter->getParams() as $field => $value) {
-                    if ($this->appEntity->getProperty($field) !== null) {
+                    if (null !== $this->appEntity->getProperty($field)) {
                         $parameters->addFilter($this->appEntity->getProperty($field)->getName(), $value);
                     } else {
                         $display->getError()
@@ -322,12 +284,11 @@ class QueryManager
     {
         $property = $display->getEntity()->getProperty(Display::FIELD_GLOBAL_SEARCH);
         if ($property instanceof Property) {
-            $arr = explode(' ',$value);
-            foreach($arr as $subValue){
+            $arr = explode(' ', $value);
+            foreach ($arr as $subValue) {
                 $parameters->addFilter($property->getName(), $subValue,
                     Clause::SUBSTRING_OF, null, Clause::TO_LOWER);
             }
         }
     }
-
 }

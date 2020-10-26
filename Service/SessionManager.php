@@ -19,11 +19,10 @@ class SessionManager
         $this->session = $session;
         $this->request = $request;
         $this->concernedPage = $this->request->getCurrentRequest()->getRequestUri();
-
     }
 
     /**
-     * Save last row index clicked in display
+     * Save last row index clicked in display.
      */
     public function saveRowIndex()
     {
@@ -35,26 +34,21 @@ class SessionManager
             $oldRows = $this->session->get('rows');
             $oldRows[$name] = [
                 'scrollY' => $scrollY,
-                'index' => $row
+                'index' => $row,
             ];
             $this->session->set('rows', $oldRows);
         } else {
             $this->session->set('rows', [$name => [
                 'scrollY' => $scrollY,
-                'index' => $row
+                'index' => $row,
             ]]);
         }
     }
 
-    /**
-     * @param Display $dataTable
-     */
     public function setLastRowIndex(Display $dataTable)
     {
         if ($this->session->has('rows')) {
-
             foreach ($this->session->get('rows') as $display => $row) {
-
                 if ($display === $this->concernedPage) {
                     $dataTable->setLastScrollY($row['scrollY']);
                     $dataTable->setLastRowIndex($row['index']);

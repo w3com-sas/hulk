@@ -2,12 +2,11 @@
 
 namespace W3com\HulkBundle\Util;
 
-use phpDocumentor\Reflection\Types\Mixed_;
+use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use W3com\BoomBundle\Exception\EntityNotFoundException;
 use W3com\BoomBundle\Generator\AppInspector;
-use W3com\BoomBundle\Service\BoomGenerator;
 use W3com\BoomBundle\Service\BoomManager;
 use W3com\HulkBundle\Model\CellAction;
 use W3com\HulkBundle\Model\Column;
@@ -47,17 +46,18 @@ class DisplayConstructor
 
         if ($this->display->getError()->isFileExist()) {
             $decodedJson = json_decode($json, true);
-            if ($decodedJson === null) {
+            if (null === $decodedJson) {
                 $this->display->getError()->setFileIsBroken(true);
             } else {
                 foreach ($decodedJson as $key => $value) {
                     $this->hydrateDisplay($key, $value);
                 }
-                if ($this->display->getPageLength() === null) {
+                if (null === $this->display->getPageLength()) {
                     $this->display->setPageLength(10000);
                 }
             }
         }
+
         return $this->display;
     }
 
@@ -67,8 +67,8 @@ class DisplayConstructor
             case Display::FIELD_CALCVIEW:
                 $this->display->setCalcView($value);
                 $this->display->setEntity($this->appInspector->getEntity($value));
-                if ($this->display->getEntity() === null) {
-                    $this->display->getError()->addEntityErrors('Impossible de trouver l\'entité ' . $value);
+                if (null === $this->display->getEntity()) {
+                    $this->display->getError()->addEntityErrors('Impossible de trouver l\'entité '.$value);
                 }
                 break;
             case Display::FIELD_DEFAULT_ORDER:
@@ -95,10 +95,10 @@ class DisplayConstructor
             case Display::FIELD_MENU_CONFIG:
                 $this->display->setMenuConfig($value);
                 break;
-            case Display::FIELD_MENU_NAME;
+            case Display::FIELD_MENU_NAME:
                 $this->display->setMenuName($value);
                 break;
-            case Display::FIELD_LABEL;
+            case Display::FIELD_LABEL:
                 $this->display->setLabel($value);
                 break;
         }
@@ -133,7 +133,7 @@ class DisplayConstructor
                         break;
                     case Column::FIELD_TYPE:
 
-                        if ($value === Column::COL_TYPE_UPDATE_SAP) {
+                        if (Column::COL_TYPE_UPDATE_SAP === $value) {
                             $additionalData = $this->hydrateConfigWithBoom($dataColumn['Config']['Entity'], $dataColumn['FieldName']);
                             if (array_key_exists('TargetChoices', $additionalData)) {
                                 $config = new Config();
@@ -195,7 +195,6 @@ class DisplayConstructor
                     case Filter::FIELD_ORDER:
                         $filter->setOrder($value);
                         break;
-
                 }
             }
             $this->display->addFilter($filter);
@@ -241,6 +240,7 @@ class DisplayConstructor
                     break;
             }
         }
+
         return $action;
     }
 
@@ -280,7 +280,7 @@ class DisplayConstructor
 
     private function hydrateConfig($arrayConfig, $column = null)
     {
-        $newConfig = ($column === null || $column->getConfig() === null) ? new Config() : $column->getConfig();
+        $newConfig = (null === $column || null === $column->getConfig()) ? new Config() : $column->getConfig();
         foreach ($arrayConfig as $field => $value) {
             switch ($field) {
                 case Config::FIELD_ENTITY:
@@ -301,7 +301,7 @@ class DisplayConstructor
                 case Config::FIELD_URL:
                     try {
                         $value = $this->router->generate($value);
-                    } catch (\Exception $e) {
+                    } catch (Exception $e) {
                         $this->logger->warning($e->getMessage(), $e->getTrace());
                     }
                     $newConfig->setUrl($value);
@@ -326,6 +326,7 @@ class DisplayConstructor
                     break;
             }
         }
+
         return $newConfig;
     }
 
@@ -335,13 +336,16 @@ class DisplayConstructor
         try {
             $entityUtil = $this->boom->getRepository($entity->getName());
         } catch (EntityNotFoundException $e) {
-            $this->display->getError()->addEntityErrors('Impossible de trouver la table ' . $entityName);
+            $this->display->getError()->addEntityErrors('Impossible de trouver la table '.$entityName);
+
             return [];
         }
 
-        if ($entityUtil == null) return [];
+        if (null == $entityUtil) {
+            return [];
+        }
 
-        $instanceName = '\\App\\HanaEntity\\' . $entity->getName();
+        $instanceName = '\\App\\HanaEntity\\'.$entity->getName();
         $instance = new $instanceName();
 
         $property = $instance->getPropertyByColumn($fieldName);
@@ -355,7 +359,5 @@ class DisplayConstructor
             'TargetType' => $type,
             'TargetChoices' => $choices,
         ];
-
     }
-
 }

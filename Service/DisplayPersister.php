@@ -2,8 +2,10 @@
 
 namespace W3com\HulkBundle\Service;
 
+use DateTime;
 use Doctrine\Common\Annotations\AnnotationException;
 use Psr\Log\LoggerInterface;
+use ReflectionException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use W3com\BoomBundle\Exception\EntityNotFoundException;
 use W3com\BoomBundle\Generator\AppInspector;
@@ -33,9 +35,10 @@ class DisplayPersister
      * @param $key
      * @param $affectedField
      * @param $affectedValue
+     *
      * @throws AnnotationException
      * @throws EntityNotFoundException
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function updateSapLine($entityName, $key, $affectedField, $affectedValue)
     {
@@ -52,26 +55,26 @@ class DisplayPersister
      * @param $displayEntityKey
      * @param $affectedField
      * @param $affectedValue
+     *
      * @throws AnnotationException
      * @throws EntityNotFoundException
      * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function displayUpdate($lines, $entityName, $displayEntityKey, $affectedField, $affectedValue)
     {
         $entity = $this->getEntity($entityName);
 
         foreach ($lines as $row) {
-
             if (!array_key_exists($displayEntityKey, $row)) {
-                throw new ResourceNotFoundException('Unable to find key ' . $displayEntityKey . ' in display');
+                throw new ResourceNotFoundException('Unable to find key '.$displayEntityKey.' in display');
             }
 
             $obj = $this->boom->getRepository($entity->getName())->find($row[$displayEntityKey]);
             $affectedProperty = $obj->getPropertyByColumn($affectedField);
 
-            if ($affectedProperty === "") {
-                throw new ResourceNotFoundException('Unable to find property ' . $displayEntityKey . ' in display');
+            if ('' === $affectedProperty) {
+                throw new ResourceNotFoundException('Unable to find property '.$displayEntityKey.' in display');
             }
 
             $obj->set($affectedProperty, $this->formatData($affectedValue));
@@ -82,19 +85,22 @@ class DisplayPersister
 
     private function formatData($targetData)
     {
-        if (\DateTime::createFromFormat('d/m/Y', $targetData) !== false) {
-            $dateTime = \DateTime::createFromFormat('d/m/Y', $targetData);
+        if (false !== DateTime::createFromFormat('d/m/Y', $targetData)) {
+            $dateTime = DateTime::createFromFormat('d/m/Y', $targetData);
+
             return $dateTime->format('Y-m-d');
         }
+
         return $targetData;
     }
 
     private function getEntity($entityName)
     {
         $entity = $this->appInspector->getEntity($entityName);
-        if ($entity === null) {
-            throw new EntityNotFoundException('Unable to find ' . $entity . ' to update sap line.');
+        if (null === $entity) {
+            throw new EntityNotFoundException('Unable to find '.$entity.' to update sap line.');
         }
+
         return $entity;
     }
 }

@@ -2,7 +2,6 @@
 
 namespace W3com\HulkBundle\Model;
 
-
 class Filter
 {
     const FIELD_FIELD_NAME = 'FieldName';
@@ -93,9 +92,9 @@ class Filter
      */
     public function getValues()
     {
-        if ($this->order === self::ORDER_ASC){
+        if (self::ORDER_ASC === $this->order) {
             ksort($this->values, SORT_NATURAL | SORT_FLAG_CASE);
-        } elseif ($this->order === self::ORDER_DESC){
+        } elseif (self::ORDER_DESC === $this->order) {
             krsort($this->values, SORT_NATURAL | SORT_FLAG_CASE);
         }
 
@@ -107,7 +106,7 @@ class Filter
      */
     public function addValue($value): void
     {
-        if ($value !== null){
+        if (null !== $value) {
             $this->values[$value] = $value;
         }
     }
@@ -127,7 +126,6 @@ class Filter
     {
         $this->index = $index;
     }
-
 
     /**
      * @return mixed
