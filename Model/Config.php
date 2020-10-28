@@ -4,161 +4,162 @@ namespace W3com\HulkBundle\Model;
 
 class Config
 {
-    const FIELD_ENTITY = 'Entity';
-    const FIELD_ENTITY_KEY = 'EntityColumnKey';
-    const FIELD_TARGET_FIELD = 'TargetField';
-    const FIELD_TARGET_DATA_TYPE = 'TargetDataType';
-    const FIELD_TARGET_DATA = 'TargetData';
-    const FIELD_TARGET_DESCRIPTION = 'TargetDescription';
-    const FIELD_TARGET_CHOICES = 'TargetChoices';
-    const FIELD_URL = 'Url';
-    const FIELD_NAME = 'Name';
-    const FIELD_LABEL = 'Label';
-    const FIELD_USER_CONFIRM = 'UserConfirm';
-
+    const DATA_TYPE_ARRAY = 'array';
+    const DATA_TYPE_CONTROLLED_LIST = 'controlledList';
+    const DATA_TYPE_QUERY = 'query';
     const DATA_TYPE_STATIC = 'static';
     const DATA_TYPE_TEXT = 'text';
-    const DATA_TYPE_ARRAY = 'array';
-    const DATA_TYPE_QUERY = 'query';
+    const DATA_TYPE_DATE = 'date';
+    const FIELD_ENTITY = 'Entity';
+    const FIELD_ENTITY_KEY = 'EntityColumnKey';
     const FIELD_MESSAGE_CONFIRM = 'MessageConfirm';
-
-    private $entity;
-
-    private $entityKey;
-
-    private $targetField;
-
-    private $targetDescription;
-
-    private $targetDataType;
-
-    private $targetData;
-
-    private $targetChoices;
-
-    private $userConfirm;
-
-    private $messageConfirm;
-
-    private $url;
-
-    private $name;
-
-    private $label = '';
+    const FIELD_TARGET_CHOICES = 'TargetChoices';
+    const FIELD_TARGET_DATA = 'TargetData';
+    const FIELD_TARGET_DATA_TYPE = 'TargetDataType';
+    const FIELD_TARGET_DATA_TYPE_ENTITY = 'TargetDataTypeEntity';
+    const FIELD_TARGET_DESCRIPTION = 'TargetDescription';
+    const FIELD_TARGET_FIELD = 'TargetField';
+    const FIELD_LABEL = 'Label';
+    const FIELD_NAME = 'Name';
+    const FIELD_URL = 'Url';
+    const FIELD_USER_CONFIRM = 'UserConfirm';
 
     /**
-     * @return mixed
+     * @var string
      */
-    public function getEntity()
+    private $entity;
+
+    /**
+     * @var string
+     */
+    private $entityKey;
+
+    /**
+     * @var string
+     */
+    private $targetField;
+
+    /**
+     * @var string
+     */
+    private $targetDescription;
+
+    /**
+     * @var string
+     */
+    private $targetDataType;
+
+    /**
+     * @var array
+     */
+    private $targetData;
+
+    /**
+     * @var string
+     */
+    private $targetChoices;
+
+    /**
+     * @var string
+     */
+    private $targetDataTypeEntity;
+
+    /**
+     * @var bool
+     */
+    private $userConfirm;
+
+    /**
+     * @var string
+     */
+    private $messageConfirm;
+
+    /**
+     * @var string
+     */
+    private $url;
+
+    /**
+     * @var string
+     */
+    private $name;
+
+    /**
+     * @var string
+     */
+    private $label = '';
+
+    public function getEntity(): ?string
     {
         return $this->entity;
     }
 
-    /**
-     * @param mixed $entity
-     */
-    public function setEntity($entity): void
+    public function setEntity(string $entity): void
     {
         $this->entity = $entity;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getEntityKey()
+    public function getEntityKey(): ?string
     {
         return $this->entityKey;
     }
 
-    /**
-     * @param mixed $entityKey
-     */
-    public function setEntityKey($entityKey): void
+    public function setEntityKey(string $entityKey): void
     {
         $this->entityKey = $entityKey;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getTargetField()
+    public function getTargetField(): ?string
     {
         return $this->targetField;
     }
 
-    /**
-     * @param mixed $targetField
-     */
-    public function setTargetField($targetField): void
+    public function setTargetField(string $targetField): void
     {
         $this->targetField = $targetField;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getTargetDataType()
+    public function getTargetDataType(): ?string
     {
         return $this->targetDataType;
     }
 
-    /**
-     * @param mixed $targetDataType
-     */
-    public function setTargetDataType($targetDataType): void
+    public function setTargetDataType(string $targetDataType): void
     {
         $this->targetDataType = $targetDataType;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getTargetData()
+    public function getTargetData(): ?array
     {
         return $this->targetData;
     }
 
-    /**
-     * @param mixed $targetData
-     */
-    public function setTargetData($targetData): void
+    public function setTargetData(array $targetData): void
     {
         $this->targetData = $targetData;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getUrl()
+    public function getUrl(): ?string
     {
         return $this->url;
     }
 
-    /**
-     * @param mixed $url
-     */
-    public function setUrl($url): void
+    public function setUrl(string $url): void
     {
         $this->url = $url;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
 
-    /**
-     * @param mixed $name
-     */
-    public function setName($name): void
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
 
-    public function getLabel(): string
+    public function getLabel(): ?string
     {
         return $this->label;
     }
@@ -168,34 +169,22 @@ class Config
         $this->label = $label;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getTargetDescription()
+    public function getTargetDescription(): ?string
     {
         return $this->targetDescription;
     }
 
-    /**
-     * @param mixed $targetDescription
-     */
-    public function setTargetDescription($targetDescription): void
+    public function setTargetDescription(string $targetDescription): void
     {
         $this->targetDescription = $targetDescription;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getTargetChoices()
+    public function getTargetChoices(): ?string
     {
         return $this->targetChoices;
     }
 
-    /**
-     * @param mixed $targetChoices
-     */
-    public function setTargetChoices($targetChoices): void
+    public function setTargetChoices(string $targetChoices): void
     {
         if ('' !== $targetChoices) {
             $targetData = [];
@@ -207,34 +196,32 @@ class Config
         $this->targetChoices = $targetChoices;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getUserConfirm()
+    public function getTargetDataTypeEntity(): ?string
+    {
+        return $this->targetDataTypeEntity;
+    }
+
+    public function setTargetDataTypeEntity(string $targetDataTypeEntity): void
+    {
+        $this->targetDataTypeEntity = $targetDataTypeEntity;
+    }
+
+    public function getUserConfirm(): ?bool
     {
         return $this->userConfirm;
     }
 
-    /**
-     * @param mixed $userConfirm
-     */
-    public function setUserConfirm($userConfirm): void
+    public function setUserConfirm(bool $userConfirm): void
     {
         $this->userConfirm = $userConfirm;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getMessageConfirm()
+    public function getMessageConfirm(): ?string
     {
         return $this->messageConfirm;
     }
 
-    /**
-     * @param mixed $messageConfirm
-     */
-    public function setMessageConfirm($messageConfirm): void
+    public function setMessageConfirm(string $messageConfirm): void
     {
         $this->messageConfirm = $messageConfirm;
     }

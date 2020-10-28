@@ -4,8 +4,8 @@ namespace W3com\HulkBundle\Util;
 
 use Exception;
 use Psr\Log\LoggerInterface;
+use ReflectionException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use W3com\BoomBundle\Exception\EntityNotFoundException;
 use W3com\BoomBundle\Generator\AppInspector;
 use W3com\BoomBundle\Service\BoomManager;
 use W3com\HulkBundle\Model\CellAction;
@@ -14,33 +14,53 @@ use W3com\HulkBundle\Model\Config;
 use W3com\HulkBundle\Model\Display;
 use W3com\HulkBundle\Model\Filter;
 use W3com\HulkBundle\Model\GlobalAction;
+use W3com\HulkBundle\Service\GlobalActionDataProvider;
 
 class DisplayConstructor
 {
-    /** @var BoomManager */
+    /**
+     * @var BoomManager
+     */
     private $boom;
 
-    /** @var AppInspector */
+    /**
+     * @var AppInspector
+     */
     private $appInspector;
 
-    /** @var UrlGeneratorInterface */
+    /**
+     * @var UrlGeneratorInterface
+     */
     private $router;
 
-    /** @var LoggerInterface */
+    /**
+     * @var LoggerInterface
+     */
     private $logger;
 
-    /** @var Display */
+    /**
+     * @var Display
+     */
     private $display;
 
-    public function __construct(BoomManager $boom, AppInspector $appInspector, UrlGeneratorInterface $router, LoggerInterface $logger)
+    /**
+     * @var GlobalActionDataProvider
+     */
+    private $globalActionDataProvider;
+
+    public function __construct(BoomManager $boom, AppInspector $appInspector, UrlGeneratorInterface $router, LoggerInterface $logger, GlobalActionDataProvider $globalActionDataProvider)
     {
         $this->logger = $logger;
         $this->router = $router;
         $this->boom = $boom;
         $this->appInspector = $appInspector;
+        $this->globalActionDataProvider = $globalActionDataProvider;
     }
 
-    public function hydrate(Display $display, $json)
+    /**
+     * @throws ReflectionException
+     */
+    public function hydrate(Display $display, string $json): Display
     {
         $this->display = $display;
 
@@ -61,7 +81,13 @@ class DisplayConstructor
         return $this->display;
     }
 
-    public function hydrateDisplay($key, $value)
+    /**
+     * @param $value
+     *
+     * @throws ReflectionException
+     * @throws Exception
+     */
+    public function hydrateDisplay(string $key, $value): void
     {
         switch ($key) {
             case Display::FIELD_CALCVIEW:
@@ -104,7 +130,10 @@ class DisplayConstructor
         }
     }
 
-    private function hydrateColumns($columns)
+    /**
+     * @throws Exception
+     */
+    private function hydrateColumns(array $columns): void
     {
         foreach ($columns as $dataColumn) {
             $column = new Column();
@@ -132,7 +161,6 @@ class DisplayConstructor
                         $column->setRender($value);
                         break;
                     case Column::FIELD_TYPE:
-
                         if (Column::COL_TYPE_UPDATE_SAP === $value) {
                             $additionalData = $this->hydrateConfigWithBoom($dataColumn['Config']['Entity'], $dataColumn['FieldName']);
                             if (array_key_exists('TargetChoices', $additionalData)) {
@@ -174,7 +202,7 @@ class DisplayConstructor
         }
     }
 
-    private function hydrateFilters($filters)
+    private function hydrateFilters(array $filters): void
     {
         foreach ($filters as $jsonFilter) {
             $filter = new Filter();
@@ -201,7 +229,7 @@ class DisplayConstructor
         }
     }
 
-    private function hydrateCellAction(array $dataAction)
+    private function hydrateCellAction(array $dataAction): CellAction
     {
         $action = new CellAction();
         foreach ($dataAction as $field => $value) {
@@ -244,7 +272,10 @@ class DisplayConstructor
         return $action;
     }
 
-    private function hydrateGlobalAction(array $dataGlobalActions)
+    /**
+     * @throws Exception
+     */
+    private function hydrateGlobalAction(array $dataGlobalActions): void
     {
         foreach ($dataGlobalActions as $globalAction) {
             $newGlobalAction = new GlobalAction();
@@ -258,6 +289,7 @@ class DisplayConstructor
                         break;
                     case GlobalAction::FIELD_CONFIG:
                         if (array_key_exists('Entity', $value) && array_key_exists('TargetField', $value)) {
+                            // Get the HanaEntity property according to the TargetField from SAP.
                             $value = array_merge($value, $this->hydrateConfigWithBoom($value['Entity'], $value['TargetField']));
                         }
                         $config = $this->hydrateConfig($value);
@@ -278,7 +310,10 @@ class DisplayConstructor
         }
     }
 
-    private function hydrateConfig($arrayConfig, $column = null)
+    /**
+     * @throws Exception
+     */
+    private function hydrateConfig(array $arrayConfig, $column = null): Config
     {
         $newConfig = (null === $column || null === $column->getConfig()) ? new Config() : $column->getConfig();
         foreach ($arrayConfig as $field => $value) {
@@ -294,6 +329,10 @@ class DisplayConstructor
                     break;
                 case Config::FIELD_TARGET_DATA_TYPE:
                     $newConfig->setTargetDataType($value);
+                    break;
+                case Config::FIELD_TARGET_DATA_TYPE_ENTITY:
+                    $dataSelects = $this->globalActionDataProvider->dataSelectProvider($value);
+                    $newConfig->setTargetData($dataSelects);
                     break;
                 case Config::FIELD_TARGET_DATA:
                     $newConfig->setTargetData($value);
@@ -330,16 +369,14 @@ class DisplayConstructor
         return $newConfig;
     }
 
-    private function hydrateConfigWithBoom($entityName, $fieldName)
+    /**
+     * @throws ReflectionException
+     * @throws Exception
+     */
+    private function hydrateConfigWithBoom(string $entityName, string $fieldName): array
     {
         $entity = $this->appInspector->getEntity($entityName);
-        try {
-            $entityUtil = $this->boom->getRepository($entity->getName());
-        } catch (EntityNotFoundException $e) {
-            $this->display->getError()->addEntityErrors('Impossible de trouver la table '.$entityName);
-
-            return [];
-        }
+        $entityUtil = $this->boom->getRepository($entity->getName());
 
         if (null == $entityUtil) {
             return [];
