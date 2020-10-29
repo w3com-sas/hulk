@@ -17,9 +17,9 @@
             </button>
         {% elseif
             globalAction.type is same as (constant('W3com\\HulkBundle\\Model\\GlobalAction::TYPE_UPDATE_SAP'))
-            and globalAction.config.targetDataType is same as (constant('W3com\\HulkBundle\\Model\\Config::DATA_TYPE_STATIC'))
+            and (globalAction.config.targetDataType is same as (constant('W3com\\HulkBundle\\Model\\Config::DATA_TYPE_STATIC'))
             or globalAction.config.targetDataType is same as (constant('W3com\\HulkBundle\\Model\\Config::DATA_TYPE_TEXT'))
-            or globalAction.config.targetDataType is same as (constant('W3com\\HulkBundle\\Model\\Config::DATA_TYPE_DATE'))
+            or globalAction.config.targetDataType is same as (constant('W3com\\HulkBundle\\Model\\Config::DATA_TYPE_DATE')))
         %}
             <button class="btn btn-{{ color }}"
                     id="btn{{ globalAction.type }}{{ globalAction.config.targetDataType }}{{ globalAction.index }}"
@@ -39,13 +39,13 @@
         {% elseif globalAction.type in [
             constant('W3com\\HulkBundle\\Model\\GlobalAction::TYPE_API_REQUEST'),
             constant('W3com\\HulkBundle\\Model\\GlobalAction::TYPE_CALL_FUNCTION'),
-            constant('W3com\\HulkBundle\\Model\\GlobalAction::TYPE_API_CALL')
+            constant('W3com\\HulkBundle\\Model\\GlobalAction::TYPE_API_CALL'),
             constant('W3com\\HulkBundle\\Model\\GlobalAction::TYPE_RENDER_VIEW')
         ] %}
             {% set
                 id =
                 (globalAction.type in [
-                    constant('W3com\\HulkBundle\\Model\\GlobalAction::TYPE_API_CALL')
+                    constant('W3com\\HulkBundle\\Model\\GlobalAction::TYPE_API_CALL'),
                     constant('W3com\\HulkBundle\\Model\\GlobalAction::TYPE_RENDER_VIEW')
                 ])
                 ? 'btn'~globalAction.type~globalAction.index
