@@ -5,14 +5,12 @@
             Actions
         </a>
     {% endif %}
-
     {% if display.filters is not null %}
         <a class="text-gray ml-3 my-auto" data-toggle="collapse" href="#filters" id="countFilters">
             <i class="fas fa-filter mr-2"></i>
             Filtres ({{ display.savedFilters }})
         </a>
     {% endif %}
-
     <a class="text-gray my-auto ml-3" href="">
         <i class="fas fa-sync mr-2"></i>
         Actualiser
@@ -30,14 +28,11 @@
         </label>
     </div>
     <p class="text-gray my-auto ml-2">Tout sélectionner</p>
-
     {% include '@W3comHulk/display/filter/search_bar.html.twig' %}
     <p class="text-gray my-auto mb-0 ml-2" style="font-size: small;">
-            Actualisé à : {{ "now"|date("H:i", "Europe/Paris")|replace({':' : 'h'}) }}
+        Actualisé à : {{ "now"|date("H:i", "Europe/Paris")|replace({':' : 'h'}) }}
     </p>
-    <p class="text-gray m-0 align-self-end ml-auto" id="countSelectedRows" style="display: none;font-size: small">
-    </p>
-
+    <p class="text-gray m-0 align-self-end ml-auto" id="countSelectedRows" style="display: none;font-size: small"></p>
 </div>
 <div class="row">
     <div class="col">

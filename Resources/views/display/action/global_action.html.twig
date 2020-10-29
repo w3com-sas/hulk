@@ -2,26 +2,32 @@
     {% for globalAction in display.globalActions %}
         {% set color = (globalAction.color is not null) ? globalAction.color : 'primary' %}
         {% set icon = (globalAction.icon is not null) ? '<i class="'~globalAction.icon~"\"></i>" : '' %}
-        {% if globalAction.type == 'export-csv' %}
+        {% if globalAction.type is same as (constant('W3com\\HulkBundle\\Model\\GlobalAction::TYPE_EXPORT_CSV')) %}
             <button class="btn btn-{{ color }} m-1" id="{{ globalAction.type }}">
                 {{ icon|raw }}
                 {{ globalAction.label }}
             </button>
-        {% elseif globalAction.type == 'print' %}
+        {% elseif globalAction.type is same as (constant('W3com\\HulkBundle\\Model\\GlobalAction::TYPE_PRINT')) %}
             <button class="btn btn-{{ color }}"
                     id="btn{{ globalAction.type }}{{ globalAction.config.targetDataType }}{{ globalAction.index }}"
-                    targetField="{{ globalAction.config.targetField }}">
+                    targetField="{{ globalAction.config.targetField }}"
+            >
                 {{ icon|raw }}
                 {{ globalAction.label }}
             </button>
-        {% elseif globalAction.type == 'update-sap' and globalAction.config.targetDataType == 'static' or
-            globalAction.config.targetDataType == 'text' or globalAction.config.targetDataType == 'date' %}
+        {% elseif
+            globalAction.typeis same as (constant('W3com\\HulkBundle\\Model\\GlobalAction::TYPE_UPDATE_SAP'))
+            and globalAction.config.targetDataType is same as (constant('W3com\\HulkBundle\\Model\\Config::DATA_TYPE_STATIC'))
+            or globalAction.config.targetDataType is same as (constant('W3com\\HulkBundle\\Model\\Config::DATA_TYPE_TEXT'))
+            or globalAction.config.targetDataType is same as (constant('W3com\\HulkBundle\\Model\\Config::DATA_TYPE_DATE'))
+        %}
             <button class="btn btn-{{ color }}"
-                    id="btn{{ globalAction.type }}{{ globalAction.config.targetDataType }}{{ globalAction.index }}">
+                    id="btn{{ globalAction.type }}{{ globalAction.config.targetDataType }}{{ globalAction.index }}"
+            >
                 {{ icon|raw }}
                 {{ globalAction.label }}
             </button>
-        {% elseif globalAction.config.targetDataType == 'array' %}
+        {% elseif globalAction.config.targetDataType is same as (constant('W3com\\HulkBundle\\Model\\Config::DATA_TYPE_ARRAY')) %}
             <button class="btn btn-{{ color }} m-1"
                     id="btn{{ globalAction.type }}{{ globalAction.config.targetDataType }}{{ globalAction.index }}"
                     targetEntity="{{ globalAction.config.entity }}"
@@ -30,10 +36,22 @@
                 {{ icon|raw }}
                 {{ globalAction.label }}
             </button>
-        {% elseif globalAction.type in ['api-request', 'call-function', 'api-call', 'render-view'] %}
-            {% set id = (globalAction.type in ['api-call', 'render-view']) ? 'btn'~globalAction.type~globalAction.index : globalAction.type~globalAction.index %}
-            <button class="btn btn-{{ color }} m-1"
-                    id="{{ id }}">
+        {% elseif globalAction.type in [
+            constant('W3com\\HulkBundle\\Model\\GlobalAction::TYPE_API_REQUEST'),
+            constant('W3com\\HulkBundle\\Model\\GlobalAction::TYPE_CALL_FUNCTION'),
+            constant('W3com\\HulkBundle\\Model\\GlobalAction::TYPE_API_CALL')
+            constant('W3com\\HulkBundle\\Model\\GlobalAction::TYPE_RENDER_VIEW')
+        ] %}
+            {% set
+                id =
+                (globalAction.type in [
+                    constant('W3com\\HulkBundle\\Model\\GlobalAction::TYPE_API_CALL')
+                    constant('W3com\\HulkBundle\\Model\\GlobalAction::TYPE_RENDER_VIEW')
+                ])
+                ? 'btn'~globalAction.type~globalAction.index
+                : globalAction.type~globalAction.index
+            %}
+            <button class="btn btn-{{ color }} m-1" id="{{ id }}">
                 {{ icon|raw }}
                 {{ globalAction.label }}
             </button>

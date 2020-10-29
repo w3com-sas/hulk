@@ -1,25 +1,22 @@
 {% block singleFilter %}
-<div class="input-group mb-3 single-filter mt-3">
-    {% for filter in display.filters %}
-        {% if filter.active == 'Y' and filter.type == 'single' %}
-        <div class="input-group-prepend">
-            <label class="input-group-text" for="select{{ filter.fieldName }}">{{ filter.label }}
-                :
-            </label>
-        </div>
-        <select class="custom-select" id="select{{ filter.fieldName }}" colIndex="{{ filter.index }}">
-
-            {% for value in filter.values %}
-
-                {% if filter.defaultValue == value %}
-                    <option value="{{ value }}" selected="selected">{{ value }}</option>
-                {% else %}
-                    <option value="{{ value }}">{{ value }}</option>
-                {% endif %}
-
-            {% endfor %}
-        </select>
-        {% endif %}
-    {% endfor %}
-</div>
+    <div class="input-group mb-3 single-filter mt-3">
+        {% for filter in display.filters %}
+            {% if filter.active == 'Y' and filter.type is same as (constant('W3com\\HulkBundle\\Model\\Filter::TYPE_SINGLE')) %}
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="select{{ filter.fieldName }}">
+                        {{ filter.label }} :
+                    </label>
+                </div>
+                <select class="custom-select" id="select{{ filter.fieldName }}" colIndex="{{ filter.index }}">
+                    {% for value in filter.values %}
+                        {% if filter.defaultValue is same as (value) %}
+                            <option value="{{ value }}" selected="selected">{{ value }}</option>
+                        {% else %}
+                            <option value="{{ value }}">{{ value }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            {% endif %}
+        {% endfor %}
+    </div>
 {% endblock %}

@@ -1,48 +1,40 @@
 {% block searchBar %}
     <div class="input-group mb-3">
         <div class="input-group-prepend prepend-search-view">
-        <span class="input-group-text">
-            <i class="fa fa-search"></i>
-        </span>
+            <span class="input-group-text">
+                <i class="fa fa-search"></i>
+            </span>
         </div>
         <input type="text" class="form-control" id="searchBarView{{ searchView.calcView }}">
     </div>
 {% endblock %}
-
 {% block table %}
     <div class="row">
         <div class="col">
             <table class="table table-hover">
                 <thead class="thead-primary">
-                <tr>
-                    {% for column, displayName in searchView.columns %}
-                        <th scope="col">{{ displayName }}</th>
-                    {% endfor %}
-                </tr>
+                    <tr>
+                        {% for column, displayName in searchView.columns %}
+                            <th scope="col">{{ displayName }}</th>
+                        {% endfor %}
+                    </tr>
                 </thead>
-                <tbody id="searchViewResults{{ searchView.calcView }}">
-
-                </tbody>
+                <tbody id="searchViewResults{{ searchView.calcView }}"></tbody>
             </table>
         </div>
     </div>
 {% endblock %}
-
-<div class="d-flex justify-content-center" id="searchViewInfo{{ searchView.calcView }}">
-</div>
-
+<div class="d-flex justify-content-center" id="searchViewInfo{{ searchView.calcView }}"></div>
 {% block template %}
     <template id="searchViewLoader{{ searchView.calcView }}">
         <i class="fal fa-circle-notch fa-5x text-primary fa-spin"></i>
     </template>
-
     <template id="searchViewNoResults{{ searchView.calcView }}">
         <p class="text-muted">
             <i class="fas fa-exclamation-triangle mr-3"></i>
             Aucune donnée ne correspond à votre recherche
         </p>
     </template>
-
     <template id="searchViewError{{ searchView.calcView }}">
         <div class="alert alert-danger">
             <i class="fal fa-exclamation mr-3"></i>
