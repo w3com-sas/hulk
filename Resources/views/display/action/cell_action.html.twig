@@ -1,6 +1,6 @@
 {% for column in display.columns %}
     {% if column.active == 'Y' %}
-        {% if column.type is same as constant('W3com\\HulkBundle\\Model\\Column::COL_TYPE_ACTION') %}
+        {% if column.type is same as (constant('W3com\\HulkBundle\\Model\\Column::COL_TYPE_ACTION')) %}
             {% if column.cellAction.iconFieldName is not null %}
                 {# For dynamic icon with field who provide it #}
                 {% set btnClass =  'btn btn-sm' %}
@@ -40,7 +40,7 @@
                 </template>
             {% endif %}
 
-        {% elseif column.type is same as constant('W3com\\HulkBundle\\Model\\Column::COL_TYPE_UNIVERSAL') %}
+        {% elseif column.type is same as (constant('W3com\\HulkBundle\\Model\\Column::COL_TYPE_UNIVERSAL')) %}
             {% if column.cellAction is not null %}
                 {% if column.cellAction.RenderType is defined %}
                     {% if column.cellAction.RenderType is same as ('static') %}
