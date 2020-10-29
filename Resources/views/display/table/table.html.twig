@@ -10,7 +10,7 @@
                                 <span class="checkbox-custom rectangular"></span>
                             </label>
                         </th>
-                    {% elseif column.cellAction and column.cellAction.functionName is same as constant('W3com\\HulkBundle\\Model\\Column::FUNCTION_NAME_DISPLAY_LINKS') %}
+                    {% elseif column.cellAction and column.cellAction.functionName is same as (constant('W3com\\HulkBundle\\Model\\Column::FUNCTION_NAME_DISPLAY_LINKS')) %}
                         <th>
                             <div class="dropdown dropdown-display-links">
                                 <button class="dropdown-toggle btn" type="button" id="dropdownMenuButton{{ column.index }}" data-toggle="dropdown">
