@@ -9,13 +9,17 @@
     {% include '@W3comHulk/display/include/header.html.twig' %}
 {% endblock %}
 
-{% if display.data|length == display.maxLength %}
+{% if display.data|length is same as (display.maxLength) %}
     <div class="alert alert-warning m-3" role="alert">
         <i class="fal fa-info-circle mr-2"></i>
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
-        Les {{ display.maxLength }} premiers résultats sont affichés, des résultats ont peut-être été omis.
+        {% if display.maxLength > 1 %}
+            Les {{ display.maxLength }} premiers résultats sont affichés, des résultats ont peut-être été omis.
+        {% else %}
+            Un seul résultat trouvé est affiché, des résultats ont peut-être été omis.
+        {% endif %}
     </div>
 {% endif %}
 

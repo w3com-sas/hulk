@@ -1,43 +1,39 @@
-
-{#todo remove#}
 {% block html %}
     <!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset="UTF-8">
-        <link rel="stylesheet" type="text/css"
-              href="https://cdn.datatables.net/v/bs4/dt-1.10.18/cr-1.5.0/datatables.min.css"/>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
-              integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
-              crossorigin="anonymous">
-        <link rel="stylesheet" type="text/css" href="https://bootswatch.com/4/flatly/bootstrap.min.css"/>
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
-              integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ"
-              crossorigin="anonymous">
-        <link rel="stylesheet" type="text/css" href="{{ asset('bundles/w3comhulk/main.css') }}">
-        <title>{% block title %}Hulk - Hana utils kit bundle{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-    </head>
-    <body>
-    {% block header %}
-    {% endblock %}
-
-    {% block content %}
-    {% endblock %}
-
-
-    <script>
-        const hulkUrls = {
-            updateSap: '{{ path('w3com_update_sap') }}',
-            apiRequest: '{{ path('w3com_api_request') }}',
-            updateSapLine: '{{ path('w3com_update_sap_line') }}',
-            displayFormReload: '{{ path('w3com_display_form_reload') }}'
-        };
-    </script>
-
-
-    <script src="{{ asset('build/app.js') }}"></script>
-    {% block javascripts %}{% endblock %}
-    </body>
+    <html lang="fr">
+        <head>
+            <meta charset="UTF-8">
+            <link rel="stylesheet" type="text/css"
+                  href="https://cdn.datatables.net/v/bs4/dt-1.10.18/cr-1.5.0/datatables.min.css"/>
+            <link rel="stylesheet"
+                  href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+                  integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+                  crossorigin="anonymous"
+            >
+            <link rel="stylesheet" type="text/css" href="https://bootswatch.com/4/flatly/bootstrap.min.css"/>
+            <link
+                    rel="stylesheet"
+                    href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+                    integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ"
+                    crossorigin="anonymous"
+            >
+            <link rel="stylesheet" type="text/css" href="{{ asset('bundles/w3comhulk/main.css') }}">
+            <title>{% block title %}Hulk - Hana utils kit bundle{% endblock %}</title>
+            {% block stylesheets %}{% endblock %}
+        </head>
+        <body>
+        {% block header %}{% endblock %}
+        {% block content %}{% endblock %}
+        <script>
+            const hulkUrls = {
+                updateSap: '{{ path('w3com_update_sap') }}',
+                apiRequest: '{{ path('w3com_api_request') }}',
+                updateSapLine: '{{ path('w3com_update_sap_line') }}',
+                displayFormReload: '{{ path('w3com_display_form_reload') }}'
+            };
+        </script>
+        <script src="{{ asset('build/app.js') }}"></script>
+        {% block javascripts %}{% endblock %}
+        </body>
     </html>
-{% endblock html %}
+{% endblock %}

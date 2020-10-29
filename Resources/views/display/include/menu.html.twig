@@ -7,13 +7,13 @@
 {% endblock %}
 
 {% block item %}
-        <li class="breadcrumb-item">
-            {%- if item.uri is not empty and (not matcher.isCurrent(item) or options.currentAsLink) %}
-                {{ block('linkElement') }}
-            {%- else %}
-                {{ block('spanElement') }}
-            {%- endif %}
-        </li>
+    <li class="breadcrumb-item">
+        {%- if item.uri is not empty and (not matcher.isCurrent(item) or options.currentAsLink) %}
+            {{ block('linkElement') }}
+        {%- else %}
+            {{ block('spanElement') }}
+        {%- endif %}
+    </li>
 {% endblock %}
 
 {% block linkElement %}

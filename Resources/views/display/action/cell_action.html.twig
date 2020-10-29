@@ -1,6 +1,6 @@
 {% for column in display.columns %}
     {% if column.active == 'Y' %}
-        {% if column.type == 'action' %}
+        {% if column.type is same as constant('W3com\\HulkBundle\\Model\\Column::COL_TYPE_ACTION') %}
             {% if column.cellAction.iconFieldName is not null %}
                 {# For dynamic icon with field who provide it #}
                 {% set btnClass =  'btn btn-sm' %}
@@ -16,30 +16,34 @@
                     {% set iconTpl = '<i class="'~iconRender~'"></i>' %}
                 {% endif %}
             {% endif %}
-
-            {% if column.cellAction.functionName == 'openForm' %}
+            {% if column.cellAction.functionName is same as (constant('W3com\\HulkBundle\\Model\\CellAction::FUNCTION_OPEN_FORM')) %}
                 <template id="{{ column.cellAction.functionName }}{{ column.index }}">
-                    <button class="{{ btnClass }}"
-                            onclick="{{ column.cellAction.functionName }}('{{ column.cellAction.targetEntity }}', '[[data]]')">
+                    <button
+                            class="{{ btnClass }}"
+                            onclick="{{ column.cellAction.functionName }}('{{ column.cellAction.targetEntity }}', '[[data]]')"
+                    >
                         {{ iconTpl|raw }}
                     </button>
                 </template>
-            {% elseif column.cellAction.functionName in ['displayLink', 'link', 'displayLinks'] %}
-                {% set id = column.cellAction.functionName == 'displayLinks'
+            {% elseif column.cellAction.functionName in [
+                constant('W3com\\HulkBundle\\Model\\Column::FUNCTION_NAME_DISPLAY_LINKS'),
+                constant('W3com\\HulkBundle\\Model\\Column::FUNCTION_NAME_DISPLAY_LINK'),
+                constant('W3com\\HulkBundle\\Model\\Column::FUNCTION_NAME_LINK')
+            ] %}
+                {% set id = column.cellAction.functionName is same as (constant('W3com\\HulkBundle\\Model\\Column::FUNCTION_NAME_DISPLAY_LINKS'))
                     ? column.cellAction.functionName~column.index
                     : column.cellAction.functionName~column.cellAction.targetEntity %}
                 <template id="{{ id }}">
-                    <a class="btn btn-primary btn-sm"
-                       href="[[data]]">
+                    <a class="btn btn-primary btn-sm" href="[[data]]">
                         {{ iconTpl|raw }}
                     </a>
                 </template>
             {% endif %}
 
-        {% elseif column.type == 'universal' %}
+        {% elseif column.type is same as constant('W3com\\HulkBundle\\Model\\Column::COL_TYPE_UNIVERSAL') %}
             {% if column.cellAction is not null %}
                 {% if column.cellAction.RenderType is defined %}
-                    {% if column.cellAction.RenderType == 'static' %}
+                    {% if column.cellAction.RenderType is same as ('static') %}
                         {% set classRender = column.cellAction.RenderValue %}
                     {% else %}
                         {% set classRender = '[[classRender]]' %}
@@ -47,13 +51,16 @@
                 {% else %}
                     {% set classRender = 'btn btn-link' %}
                 {% endif %}
-
-                {% if column.cellAction.functionName in  ['displayLink', 'displayLinks', 'link'] %}
+                {% if column.cellAction.functionName in  [
+                    constant('W3com\\HulkBundle\\Model\\Column::FUNCTION_NAME_DISPLAY_LINKS'),
+                    constant('W3com\\HulkBundle\\Model\\Column::FUNCTION_NAME_DISPLAY_LINK'),
+                    constant('W3com\\HulkBundle\\Model\\Column::FUNCTION_NAME_LINK')
+                ] %}
                     {% set hrefAction = "[[data]]" %}
-                {% elseif column.cellAction.functionName == 'openForm' %}
+                {% elseif column.cellAction.functionName is same as (constant('W3com\\HulkBundle\\Model\\CellAction::FUNCTION_OPEN_FORM')) %}
                     {% set hrefAction = "javascript:" ~ column.cellAction.functionName ~ "('" ~ column.cellAction.targetEntity ~ "', '[[data]]')" %}
-                {% elseif column.cellAction.functionName == 'call-function' %}
-                    {% if "(" in column.cellAction.params['FunctionToCall'] %}
+                {% elseif column.cellAction.functionName is same as (constant('W3com\\HulkBundle\\Model\\CellAction::FUNCTION_CALL_FUNCTION')) %}
+                    {% if '(' in column.cellAction.params['FunctionToCall'] %}
                         {% set hrefAction = "javascript:" ~ column.cellAction.params['FunctionToCall'] %}
                     {% else %}
                         {% set hrefAction = "javascript:" ~ column.cellAction.params['FunctionToCall'] ~ '([[row]])' %}
@@ -74,7 +81,7 @@
 {% endfor %}
 
 {% for column in display.columns %}
-    {% if column.type == 'call-function' and column.cellAction is not null %}
+    {% if column.type is same as (constant('W3com\\HulkBundle\\Model\\Column::COL_TYPE_CALL_FUNCTION')) and column.cellAction is not null %}
         {% set id = column.cellAction.functionName %}
         <div class="modal fade" id="{{ id }}" tabindex="-1" role="dialog">
             <div class="modal-dialog large-modal" role="document">
@@ -84,8 +91,7 @@
                         <div class="d-none icon-loading">
                             <i class="fad fa-circle-notch fa-3x text-success fa-spin"></i>
                         </div>
-                        <div class="d-none icon-item">
-                        </div>
+                        <div class="d-none icon-item"></div>
                     </div>
                     <div class="modal-body d-none" id="{{ id }}Body"></div>
                     <div class="modal-footer d-none" id="{{ id }}Footer"></div>

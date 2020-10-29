@@ -2,37 +2,49 @@
     <div class="input-group mt-1">
         {% for filter in display.filters %}
             {% if filter.active == 'Y' %}
-                {% if filter.type == 'multiple' %}
+                {% if filter.type is same as (constant('W3com\\HulkBundle\\Model\\Filter::TYPE_MULTIPLE')) %}
                     <div class="input-group-prepend">
                         <span class="input-group-text">{{ filter.label }}</span>
                     </div>
-                    {% if filter.defaultValue != null and filter.defaultValue != "" %}
-                        <input type="text" value="{{ filter.defaultValue['min'] }}"
-                               class="form-control multiple-filter" id="min{{ filter.fieldName }}">
-                        <input type="text" value="{{ filter.defaultValue['max'] }}"
-                               class="form-control multiple-filter" id="max{{ filter.fieldName }}">
+                    {% if filter.defaultValue is not same as (null) and filter.defaultValue is not empty %}
+                        <input type="text"
+                               value="{{ filter.defaultValue['min'] }}"
+                               class="form-control multiple-filter" id="min{{ filter.fieldName }}"
+                        />
+                        <input type="text"
+                               value="{{ filter.defaultValue['max'] }}"
+                               class="form-control multiple-filter" id="max{{ filter.fieldName }}"
+                        />
                     {% else %}
-                        <input type="text" class="form-control multiple-filter" id="min{{ filter.fieldName }}">
-                        <input type="text" class="form-control multiple-filter" id="max{{ filter.fieldName }}">
+                        <input type="text" class="form-control multiple-filter" id="min{{ filter.fieldName }}"/>
+                        <input type="text" class="form-control multiple-filter" id="max{{ filter.fieldName }}"/>
                     {% endif %}
                 {% elseif filter.type == 'multiple-date' %}
                     <div class="input-group-prepend">
                         <span class="input-group-text">{{ filter.label }}</span>
                     </div>
-                    {% if filter.defaultValue != null and filter.defaultValue != "" %}
-                        <input type="text" value="{{ filter.defaultValue['min'] }}"
+                    {% if filter.defaultValue is not empty %}
+                        <input type="text"
+                               value="{{ filter.defaultValue['min'] }}"
                                class="form-control multiple-filter datepicker-here" id="min{{ filter.fieldName }}"
-                               data-language="fr">
-                        <input type="text" value="{{ filter.defaultValue['max'] }}"
+                               data-language="fr"
+                        />
+                        <input type="text"
+                               value="{{ filter.defaultValue['max'] }}"
                                class="form-control multiple-filter datepicker-here" id="max{{ filter.fieldName }}"
-                               data-language="fr">
+                               data-language="fr"
+                        />
                     {% else %}
-                        <input type="text" class="form-control multiple-filter datepicker-here"
+                        <input type="text"
+                               class="form-control multiple-filter datepicker-here"
                                id="min{{ filter.fieldName }}"
-                               data-language="fr">
-                        <input type="text" class="form-control multiple-filter datepicker-here"
+                               data-language="fr"
+                        />
+                        <input type="text"
+                               class="form-control multiple-filter datepicker-here"
                                id="max{{ filter.fieldName }}"
-                               data-language="fr">
+                               data-language="fr"
+                        />
                     {% endif %}
                 {% endif %}
             {% endif %}
