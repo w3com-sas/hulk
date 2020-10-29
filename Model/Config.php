@@ -50,7 +50,7 @@ class Config
     private $targetDataType;
 
     /**
-     * @var array
+     * @var array | string
      */
     private $targetData;
 
@@ -129,12 +129,12 @@ class Config
         $this->targetDataType = $targetDataType;
     }
 
-    public function getTargetData(): ?array
+    public function getTargetData()
     {
         return $this->targetData;
     }
 
-    public function setTargetData(array $targetData): void
+    public function setTargetData($targetData): void
     {
         $this->targetData = $targetData;
     }
