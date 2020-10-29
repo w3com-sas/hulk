@@ -16,7 +16,7 @@
                 {{ globalAction.label }}
             </button>
         {% elseif
-            globalAction.typeis same as (constant('W3com\\HulkBundle\\Model\\GlobalAction::TYPE_UPDATE_SAP'))
+            globalAction.type is same as (constant('W3com\\HulkBundle\\Model\\GlobalAction::TYPE_UPDATE_SAP'))
             and globalAction.config.targetDataType is same as (constant('W3com\\HulkBundle\\Model\\Config::DATA_TYPE_STATIC'))
             or globalAction.config.targetDataType is same as (constant('W3com\\HulkBundle\\Model\\Config::DATA_TYPE_TEXT'))
             or globalAction.config.targetDataType is same as (constant('W3com\\HulkBundle\\Model\\Config::DATA_TYPE_DATE'))
