@@ -1,4 +1,5 @@
 <?php
+
 namespace W3com\HulkBundle\DataCollector;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -8,8 +9,7 @@ use W3com\HulkBundle\Service\DisplayProvider;
 
 class DisplayDataCollector extends DataCollector
 {
-
-    /** @var DisplayProvider  */
+    /** @var DisplayProvider */
     protected $displayManager;
 
     public function __construct(DisplayProvider $displayManager)
@@ -19,9 +19,6 @@ class DisplayDataCollector extends DataCollector
 
     /**
      * Collects data for the given Request and Response.
-     *
-     * @param Request $request
-     * @param Response $response
      */
     public function collect(Request $request, Response $response)
     {

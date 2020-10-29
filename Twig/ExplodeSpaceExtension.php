@@ -19,6 +19,6 @@ class ExplodeSpaceExtension extends AbstractExtension
 
     public function explodeSpace($value)
     {
-        return str_replace(' ',' <i class="fad fa-plus-circle text-white"></i> ',$value);
+        return str_replace(' ', ' <i class="fad fa-plus-circle text-white"></i> ', $value);
     }
 }

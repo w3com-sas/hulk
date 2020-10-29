@@ -6,17 +6,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
-use Symfony\Component\Serializer\Encoder\CsvEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
-use W3com\HulkBundle\Model\Column;
-use W3com\HulkBundle\Model\Display;
 use W3com\HulkBundle\Service\CsvManager;
-use W3com\HulkBundle\Service\DisplayProvider;
 
 class ExportCsvController extends AbstractController
 {
-
     private $csvManager;
 
     private $request;
@@ -40,7 +33,7 @@ class ExportCsvController extends AbstractController
 
         $response->headers->set('Content-Type', 'application/csv');
         $response->headers->set('Content-Disposition', $disposition);
+
         return $response;
     }
-
 }

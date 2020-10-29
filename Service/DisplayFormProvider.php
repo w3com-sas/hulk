@@ -4,6 +4,7 @@ namespace W3com\HulkBundle\Service;
 
 use DateTime;
 use Doctrine\Common\Annotations\AnnotationException;
+use ReflectionException;
 use W3com\BoomBundle\HanaEntity\AbstractEntity;
 use W3com\BoomBundle\Service\BoomGenerator;
 use W3com\BoomBundle\Service\BoomManager;
@@ -12,8 +13,8 @@ use W3com\HulkBundle\Finder\JsonFinder;
 use W3com\HulkBundle\Model\Display;
 use W3com\HulkBundle\Query\QueryManager;
 use W3com\HulkBundle\Url\UrlManager;
-use W3com\HulkBundle\Util\DisplayConstructor;
 use W3com\HulkBundle\Util\DataTransformer;
+use W3com\HulkBundle\Util\DisplayConstructor;
 
 class DisplayFormProvider
 {
@@ -39,7 +40,7 @@ class DisplayFormProvider
 
     public function __construct(BoomManager $boom, BoomGenerator $generator, UrlManager $urlManager, DisplayConstructor $constructor, $config)
     {
-        if(array_key_exists('max_result_returned',$config)){
+        if (array_key_exists('max_result_returned', $config)) {
             $this->max_result_returned = $config['max_result_returned'];
         }
         $this->display = new Display();
@@ -56,9 +57,11 @@ class DisplayFormProvider
     /**
      * @param $filename
      * @param array $getParamsRequest
-     * @return Display
+     *
      * @throws AnnotationException
-     * @throws \ReflectionException
+     * @throws ReflectionException
+     *
+     * @return Display
      */
     public function getDisplay($filename, $getParamsRequest = [])
     {
@@ -73,6 +76,7 @@ class DisplayFormProvider
 
         $this->dataTransformer->addData($this->display, $data);
         $this->filterManager->initFilters($this->display);
+
         return $this->display;
     }
 
@@ -80,9 +84,11 @@ class DisplayFormProvider
      * @param $calculationView
      * @param array $choices
      * @param array $allFields
-     * @return array
+     *
      * @throws AnnotationException
-     * @throws \ReflectionException
+     * @throws ReflectionException
+     *
+     * @return array
      */
     public function getDataFromChoices($calculationView, $choices = [], $allFields = [])
     {
@@ -97,7 +103,7 @@ class DisplayFormProvider
             $params->addFilter($entity->getProperty($field)->getName(), $value);
         }
 
-        foreach ($allFields as $field => $value){
+        foreach ($allFields as $field => $value) {
             $params->addSelect($entity->getProperty($field)->getName());
         }
 
@@ -107,7 +113,9 @@ class DisplayFormProvider
         foreach ($results as $hanaEntity) {
             $entityArray = json_decode($hanaEntity->getEntityJson(), true);
             foreach ($entityArray as $field => $value) {
-                if (!array_key_exists($field, $formattedData)) $formattedData[$field] = [];
+                if (!array_key_exists($field, $formattedData)) {
+                    $formattedData[$field] = [];
+                }
                 $formattedData[$field][$value] = $this->dataTransformer->transformDateFormat($value);
             }
         }
@@ -115,53 +123,46 @@ class DisplayFormProvider
         foreach ($formattedData as $field => $values) {
             foreach ($values as $value) {
                 $isDate = Datetime::createFromFormat('d/m/Y', $value);
-                if (isset($isDate) && $isDate instanceof \DateTime) {
-                    usort($formattedData[$field], [$this, "sortDate"]);
+                if (isset($isDate) && $isDate instanceof DateTime) {
+                    usort($formattedData[$field], [$this, 'sortDate']);
                 } else {
                     ksort($formattedData);
                 }
                 unset($isDate);
             }
         }
+
         return $formattedData;
     }
 
     public function sortDate($x, $y)
     {
-        if ($x == null) {
+        if (null == $x) {
             return -1;
-        } elseif ($y == null) {
+        } elseif (null == $y) {
             return 0;
         }
-        if (\DateTime::createFromFormat('d/m/Y', $x) === false || \DateTime::createFromFormat('d/m/Y', $y) === false) {
+        if (false === DateTime::createFromFormat('d/m/Y', $x) || false === DateTime::createFromFormat('d/m/Y', $y)) {
             return 0;
         }
-        $stampX = \DateTime::createFromFormat('d/m/Y', $x)->getTimestamp();
-        $stampY = \DateTime::createFromFormat('d/m/Y', $y)->getTimestamp();
-
+        $stampX = DateTime::createFromFormat('d/m/Y', $x)->getTimestamp();
+        $stampY = DateTime::createFromFormat('d/m/Y', $y)->getTimestamp();
 
         if ($stampX > $stampY) {
             return 1;
         } elseif ($stampX < $stampY) {
             return -1;
-        } else {
-            return 0;
         }
+
+        return 0;
     }
 
-    private function removeFilenameInChoices(array &$choices)
-    {
-        if (array_key_exists('filename', $choices)){
-            unset($choices['filename']);
-        }
-    }
-
-    public function getQueryManager():QueryManager
+    public function getQueryManager(): QueryManager
     {
         return $this->queryManager;
     }
 
-    public function getJsonFinder():JsonFinder
+    public function getJsonFinder(): JsonFinder
     {
         return $this->jsonFinder;
     }
@@ -169,5 +170,12 @@ class DisplayFormProvider
     public function getMaxResultReturned()
     {
         return $this->max_result_returned;
+    }
+
+    private function removeFilenameInChoices(array &$choices)
+    {
+        if (array_key_exists('filename', $choices)) {
+            unset($choices['filename']);
+        }
     }
 }

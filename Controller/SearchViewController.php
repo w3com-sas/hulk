@@ -2,6 +2,7 @@
 
 namespace W3com\HulkBundle\Controller;
 
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -11,7 +12,6 @@ use W3com\HulkBundle\Service\SearchViewProvider;
 
 class SearchViewController extends AbstractController
 {
-
     private $searchView;
 
     private $requestStack;
@@ -23,7 +23,7 @@ class SearchViewController extends AbstractController
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function searchView()
     {
@@ -39,19 +39,19 @@ class SearchViewController extends AbstractController
             return new JsonResponse('Calculation view isn\'t in service.xsodata file', 400);
         }
 
-        if (count($results) === 0){
+        if (0 === count($results)) {
             return new JsonResponse('', 204);
         }
 
         return $this->render('@W3comHulk/search_view/list.html.twig', ['results' => $results,
-            'entity' => $params['entity']]);
+            'entity' => $params['entity'], ]);
     }
 
     private function checkRequestParams(array $params)
     {
-        if (!array_key_exists('entity', $params)){
+        if (!array_key_exists('entity', $params)) {
             return new JsonResponse('Missing entity parameter', 400);
-        } elseif (!array_key_exists('columns', $params)){
+        } elseif (!array_key_exists('columns', $params)) {
             return new JsonResponse('Missing columns parameter', 400);
         }
     }

@@ -34,10 +34,12 @@ class MenuSession
             $currentMenu = $this->getCurrentMenuItem($currentDisplayName, true, [], $currentMenuName);
             $menus[$currentMenuName][$currentMenu['uniqId']] = $currentMenu;
             $this->session->set('menu', $menus);
+
             return $menus;
         }
         $menus = $this->session->get('menu');
         $currentMenu = $this->getCurrentMenuItem($currentDisplayName, false, $menus, $currentMenuName);
+
         return $this->manageMenu($currentMenu, $currentMenuName);
     }
 
@@ -47,7 +49,7 @@ class MenuSession
         $currentMenuItem['route'] = null !== $this->request->getCurrentRequest()->get('_route') ?
             $this->request->getCurrentRequest()->get('_route') : $this->request->getMasterRequest()->attributes->get('_route');
         $currentMenuItem['routeParameters'] = $this->getRouteParams();
-        $currentMenuItem['uniqId'] = $currentMenuItem['route'] . implode('_', $currentMenuItem['routeParameters']);
+        $currentMenuItem['uniqId'] = $currentMenuItem['route'].implode('_', $currentMenuItem['routeParameters']);
         $currentMenuItem['displayName'] = $currentDisplayName;
 
         foreach ($menus as $menu) {
@@ -57,6 +59,7 @@ class MenuSession
         }
 
         $currentMenuItem['index'] = $isFirst ? 1 : $this->getLastItemIndex($currentMenuName) + 1;
+
         return $currentMenuItem;
     }
 
@@ -65,7 +68,6 @@ class MenuSession
         $newMenu = [];
         $newMenu[$currentMenuName] = [];
         foreach ($this->getCurrentMenu($currentMenuName) as $menu) {
-
             if ($menu['index'] > $currentMenu['index']) {
                 continue;
             }
@@ -79,6 +81,7 @@ class MenuSession
         }
         $newMenu[$currentMenuName][$currentMenu['uniqId']] = $currentMenu;
         $this->session->set('menu', $newMenu);
+
         return $newMenu;
     }
 
@@ -94,12 +97,13 @@ class MenuSession
                 return $menu;
             }
         }
+
         return [];
     }
 
     private function isHulkRoute($route)
     {
-        return ($route === "w3com_display" || $route === "w3com_display_form");
+        return 'w3com_display' === $route || 'w3com_display_form' === $route;
     }
 
     private function getRouteParams()
@@ -115,11 +119,12 @@ class MenuSession
 
         if (!empty($this->request->getCurrentRequest()->query->all())) {
             foreach ($this->request->getCurrentRequest()->query->all() as $key => $value) {
-                if ($key !== '_path') {
+                if ('_path' !== $key) {
                     $params[$key] = $value;
                 }
             }
         }
+
         return $params;
     }
 }

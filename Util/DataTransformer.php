@@ -2,7 +2,9 @@
 
 namespace W3com\HulkBundle\Util;
 
+use DateTime;
 use Doctrine\Common\Annotations\AnnotationException;
+use Exception;
 use ReflectionException;
 use W3com\BoomBundle\HanaEntity\AbstractEntity;
 use W3com\HulkBundle\Model\Display;
@@ -19,23 +21,49 @@ class DataTransformer
     }
 
     /**
-     * @param Display $dataTable
      * @param $data
+     *
+     * @throws Exception
+     *
      * @return Display
-     * @throws \Exception
      */
     public function addData(Display $dataTable, $data)
     {
         $dataTable->setData($this->transformData($data));
         $this->urlManager->generateLinks($dataTable, $dataTable->getData());
+
         return $dataTable;
     }
 
+    public static function transformDateFormat($value)
+    {
+        $dateTime = DateTime::createFromFormat('Y-m-d H:i:s',
+            str_replace('T', ' ', $value));
+
+        $date = DateTime::createFromFormat('Y-m-d', $value);
+
+        if (false === $dateTime && false === $date) {
+            return $value;
+        }
+
+        return $dateTime ? $dateTime->format('d/m/Y H:i:s') : $date->format('d/m/Y');
+    }
+
+    public static function reverseDateFormat($value)
+    {
+        $date = DateTime::createFromFormat('d/m/Y', $value);
+        if (false !== $date) {
+            return $date->format('Y-m-d');
+        }
+
+        return $value;
+    }
+
     /**
-     * @param array $hanaEntities
-     * @return array
      * @throws AnnotationException
      * @throws ReflectionException
+     *
+     * @return array
      */
     private function transformData(array $hanaEntities)
     {
@@ -50,29 +78,7 @@ class DataTransformer
             }
             $data[] = $entityArray;
         }
+
         return $data;
-    }
-
-    public static function transformDateFormat($value)
-    {
-        $dateTime = \DateTime::createFromFormat('Y-m-d H:i:s',
-            str_replace('T', ' ', $value));
-
-        $date = \DateTime::createFromFormat('Y-m-d', $value);
-
-        if (false === $dateTime && false === $date) {
-            return $value;
-        } else {
-            return $dateTime ? $dateTime->format('d/m/Y H:i:s') : $date->format('d/m/Y');
-        }
-    }
-
-    public static function reverseDateFormat($value)
-    {
-        $date = \DateTime::createFromFormat('d/m/Y', $value);
-        if ($date !== false) {
-            return $date->format('Y-m-d');
-        }
-        return $value;
     }
 }

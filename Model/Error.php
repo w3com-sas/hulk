@@ -36,12 +36,12 @@ class Error
     private $entityErrors = [];
 
     /**
-     * @param bool $fileExist
      * @return Error
      */
     public function setFileExist(bool $fileExist)
     {
         $this->fileExist = $fileExist;
+
         return $this;
     }
 
@@ -53,15 +53,11 @@ class Error
         return $this->fileExist;
     }
 
-    /**
-     * @param Display $dataTable
-     */
     public function setNonexistentProperties(Display $dataTable)
     {
         /** @var Column $column */
-        foreach ($dataTable->getColumns() as $column){
-
-            if ($column->getActive() !== 'Y'){
+        foreach ($dataTable->getColumns() as $column) {
+            if ('Y' !== $column->getActive()) {
                 $this->nonexistentProperties[] = $column;
             }
         }
@@ -83,13 +79,10 @@ class Error
         return $this->classExist;
     }
 
-    /**
-     * @param bool $classExist
-     * @return Error
-     */
     public function setClassExist(bool $classExist): Error
     {
         $this->classExist = $classExist;
+
         return $this;
     }
 
@@ -101,17 +94,11 @@ class Error
         return $this->viewExist;
     }
 
-    /**
-     * @param bool $viewExist
-     */
     public function setViewExist(bool $viewExist): void
     {
         $this->viewExist = $viewExist;
     }
 
-    /**
-     * @return array
-     */
     public function getFilterErrors(): array
     {
         return $this->filterErrors;
@@ -125,9 +112,6 @@ class Error
         $this->filterErrors[] = $filterError;
     }
 
-    /**
-     * @return array
-     */
     public function getColumnErrors(): array
     {
         return $this->columnErrors;
@@ -146,9 +130,6 @@ class Error
         $this->urlErrors[$column] = $urlError;
     }
 
-    /**
-     * @return array
-     */
     public function getRequestParamsErrors(): array
     {
         return $this->requestParamsErrors;
@@ -175,9 +156,6 @@ class Error
         return count($this->filterErrors) > 0;
     }
 
-    /**
-     * @return array
-     */
     public function getUrlErrors(): array
     {
         return $this->urlErrors;
@@ -191,18 +169,11 @@ class Error
         return $this->fileIsBroken;
     }
 
-    /**
-     * @param bool $fileIsBroken
-     */
     public function setFileIsBroken(bool $fileIsBroken): void
     {
         $this->fileIsBroken = $fileIsBroken;
     }
 
-
-    /**
-     * @return array
-     */
     public function getEntityErrors(): array
     {
         return $this->entityErrors;
@@ -216,11 +187,8 @@ class Error
         $this->entityErrors[] = $entityError;
     }
 
-
     public function all()
     {
         return array_merge($this->entityErrors, $this->urlErrors, $this->columnErrors, $this->filterErrors);
     }
-
-
 }

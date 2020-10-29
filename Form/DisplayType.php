@@ -12,18 +12,15 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use W3com\BoomBundle\Generator\Model\Entity;
 use W3com\BoomBundle\Generator\Model\Property;
 use W3com\HulkBundle\Model\Display;
 use W3com\HulkBundle\Model\Filter;
 
 class DisplayType extends AbstractType
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $formEvent) {
-
             /** @var Display $display */
             $display = $formEvent->getData();
             $form = $formEvent->getForm();
@@ -38,53 +35,42 @@ class DisplayType extends AbstractType
             /** @var Property $globalSearchProperty */
             $globalSearchProperty = $display->getSearchProperty();
 
-            if ($globalSearchProperty !== null){
+            if (null !== $globalSearchProperty) {
                 $form->add($globalSearchProperty->getField(), TextType::class, [
-                    'mapped' => false, 'label' => 'Recherche générale', 'required' => false
+                    'mapped' => false, 'label' => 'Recherche générale', 'required' => false,
                 ]);
             }
 
             /** @var Filter $filter */
             foreach ($display->getFilters() as $filter) {
-
-                if ($filter->getType() === Filter::TYPE_MULTIPLE_DATE) {
-
-                    $form->add('_interval' . $filter->getFieldName(), DisplayMultipleType::class, [
-                        'data' => $filter, 'filter_type' => Filter::TYPE_MULTIPLE_DATE, 'mapped' => false
+                if (Filter::TYPE_MULTIPLE_DATE === $filter->getType()) {
+                    $form->add('_interval'.$filter->getFieldName(), DisplayMultipleType::class, [
+                        'data' => $filter, 'filter_type' => Filter::TYPE_MULTIPLE_DATE, 'mapped' => false,
                     ]);
-
-                } elseif ($filter->getType() === Filter::TYPE_MULTIPLE) {
-
-                    $form->add('_interval' . $filter->getFieldName(), DisplayMultipleType::class, [
-                        'data' => $filter, 'filter_type' => Filter::TYPE_MULTIPLE, 'mapped' => false]);
-
-                } elseif ($filter->getType() === Filter::TYPE_SINGLE) {
+                } elseif (Filter::TYPE_MULTIPLE === $filter->getType()) {
+                    $form->add('_interval'.$filter->getFieldName(), DisplayMultipleType::class, [
+                        'data' => $filter, 'filter_type' => Filter::TYPE_MULTIPLE, 'mapped' => false, ]);
+                } elseif (Filter::TYPE_SINGLE === $filter->getType()) {
                     $form->add($filter->getFieldName(), ChoiceType::class, ['mapped' => false,
                         'label' => $filter->getLabel(), 'choices' => $filter->getValues(), 'required' => false,
-                        'attr' => ['onchange' => 'reloadDisplayForm()']]);
-
-                } elseif ($filter->getType() === Filter::TYPE_DATE) {
-
+                        'attr' => ['onchange' => 'reloadDisplayForm()'], ]);
+                } elseif (Filter::TYPE_DATE === $filter->getType()) {
                     $form->add($filter->getFieldName(), DateType::class, [
                         'format' => 'd/m/Y',
                         'label' => $filter->getLabel(), 'mapped' => false, 'widget' => 'single_text',
-                        'required' => false, 'html5' => false
+                        'required' => false, 'html5' => false,
                     ]);
                 }
             }
-            $form->add('submit', SubmitType::class, ['label' => 'Rechercher', 'attr' =>
-                ['class' => 'btn btn-blue btn-block']])->add('calcView', HiddenType::class);
-
+            $form->add('submit', SubmitType::class, ['label' => 'Rechercher', 'attr' => ['class' => 'btn btn-blue btn-block']])->add('calcView', HiddenType::class);
         });
-
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => Display::class,
-            'label' => false
+            'label' => false,
         ]);
     }
-
 }

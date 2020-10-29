@@ -2,14 +2,8 @@
 
 namespace W3com\HulkBundle\Model;
 
-
 use W3com\BoomBundle\Generator\Model\Entity;
 use W3com\BoomBundle\Generator\Model\Property;
-use W3com\BoomBundle\HanaEntity\AbstractEntity;
-use W3com\BoomBundle\Service\BoomGenerator;
-use W3com\HulkBundle\Form\DisplayType;
-use W3com\HulkBundle\Url\UrlManager;
-use W3com\HulkBundle\Util\DisplayConstructor;
 
 class Display
 {
@@ -40,7 +34,7 @@ class Display
     /** @var string */
     private $calcView;
 
-    /** @var array  */
+    /** @var array */
     private $defaultOrder = [];
 
     /**
@@ -66,10 +60,10 @@ class Display
     /** @var array */
     private $dataTablesColumnDefs = [];
 
-    /** @var integer */
+    /** @var int */
     private $pageLength = 10;
 
-    /** @var integer */
+    /** @var int */
     private $countSavedFilters = 0;
 
     /** @var Error */
@@ -98,17 +92,11 @@ class Display
         $this->error = new Error();
     }
 
-    /**
-     * @param Column $column
-     */
     public function addColumn(Column $column)
     {
         $this->columns[] = $column;
     }
 
-    /**
-     * @param array $columns
-     */
     public function setColumns(array $columns)
     {
         $this->columns = $columns;
@@ -122,9 +110,6 @@ class Display
         return $this->columns;
     }
 
-    /**
-     * @param Filter $filter
-     */
     public function addFilter(Filter $filter)
     {
         $this->filters[$filter->getFieldName()] = $filter;
@@ -156,9 +141,6 @@ class Display
         $this->data = $data;
     }
 
-    /**
-     * @return array
-     */
     public function getData(): array
     {
         return $this->data;
@@ -169,6 +151,7 @@ class Display
         if (count($this->data) > 0) {
             return $this->data[0];
         }
+
         return [];
     }
 
@@ -208,12 +191,13 @@ class Display
         foreach ($this->columns as $column) {
             $fieldNames[] = $column->getFieldName();
         }
+
         return $fieldNames;
     }
 
-
     /**
      * @param $entityFields
+     *
      * @return mixed
      *
      * Return fields who exist in entity and in Json File
@@ -225,7 +209,6 @@ class Display
         if (!empty($this->columns)) {
             /** @var Column $column */
             foreach ($this->columns as $column) {
-
                 // Need to get property name to check it in entity
                 /** @var Property $property */
                 foreach ($entityFields as $property) {
@@ -235,8 +218,7 @@ class Display
                         $fields[$column->getIconFieldName()] = $property;
                     } elseif ($property->getField() === $column->getLabelFieldName()) {
                         $fields[$column->getLabelFieldName()] = $property;
-                    } elseif ($column->getCellAction() !== null) {
-
+                    } elseif (null !== $column->getCellAction()) {
                         if (!empty($column->getCellAction()->getParams())) {
                             foreach ($column->getCellAction()->getParams() as $key => $value) {
                                 if ($key === $property->getField()) {
@@ -245,7 +227,7 @@ class Display
                             }
                         }
 
-                        if ($column->getCellAction()->getRenderFieldName() != '') {
+                        if ('' != $column->getCellAction()->getRenderFieldName()) {
                             if ($column->getCellAction()->getRenderFieldName() == $property->getField()) {
                                 $fields[$column->getCellAction()->getRenderFieldName()] = $property;
                             }
@@ -254,7 +236,6 @@ class Display
                 }
             }
         }
-
 
         if (!empty($this->filters)) {
             /** @var Filter $filter */
@@ -282,27 +263,20 @@ class Display
     {
         $return = [];
         /** @var GlobalAction $globalAction */
-        foreach($this->globalActions as $globalAction){
-            if($globalAction->getType() == $type){
+        foreach ($this->globalActions as $globalAction) {
+            if ($globalAction->getType() == $type) {
                 $return[] = $globalAction;
             }
         }
+
         return $return;
     }
 
-
-
-    /**
-     * @param GlobalAction $globalAction
-     */
     public function addGlobalAction(GlobalAction $globalAction)
     {
         $this->globalActions[] = $globalAction;
     }
 
-    /**
-     * @return Error
-     */
     public function getError(): Error
     {
         return $this->error;
@@ -316,6 +290,7 @@ class Display
                 return $filter;
             }
         }
+
         return false;
     }
 
@@ -327,6 +302,7 @@ class Display
                 return $column;
             }
         }
+
         return false;
     }
 
@@ -362,9 +338,6 @@ class Display
         $this->menuConfig = $menuConfig;
     }
 
-    /**
-     * @return int
-     */
     public function getSavedFilters(): int
     {
         return $this->countSavedFilters;
@@ -383,9 +356,6 @@ class Display
         return $this->displayName;
     }
 
-    /**
-     * @param string $displayName
-     */
     public function setDisplayName(string $displayName): void
     {
         $this->displayName = $displayName;
@@ -399,41 +369,26 @@ class Display
         return $this->filename;
     }
 
-    /**
-     * @param string $filename
-     */
     public function setFilename(string $filename): void
     {
         $this->filename = $filename;
     }
 
-    /**
-     * @return int
-     */
     public function getMaxLength(): int
     {
         return $this->maxLength;
     }
 
-    /**
-     * @param int $maxLength
-     */
     public function setMaxLength(int $maxLength): void
     {
         $this->maxLength = $maxLength;
     }
 
-    /**
-     * @return string
-     */
     public function getMenuName(): string
     {
         return $this->menuName;
     }
 
-    /**
-     * @param string $menuName
-     */
     public function setMenuName(string $menuName): void
     {
         $this->menuName = $menuName;
@@ -445,6 +400,7 @@ class Display
             $this->error->hasErrorColumn() || $this->error->hasErrorFilter() || $this->error->isClassExist() || $this->error->isViewExist() || $this->error->isFileIsBroken()) {
             return false;
         }
+
         return true;
     }
 
@@ -453,9 +409,6 @@ class Display
         return $this->label;
     }
 
-    /**
-     * @param string $label
-     */
     public function setLabel(string $label): void
     {
         $this->label = $label;
@@ -466,6 +419,7 @@ class Display
         if ($this->entity instanceof Entity) {
             return $this->entity->getName();
         }
+
         return null;
     }
 
@@ -474,69 +428,53 @@ class Display
         $columns = [];
         /** @var Column $column */
         foreach ($this->columns as $column) {
-            if ($column->getCellAction() !== null) {
+            if (null !== $column->getCellAction()) {
                 if (in_array($column->getCellAction()->getFunctionName(), [Column::FUNCTION_NAME_DISPLAY_LINK, Column::FUNCTION_NAME_LINK, Column::FUNCTION_NAME_DISPLAY_LINKS])) {
                     $columns[] = $column;
                 }
             }
         }
+
         return $columns;
     }
 
     public function getSearchProperty()
     {
-        if ($this->entity !== null && $this->entity->getProperty(self::FIELD_GLOBAL_SEARCH) !== null) {
+        if (null !== $this->entity && null !== $this->entity->getProperty(self::FIELD_GLOBAL_SEARCH)) {
             return $this->entity->getProperty(self::FIELD_GLOBAL_SEARCH);
         }
+
         return null;
     }
 
-    /**
-     * @return array
-     */
     public function getDataTablesColumnDefs(): array
     {
         return $this->dataTablesColumnDefs;
     }
 
     /**
-     * @param array $dataTablesColumnDefs
      * @return Display
      */
     public function setDataTablesColumnDefs(array $dataTablesColumnDefs)
     {
         $this->dataTablesColumnDefs = $dataTablesColumnDefs;
+
         return $this;
     }
 
     /**
-     * @param array $dataTablesColumns
      * @return $this
      */
     public function setDataTablesColumns(array $dataTablesColumns)
     {
         $this->dataTablesColumns = $dataTablesColumns;
+
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function getDataTablesColumns(): array
     {
         return $this->dataTablesColumns;
-    }
-
-    private function getColumnsByType(string $type)
-    {
-        $columns = [];
-        /** @var Column $column */
-        foreach ($this->columns as $column) {
-            if ($column->getType() === $type) {
-                $columns[] = $column;
-            }
-        }
-        return $columns;
     }
 
     public function getUpdateSapColumns(): array
@@ -550,10 +488,11 @@ class Display
         $columns = [];
         /** @var Column $columnAction */
         foreach ($columnsAction as $columnAction) {
-            if ($columnAction->getCellAction()->getFunctionName() === CellAction::FUNCTION_OPEN_FORM) {
+            if (CellAction::FUNCTION_OPEN_FORM === $columnAction->getCellAction()->getFunctionName()) {
                 $columns[] = $columnAction;
             }
         }
+
         return $columns;
     }
 
@@ -561,10 +500,11 @@ class Display
     {
         $renderElements = [];
         foreach ($this->getColumns() as $column) {
-            if ($column->getRenderElement() !== null){
+            if (null !== $column->getRenderElement()) {
                 $renderElements[] = $column->getRenderElement();
             }
         }
+
         return $renderElements;
     }
 
@@ -592,9 +532,6 @@ class Display
         return $this->lastRowIndex;
     }
 
-    /**
-     * @param int $lastRowIndex
-     */
     public function setLastRowIndex(int $lastRowIndex): void
     {
         $this->lastRowIndex = $lastRowIndex;
@@ -616,4 +553,16 @@ class Display
         return $this->displayNames;
     }
 
+    private function getColumnsByType(string $type)
+    {
+        $columns = [];
+        /** @var Column $column */
+        foreach ($this->columns as $column) {
+            if ($column->getType() === $type) {
+                $columns[] = $column;
+            }
+        }
+
+        return $columns;
+    }
 }

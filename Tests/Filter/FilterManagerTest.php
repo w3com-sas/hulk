@@ -1,6 +1,5 @@
 <?php
 
-
 namespace W3com\HulkBundle\Tests;
 
 use PHPUnit\Framework\TestCase;
@@ -15,7 +14,7 @@ class FilterManagerTest extends TestCase
     {
         $filterManager = new FilterManager();
         $data = [];
-        for ($i = 0; $i > 5; $i++){
+        for ($i = 0; $i > 5; ++$i) {
             $boomObj = new AbstractEntity();
             $boomObj->set('azefield', 'value'.$i);
             $data[] = $boomObj;
@@ -37,7 +36,7 @@ class FilterManagerTest extends TestCase
 
         $data = [];
 
-        for ($i = 0; $i < 5; $i++){
+        for ($i = 0; $i < 5; ++$i) {
             $boomObj = new AbstractEntity();
             $boomObj->set('azefield', 'value'.$i);
             $data[] = $boomObj;

@@ -2,17 +2,16 @@
 
 namespace W3com\HulkBundle\Controller;
 
+use Exception;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use W3com\HulkBundle\Model\Display;
 use W3com\HulkBundle\Service\DisplayProvider;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class DisplayController extends AbstractController
 {
-
     private $displayProvider;
 
     private $logger;
@@ -28,14 +27,16 @@ class DisplayController extends AbstractController
 
     /**
      * @param $filename
+     *
+     * @throws Exception
+     *
      * @return Response
-     * @throws \Exception
      */
     public function display($filename)
     {
         $display = $this->displayProvider->getDisplay($filename, $this->request->getCurrentRequest()->query);
+
         return $this->render('@W3comHulk/display/all.html.twig',
             ['display' => $display, 'filename' => $filename]);
     }
-
 }

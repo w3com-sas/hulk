@@ -2,8 +2,9 @@
 
 namespace W3com\HulkBundle\Twig;
 
-use Twig\Extension\AbstractExtension;
+use Throwable;
 use Twig\Environment;
+use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 class SearchViewHtmlExtension extends AbstractExtension
@@ -24,14 +25,17 @@ class SearchViewHtmlExtension extends AbstractExtension
 
     /**
      * @param $params
+     *
+     * @throws Throwable
+     *
      * @return string
-     * @throws \Throwable
      */
     public function render($params)
     {
         $searchView = $params['searchView'];
+
         return $this->template->render('@W3comHulk/search_view/search_view.html.twig', [
-            'searchView' => $searchView
+            'searchView' => $searchView,
             ]);
     }
 }

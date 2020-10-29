@@ -2,6 +2,7 @@
 
 namespace W3com\HulkBundle\Finder;
 
+use Exception;
 use W3com\BoomBundle\Service\BoomManager;
 use W3com\HulkBundle\Model\Display;
 
@@ -25,40 +26,42 @@ class JsonFinder
         $this->jsonUri = $this->config['json_display']['url_files'];
     }
 
-    private function createContext()
-    {
-        $login = $this->boom->config['odata_service']['connections']['default']['username']
-            . ':' . $this->boom->config['odata_service']['connections']['default']['password'];
-
-        $encodedLogin = base64_encode($login);
-        $opts = array(
-            'http' => array(
-                'method' => "GET",
-                'header' => [
-                    "Authorization: Basic " . $encodedLogin
-                ]
-            ),
-            'ssl' => array(
-                'verify_peer' => false,
-                'verify_peer_name' => false,
-            )
-        );
-        return stream_context_create($opts);
-    }
-
     public function getOnlineJson($filename, Display $display = null)
     {
         $context = $this->createContext();
-        $display = $display === null ? new Display() : $display;
+        $display = null === $display ? new Display() : $display;
         $display->getError()->setFileExist(true);
 
         try {
-            $file = file_get_contents($this->baseUri . $this->jsonUri . $filename . '.json', false, $context);
-        } catch (\Exception $e){
+            $file = file_get_contents($this->baseUri.$this->jsonUri.$filename.'.json', false, $context);
+        } catch (Exception $e) {
             $display->getError()->setFileExist(false);
+
             return null;
         }
+
         return $file;
     }
 
+    private function createContext()
+    {
+        $login = $this->boom->config['odata_service']['connections']['default']['username']
+            .':'.$this->boom->config['odata_service']['connections']['default']['password'];
+
+        $encodedLogin = base64_encode($login);
+        $opts = [
+            'http' => [
+                'method' => 'GET',
+                'header' => [
+                    'Authorization: Basic '.$encodedLogin,
+                ],
+            ],
+            'ssl' => [
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+            ],
+        ];
+
+        return stream_context_create($opts);
+    }
 }

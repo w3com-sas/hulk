@@ -9,7 +9,6 @@ use W3com\HulkBundle\Model\Column;
 use W3com\HulkBundle\Model\Display;
 use W3com\HulkBundle\Model\GlobalAction;
 
-
 class ColumnManagerTest extends TestCase
 {
     public function testReturnActiveColumnWhenRelatedDataExist()
@@ -60,5 +59,4 @@ class ColumnManagerTest extends TestCase
         $newDataDatable = $columnManager->initColumns($dataTable);
         $this->assertEquals(Column::COL_TYPE_CHECKBOX, $newDataDatable->getColumns()[0]->getType());
     }
-
 }

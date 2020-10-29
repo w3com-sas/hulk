@@ -2,7 +2,6 @@
 
 namespace W3com\HulkBundle\Form;
 
-
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
@@ -14,40 +13,36 @@ use W3com\HulkBundle\Model\Filter;
 
 class DisplayMultipleType extends AbstractType
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $formEvent) {
-
             /** @var Filter $data */
             $filter = $formEvent->getData();
             $form = $formEvent->getForm();
             $options = $formEvent->getForm()->getConfig()->getOptions();
 
-            if ($options['filter_type'] === Filter::TYPE_MULTIPLE) {
+            if (Filter::TYPE_MULTIPLE === $options['filter_type']) {
                 $form->add('min', NumberType::class, [
                     'label' => $filter->getLabel(),
-                    'required' => false, 'mapped' => false
+                    'required' => false, 'mapped' => false,
                 ]);
 
                 $form->add('max', NumberType::class, [
-                    'label' => false, 'required' => false, 'mapped' => false
+                    'label' => false, 'required' => false, 'mapped' => false,
                 ]);
-            } elseif ($options['filter_type'] === Filter::TYPE_MULTIPLE_DATE) {
-
+            } elseif (Filter::TYPE_MULTIPLE_DATE === $options['filter_type']) {
                 $form->add('min', DateType::class, [
                     'format' => 'd/m/Y',
                     'label' => $filter->getLabel(), 'widget' => 'single_text',
-                    'html5' => false, 'required' => false, 'mapped' => false
+                    'html5' => false, 'required' => false, 'mapped' => false,
                 ]);
 
                 $form->add('max', DateType::class, [
                     'format' => 'd/m/Y',
                     'label' => false, 'widget' => 'single_text',
-                    'html5' => false, 'required' => false, 'mapped' => false
+                    'html5' => false, 'required' => false, 'mapped' => false,
                 ]);
             }
-
         });
     }
 
@@ -55,9 +50,7 @@ class DisplayMultipleType extends AbstractType
     {
         $resolver->setDefaults([
             'filter_type' => null,
-            'label' => false
+            'label' => false,
         ]);
     }
-
-
 }

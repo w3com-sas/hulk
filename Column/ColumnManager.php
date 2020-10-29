@@ -7,41 +7,37 @@ use W3com\HulkBundle\Model\Display;
 
 class ColumnManager
 {
-
     public function initColumns(Display $dataTable)
     {
         $this->adaptColumnsWithData($dataTable);
         $this->addCheckboxColumn($dataTable);
+
         return $dataTable;
     }
 
-    /**
-     * @param Display $display
-     */
     private function adaptColumnsWithData(Display $display)
     {
         /** @var Column $column */
         foreach ($display->getColumns() as $column) {
             foreach ($display->getFirstLineData() as $property => $value) {
-
-                if (in_array($property , [$column->getFieldName(),$column->getIconFieldName(),$column->getLabelFieldName(), $column->getRenderFieldName()])) {
+                if (in_array($property, [$column->getFieldName(), $column->getIconFieldName(), $column->getLabelFieldName(), $column->getRenderFieldName()])) {
                     $column->setActive('Y');
                     continue;
                 }
 
                 if ($column->hasCellAction()) {
-                    if ($column->getCellAction()->getFunctionName() . $column->getCellAction()->getTargetEntity() == $property) {
+                    if ($column->getCellAction()->getFunctionName().$column->getCellAction()->getTargetEntity() == $property) {
                         $column->setActive('Y');
                         continue;
                     }
                 }
 
-                if ($column->getType() === Column::COL_TYPE_CALL_FUNCTION){
+                if (Column::COL_TYPE_CALL_FUNCTION === $column->getType()) {
                     $column->setActive('Y');
                     continue;
                 }
 
-                if ($column->getActive() !== 'Y') {
+                if ('Y' !== $column->getActive()) {
                     $column->setActive('N');
                 }
             }
@@ -64,6 +60,4 @@ class ColumnManager
 
         return $dataTable;
     }
-
-
 }

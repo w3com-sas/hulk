@@ -2,6 +2,7 @@
 
 namespace W3com\HulkBundle\Controller;
 
+use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -36,22 +37,25 @@ class SessionController extends AbstractController
     {
         try {
             $countFilters = $this->filterSession->addFilter();
-        } catch (\Exception $e){
+        } catch (Exception $e) {
             $this->logger->error($e->getMessage(), $e->getTrace());
+
             return new JsonResponse(['success' => false]);
         }
+
         return new JsonResponse(['success' => true, 'countFilters' => $countFilters]);
     }
 
-    public function  saveRowIndex()
+    public function saveRowIndex()
     {
         try {
             $this->session->saveRowIndex();
-        } catch (\Exception $e){
+        } catch (Exception $e) {
             $this->logger->error($e->getMessage(), $e->getTrace());
+
             return new JsonResponse(['success' => false]);
         }
+
         return new JsonResponse(['success' => true]);
     }
-
 }

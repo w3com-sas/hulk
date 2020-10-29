@@ -9,17 +9,15 @@ class MultipleFilterManager extends AbstractFilterManager
 {
     public function manageMultipleFilters(Display $dataTable)
     {
-        if (!empty($dataTable->getFilters())){
+        if (!empty($dataTable->getFilters())) {
             /** @var Filter $filter */
             foreach ($dataTable->getFilters() as $filter) {
-                if ($filter->getType() === Filter::TYPE_MULTIPLE || $filter->getType() === Filter::TYPE_MULTIPLE_DATE) {
-                    if ($filter->getActive() == 'Y' && !$this->isColumnExist($filter, $dataTable)) {
-
+                if (Filter::TYPE_MULTIPLE === $filter->getType() || Filter::TYPE_MULTIPLE_DATE === $filter->getType()) {
+                    if ('Y' == $filter->getActive() && !$this->isColumnExist($filter, $dataTable)) {
                         $this->addHidenColumn($filter, $dataTable);
                     }
                 }
             }
         }
-
     }
 }

@@ -3,24 +3,24 @@
 namespace W3com\HulkBundle\Service;
 
 use Psr\Log\LoggerInterface;
+use ReflectionException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use W3com\BoomBundle\Service\BoomGenerator;
+use W3com\BoomBundle\Service\BoomManager;
 use W3com\HulkBundle\Column\ColumnManager;
 use W3com\HulkBundle\Filter\FilterManager;
 use W3com\HulkBundle\Filter\FilterSessionManager;
 use W3com\HulkBundle\Finder\JsonFinder;
 use W3com\HulkBundle\Model\Display;
 use W3com\HulkBundle\Query\QueryManager;
-use W3com\BoomBundle\Service\BoomManager;
 use W3com\HulkBundle\Renderer\Renderer;
 use W3com\HulkBundle\Url\UrlManager;
-use W3com\HulkBundle\Util\DisplayConstructor;
 use W3com\HulkBundle\Util\DataTransformer;
+use W3com\HulkBundle\Util\DisplayConstructor;
 use W3com\HulkBundle\Util\Indexor;
 
 class DisplayProvider
 {
-
     /** @var QueryManager */
     private $queryManager;
 
@@ -62,14 +62,8 @@ class DisplayProvider
 
     /**
      * DisplayProvider constructor.
+     *
      * @param $config
-     * @param BoomManager $boom
-     * @param BoomGenerator $generator
-     * @param UrlGeneratorInterface $router
-     * @param FilterSessionManager $filterSessionManager
-     * @param LoggerInterface $logger
-     * @param DisplayConstructor $constructor
-     * @param SessionManager $sessionManager
      */
     public function __construct($config, BoomManager $boom, BoomGenerator $generator, UrlGeneratorInterface $router, FilterSessionManager $filterSessionManager,
                                 LoggerInterface $logger, DisplayConstructor $constructor, SessionManager $sessionManager)
@@ -92,9 +86,11 @@ class DisplayProvider
     /**
      * @param $filename
      * @param array $getRequestParams
-     * @param null $maxResults
+     * @param null  $maxResults
+     *
+     * @throws ReflectionException
+     *
      * @return Display
-     * @throws \ReflectionException
      */
     public function getDisplay($filename, $getRequestParams = [], $maxResults = null)
     {
@@ -115,21 +111,15 @@ class DisplayProvider
                 $this->indexor->addIndex($display);
             }
         }
+
         return $display;
     }
 
-
-    /**
-     * @return JsonFinder
-     */
     public function getJsonFinder(): JsonFinder
     {
         return $this->jsonFinder;
     }
 
-    /**
-     * @return DisplayConstructor
-     */
     public function getConstructor(): DisplayConstructor
     {
         return $this->constructor;

@@ -3,6 +3,7 @@
 namespace W3com\HulkBundle\Service;
 
 use Doctrine\Common\Annotations\AnnotationException;
+use ReflectionException;
 use W3com\BoomBundle\HanaEntity\AbstractEntity;
 use W3com\BoomBundle\Parameters\Parameters;
 use W3com\BoomBundle\Service\BoomManager;
@@ -18,15 +19,17 @@ class SearchViewProvider
 
     /**
      * @param $params
-     * @return array
+     *
      * @throws AnnotationException
-     * @throws \ReflectionException
+     * @throws ReflectionException
+     *
+     * @return array
      */
     public function getBoomResults($params)
     {
         $repo = $this->boom->getRepository($params['entity']);
 
-        if (array_key_exists('filters', $params) && !empty($params['filters'])){
+        if (array_key_exists('filters', $params) && !empty($params['filters'])) {
             $rawFilter = ' and (';
         } else {
             $rawFilter = '(';
@@ -36,7 +39,6 @@ class SearchViewProvider
         $search = array_key_exists('search', $params) ? $params['search'] : null;
         $top = array_key_exists('top', $params) ? $params['top'] : 100;
         $filters = array_key_exists('filters', $params) ? $params['filters'] : [];
-
 
         $rawFilter = $this->createRawFilter($columns, $search, $rawFilter);
 
@@ -54,24 +56,26 @@ class SearchViewProvider
     private function createRawFilter($columns, $search, $rawFilter = '')
     {
         foreach ($columns as $col => $displayName) {
-
             if (end($columns) !== $displayName) {
-                $rawFilter .= 'substringof(\'' . strtolower($search) . '\' , ' . $col . ') or ';
-                $rawFilter .= 'substringof(\'' . strtoupper($search) . '\' , ' . $col . ') or ';
+                $rawFilter .= 'substringof(\''.strtolower($search).'\' , '.$col.') or ';
+                $rawFilter .= 'substringof(\''.strtoupper($search).'\' , '.$col.') or ';
             } else {
-                $rawFilter .= 'substringof(\'' . strtolower($search) . '\' , ' . $col . ') or ';
-                $rawFilter .= 'substringof(\'' . strtoupper($search) . '\' , ' . $col . ')';
+                $rawFilter .= 'substringof(\''.strtolower($search).'\' , '.$col.') or ';
+                $rawFilter .= 'substringof(\''.strtoupper($search).'\' , '.$col.')';
             }
         }
+
         return $rawFilter.')';
     }
 
     /**
      * @param $results
      * @param $requestedColumns
-     * @return array
+     *
      * @throws AnnotationException
-     * @throws \ReflectionException
+     * @throws ReflectionException
+     *
+     * @return array
      */
     private function retrieveResults($results, $requestedColumns)
     {
@@ -80,7 +84,6 @@ class SearchViewProvider
         foreach ($results as $result) {
             $data[] = \GuzzleHttp\json_decode($result->getEntityJson(), true);
         }
-
 
         $newData = [];
         foreach ($data as $line) {
@@ -92,11 +95,10 @@ class SearchViewProvider
 
     private function addFilters(array $filters, Parameters $params)
     {
-        foreach ($filters as $field => $value){
+        foreach ($filters as $field => $value) {
             $params = $params->addFilter($field, $value);
         }
+
         return $params;
     }
-
-
 }

@@ -3,7 +3,9 @@
 namespace W3com\HulkBundle\Controller;
 
 use Doctrine\Common\Annotations\AnnotationException;
+use Exception;
 use Psr\Log\LoggerInterface;
+use ReflectionException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -46,9 +48,11 @@ class DisplayFormController extends AbstractController
 
     /**
      * @param $filename
-     * @return Response
+     *
      * @throws AnnotationException
-     * @throws \ReflectionException
+     * @throws ReflectionException
+     *
+     * @return Response
      */
     public function displayForm($filename)
     {
@@ -65,28 +69,29 @@ class DisplayFormController extends AbstractController
             $numberOfLineMax = $this->displayFormProvider->getMaxResultReturned();
             $jsonFinder = $this->displayFormProvider->getJsonFinder();
             $configDisplay = $jsonFinder->getOnlineJson($routeParams['filename']);
-            if($configDisplay){
-                $config = json_decode($configDisplay,true);
+            if ($configDisplay) {
+                $config = json_decode($configDisplay, true);
                 $entityNameDisplay = $config['CalculationView'];
             }
             $queryManager = $this->displayFormProvider->getQueryManager();
-            $numberOfLineQuery = $queryManager->getResultLength($entityNameDisplay,$routeParams,$display);
+            $numberOfLineQuery = $queryManager->getResultLength($entityNameDisplay, $routeParams, $display);
 
-            if($numberOfLineQuery > $numberOfLineMax || $numberOfLineQuery == 0){
+            if ($numberOfLineQuery > $numberOfLineMax || 0 == $numberOfLineQuery) {
                 return $this->render('@W3comHulk/display_form/form.html.twig', [
                     'form' => $form->createView(),
                     'filename' => $filename,
                     'display' => $display,
                     'hasExceededMaxNumberLines' => true,
                     'numberOfLineMax' => $numberOfLineMax,
-                    'numberOfLineQuery' => $numberOfLineQuery
+                    'numberOfLineQuery' => $numberOfLineQuery,
                 ]);
             }
 
             return $this->redirectToRoute('w3com_display', $routeParams);
         }
+
         return $this->render('@W3comHulk/display_form/form.html.twig', [
-            'form' => $form->createView(), 'filename' => $filename, 'display' => $display
+            'form' => $form->createView(), 'filename' => $filename, 'display' => $display,
         ]);
     }
 
@@ -96,7 +101,7 @@ class DisplayFormController extends AbstractController
     public function displayFormReload()
     {
         $postRequest = $this->request->getCurrentRequest()->request;
-        if (!$postRequest->has('calcView')){
+        if (!$postRequest->has('calcView')) {
             return new JsonResponse('Calculation view param required', 400);
         }
 
@@ -108,10 +113,12 @@ class DisplayFormController extends AbstractController
             $data = $this->displayFormProvider->getDataFromChoices($calculationView, $choices, $allFields);
         } catch (EntityNotFoundException $e) {
             return new JsonResponse($e->getMessage(), 400);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->error($e->getMessage(), $e->getTrace());
+
             return new JsonResponse(null, 500);
         }
+
         return new JsonResponse($data);
     }
 }
