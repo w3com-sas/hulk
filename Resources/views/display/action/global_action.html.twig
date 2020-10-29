@@ -27,7 +27,10 @@
                 {{ icon|raw }}
                 {{ globalAction.label }}
             </button>
-        {% elseif globalAction.config.targetDataType is same as (constant('W3com\\HulkBundle\\Model\\Config::DATA_TYPE_ARRAY')) %}
+        {% elseif 
+            globalAction.config.targetDataType is same as (constant('W3com\\HulkBundle\\Model\\Config::DATA_TYPE_ARRAY')) 
+            or globalAction.config.targetDataType is same as (constant('W3com\\HulkBundle\\Model\\Config::DATA_TYPE_CONTROLLED_LIST'))
+        %}
             <button class="btn btn-{{ color }} m-1"
                     id="btn{{ globalAction.type }}{{ globalAction.config.targetDataType }}{{ globalAction.index }}"
                     targetEntity="{{ globalAction.config.entity }}"
