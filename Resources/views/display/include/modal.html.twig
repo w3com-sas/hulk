@@ -30,7 +30,7 @@
             {% set title = globalAction.label %}
         {% endif %}
         <div class="modal fade" id="{{ modalId }}" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: max-content;">
                 <div class="modal-content">
                     <div class="modal-header flex-column">
                         <h5 class="modal-title text-center">
@@ -113,7 +113,7 @@
             action.type~action.index
         %}
         <div class="modal fade" id="{{ id }}" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog" role="document" style="max-width: max-content;">
                 <div class="modal-content">
                     <div class="modal-header" id="{{ id }}Header">
                         <h5 class="modal-title my-auto" id="{{ id }}TextLoading">Texte</h5>
