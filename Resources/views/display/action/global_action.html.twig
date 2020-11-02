@@ -7,6 +7,14 @@
                 {{ icon|raw }}
                 {{ globalAction.label }}
             </button>
+        {% elseif globalAction.type is same as (constant('W3com\\HulkBundle\\Model\\GlobalAction::TYPE_LINK')) %}
+            <a class="btn btn-{{ color }}" href="{{ globalAction.config.url }}"
+               id="btn{{ globalAction.type }}{{ globalAction.config.targetDataType }}{{ globalAction.index }}"
+               targetField="{{ globalAction.config.targetField }}"
+            >
+                {{ icon|raw }}
+                {{ globalAction.label }}
+            </a>
         {% elseif globalAction.type is same as (constant('W3com\\HulkBundle\\Model\\GlobalAction::TYPE_PRINT')) %}
             <button class="btn btn-{{ color }}"
                     id="btn{{ globalAction.type }}{{ globalAction.config.targetDataType }}{{ globalAction.index }}"

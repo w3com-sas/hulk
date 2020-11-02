@@ -20,6 +20,7 @@ class GlobalAction
     const TYPE_PRINT = 'print';
     const TYPE_RENDER_VIEW = 'render-view';
     const TYPE_UPDATE_SAP = 'update-sap';
+    const TYPE_LINK = 'link';
 
     /**
      * @var string
