@@ -4,125 +4,160 @@ namespace W3com\HulkBundle\Model;
 
 class Column
 {
-    const FIELD_LABEL = 'Label';
-    const FIELD_FIELDNAME = 'FieldName';
-    const FIELD_ICON_FIELDNAME = 'IconFieldName';
-    const FIELD_LABEL_FIELDNAME = 'LabelFieldName';
-    const FIELD_RENDER_FIELDNAME = 'RenderFieldName';
-    const FIELD_TYPE = 'Type';
     const FIELD_CELL_ACTION = 'CellAction';
-    const FIELD_WIDTH = 'Width';
+    const FIELD_FIELDNAME = 'FieldName';
     const FIELD_HIDDEN = 'Hidden';
-    const FIELD_ORDERABLE = 'Orderable';
-    const FIELD_SEARCHABLE = 'Searchable';
-    const FIELD_PARAMS = 'Params';
-    const FIELD_RENDER_ELEMENT_OPTIONS = 'RenderElementOptions';
     const FIELD_ICON = 'Icon';
+    const FIELD_ICON_FIELDNAME = 'IconFieldName';
+    const FIELD_LABEL = 'Label';
+    const FIELD_LABEL_FIELDNAME = 'LabelFieldName';
+    const FIELD_ORDERABLE = 'Orderable';
+    const FIELD_PARAMS = 'Params';
     const FIELD_RENDER = 'Render';
+    const FIELD_RENDER_ELEMENT_OPTIONS = 'RenderElementOptions';
+    const FIELD_RENDER_FIELDNAME = 'RenderFieldName';
+    const FIELD_SEARCHABLE = 'Searchable';
+    const FIELD_TYPE = 'Type';
+    const FIELD_WIDTH = 'Width';
 
     const FUNCTION_NAME_DISPLAY_LINK = 'displayLink';
     const FUNCTION_NAME_DISPLAY_LINKS = 'displayLinks';
     const FUNCTION_NAME_LINK = 'link';
 
-    const COL_TYPE_TEXT = 'text';
+    const COL_TYPE_ACTION = 'action';
+    const COL_TYPE_CALL_FUNCTION = 'call-function';
     const COL_TYPE_CHECKBOX = 'checkbox';
     const COL_TYPE_ICON = 'icon';
-    const COL_TYPE_UPDATE_SAP = 'update-sap';
-    const COL_TYPE_ACTION = 'action';
-    const COL_TYPE_UNIVERSAL = 'universal';
-    const COL_TYPE_INPUT_TEXT = 'input-text';
     const COL_TYPE_INPUT_NUMBER = 'input-number';
+    const COL_TYPE_INPUT_TEXT = 'input-text';
     const COL_TYPE_RENDER_ELEMENT = 'render-element';
-    const COL_TYPE_CALL_FUNCTION = 'call-function';
+    const COL_TYPE_TEXT = 'text';
+    const COL_TYPE_UNIVERSAL = 'universal';
+    const COL_TYPE_UPDATE_SAP = 'update-sap';
 
-    /** @var int */
+    /**
+     * @var int
+     */
     private $index;
 
-    /** @var bool */
+    /**
+     * @var bool
+     */
     private $hidden;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     private $params;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $label;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $fieldName;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $iconFieldName;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $labelFieldName;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $renderFieldName;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $render;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $icon;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $type;
 
-    /** @var CellAction */
+    /**
+     * @var CellAction
+     */
     private $cellAction;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $active;
 
-    /** @var int */
+    /**
+     * @var int
+     */
     private $width;
 
-    /** @var bool */
+    /**
+     * @var bool
+     */
     private $searchable = true;
 
-    /** @var bool */
+    /**
+     * @var bool
+     */
     private $orderable = false;
 
-    /** @var Config */
+    /**
+     * @var Config
+     */
     private $config;
 
+    /**
+     * @var RenderElement
+     */
     private $renderElement;
 
+    /**
+     * @var array
+     */
     private $renderElementOptions = [];
 
-    public function setLabel($label)
+    public function setLabel(string $label): void
     {
-        return $this->label = $label;
+        $this->label = $label;
     }
 
-    public function setFieldName($fieldName)
-    {
-        $this->fieldName = $fieldName;
-    }
-
-    public function getFieldName()
-    {
-        return $this->fieldName;
-    }
-
-    public function setActive(string $active)
-    {
-        $this->active = $active;
-    }
-
-    public function getActive()
-    {
-        return $this->active;
-    }
-
-    public function getLabel()
+    public function getLabel(): string
     {
         return $this->label;
     }
 
-    public function isHidden(): ?bool
+    public function setFieldName(string $fieldName): void
     {
-        return $this->hidden;
+        $this->fieldName = $fieldName;
+    }
+
+    public function getFieldName(): string
+    {
+        return $this->fieldName;
+    }
+
+    public function setActive(string $active): void
+    {
+        $this->active = $active;
+    }
+
+    public function getActive(): string
+    {
+        return $this->active;
     }
 
     public function setHidden(bool $hidden): void
@@ -130,29 +165,29 @@ class Column
         $this->hidden = $hidden;
     }
 
-    public function getIndex()
+    public function isHidden(): ?bool
     {
-        return $this->index;
+        return $this->hidden;
     }
 
-    public function setIndex($index): void
+    public function setIndex(string $index): void
     {
         $this->index = $index;
     }
 
-    public function getType()
+    public function getIndex(): string
     {
-        return $this->type;
+        return $this->index;
     }
 
-    public function setType($type): void
+    public function setType(string $type): void
     {
         $this->type = $type;
     }
 
-    public function getCellAction(): ?CellAction
+    public function getType(): string
     {
-        return $this->cellAction;
+        return $this->type;
     }
 
     public function hasCellAction(): bool
@@ -165,14 +200,19 @@ class Column
         $this->cellAction = $cellAction;
     }
 
-    public function getWidth(): ?int
+    public function getCellAction(): ?CellAction
     {
-        return $this->width;
+        return $this->cellAction;
     }
 
     public function setWidth(int $width): void
     {
         $this->width = $width;
+    }
+
+    public function getWidth(): ?int
+    {
+        return $this->width;
     }
 
     public function isSearchable(): bool
@@ -195,29 +235,24 @@ class Column
         $this->orderable = $orderable;
     }
 
-    public function getIconFieldName()
-    {
-        return $this->iconFieldName;
-    }
-
-    public function setIconFieldName($iconFieldName): void
+    public function setIconFieldName(string $iconFieldName): void
     {
         $this->iconFieldName = $iconFieldName;
     }
 
-    public function getLabelFieldName()
+    public function getIconFieldName(): string
     {
-        return $this->labelFieldName;
+        return $this->iconFieldName;
     }
 
-    public function setLabelFieldName($labelFieldName): void
+    public function setLabelFieldName(string $labelFieldName): void
     {
         $this->labelFieldName = $labelFieldName;
     }
 
-    public function getConfig(): ?Config
+    public function getLabelFieldName(): string
     {
-        return $this->config;
+        return $this->labelFieldName;
     }
 
     public function setConfig(Config $config): void
@@ -225,9 +260,9 @@ class Column
         $this->config = $config;
     }
 
-    public function getRenderFieldName(): ?string
+    public function getConfig(): ?Config
     {
-        return $this->renderFieldName;
+        return $this->config;
     }
 
     public function setRenderFieldName(string $renderFieldName): void
@@ -235,9 +270,9 @@ class Column
         $this->renderFieldName = $renderFieldName;
     }
 
-    public function getParams(): array
+    public function getRenderFieldName(): ?string
     {
-        return $this->params;
+        return $this->renderFieldName;
     }
 
     public function setParams(array $params): void
@@ -245,9 +280,9 @@ class Column
         $this->params = $params;
     }
 
-    public function getRenderElementOptions(): array
+    public function getParams(): array
     {
-        return $this->renderElementOptions;
+        return $this->params;
     }
 
     public function setRenderElementOptions(array $renderElementOptions): void
@@ -255,9 +290,9 @@ class Column
         $this->renderElementOptions = $renderElementOptions;
     }
 
-    public function getRenderElement(): ?RenderElement
+    public function getRenderElementOptions(): array
     {
-        return $this->renderElement;
+        return $this->renderElementOptions;
     }
 
     public function setRenderElement(RenderElement $renderElement): void
@@ -265,12 +300,9 @@ class Column
         $this->renderElement = $renderElement;
     }
 
-    /**
-     * @return string
-     */
-    public function getIcon(): ?string
+    public function getRenderElement(): ?RenderElement
     {
-        return $this->icon;
+        return $this->renderElement;
     }
 
     public function setIcon(string $icon): void
@@ -278,16 +310,18 @@ class Column
         $this->icon = $icon;
     }
 
-    /**
-     * @return string
-     */
-    public function getRender(): ?string
+    public function getIcon(): ?string
     {
-        return $this->render;
+        return $this->icon;
     }
 
     public function setRender(string $render): void
     {
         $this->render = $render;
+    }
+
+    public function getRender(): ?string
+    {
+        return $this->render;
     }
 }

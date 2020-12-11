@@ -89,6 +89,11 @@ class Config
      */
     private $label = '';
 
+    /**
+     * @var string
+     */
+    private $inputType;
+
     public function getEntity(): ?string
     {
         return $this->entity;
@@ -224,5 +229,15 @@ class Config
     public function setMessageConfirm(string $messageConfirm): void
     {
         $this->messageConfirm = $messageConfirm;
+    }
+
+    public function getInputType(): string
+    {
+        return $this->inputType;
+    }
+
+    public function setInputType(string $inputType): void
+    {
+        $this->inputType = $inputType;
     }
 }
