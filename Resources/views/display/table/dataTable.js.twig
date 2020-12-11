@@ -291,11 +291,20 @@ $(document).ready(function () {
 
                                         return template;
                                     {% else %}
-                                        return '<input type="text" value="' + data + '"' + 'class="form-control form-control-sm"'
-                                            + 'data-entity="' + '{{ column.config.entity }}'
-                                            + '" data-field-name="' + '{{ column.config.targetField ? column.config.targetField  : column.fieldName }}'
-                                            + '" data-key="' + row.{{ column.config.entityKey }}
-                                            + '" onchange="updateSapLine(this)"/>'
+                                        {# Need to format the date from d/m/Y to Y-m-d #}
+                                        {% if column.config.updateSapInputType is same as (constant('W3com\\HulkBundle\\Model\\Config::TYPE_UPDATE_SAP_INPUT_DATE')) %}
+                                            day = data.substring(0, 2)
+                                            month = data.substring(3, 5)
+                                            year = data.substring(6, 10)
+                                            data = year+'-'+month+'-'+day
+                                        {% endif %}
+                                        return '<input class="form-control form-control-sm"'
+                                            + 'type="{{ column.config.updateSapInputType }}"'
+                                            + 'value="' + data + '"'
+                                            + 'data-entity="{{ column.config.entity }}"'
+                                            + 'data-field-name="{{ column.config.targetField ? column.config.targetField  : column.fieldName }}"'
+                                            + 'data-key="' + row.{{ column.config.entityKey }} + '"'
+                                            + 'onchange="updateSapLine(this)"/>'
                                         ;
                                     {% endif %}
                                 }

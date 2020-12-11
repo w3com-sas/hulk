@@ -23,6 +23,9 @@ class Config
     const FIELD_NAME = 'Name';
     const FIELD_URL = 'Url';
     const FIELD_USER_CONFIRM = 'UserConfirm';
+    const FIELD_UPDATE_SAP_INPUT_TYPE = 'InputType';
+
+    const TYPE_UPDATE_SAP_INPUT_DATE = 'date';
 
     /**
      * @var string
@@ -92,7 +95,12 @@ class Config
     /**
      * @var string
      */
-    private $inputType;
+    private $updateSapInputType;
+
+    public function __construct()
+    {
+        $this->updateSapInputType = 'text';
+    }
 
     public function getEntity(): ?string
     {
@@ -231,13 +239,13 @@ class Config
         $this->messageConfirm = $messageConfirm;
     }
 
-    public function getInputType(): string
+    public function getUpdateSapInputType(): string
     {
-        return $this->inputType;
+        return $this->updateSapInputType;
     }
 
-    public function setInputType(string $inputType): void
+    public function setUpdateSapInputType(string $updateSapInputType): void
     {
-        $this->inputType = $inputType;
+        $this->updateSapInputType = $updateSapInputType;
     }
 }
