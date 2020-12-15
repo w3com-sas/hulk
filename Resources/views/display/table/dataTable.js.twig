@@ -293,19 +293,39 @@ $(document).ready(function () {
                                     {% else %}
                                         {# Need to format the date from d/m/Y to Y-m-d #}
                                         {% if column.config.updateSapInputType is same as (constant('W3com\\HulkBundle\\Model\\Config::TYPE_UPDATE_SAP_INPUT_DATE')) %}
-                                            day = data.substring(0, 2)
-                                            month = data.substring(3, 5)
-                                            year = data.substring(6, 10)
+                                            let day = data.substring(0, 2)
+                                            let month = data.substring(3, 5)
+                                            let year = data.substring(6, 10)
                                             data = year+'-'+month+'-'+day
                                         {% endif %}
-                                        return '<input class="form-control form-control-sm"'
+
+                                        let updateSapInput = '<input class="form-control form-control-sm"'
                                             + 'type="{{ column.config.updateSapInputType }}"'
                                             + 'value="' + data + '"'
-                                            + 'data-entity="{{ column.config.entity }}"'
-                                            + 'data-field-name="{{ column.config.targetField ? column.config.targetField  : column.fieldName }}"'
-                                            + 'data-key="' + row.{{ column.config.entityKey }} + '"'
-                                            + 'onchange="updateSapLine(this)"/>'
                                         ;
+
+                                        {% if column.config.entity %}
+                                            updateSapInput += 'data-entity="{{ column.config.entity }}"'
+                                        {% endif %}
+
+                                        {% if column.config.targetField %}
+                                            updateSapInput += 'data-field-name="{{ column.config.targetField ? column.config.targetField  : column.fieldName }}"'
+                                        {% endif %}
+
+                                        {% if column.config.entityKey %}
+                                            updateSapInput += 'data-key="' + row.{{ column.config.entityKey }} + '"'
+                                        {% endif %}
+
+                                        {% if column.config.updateSapLocalFunctionName is not same as (constant('W3com\\HulkBundle\\Model\\Config::TYPE_UPDATE_SAP_DEFAULT_FUNCTION')) %}
+                                            {# Parameters of the local called function is, in all cases, the row plus the input #}
+                                            {# The row is a Json object #}
+                                            {# Need to change all (") to (') cause this (") break the way that the input is render in HTML #}
+                                            updateSapInput += 'onchange="{{ column.config.updateSapLocalFunctionName }}(' + JSON.stringify(row).replaceAll('"', '\'') + ',this)"/>'
+                                        {% else %}
+                                            updateSapInput += 'onchange="{{ column.config.updateSapLocalFunctionName }}"/>'
+                                        {% endif %}
+
+                                        return updateSapInput
                                     {% endif %}
                                 }
                             },

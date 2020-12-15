@@ -24,8 +24,11 @@ class Config
     const FIELD_URL = 'Url';
     const FIELD_USER_CONFIRM = 'UserConfirm';
     const FIELD_UPDATE_SAP_INPUT_TYPE = 'InputType';
+    const FIELD_UPDATE_SAP_FUNCTION_NAME = 'LocalFunctionName';
 
+    const TYPE_UPDATE_SAP_INPUT_TEXT = 'text';
     const TYPE_UPDATE_SAP_INPUT_DATE = 'date';
+    const TYPE_UPDATE_SAP_DEFAULT_FUNCTION = 'updateSapLine(this)';
 
     /**
      * @var string
@@ -97,9 +100,15 @@ class Config
      */
     private $updateSapInputType;
 
+    /**
+     * @var string
+     */
+    private $updateSapLocalFunctionName;
+
     public function __construct()
     {
-        $this->updateSapInputType = 'text';
+        $this->updateSapInputType = self::TYPE_UPDATE_SAP_INPUT_TEXT;
+        $this->updateSapLocalFunctionName = self::TYPE_UPDATE_SAP_DEFAULT_FUNCTION;
     }
 
     public function getEntity(): ?string
@@ -247,5 +256,15 @@ class Config
     public function setUpdateSapInputType(string $updateSapInputType): void
     {
         $this->updateSapInputType = $updateSapInputType;
+    }
+
+    public function getUpdateSapLocalFunctionName(): string
+    {
+        return $this->updateSapLocalFunctionName;
+    }
+
+    public function setUpdateSapLocalFunctionName(string $updateSapLocalFunctionName): void
+    {
+        $this->updateSapLocalFunctionName = $updateSapLocalFunctionName;
     }
 }
