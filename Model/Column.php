@@ -130,22 +130,22 @@ class Column
      */
     private $renderElementOptions = [];
 
-    public function setLabel(string $label): void
+    public function setLabel(?string $label): void
     {
         $this->label = $label;
     }
 
-    public function getLabel(): string
+    public function getLabel(): ?string
     {
         return $this->label;
     }
 
-    public function setFieldName(string $fieldName): void
+    public function setFieldName(?string $fieldName): void
     {
         $this->fieldName = $fieldName;
     }
 
-    public function getFieldName(): string
+    public function getFieldName(): ?string
     {
         return $this->fieldName;
     }
@@ -155,7 +155,7 @@ class Column
         $this->active = $active;
     }
 
-    public function getActive(): string
+    public function getActive(): ?string
     {
         return $this->active;
     }
@@ -175,7 +175,7 @@ class Column
         $this->index = $index;
     }
 
-    public function getIndex(): string
+    public function getIndex(): ?string
     {
         return $this->index;
     }
@@ -185,7 +185,7 @@ class Column
         $this->type = $type;
     }
 
-    public function getType(): string
+    public function getType(): ?string
     {
         return $this->type;
     }
@@ -240,7 +240,7 @@ class Column
         $this->iconFieldName = $iconFieldName;
     }
 
-    public function getIconFieldName(): string
+    public function getIconFieldName(): ?string
     {
         return $this->iconFieldName;
     }
@@ -250,7 +250,7 @@ class Column
         $this->labelFieldName = $labelFieldName;
     }
 
-    public function getLabelFieldName(): string
+    public function getLabelFieldName(): ?string
     {
         return $this->labelFieldName;
     }
