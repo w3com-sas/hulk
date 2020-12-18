@@ -363,6 +363,12 @@ class DisplayConstructor
                 case Config::FIELD_USER_CONFIRM:
                     $newConfig->setUserConfirm($value);
                     break;
+                case Config::FIELD_UPDATE_SAP_INPUT_TYPE:
+                    $newConfig->setUpdateSapInputType($value);
+                    break;
+                case Config::FIELD_UPDATE_SAP_FUNCTION_NAME:
+                    $newConfig->setUpdateSapLocalFunctionName($value);
+                    break;
             }
         }
 
