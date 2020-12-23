@@ -10,7 +10,7 @@
     }
 }(function ($, moment) {
     $.fn.dataTable.moment = function (format, locale) {
-        let types = $.fn.dataTable.ext.type;
+        var types = $.fn.dataTable.ext.type;
 
         // Add type detection
         types.detect.unshift(function (d) {
@@ -59,7 +59,7 @@ $(document).ready(function () {
     // Add all datetime format here
     $.fn.dataTable.moment('DD/MM/YYYY');
 
-    let data = [
+    var data = [
         {% for object in display.data %}
         {
             'idLines': 'line{{ loop.index }}',
@@ -70,7 +70,7 @@ $(document).ready(function () {
         {% endfor %}
     ];
 
-    let table = $('#dataTable').DataTable({
+    var table = $('#dataTable').DataTable({
             language: {
                 processing: "Traitement en cours...",
                 search: "Rechercher&nbsp;:",
@@ -110,14 +110,14 @@ $(document).ready(function () {
                                     {% endif %}
                                     data: "{{ column.fieldName }}",
                                     render: function (data, type, row) {
-                                        let idTpl = '#' + '{{ column.cellAction.functionName }}{{ column.index }}';
-                                        let tpl = $(idTpl).html();
+                                        var idTpl = '#' + '{{ column.cellAction.functionName }}{{ column.index }}';
+                                        var tpl = $(idTpl).html();
 
                                         if (data === '') {
                                             return null;
                                         }
                                         {% if column.cellAction.iconFieldName is not null %}
-                                            let icon = row.{{ column.cellAction.iconFieldName }};
+                                            var icon = row.{{ column.cellAction.iconFieldName }};
                                             return tpl.replace('[[icon]]', icon).replace('[[data]]', data);
                                         {% else %}
                                             return tpl.replace('[[data]]', data);
@@ -137,8 +137,8 @@ $(document).ready(function () {
                                         if (data === '' || data === undefined || data === null) {
                                             return null;
                                         }
-                                        let idTpl = '#' + '{{ column.cellAction.functionName }}{{ column.cellAction.targetEntity }}';
-                                        let tpl = $(idTpl).html();
+                                        var idTpl = '#' + '{{ column.cellAction.functionName }}{{ column.cellAction.targetEntity }}';
+                                        var tpl = $(idTpl).html();
                                         return tpl.replace('[[data]]', data);
                                     }
                                 },
@@ -153,15 +153,15 @@ $(document).ready(function () {
                                             return null;
                                         }
 
-                                        let explodedLink = data.split('/');
-                                        let explodedGetParams = explodedLink[2].split('?');
+                                        var explodedLink = data.split('/');
+                                        var explodedGetParams = explodedLink[2].split('?');
 
                                         explodedGetParams[0] = document.getElementById('dropDownMenu' + '{{ column.index }}').dataset.display;
                                         explodedLink[2] = explodedGetParams.join('?');
 
-                                        let link = explodedLink.join('/');
-                                        let idTpl = '#' + '{{ column.cellAction.functionName }}{{ column.index }}';
-                                        let tpl = $(idTpl).html();
+                                        var link = explodedLink.join('/');
+                                        var idTpl = '#' + '{{ column.cellAction.functionName }}{{ column.index }}';
+                                        var tpl = $(idTpl).html();
 
                                         return tpl.replace('[[data]]', link);
                                     }
@@ -181,7 +181,7 @@ $(document).ready(function () {
                                 {% endif %}
                                 data: "{{ column.fieldName }}",
                                 render: function (data, type, row) {
-                                    let tpl = $('#icon').html();
+                                    var tpl = $('#icon').html();
                                     if (data.split(' ').length === 1) {
                                         data = 'fa fa-' + data;
                                     }
@@ -195,10 +195,10 @@ $(document).ready(function () {
                                 {% endif %}
                                 data: null,
                                 render: function (data, type, row) {
-                                    let iconRenderer;
-                                    let tplIcon = $('#icon').html();
+                                    var iconRenderer;
+                                    var tplIcon = $('#icon').html();
                                     if (row.hasOwnProperty('{{ column.iconFieldName }}') && (row.{{ column.iconFieldName }} !== '')) {
-                                        let prefixIcon;
+                                        var prefixIcon;
                                         if (row.{{ column.iconFieldName }}.split(' ').length === 1) {
                                             prefixIcon = 'fa fa-';
                                         }
@@ -206,15 +206,15 @@ $(document).ready(function () {
                                     } else {
                                         iconRenderer = tplIcon.replace('[[data]]', '{{ column.cellAction.icon }}')
                                     }
-                                    let labelRenderer = '';
+                                    var labelRenderer = '';
 
                                     if (row.hasOwnProperty('{{ column.labelFieldName }}') && row.{{ column.labelFieldName }} !== '') {
-                                        let tplLabel = $('#labelRenderer').html();
+                                        var tplLabel = $('#labelRenderer').html();
                                         labelRenderer = tplLabel.replace('[[data]]', row.{{ column.labelFieldName }});
                                     }
 
                                     {% if column.cellAction is defined %}
-                                        let tplAction = $('#action{{ column.cellAction.functionName }}{{ column.index }}').html();
+                                        var tplAction = $('#action{{ column.cellAction.functionName }}{{ column.index }}').html();
                                         tplAction = tplAction
                                             .replace('[[globalRender]]', iconRenderer + labelRenderer)
                                             .replace('[[row]]', JSON.stringify(row).replace(/"/g, '&quot;'))
@@ -236,9 +236,9 @@ $(document).ready(function () {
                                 {% endif %}
                                 data: null,
                                 render: function (data, type, row) {
-                                    let baseIcon = document.createElement('i');
-                                    let baseBtn = document.createElement('button');
-                                    let label =
+                                    var baseIcon = document.createElement('i');
+                                    var baseBtn = document.createElement('button');
+                                    var label =
                                         (row.hasOwnProperty('{{ column.labelFieldName }}') && row['{{ column.labelFieldName }}'] !== '')
                                         ? row['{{ column.labelFieldName }}']
                                         : ''
@@ -273,8 +273,8 @@ $(document).ready(function () {
                                 data: '{{ column.fieldName }}',
                                 render: function (data, type, row) {
                                     {% if column.config.targetChoices is iterable %}
-                                        let choices = {{ column.config.targetChoices|json_encode|raw }};
-                                        let template =
+                                        var choices = {{ column.config.targetChoices|json_encode|raw }};
+                                        var template =
                                             '<select data-entity="{{ column.config.entity }}"'
                                             + 'data-field-name="{{ column.fieldName }}"'
                                             + 'data-key="' + row['{{ column.config.entityKey }}']
@@ -293,13 +293,13 @@ $(document).ready(function () {
                                     {% else %}
                                         {# Need to format the date from d/m/Y to Y-m-d #}
                                         {% if column.config.updateSapInputType is same as (constant('W3com\\HulkBundle\\Model\\Config::TYPE_UPDATE_SAP_INPUT_DATE')) %}
-                                            let day = data.substring(0, 2)
-                                            let month = data.substring(3, 5)
-                                            let year = data.substring(6, 10)
+                                            var day = data.substring(0, 2)
+                                            var month = data.substring(3, 5)
+                                            var year = data.substring(6, 10)
                                             data = year+'-'+month+'-'+day
                                         {% endif %}
 
-                                        let updateSapInput = '<input class="form-control form-control-sm"'
+                                        var updateSapInput = '<input class="form-control form-control-sm"'
                                             + 'type="{{ column.config.updateSapInputType }}"'
                                             + 'value="' + data + '"'
                                         ;
@@ -319,11 +319,33 @@ $(document).ready(function () {
                                         {% if column.config.updateSapLocalFunctionName is not same as (constant('W3com\\HulkBundle\\Model\\Config::TYPE_UPDATE_SAP_DEFAULT_FUNCTION')) %}
                                             {# Parameters of the local called function is, in all cases, the row plus the input #}
                                             {# The row is a Json object #}
-                                            {# Need to change all (") to (') cause this (") break the way that the input is render in HTML #}
-                                            updateSapInput += 'onchange="{{ column.config.updateSapLocalFunctionName }}(' + JSON.stringify(row).replaceAll('"', '\'') + ',this)"/>'
+                                            {# The strigified row do not contain (") cause this (") break the way that the input is render in HTML #}
+                                            {# Force to make the following var because JSON.stringify(row) isn't supported by Chrome 47 #}
+                                            {# Moreover, String.protoype.replaceAll("'", "\'") isn't supported too, but the following var make this function useless #}
+                                            var arrayRow = [];
+
+                                            for (var i in row) {
+                                                if (row.hasOwnProperty(i)) {
+                                                    arrayRow.push([i, row[i]]);
+                                                }
+                                            }
+
+                                            var stringifiedRow = arrayRow
+                                                .reduce((a, e) => {
+                                                    if (typeof e[1] != 'function') {
+                                                        a += `'${e[0]}':'${e[1]}',`;
+                                                    }
+                                                    return a;
+                                                }, `'{`)
+                                                .slice(1, -2) + `'}`
+                                            ;
+
+                                            updateSapInput += 'onchange="{{ column.config.updateSapLocalFunctionName }}(' + stringifiedRow + ',this)"'
                                         {% else %}
-                                            updateSapInput += 'onchange="{{ column.config.updateSapLocalFunctionName }}"/>'
+                                            updateSapInput += 'onchange="{{ column.config.updateSapLocalFunctionName }}"'
                                         {% endif %}
+
+                                        updateSapInput += '/>'
 
                                         return updateSapInput
                                     {% endif %}
@@ -333,8 +355,8 @@ $(document).ready(function () {
                             {
                                 data: '{{ column.fieldName }}',
                                 render: function (data, type, row) {
-                                    let template = document.getElementById('{{ column.renderElement.elementId }}').innerHTML;
-                                    let input = template.replace('[[data]]', data);
+                                    var template = document.getElementById('{{ column.renderElement.elementId }}').innerHTML;
+                                    var input = template.replace('[[data]]', data);
                                     return (row.hasOwnProperty('{{ column.renderFieldName }}') && row['{{ column.renderFieldName }}'] !== '')
                                         ? '<div class="' + row['{{ column.renderFieldName }}'] + '">' + input + '</div>'
                                         : input
@@ -397,9 +419,9 @@ $(document).ready(function () {
             }
         },
         drawCallback: function () {
-            let selectedRows = $('#dataTable tbody .selected');
-            let headerCheckbox = $('#headerCheckbox input');
-            let allRows = $('#dataTable tbody tr');
+            var selectedRows = $('#dataTable tbody .selected');
+            var headerCheckbox = $('#headerCheckbox input');
+            var allRows = $('#dataTable tbody tr');
 
             if (selectedRows.length === allRows.length) {
                 headerCheckbox.prop('checked', true)
@@ -413,13 +435,13 @@ $(document).ready(function () {
     {% include '@W3comHulk/display/filter/filter.js.twig' %}
 
     $('#dataTable tbody').on('click', 'tr td label input', function () {
-        let row = this.parentNode.parentNode.parentNode;
+        var row = this.parentNode.parentNode.parentNode;
         if ($(row).hasClass('selected')) {
             $(row).removeClass('selected');
         } else {
             $(row).addClass('selected');
         }
-        let rows = table.rows('.selected').data();
+        var rows = table.rows('.selected').data();
         countSelectedRows(rows);
     });
 
@@ -443,7 +465,7 @@ $(document).ready(function () {
     });
 
     $('#dataTable tbody').on('click', 'tr', function () {
-        let data = {};
+        var data = {};
         data.currentRoute = '{{ app.request.getRequestUri() }}';
         data.scrollY = window.scrollY;
         data.rowIndex = table.row(this).index();
