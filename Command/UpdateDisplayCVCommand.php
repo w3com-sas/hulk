@@ -83,5 +83,6 @@ class UpdateDisplayCVCommand extends Command
                 }
             }
         }
+        return Command::SUCCESS;
     }
 }
