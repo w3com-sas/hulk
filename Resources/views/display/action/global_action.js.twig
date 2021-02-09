@@ -124,7 +124,6 @@ $('#btn{{ globalAction.type~globalAction.index }}').click(function () {
 
             },
             error: function (rep) {
-                console.log(rep);
                 callFunction.addUnknowError();
             },
             complete: function () {
@@ -157,7 +156,7 @@ $('#btn{{ globalAction.type~globalAction.index }}').click(function () {
     callFunction.startLoading();
     $.ajax({
         type: 'POST',
-        data: {data},
+        data: {data: JSON.stringify(data)},
         url: '{{ globalAction.config.url }}',
         success: function (rep) {
             callFunction.modalBody.innerHTML = rep.template;
