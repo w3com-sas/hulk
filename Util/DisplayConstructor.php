@@ -369,6 +369,9 @@ class DisplayConstructor
                 case Config::FIELD_UPDATE_SAP_FUNCTION_NAME:
                     $newConfig->setUpdateSapLocalFunctionName($value);
                     break;
+                case Config::FIELD_ADDITIONAL_PARAMETER:
+                    $newConfig->setAdditionalParameter($value);
+                    break;
             }
         }
 
