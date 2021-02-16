@@ -317,7 +317,7 @@ $(document).ready(function () {
                                         {% endif %}
 
                                         {% if column.config.updateSapLocalFunctionName is not same as (constant('W3com\\HulkBundle\\Model\\Config::TYPE_UPDATE_SAP_DEFAULT_FUNCTION')) %}
-                                            {# Parameters of the local called function is, in all cases, the row plus the input #}
+                                            {# Parameters of the local called function are the row plus the input plus, if it is set, config.additionalParameter #}
                                             {# The row is a Json object #}
                                             {# The strigified row do not contain (") cause this (") break the way that the input is render in HTML #}
                                             {# Force to make the following var because JSON.stringify(row) isn't supported by Chrome 47 #}
@@ -340,7 +340,11 @@ $(document).ready(function () {
                                                 .slice(1, -2) + `'}`
                                             ;
 
-                                            updateSapInput += 'onchange="{{ column.config.updateSapLocalFunctionName }}(' + stringifiedRow + ',this)"'
+                                            {% if column.config.additionalParameter is not same as (null) %}
+                                                updateSapInput += 'onchange="{{ column.config.updateSapLocalFunctionName }}(' + stringifiedRow + ',this, ' + {{ column.config.additionalParameter }} + ')"';
+                                            {% else %}
+                                                updateSapInput += 'onchange="{{ column.config.updateSapLocalFunctionName }}(' + stringifiedRow + ',this)"';
+                                            {% endif %}
                                         {% else %}
                                             updateSapInput += 'onchange="{{ column.config.updateSapLocalFunctionName }}"'
                                         {% endif %}

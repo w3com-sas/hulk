@@ -108,7 +108,9 @@ class Config
     private $updateSapLocalFunctionName;
 
     /**
-     * This is used only by 'call-function' global action, and allow to put a string parameter to the function call in name field.
+     * This is used by 'call-function' global action and 'update-sap' cell action.
+     * In call-function's case, allow to put a string parameter to the function called in $name field.
+     * In update-sap's case, allow to put a string parameter to the function called in $updateSapLocalFunctionName field.
      *
      * @var string
      */
