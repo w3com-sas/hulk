@@ -30,6 +30,8 @@ class Config
     const TYPE_UPDATE_SAP_INPUT_DATE = 'date';
     const TYPE_UPDATE_SAP_DEFAULT_FUNCTION = 'updateSapLine(this)';
 
+    const FIELD_ADDITIONAL_PARAMETER = 'AdditionalParameter';
+
     /**
      * @var string
      */
@@ -104,6 +106,15 @@ class Config
      * @var string
      */
     private $updateSapLocalFunctionName;
+
+    /**
+     * This is used by 'call-function' global action and 'update-sap' cell action.
+     * In call-function's case, allow to put a string parameter to the function called in $name field.
+     * In update-sap's case, allow to put a string parameter to the function called in $updateSapLocalFunctionName field.
+     *
+     * @var string
+     */
+    private $additionalParameter;
 
     public function __construct()
     {
@@ -266,5 +277,15 @@ class Config
     public function setUpdateSapLocalFunctionName(string $updateSapLocalFunctionName): void
     {
         $this->updateSapLocalFunctionName = $updateSapLocalFunctionName;
+    }
+
+    public function getAdditionalParameter(): ?string
+    {
+        return $this->additionalParameter;
+    }
+
+    public function setAdditionalParameter(?string $additionalParameter): void
+    {
+        $this->additionalParameter = $additionalParameter;
     }
 }
