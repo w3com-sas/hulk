@@ -104,7 +104,7 @@
         $('#btn{{ globalAction.type~globalAction.index }}').click(function () {
             var callFunction = new CallFunction('{{ globalAction.type }}{{ globalAction.index }}', '{{ globalAction.icon }}');
             callFunction.showModal('{{ globalAction.label }}');
-            var data = table.rows('.selected').data().toArray();
+            var data = JSON.stringify(table.rows('.selected').data().toArray());
             var ajaxCall = function () {
                 callFunction.startLoading();
                 $.ajax({

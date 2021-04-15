@@ -61,32 +61,31 @@ export const initUpdateSap = (globalAction) => {
     })
 };
 
+// TODO : code mort ?
 export const renderForm = (globalAction, lines) => {
     document.addEventListener(globalAction.renderElements.btn.id, () => {
 
     });
     apiJsonRequest(globalAction.url, data)
-            .then((resp) => {
-                if (typeof resp.template !== "undefined") {
-                    callFunction.modalBody.innerHTML = resp.template;
-                    let form = callFunction.modalBody.querySelector('form');
+        .then((resp) => {
+            if (typeof resp.template !== "undefined") {
+                callFunction.modalBody.innerHTML = resp.template;
+                let form = callFunction.modalBody.querySelector('form');
 
-                    if (typeof form !== "undefined"){
+                if (typeof form !== "undefined") {
 
-                    }
-                    callFunction.addValidateBtn(() => {
-                        let data = typeof form !== "undefined" ? {
-                            lines: lines,
-                            form: $(form).serializeArray()
-                        } : {lines: lines};
-                        sendRequest(globalAction.url, data);
-                    });
                 }
+                callFunction.addValidateBtn(() => {
+                    let data = typeof form !== "undefined" ? {
+                        lines: lines,
+                        form: $(form).serializeArray()
+                    } : {lines: lines};
+                    sendRequest(globalAction.url, data);
+                });
+            }
 
-                if (typeof resp.reload !== "undefined" && resp.reload === true) {
-                    window.location.reload();
-                }
-            });
-    }
-
+            if (typeof resp.reload !== "undefined" && resp.reload === true) {
+                window.location.reload();
+            }
+        });
 };
