@@ -53,15 +53,17 @@ class QueryManager
             $repo = $this->boom->getRepository($display->getEntityName());
         } catch (EntityNotFoundException $e) {
             $display->getError()->setClassExist(false);
-
             return null;
         }
+
         $params = $repo->createParams();
 
-        if ($display->isFilter) {
+        // Don't make request if no filter
+        if ($display->isFilter && count($display->getFilters()) > 0) {
             $this->addSelectForFilters($display, $params);
-
             return $repo->findAll($params);
+        } elseif ($display->isFilter && count($display->getFilters()) === 0){
+            return [];
         }
 
         $this->addSelectForColumns($display, $params);
