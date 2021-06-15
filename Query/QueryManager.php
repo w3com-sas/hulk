@@ -40,9 +40,9 @@ class QueryManager
      * @param array $requestParams
      * @param null $top
      *
+     * @return array
      * @throws ReflectionException
      *
-     * @return array
      */
     public function createDataTableQuery(Display $display, $requestParams = [], $top = null)
     {
@@ -62,7 +62,7 @@ class QueryManager
         if ($display->isFilter && count($display->getFilters()) > 0) {
             $this->addSelectForFilters($display, $params);
             return $repo->findAll($params);
-        } elseif ($display->isFilter && count($display->getFilters()) === 0){
+        } elseif ($display->isFilter && count($display->getFilters()) === 0) {
             return [];
         }
 
@@ -80,23 +80,8 @@ class QueryManager
     public function getResultLength($entityName, $routeParams, $display)
     {
         $repo = $this->boom->getRepository($entityName);
-
         $params = $repo->createParams();
-        if (count($routeParams) > 0) {
-            foreach ($routeParams as $key => $value) {
-                if ('SEARCH' === $key) {
-                    $this->addGlobalSearchFilter($value, $params, $display);
-                    break;
-                }
-                if (null !== $this->appEntity->getProperty($key)) {
-                    $paramsExist = true;
-
-                    $params->addFilter($this->appEntity->getProperty($key)->getName(), $value,
-                        Clause::EQUALS, Clause:: AND);
-                }
-            }
-        }
-
+        $this->buildParametersFromGetParams($display, $routeParams, $params);
         return $repo->count($params);
     }
 
@@ -170,13 +155,7 @@ class QueryManager
                         foreach ($column->getCellAction()->getParams() as $fieldKey => $targetFieldKey) {
                             if (null !== $this->appEntity->getProperty($fieldKey)) {
                                 $params->addSelect($this->appEntity->getProperty($fieldKey)->getName());
-                            } /*else {
-
-                                $dataTable->getError()->addColumnError(
-                                    sprintf(Error::ERROR_MISSING_FIELD, $fieldKey, $dataTable->getCalcView())
-                                );
-
-                            }*/
+                            }
                         }
                     }
                 }
@@ -191,19 +170,22 @@ class QueryManager
      */
     private function addGetParamsRequest(Display $display, $getRequestParams, Parameters $parameters)
     {
-        $odsInspector = $this->generator->getOdsInspector();
-        $odsInspector->initEntities();
-
-        $odsEntity = $odsInspector->getEntity($display->getCalcView());
-
         if ($getRequestParams instanceof ParameterBag) {
             $arrayGetParams = $getRequestParams->all();
         } else {
             $arrayGetParams = $getRequestParams;
         }
 
-        $paramsExist = false;
+        return $this->buildParametersFromGetParams($display, $arrayGetParams, $parameters);
+    }
 
+    private function buildParametersFromGetParams(Display $display, array $arrayGetParams, Parameters $parameters)
+    {
+        $odsInspector = $this->generator->getOdsInspector();
+        $odsInspector->initEntities();
+        $odsEntity = $odsInspector->getEntity($display->getCalcView());
+
+        $paramsExist = false;
         foreach ($arrayGetParams as $key => $value) {
             if ('SEARCH' === $key) {
                 $this->addGlobalSearchFilter($value, $parameters, $display);
@@ -212,10 +194,8 @@ class QueryManager
 
             if (null !== $this->appEntity->getProperty($key)) {
                 $paramsExist = true;
-
                 $parameters->addFilter($this->appEntity->getProperty($key)->getName(), $value,
                     Clause::EQUALS, Clause:: AND);
-
                 unset($arrayGetParams[$key]);
             }
         }
@@ -243,12 +223,12 @@ class QueryManager
                 $max = explode('|', $value)[1];
 
                 if (null != $min && null != $max) {
-                    $rawFilter .= sprintf(Clause::GREATER_THAN, $sapField, $sapDatetime.$sapQuote.$min.$sapQuote.' and ');
-                    $rawFilter .= sprintf(Clause::LOWER_THAN, $sapField, $sapDatetime.$sapQuote.$max.$sapQuote.$filterOperator);
+                    $rawFilter .= sprintf(Clause::GREATER_THAN, $sapField, $sapDatetime . $sapQuote . $min . $sapQuote . ' and ');
+                    $rawFilter .= sprintf(Clause::LOWER_THAN, $sapField, $sapDatetime . $sapQuote . $max . $sapQuote . $filterOperator);
                 } elseif (null != $min) {
-                    $rawFilter .= sprintf(Clause::GREATER_THAN, $sapField, $sapDatetime.$sapQuote.$min.$sapQuote);
+                    $rawFilter .= sprintf(Clause::GREATER_THAN, $sapField, $sapDatetime . $sapQuote . $min . $sapQuote);
                 } elseif (null != $max) {
-                    $rawFilter .= sprintf(Clause::LOWER_THAN, $sapField, $sapDatetime.$sapQuote.$max.$sapQuote.$filterOperator);
+                    $rawFilter .= sprintf(Clause::LOWER_THAN, $sapField, $sapDatetime . $sapQuote . $max . $sapQuote . $filterOperator);
                 }
 
                 if (null != $min || null != $max) {
@@ -256,12 +236,14 @@ class QueryManager
                 }
             }
         }
+
+        return $parameters;
     }
 
     /**
+     * @return void
      * @throws Exception
      *
-     * @return void
      */
     private function addPreFilter(Display $display, Parameters $parameters)
     {
