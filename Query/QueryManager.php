@@ -186,55 +186,53 @@ class QueryManager
         $odsEntity = $odsInspector->getEntity($display->getCalcView());
 
         $paramsExist = false;
+
         foreach ($arrayGetParams as $key => $value) {
             if ('SEARCH' === $key) {
+                $paramsExist = true;
                 $this->addGlobalSearchFilter($value, $parameters, $display);
-                break;
             }
 
             if (null !== $this->appEntity->getProperty($key)) {
                 $paramsExist = true;
                 $parameters->addFilter($this->appEntity->getProperty($key)->getName(), $value,
                     Clause::EQUALS, Clause:: AND);
-                unset($arrayGetParams[$key]);
             }
         }
 
-        foreach ($arrayGetParams as $key => $value) {
-            if (UrlManager::INTERVAL_URL_KEY === substr($key, 0, strlen(UrlManager::INTERVAL_URL_KEY))) {
-                if ($paramsExist && !isset($rawFilter)) {
-                    $rawFilter = ' and ';
-                } elseif (!$paramsExist && !isset($rawFilter)) {
-                    $rawFilter = '';
-                }
+        $intervalParams = array_filter($arrayGetParams, function ($value, $key) {
+            return UrlManager::INTERVAL_URL_KEY === substr($key, 0, strlen(UrlManager::INTERVAL_URL_KEY));
+        }, ARRAY_FILTER_USE_BOTH);
 
-                if (end($arrayGetParams) === $value) {
-                    $filterOperator = '';
-                } else {
-                    $filterOperator = Clause:: AND;
-                }
+        // Has classic filter, need to begin raw filter with and clause
+        $rawFilter = $paramsExist ? ' and ' : '';
 
-                $sapField = substr($key, strlen(UrlManager::INTERVAL_URL_KEY));
-                $sapQuote = ('Edm.Int32' === $odsEntity->getProperty($sapField)->getFieldType() || 'Edm.Decimal'
-                    === $odsEntity->getProperty($sapField)->getFieldType() || 'Edm.Double' ===
-                    $odsEntity->getProperty($sapField)->getFieldType()) ? '' : "'";
-                $sapDatetime = 'Edm.DateTime' === $odsEntity->getProperty($sapField)->getFieldType() ? 'datetime' : null;
-                $min = explode('|', $value)[0];
-                $max = explode('|', $value)[1];
+        foreach ($intervalParams as $key => $value) {
+            // Only the last doesn't have and clause
+            $filterOperator = array_key_last($intervalParams) === $key ? '' : Clause::AND;
 
-                if (null != $min && null != $max) {
-                    $rawFilter .= sprintf(Clause::GREATER_THAN, $sapField, $sapDatetime . $sapQuote . $min . $sapQuote . ' and ');
-                    $rawFilter .= sprintf(Clause::LOWER_THAN, $sapField, $sapDatetime . $sapQuote . $max . $sapQuote . $filterOperator);
-                } elseif (null != $min) {
-                    $rawFilter .= sprintf(Clause::GREATER_THAN, $sapField, $sapDatetime . $sapQuote . $min . $sapQuote);
-                } elseif (null != $max) {
-                    $rawFilter .= sprintf(Clause::LOWER_THAN, $sapField, $sapDatetime . $sapQuote . $max . $sapQuote . $filterOperator);
-                }
+            $sapField = substr($key, strlen(UrlManager::INTERVAL_URL_KEY));
+            $sapQuote = ('Edm.Int32' === $odsEntity->getProperty($sapField)->getFieldType() || 'Edm.Decimal'
+                === $odsEntity->getProperty($sapField)->getFieldType() || 'Edm.Double' ===
+                $odsEntity->getProperty($sapField)->getFieldType()) ? '' : "'";
+            $sapDatetime = 'Edm.DateTime' === $odsEntity->getProperty($sapField)->getFieldType() ? 'datetime' : null;
 
-                if (null != $min || null != $max) {
-                    $parameters->addRawFilter($rawFilter);
-                }
+            $min = explode('|', $value)[0];
+            $max = explode('|', $value)[1];
+
+
+            if (null != $min && null != $max) {
+                $rawFilter .= sprintf(Clause::GREATER_THAN, $sapField, $sapDatetime . $sapQuote . $min . $sapQuote . ' and ');
+                $rawFilter .= sprintf(Clause::LOWER_THAN, $sapField, $sapDatetime . $sapQuote . $max . $sapQuote . $filterOperator);
+            } elseif (null != $min) {
+                $rawFilter .= sprintf(Clause::GREATER_THAN, $sapField, $sapDatetime . $sapQuote . $min . $sapQuote.$filterOperator);
+            } elseif (null != $max) {
+                $rawFilter .= sprintf(Clause::LOWER_THAN, $sapField, $sapDatetime . $sapQuote . $max . $sapQuote . $filterOperator);
             }
+        }
+
+        if ($rawFilter !== ' and ' && $rawFilter !== '') {
+            $parameters->addRawFilter($rawFilter);
         }
 
         return $parameters;
