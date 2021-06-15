@@ -1,3 +1,5 @@
+import {temporizeUpdate} from "./utils";
+
 export const updateSapLine = (input) => {
     if (input.className.indexOf('is-valid') !== -1) {
         input.className = input.className.replace('is-valid', '');
