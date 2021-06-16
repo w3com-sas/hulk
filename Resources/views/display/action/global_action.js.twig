@@ -104,6 +104,7 @@ $('#{{ globalAction.type~globalAction.index }}').click(function () {
 $('#btn{{ globalAction.type~globalAction.index }}').click(function () {
     var callFunction = new CallFunction('{{ globalAction.type }}{{ globalAction.index }}', '{{ globalAction.icon }}');
     callFunction.showModal('{{ globalAction.label }}');
+
     var data = JSON.stringify(table.rows('.selected').data().toArray());
     var ajaxCall = function () {
         callFunction.startLoading();
@@ -139,9 +140,13 @@ $('#btn{{ globalAction.type~globalAction.index }}').click(function () {
     {% if globalAction.config.messageConfirm %}
     callFunction.addMessage('{{ globalAction.config.messageConfirm }}');
     {% endif %}
-    callFunction.addValidateBtn(function () {
-        ajaxCall();
-    });
+    if (callFunction.checkRowsLength(table.rows('.selected').data().toArray(), 1, callFunction)) {
+        callFunction.showLinesSelected(table.rows('.selected').data().toArray().length);
+        callFunction.addValidateBtn(function () {
+            ajaxCall();
+        });
+    }
+
     {% else %}
     ajaxCall();
     {% endif %}
