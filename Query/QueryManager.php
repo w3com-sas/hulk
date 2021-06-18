@@ -191,6 +191,7 @@ class QueryManager
             if ('SEARCH' === $key) {
                 $paramsExist = true;
                 $this->addGlobalSearchFilter($value, $parameters, $display);
+                continue;
             }
 
             if (null !== $this->appEntity->getProperty($key)) {

@@ -60,6 +60,7 @@ class DisplayFormController extends AbstractController
         $display = $this->displayFormProvider->getDisplay($filename);
         $form = $this->createForm(DisplayType::class, $display);
         $form->handleRequest($this->request->getCurrentRequest());
+
         if ($form->isSubmitted() && $form->isValid()) {
             $formData = $this->request->getCurrentRequest()->request->all();
             $routeParams = $this->urlManager->createRouteParams($formData, $display);
