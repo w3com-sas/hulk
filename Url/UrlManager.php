@@ -12,18 +12,15 @@ use W3com\HulkBundle\Util\DataTransformer;
 class UrlManager
 {
     const KEY_WORD_TODAY = 'today';
-
     const INTERVAL_URL_KEY = 'interval_';
 
-    /** @var UrlGeneratorInterface */
+    /**
+     * @var UrlGeneratorInterface
+     */
     private $router;
 
-    /*** @var LoggerInterface */
-    private $logger;
-
-    public function __construct(UrlGeneratorInterface $router, LoggerInterface $logger)
+    public function __construct(UrlGeneratorInterface $router)
     {
-        $this->logger = $logger;
         $this->router = $router;
     }
 

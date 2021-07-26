@@ -6,14 +6,20 @@ use W3com\HulkBundle\Model\Display;
 
 class FilterManager extends AbstractFilterManager
 {
+    /**
+     * @var SingleFilterManager
+     */
     private $singleFilterManager;
 
+    /**
+     * @var MultipleFilterManager
+     */
     private $multilpleFilterManager;
 
-    public function __construct()
+    public function __construct(SingleFilterManager $singleFilterManager, MultipleFilterManager $multilpleFilterManager)
     {
-        $this->singleFilterManager = new SingleFilterManager();
-        $this->multilpleFilterManager = new MultipleFilterManager();
+        $this->singleFilterManager = $singleFilterManager;
+        $this->multilpleFilterManager = $multilpleFilterManager;
     }
 
     public function initFilters(Display $dataTable)

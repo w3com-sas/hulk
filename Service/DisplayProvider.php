@@ -4,11 +4,7 @@ namespace W3com\HulkBundle\Service;
 
 use Exception;
 use Psr\Cache\InvalidArgumentException;
-use Psr\Log\LoggerInterface;
 use ReflectionException;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use W3com\BoomBundle\Service\BoomGenerator;
-use W3com\BoomBundle\Service\BoomManager;
 use W3com\HulkBundle\Column\ColumnManager;
 use W3com\HulkBundle\Filter\FilterManager;
 use W3com\HulkBundle\Filter\FilterSessionManager;
@@ -16,7 +12,6 @@ use W3com\HulkBundle\Finder\JsonFinder;
 use W3com\HulkBundle\Model\Display;
 use W3com\HulkBundle\Query\QueryManager;
 use W3com\HulkBundle\Renderer\Renderer;
-use W3com\HulkBundle\Url\UrlManager;
 use W3com\HulkBundle\Util\DataTransformer;
 use W3com\HulkBundle\Util\DisplayConstructor;
 use W3com\HulkBundle\Util\Indexor;
@@ -24,9 +19,24 @@ use W3com\HulkBundle\Util\Indexor;
 class DisplayProvider
 {
     /**
-     * @var QueryManager
+     * @var FilterSessionManager
      */
-    private $queryManager;
+    private $filterSessionManager;
+
+    /**
+     * @var DisplayConstructor
+     */
+    private $constructor;
+
+    /**
+     * @var SessionManager
+     */
+    private $session;
+
+    /**
+     * @var Indexor
+     */
+    private $indexor;
 
     /**
      * @var FilterManager
@@ -39,39 +49,19 @@ class DisplayProvider
     private $columnManager;
 
     /**
-     * @var JsonFinder
-     */
-    private $jsonFinder;
-
-    /**
-     * @var Indexor
-     */
-    private $indexor;
-
-    /**
      * @var DataTransformer
      */
     private $dataTransformer;
 
     /**
-     * @var DisplayConstructor
+     * @var QueryManager
      */
-    private $constructor;
+    private $queryManager;
 
     /**
-     * @var UrlManager
+     * @var JsonFinder
      */
-    private $urlManager;
-
-    /**
-     * @var FilterSessionManager
-     */
-    private $filterSessionManager;
-
-    /**
-     * @var SessionManager
-     */
-    private $session;
+    private $jsonFinder;
 
     /**
      * @var Renderer
@@ -84,28 +74,30 @@ class DisplayProvider
     private $cacheManager;
 
     public function __construct(
-        array $config,
-        BoomManager $boom,
-        BoomGenerator $generator,
-        UrlGeneratorInterface $router,
         FilterSessionManager $filterSessionManager,
-        LoggerInterface $logger,
         DisplayConstructor $constructor,
-        SessionManager $sessionManager
+        SessionManager $sessionManager,
+        Indexor $indexor,
+        FilterManager $filterManager,
+        ColumnManager $columnManager,
+        DataTransformer $dataTransformer,
+        QueryManager $queryManager,
+        JsonFinder $jsonFinder,
+        Renderer $renderer,
+        CacheManager $cacheManager
     )
     {
         $this->filterSessionManager = $filterSessionManager;
-        $this->session = $sessionManager;
         $this->constructor = $constructor;
-        $this->indexor = new Indexor();
-        $this->filterManager = new FilterManager();
-        $this->columnManager = new ColumnManager();
-        $this->urlManager = new UrlManager($router, $logger);
-        $this->dataTransformer = new DataTransformer($this->urlManager);
-        $this->queryManager = new QueryManager($boom, $generator);
-        $this->jsonFinder = new JsonFinder($boom, $config);
-        $this->renderer = new Renderer();
-        $this->cacheManager = new CacheManager();
+        $this->session = $sessionManager;
+        $this->indexor = $indexor;
+        $this->filterManager = $filterManager;
+        $this->columnManager = $columnManager;
+        $this->dataTransformer = $dataTransformer;
+        $this->queryManager = $queryManager;
+        $this->jsonFinder = $jsonFinder;
+        $this->renderer = $renderer;
+        $this->cacheManager = $cacheManager;
     }
 
     /**
@@ -114,7 +106,7 @@ class DisplayProvider
      * @throws ReflectionException|InvalidArgumentException
      * @throws Exception
      */
-    public function getDisplay($filename, array $getRequestParams = [], $maxResults = null): Display
+    public function getDisplay($filename, $getRequestParams = [], $maxResults = null): Display
     {
         $display = new Display();
         $display->setFilename($filename);
