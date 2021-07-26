@@ -2,17 +2,16 @@
 
 namespace W3com\HulkBundle\Controller;
 
-use Doctrine\Common\Annotations\AnnotationException;
 use Exception;
+use Psr\Cache\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use ReflectionException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
-use W3com\BoomBundle\Exception\EntityNotFoundException;
 use W3com\HulkBundle\Form\DisplayType;
-use W3com\HulkBundle\Model\Display;
+use W3com\HulkBundle\Service\CacheManager;
 use W3com\HulkBundle\Service\DisplayFormProvider;
 use W3com\HulkBundle\Url\UrlManager;
 
@@ -38,28 +37,29 @@ class DisplayFormController extends AbstractController
      */
     private $logger;
 
+    /**
+     * @var CacheManager
+     */
+    private $cacheManager;
+
     public function __construct(DisplayFormProvider $displayFormProvider, RequestStack $requestStack, UrlManager $urlManager, LoggerInterface $logger)
     {
         $this->logger = $logger;
         $this->urlManager = $urlManager;
         $this->displayFormProvider = $displayFormProvider;
         $this->request = $requestStack;
+        $this->cacheManager = new CacheManager();
     }
 
     /**
-     * @param $filename
-     *
-     * @throws AnnotationException
-     * @throws ReflectionException
-     *
-     * @return Response
+     * @throws ReflectionException|InvalidArgumentException
      */
-    public function displayForm($filename)
+    public function displayForm($filename): Response
     {
-        /** @var Display $display */
         $display = $this->displayFormProvider->getDisplay($filename);
         $form = $this->createForm(DisplayType::class, $display);
         $form->handleRequest($this->request->getCurrentRequest());
+        $entityNameDisplay = '';
 
         if ($form->isSubmitted() && $form->isValid()) {
             $formData = $this->request->getCurrentRequest()->request->all();
@@ -69,11 +69,26 @@ class DisplayFormController extends AbstractController
             // an error is threw and the redirection to display is not made
             $numberOfLineMax = $this->displayFormProvider->getMaxResultReturned();
             $jsonFinder = $this->displayFormProvider->getJsonFinder();
-            $configDisplay = $jsonFinder->getOnlineJson($routeParams['filename']);
+
+            if (!$this->cacheManager->isInCache($filename)) {
+                $configDisplay = $jsonFinder->getOnlineJson($routeParams['filename']);
+            } else {
+                $cacheItem = $this->cacheManager->getCacheItem(CacheManager::DISPLAY_CACHE_KEY);
+                $displays = $cacheItem->get();
+
+                if (!array_key_exists($filename, $displays)) {
+                    $configDisplay = $jsonFinder->getOnlineJson($routeParams['filename']);
+                } else {
+                    $display->getError()->setFileExist(true);
+                    $configDisplay = $displays[$filename];
+                }
+            }
+
             if ($configDisplay) {
                 $config = json_decode($configDisplay, true);
                 $entityNameDisplay = $config['CalculationView'];
             }
+
             $queryManager = $this->displayFormProvider->getQueryManager();
             $numberOfLineQuery = $queryManager->getResultLength($entityNameDisplay, $routeParams, $display);
 
@@ -112,8 +127,6 @@ class DisplayFormController extends AbstractController
 
         try {
             $data = $this->displayFormProvider->getDataFromChoices($calculationView, $choices, $allFields);
-        } catch (EntityNotFoundException $e) {
-            return new JsonResponse($e->getMessage(), 400);
         } catch (Exception $e) {
             $this->logger->error($e->getMessage(), $e->getTrace());
 

@@ -2,6 +2,8 @@
 
 namespace W3com\HulkBundle\Service;
 
+use Exception;
+use Psr\Cache\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use ReflectionException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -21,57 +23,79 @@ use W3com\HulkBundle\Util\Indexor;
 
 class DisplayProvider
 {
-    /** @var QueryManager */
+    /**
+     * @var QueryManager
+     */
     private $queryManager;
 
-    /** @var FilterManager */
+    /**
+     * @var FilterManager
+     */
     private $filterManager;
 
-    /** @var ColumnManager */
+    /**
+     * @var ColumnManager
+     */
     private $columnManager;
 
-    /** @var array */
-    private $config;
-
-    /** @var JsonFinder */
+    /**
+     * @var JsonFinder
+     */
     private $jsonFinder;
 
-    /** @var Indexor */
+    /**
+     * @var Indexor
+     */
     private $indexor;
 
-    /** @var DataTransformer */
+    /**
+     * @var DataTransformer
+     */
     private $dataTransformer;
 
-    /** @var DisplayConstructor */
+    /**
+     * @var DisplayConstructor
+     */
     private $constructor;
 
-    /** @var UrlManager */
+    /**
+     * @var UrlManager
+     */
     private $urlManager;
 
-    /** @var FilterSessionManager */
+    /**
+     * @var FilterSessionManager
+     */
     private $filterSessionManager;
 
-    /** @var SessionManager */
+    /**
+     * @var SessionManager
+     */
     private $session;
 
-    /** @var LoggerInterface */
-    private $logger;
-
-    /** @var Renderer */
+    /**
+     * @var Renderer
+     */
     private $renderer;
 
     /**
-     * DisplayProvider constructor.
-     *
-     * @param $config
+     * @var CacheManager
      */
-    public function __construct($config, BoomManager $boom, BoomGenerator $generator, UrlGeneratorInterface $router, FilterSessionManager $filterSessionManager,
-                                LoggerInterface $logger, DisplayConstructor $constructor, SessionManager $sessionManager)
+    private $cacheManager;
+
+    public function __construct(
+        array $config,
+        BoomManager $boom,
+        BoomGenerator $generator,
+        UrlGeneratorInterface $router,
+        FilterSessionManager $filterSessionManager,
+        LoggerInterface $logger,
+        DisplayConstructor $constructor,
+        SessionManager $sessionManager
+    )
     {
         $this->filterSessionManager = $filterSessionManager;
         $this->session = $sessionManager;
-        $this->logger = $logger;
-        $this->config = $config;
         $this->constructor = $constructor;
         $this->indexor = new Indexor();
         $this->filterManager = new FilterManager();
@@ -81,22 +105,35 @@ class DisplayProvider
         $this->queryManager = new QueryManager($boom, $generator);
         $this->jsonFinder = new JsonFinder($boom, $config);
         $this->renderer = new Renderer();
+        $this->cacheManager = new CacheManager();
     }
 
     /**
-     * @param $filename
-     * @param array $getRequestParams
-     * @param null  $maxResults
+     * @param null $maxResults
      *
-     * @throws ReflectionException
-     *
-     * @return Display
+     * @throws ReflectionException|InvalidArgumentException
+     * @throws Exception
      */
-    public function getDisplay($filename, $getRequestParams = [], $maxResults = null)
+    public function getDisplay($filename, array $getRequestParams = [], $maxResults = null): Display
     {
         $display = new Display();
         $display->setFilename($filename);
-        $this->constructor->hydrate($display, $this->jsonFinder->getOnlineJson($filename, $display));
+
+        if (!$this->cacheManager->isInCache($filename)) {
+            $json = $this->jsonFinder->getOnlineJson($filename, $display);
+        } else {
+            $cacheItem = $this->cacheManager->getCacheItem(CacheManager::DISPLAY_CACHE_KEY);
+            $displays = $cacheItem->get();
+
+            if (!array_key_exists($filename, $displays)) {
+                $json = $this->jsonFinder->getOnlineJson($filename, $display);
+            } else {
+                $display->getError()->setFileExist(true);
+                $json = $displays[$filename];
+            }
+        }
+
+        $this->constructor->hydrate($display, $json);
         $this->renderer->buildTemplate($display);
 
         if ($display->getError()->isFileExist()) {

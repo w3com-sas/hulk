@@ -2,7 +2,8 @@
 
 namespace W3com\HulkBundle\Service;
 
-use Symfony\Component\HttpFoundation\RequestStack;
+use Psr\Cache\InvalidArgumentException;
+use ReflectionException;
 use Symfony\Component\Serializer\Encoder\CsvEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
@@ -12,30 +13,57 @@ use W3com\HulkBundle\Model\GlobalAction;
 
 class CsvManager
 {
+    /**
+     * @var Serializer
+     */
     private $serializer;
 
-    private $request;
-
+    /**
+     * @var DisplayProvider
+     */
     private $displayProvider;
 
+    /**
+     * @var string
+     */
     private $displayName = 'export-csv';
 
-    public function __construct(DisplayProvider $displayProvider, RequestStack $request)
+    /**
+     * @var CacheManager
+     */
+    private $cacheManager;
+
+    public function __construct(DisplayProvider $displayProvider)
     {
         $this->displayProvider = $displayProvider;
-        $this->request = $request;
         $this->serializer = new Serializer([new ObjectNormalizer()], [new CsvEncoder()]);
+        $this->cacheManager = new CacheManager();
     }
 
+    /**
+     * @throws ReflectionException
+     * @throws InvalidArgumentException
+     */
     public function getCsv(array $data, string $filename)
     {
-        //$data = $this->request->getCurrentRequest()->request->all();
         $display = new Display();
-        $file = $this->displayProvider->getJsonFinder()->getOnlineJson($filename, $display);
+
+        if (!$this->cacheManager->isInCache($filename)) {
+            $file = $this->displayProvider->getJsonFinder()->getOnlineJson($filename, $display);
+        } else {
+            $cacheItem = $this->cacheManager->getCacheItem(CacheManager::DISPLAY_CACHE_KEY);
+            $displays = $cacheItem->get();
+
+            if (!array_key_exists($filename, $displays)) {
+                $file = $this->displayProvider->getJsonFinder()->getOnlineJson($filename, $display);
+            } else {
+                $display->getError()->setFileExist(true);
+                $file = $displays[$filename];
+            }
+        }
+
         $display = $this->displayProvider->getConstructor()->hydrate($display, $file);
-
         $this->displayName = $display->getDisplayName();
-
         $formattedData = [];
 
         // TODO : pour l'instant ne gère qu'un seul export csv. Si besoin de plusieurs passer la param index par exemple
@@ -66,7 +94,7 @@ class CsvManager
         return $this->serializer->encode($formattedData, 'csv', [CsvEncoder::DELIMITER_KEY => ';']);
     }
 
-    public function getDisplayName()
+    public function getDisplayName(): string
     {
         return $this->displayName;
     }

@@ -4,6 +4,8 @@ namespace W3com\HulkBundle\Service;
 
 use DateTime;
 use Doctrine\Common\Annotations\AnnotationException;
+use Exception;
+use Psr\Cache\InvalidArgumentException;
 use ReflectionException;
 use W3com\BoomBundle\HanaEntity\AbstractEntity;
 use W3com\BoomBundle\Service\BoomGenerator;
@@ -18,25 +20,55 @@ use W3com\HulkBundle\Util\DisplayConstructor;
 
 class DisplayFormProvider
 {
+    /**
+     * @var Display
+     */
     private $display;
 
+    /**
+     * @var JsonFinder
+     */
     private $jsonFinder;
 
+    /**
+     * @var QueryManager
+     */
     private $queryManager;
 
+    /**
+     * @var DisplayConstructor
+     */
     private $displayConstructor;
 
+    /**
+     * @var FilterManager
+     */
     private $filterManager;
 
+    /**
+     * @var DataTransformer
+     */
     private $dataTransformer;
 
+    /**
+     * @var int|mixed
+     */
     private $max_result_returned = 500;
 
-    /** @var BoomManager */
+    /**
+     * @var BoomManager
+     */
     private $boom;
 
-    /** @var BoomGenerator */
+    /**
+     * @var BoomGenerator
+     */
     private $generator;
+
+    /**
+     * @var CacheManager
+     */
+    private $cacheManager;
 
     public function __construct(BoomManager $boom, BoomGenerator $generator, UrlManager $urlManager, DisplayConstructor $constructor, $config)
     {
@@ -52,20 +84,35 @@ class DisplayFormProvider
         $this->display->isFilter = true;
         $this->boom = $boom;
         $this->generator = $generator;
+        $this->cacheManager = new CacheManager();
     }
 
     /**
      * @param $filename
      * @param array $getParamsRequest
      *
-     * @throws AnnotationException
-     * @throws ReflectionException
-     *
      * @return Display
+     * @throws ReflectionException*
+     * @throws InvalidArgumentException
+     * @throws Exception
      */
-    public function getDisplay($filename, $getParamsRequest = [])
+    public function getDisplay($filename, array $getParamsRequest = []): Display
     {
-        $json = $this->jsonFinder->getOnlineJson($filename, $this->display);
+        if (!$this->cacheManager->isInCache($filename)) {
+            $json = $this->jsonFinder->getOnlineJson($filename, $this->display);
+        } else {
+            $cacheItem = $this->cacheManager->getCacheItem(CacheManager::DISPLAY_CACHE_KEY);
+            $displays = $cacheItem->get();
+
+            if (!array_key_exists($filename, $displays)) {
+                $json = $this->jsonFinder->getOnlineJson($filename, $this->display);
+            } else {
+                $this->display->getError()->setFileExist(true);
+                $json = $displays[$filename];
+            }
+        }
+
+
         $this->display->setFilename($filename);
         $this->displayConstructor->hydrate($this->display, $json);
         $data = $this->queryManager->createDataTableQuery($this->display, $getParamsRequest);
