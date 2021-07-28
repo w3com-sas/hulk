@@ -10,23 +10,29 @@ use W3com\HulkBundle\Service\ApiManager;
 
 class ApiWendisController extends AbstractController
 {
-    /** @var RequestStack */
+    /**
+     * @var RequestStack
+     */
     private $request;
 
-    /** @var LoggerInterface */
+    /**
+     * @var LoggerInterface
+     */
     private $logger;
 
-    /** @var ApiManager */
+    /**
+     * @var ApiManager
+     */
     private $apiManager;
 
-    public function __construct(RequestStack $request, LoggerInterface $logger)
+    public function __construct(RequestStack $request, LoggerInterface $logger, ApiManager $apiManager)
     {
         $this->request = $request;
         $this->logger = $logger;
-        $this->apiManager = new ApiManager($logger);
+        $this->apiManager = $apiManager;
     }
 
-    public function apiRequest()
+    public function apiRequest(): JsonResponse
     {
         $this->manageRequest();
         $data = $this->request->getCurrentRequest()->request->all();
@@ -35,14 +41,20 @@ class ApiWendisController extends AbstractController
         return new JsonResponse($response, 200);
     }
 
-    private function manageRequest()
+    private function manageRequest(): JsonResponse
     {
-        if (!$this->request->getCurrentRequest()->request->has('data') ||
-            !$this->request->getCurrentRequest()->request->has('apiParams') ||
-            !$this->request->getCurrentRequest()->request->has('urlApi')) {
+        $jsonResponse = new JsonResponse(['valid' => true]);
+
+        if (
+            !$this->request->getCurrentRequest()->request->has('data')
+            || !$this->request->getCurrentRequest()->request->has('apiParams')
+            || !$this->request->getCurrentRequest()->request->has('urlApi')
+        ) {
             $this->logger->error('Missing data to update in the Json file.');
 
-            return new JsonResponse(['valid' => false], 400);
+            $jsonResponse = new JsonResponse(['valid' => false], 400);
         }
+
+        return $jsonResponse;
     }
 }

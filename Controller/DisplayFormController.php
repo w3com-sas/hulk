@@ -42,13 +42,19 @@ class DisplayFormController extends AbstractController
      */
     private $cacheManager;
 
-    public function __construct(DisplayFormProvider $displayFormProvider, RequestStack $requestStack, UrlManager $urlManager, LoggerInterface $logger)
+    public function __construct(
+        DisplayFormProvider $displayFormProvider,
+        RequestStack $requestStack,
+        UrlManager $urlManager,
+        LoggerInterface $logger,
+        CacheManager $cacheManager
+    )
     {
         $this->logger = $logger;
         $this->urlManager = $urlManager;
         $this->displayFormProvider = $displayFormProvider;
         $this->request = $requestStack;
-        $this->cacheManager = new CacheManager();
+        $this->cacheManager = $cacheManager;
     }
 
     /**

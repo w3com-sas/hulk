@@ -15,13 +15,13 @@ use W3com\BoomBundle\Service\BoomGenerator;
 
 class UpdateProjectEntityController extends AbstractController
 {
-    const TYPE_SAP_TABLE = 'SAP_TABLE';
     const TYPE_CV = 'CV';
 
     /**
      * @var BoomGenerator
      */
     private $generator;
+
     /**
      * @var AdapterInterface
      */
