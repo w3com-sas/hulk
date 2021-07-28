@@ -82,8 +82,6 @@ class DisplayConstructor
     }
 
     /**
-     * @param $value
-     *
      * @throws ReflectionException
      * @throws Exception
      */
@@ -395,9 +393,15 @@ class DisplayConstructor
         $instance = new $instanceName();
 
         $property = $instance->getPropertyByColumn($fieldName);
-        $description = $instance->getDescriptionByProperty($property);
-        $type = $instance->getTypeByField($property);
-        $choices = $instance->getChoicesByProperty($property);
+        $description = '';
+        $type = '';
+        $choices = '';
+
+        if (!empty($property)) {
+            $description = $instance->getDescriptionByProperty($property);
+            $type = $instance->getTypeByField($property);
+            $choices = $instance->getChoicesByProperty($property);
+        }
 
         return [
             'TargetProperty' => $property,

@@ -2,11 +2,9 @@
 
 namespace W3com\HulkBundle\Service;
 
-use Psr\Log\LoggerInterface;
+use Exception;
+use Psr\Cache\InvalidArgumentException;
 use ReflectionException;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use W3com\BoomBundle\Service\BoomGenerator;
-use W3com\BoomBundle\Service\BoomManager;
 use W3com\HulkBundle\Column\ColumnManager;
 use W3com\HulkBundle\Filter\FilterManager;
 use W3com\HulkBundle\Filter\FilterSessionManager;
@@ -14,89 +12,120 @@ use W3com\HulkBundle\Finder\JsonFinder;
 use W3com\HulkBundle\Model\Display;
 use W3com\HulkBundle\Query\QueryManager;
 use W3com\HulkBundle\Renderer\Renderer;
-use W3com\HulkBundle\Url\UrlManager;
 use W3com\HulkBundle\Util\DataTransformer;
 use W3com\HulkBundle\Util\DisplayConstructor;
 use W3com\HulkBundle\Util\Indexor;
 
 class DisplayProvider
 {
-    /** @var QueryManager */
-    private $queryManager;
-
-    /** @var FilterManager */
-    private $filterManager;
-
-    /** @var ColumnManager */
-    private $columnManager;
-
-    /** @var array */
-    private $config;
-
-    /** @var JsonFinder */
-    private $jsonFinder;
-
-    /** @var Indexor */
-    private $indexor;
-
-    /** @var DataTransformer */
-    private $dataTransformer;
-
-    /** @var DisplayConstructor */
-    private $constructor;
-
-    /** @var UrlManager */
-    private $urlManager;
-
-    /** @var FilterSessionManager */
+    /**
+     * @var FilterSessionManager
+     */
     private $filterSessionManager;
 
-    /** @var SessionManager */
+    /**
+     * @var DisplayConstructor
+     */
+    private $constructor;
+
+    /**
+     * @var SessionManager
+     */
     private $session;
 
-    /** @var LoggerInterface */
-    private $logger;
+    /**
+     * @var Indexor
+     */
+    private $indexor;
 
-    /** @var Renderer */
+    /**
+     * @var FilterManager
+     */
+    private $filterManager;
+
+    /**
+     * @var ColumnManager
+     */
+    private $columnManager;
+
+    /**
+     * @var DataTransformer
+     */
+    private $dataTransformer;
+
+    /**
+     * @var QueryManager
+     */
+    private $queryManager;
+
+    /**
+     * @var JsonFinder
+     */
+    private $jsonFinder;
+
+    /**
+     * @var Renderer
+     */
     private $renderer;
 
     /**
-     * DisplayProvider constructor.
-     *
-     * @param $config
+     * @var CacheManager
      */
-    public function __construct($config, BoomManager $boom, BoomGenerator $generator, UrlGeneratorInterface $router, FilterSessionManager $filterSessionManager,
-                                LoggerInterface $logger, DisplayConstructor $constructor, SessionManager $sessionManager)
+    private $cacheManager;
+
+    public function __construct(
+        FilterSessionManager $filterSessionManager,
+        DisplayConstructor $constructor,
+        SessionManager $sessionManager,
+        Indexor $indexor,
+        FilterManager $filterManager,
+        ColumnManager $columnManager,
+        DataTransformer $dataTransformer,
+        QueryManager $queryManager,
+        JsonFinder $jsonFinder,
+        Renderer $renderer,
+        CacheManager $cacheManager
+    )
     {
         $this->filterSessionManager = $filterSessionManager;
-        $this->session = $sessionManager;
-        $this->logger = $logger;
-        $this->config = $config;
         $this->constructor = $constructor;
-        $this->indexor = new Indexor();
-        $this->filterManager = new FilterManager();
-        $this->columnManager = new ColumnManager();
-        $this->urlManager = new UrlManager($router, $logger);
-        $this->dataTransformer = new DataTransformer($this->urlManager);
-        $this->queryManager = new QueryManager($boom, $generator);
-        $this->jsonFinder = new JsonFinder($boom, $config);
-        $this->renderer = new Renderer();
+        $this->session = $sessionManager;
+        $this->indexor = $indexor;
+        $this->filterManager = $filterManager;
+        $this->columnManager = $columnManager;
+        $this->dataTransformer = $dataTransformer;
+        $this->queryManager = $queryManager;
+        $this->jsonFinder = $jsonFinder;
+        $this->renderer = $renderer;
+        $this->cacheManager = $cacheManager;
     }
 
     /**
-     * @param $filename
-     * @param array $getRequestParams
-     * @param null  $maxResults
+     * @param null $maxResults
      *
-     * @throws ReflectionException
-     *
-     * @return Display
+     * @throws ReflectionException|InvalidArgumentException
+     * @throws Exception
      */
-    public function getDisplay($filename, $getRequestParams = [], $maxResults = null)
+    public function getDisplay($filename, $getRequestParams = [], $maxResults = null): Display
     {
         $display = new Display();
         $display->setFilename($filename);
-        $this->constructor->hydrate($display, $this->jsonFinder->getOnlineJson($filename, $display));
+
+        if (!$this->cacheManager->isInCache($filename)) {
+            $json = $this->jsonFinder->getOnlineJson($filename, $display);
+        } else {
+            $cacheItem = $this->cacheManager->getCacheItem(CacheManager::DISPLAY_CACHE_KEY);
+            $displays = $cacheItem->get();
+
+            if (!array_key_exists($filename, $displays)) {
+                $json = $this->jsonFinder->getOnlineJson($filename, $display);
+            } else {
+                $display->getError()->setFileExist(true);
+                $json = $displays[$filename];
+            }
+        }
+
+        $this->constructor->hydrate($display, $json);
         $this->renderer->buildTemplate($display);
 
         if ($display->getError()->isFileExist()) {

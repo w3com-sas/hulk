@@ -1,90 +1,80 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<container xmlns="http://symfony.com/schema/dic/services"
-           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+<container
+    xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd"
+>
     <services>
-        <service id="w3com_hulk.controller.display_controller"
-                 class="W3com\HulkBundle\Controller\DisplayController" public="true">
+        <service class="W3com\HulkBundle\Controller\AdminController" id="w3com_hulk.controller.admin_controller" public="true">
+            <argument type="service" id="security.authentication_utils"/>
             <argument type="service" id="w3com_hulk.service.display_provider"/>
-            <argument type="service" id="monolog.logger"/>
+            <argument type="service" id="kernel"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        <service class="W3com\HulkBundle\Controller\ApiWendisController" id="w3com_hulk.controller.api_request_controller" public="true">
+            <argument type="service" id="request_stack"/>
+            <argument type="service" id="logger"/>
+            <argument type="service" id="w3com_hulk.service.api_manager"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        <service class="W3com\HulkBundle\Controller\DisplayController" id="w3com_hulk.controller.display_controller" public="true">
+            <argument type="service" id="w3com_hulk.service.display_provider"/>
             <argument type="service" id="request_stack"/>
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>
         </service>
-        <service id="w3com_hulk.controller.display_form_controller"
-                 class="W3com\HulkBundle\Controller\DisplayFormController" public="true">
+        <service class="W3com\HulkBundle\Controller\DisplayFormController" id="w3com_hulk.controller.display_form_controller" public="true">
             <argument type="service" id="w3com_hulk.service.display_form_provider"/>
             <argument type="service" id="request_stack"/>
             <argument type="service" id="w3com_hulk.url.url_manager"/>
             <argument type="service" id="logger"/>
+            <argument type="service" id="w3com_hulk.service.cache_manager"/>
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>
         </service>
-        <service id="w3com_hulk.controller.search_view_controller"
-                 class="W3com\HulkBundle\Controller\SearchViewController" public="true">
-            <argument type="service" id="w3com_hulk.service.search_view_provider"/>
-            <argument type="service" id="request_stack"/>
-            <call method="setContainer">
-                <argument type="service" id="service_container" />
-            </call>
-        </service>
-        <service id="w3com_hulk.controller.update_project_entity_controller"
-                 class="W3com\HulkBundle\Controller\UpdateProjectEntityController" public="true">
-            <argument type="service" id="W3com\BoomBundle\Service\BoomGenerator"/>
-            <argument type="service" id="cache.security_expression_language"/>
-            <call method="setContainer">
-                <argument type="service" id="service_container"/>
-            </call>
-        </service>
-        <service id="w3com_hulk.controller.update_sap_controller"
-                 class="W3com\HulkBundle\Controller\PersistenceController" public="true">
-            <argument type="service" id="monolog.logger"/>
-            <argument type="service" id="request_stack"/>
-            <argument type="service" id="w3com_hulk.service.display_persister"/>
-            <argument type="service" id="W3com\BoomBundle\Service\BoomGenerator"/>
-            <call method="setContainer">
-                <argument type="service" id="service_container" />
-            </call>
-        </service>
-        <service id="w3com_hulk.controller.api_request_controller"
-                 class="W3com\HulkBundle\Controller\ApiWendisController" public="true">
-            <argument type="service" id="request_stack"/>
-            <argument type="service" id="monolog.logger"/>
-            <call method="setContainer">
-                <argument type="service" id="service_container" />
-            </call>
-        </service>
-        <service id="w3com_hulk.controller.export_csv_controller"
-                 class="W3com\HulkBundle\Controller\ExportCsvController" public="true">
+        <service class="W3com\HulkBundle\Controller\ExportCsvController" id="w3com_hulk.controller.export_csv_controller" public="true">
             <argument type="service" id="request_stack"/>
             <argument type="service" id="w3com_hulk.service.csv_manager"/>
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>
         </service>
-        <service id="w3com_hulk.controller.admin_controller"
-                 class="W3com\HulkBundle\Controller\AdminController" public="true">
-            <argument type="service" id="security.authentication_utils"/>
-            <argument type="service" id="w3com_hulk.service.display_provider"/>
-            <argument type="service" id="cache.security_expression_language"/>
-            <argument type="service" id="W3com\BoomBundle\Service\BoomGenerator"/>
-            <argument type="service" id="kernel"/>
+        <service class="W3com\HulkBundle\Controller\PersistenceController" id="w3com_hulk.controller.update_sap_controller" public="true">
+            <argument type="service" id="logger"/>
+            <argument type="service" id="request_stack"/>
+            <argument type="service" id="w3com_hulk.service.display_persister"/>
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>
         </service>
-        <service id="w3com_hulk.controller.session_controller"
-                 class="W3com\HulkBundle\Controller\SessionController" public="true">
-            <argument type="service" id="w3com_hulk.filter.filter_session_manager"/>
-            <argument type="service" id="w3com_hulk.service.session_manager"/>
-            <argument type="service" id="monolog.logger"/>
+        <service class="W3com\HulkBundle\Controller\SearchViewController" id="w3com_hulk.controller.search_view_controller" public="true">
+            <argument type="service" id="w3com_hulk.service.search_view_provider"/>
+            <argument type="service" id="request_stack"/>
             <call method="setContainer">
                 <argument type="service" id="service_container" />
+            </call>
+        </service>
+        <service class="W3com\HulkBundle\Controller\SessionController" id="w3com_hulk.controller.session_controller" public="true">
+            <argument type="service" id="w3com_hulk.filter.filter_session_manager"/>
+            <argument type="service" id="w3com_hulk.service.session_manager"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+            <argument type="service" id="logger"/>
+        </service>
+        <service class="W3com\HulkBundle\Controller\UpdateProjectEntityController" id="w3com_hulk.controller.update_project_entity_controller" public="true">
+            <argument type="service" id="W3com\BoomBundle\Service\BoomGenerator"/>
+            <argument type="service" id="cache.security_expression_language"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
             </call>
         </service>
     </services>
-
 </container>

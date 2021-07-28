@@ -59,24 +59,21 @@ class DataTransformer
         return $value;
     }
 
-    /**
-     * @throws AnnotationException
-     * @throws ReflectionException
-     *
-     * @return array
-     */
-    private function transformData(array $hanaEntities)
+    private function transformData(array $hanaEntities): array
     {
         $data = [];
+
         /** @var AbstractEntity $boomObj */
         foreach ($hanaEntities as $boomObj) {
-            // Cast entity
-            $entityArray = json_decode($boomObj->getEntityJson(), true);
-            foreach ($entityArray as $property => $value) {
-                $value = $this->transformDateFormat($value);
-                $entityArray[$property] = $value;
+            $normalizeEntity = $boomObj->normalize();
+
+            foreach ($normalizeEntity as $property => $value) {
+                if (!is_array($value)) {
+                    $value = $this->transformDateFormat($value);
+                }
+                $normalizeEntity[$property] = $value;
             }
-            $data[] = $entityArray;
+            $data[] = $normalizeEntity;
         }
 
         return $data;
