@@ -42,4 +42,18 @@ class CacheManager
     {
         return $this->cache->getItem($key);
     }
+
+    /**
+     * For Some odd reasons, if the sub string which remove the first dot of the constant (which make it a little bit variable ...) ...
+     * ... the cache construct in this class doesn't get the cache to clear.
+     */
+    public function clearCache(): bool
+    {
+        $cacheToClear = new PhpArrayAdapter(
+            substr(self::DISPLAY_CACHE_DIRECTORY, 1).self::DISPLAY_CACHE_KEY.'.cache',
+            new FilesystemAdapter()
+        );
+
+        return $cacheToClear->clear();
+    }
 }
