@@ -4,11 +4,15 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="w3com_hulk.command.update_display_cv_command"
-                 class="W3com\HulkBundle\Command\UpdateDisplayCVCommand" public="true">
+        <service class="W3com\HulkBundle\Command\UpdateDisplayCVCommand" id="w3com_hulk.command.update_display_cv_command" public="true">
             <argument type="service" id="W3com\BoomBundle\Service\BoomGenerator"/>
             <argument type="service" id="w3com_hulk.finder.json_finder"/>
             <tag name="console.command" command="hulk:update:displays"/>
+        </service>
+        <service class="W3com\HulkBundle\Command\ClearCacheCommand" id="w3com_hulk.command.clear_cache_command" public="true">
+            <argument type="service" id="w3com_hulk.service.cache_manager"/>
+            <argument type="service" id="kernel"/>
+            <tag name="console.command" command="hulk:clear"/>
         </service>
     </services>
 </container>

@@ -12,9 +12,6 @@ use W3com\HulkBundle\Service\CacheManager;
 
 class JsonFinder
 {
-    const DISPLAY_CACHE_DIRECTORY = '../var/cache/hulk/';
-    const DISPLAY_CACHE_KEY = 'display';
-
     /**
      * @var BoomManager
      */
@@ -44,7 +41,7 @@ class JsonFinder
         $this->baseUri = $this->boom->config['odata_service']['connections']['default']['uri'];
         $this->jsonUri = $this->config['json_display']['url_files'];
         $this->cache = new PhpArrayAdapter(
-            self::DISPLAY_CACHE_DIRECTORY.self::DISPLAY_CACHE_KEY.'.cache',
+            CacheManager::DISPLAY_CACHE_DIRECTORY.CacheManager::DISPLAY_CACHE_KEY.'.cache',
             new FilesystemAdapter()
         );
     }
