@@ -11,7 +11,6 @@
         </service>
         <service class="W3com\HulkBundle\Command\ClearCacheCommand" id="w3com_hulk.command.clear_cache_command" public="true">
             <argument type="service" id="w3com_hulk.service.cache_manager"/>
-            <argument type="service" id="kernel"/>
             <tag name="console.command" command="hulk:clear"/>
         </service>
     </services>

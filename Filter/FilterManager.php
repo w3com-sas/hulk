@@ -16,13 +16,19 @@ class FilterManager extends AbstractFilterManager
      */
     private $multilpleFilterManager;
 
-    public function __construct(SingleFilterManager $singleFilterManager, MultipleFilterManager $multilpleFilterManager)
+    /**
+     * FilterManager constructor.
+     *
+     * For some odd reasons, the services.xml don't put those two needed class as construct argument.
+     * So we need to instantiate with a new.
+     */
+    public function __construct()
     {
-        $this->singleFilterManager = $singleFilterManager;
-        $this->multilpleFilterManager = $multilpleFilterManager;
+        $this->singleFilterManager = new SingleFilterManager();
+        $this->multilpleFilterManager = new MultipleFilterManager();
     }
 
-    public function initFilters(Display $dataTable)
+    public function initFilters(Display $dataTable): Display
     {
         $this->singleFilterManager->manageSingleFilters($dataTable);
         $this->multilpleFilterManager->manageMultipleFilters($dataTable);
