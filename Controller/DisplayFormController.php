@@ -60,7 +60,7 @@ class DisplayFormController extends AbstractController
     /**
      * @throws ReflectionException|InvalidArgumentException
      */
-    public function displayForm($filename): Response
+    public function displayForm(string $filename): Response
     {
         $display = $this->displayFormProvider->getDisplay($filename);
         $form = $this->createForm(DisplayType::class, $display);
@@ -76,17 +76,17 @@ class DisplayFormController extends AbstractController
             $numberOfLineMax = $this->displayFormProvider->getMaxResultReturned();
             $jsonFinder = $this->displayFormProvider->getJsonFinder();
 
-            if (!$this->cacheManager->isInCache($filename)) {
+            if (!$this->cacheManager->isInCache($routeParams['filename'])) {
                 $configDisplay = $jsonFinder->getOnlineJson($routeParams['filename']);
             } else {
                 $cacheItem = $this->cacheManager->getCacheItem(CacheManager::DISPLAY_CACHE_KEY);
                 $displays = $cacheItem->get();
 
-                if (!array_key_exists($filename, $displays)) {
+                if (!array_key_exists($routeParams['filename'], $displays)) {
                     $configDisplay = $jsonFinder->getOnlineJson($routeParams['filename']);
                 } else {
                     $display->getError()->setFileExist(true);
-                    $configDisplay = $displays[$filename];
+                    $configDisplay = $displays[$routeParams['filename']];
                 }
             }
 
