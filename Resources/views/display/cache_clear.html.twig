@@ -1,0 +1,41 @@
+{% extends '@W3comHulk/display/base.html.twig' %}
+
+{% block content %}
+    <div class="d-flex align-items-center h-100 w-100">
+        <div class="mx-auto">
+            {% if commandResponse is same as (0) %}
+                <p class="display-1 text-center text-success animate__animated animate__tada">
+                    Le cache a bien été nettoyé.
+                </p>
+            {% elseif commandResponse is same as (1) %}
+                <p class="display-1 text-center text-success animate__animated animate__tada">
+                    Le cache de Boom a bien été nettoyé.
+                </p>
+                <p class="h1 text-center text-warning animate__animated animate__flash">
+                    En revanche le cache d'Hulk n'a pas été nettoyé.
+                </p>
+            {% elseif commandResponse is same as (2) %}
+                <p class="display-1 text-center text-success animate__animated animate__tada">
+                    Le cache d'Hulk a bien été nettoyé.
+                </p>
+                <p class="h1 text-center text-warning animate__animated animate__flash">
+                    En revanche le cache de Boom n'a pas été nettoyé.
+                </p>
+            {% elseif commandResponse is same as (3) %}
+                <p class="display-1 text-center text-danger animate__animated animate__shakeX">
+                    Le cache n'a pas été nettoyé.
+                </p>
+            {% endif %}
+            <div class="text-center">
+                <button
+                        type="button"
+                        class="btn btn-primary btn-lg"
+                        onclick="document.location.reload()"
+                        style="border-radius: 5px;"
+                >
+                    Recharger
+                </button>
+            </div>
+        </div>
+    </div>
+{% endblock %}
