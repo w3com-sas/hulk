@@ -1,50 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<routes xmlns="http://symfony.com/schema/routing"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
-    <route id="w3com_display" path="/display/{filename}" methods="GET POST">
-        <default key="_controller">w3com_hulk.controller.display_controller::display</default>
-    </route>
-    <route id="w3com_save_filters" path="/save-filters" methods="POST">
-        <default key="_controller">w3com_hulk.controller.session_controller::saveFilter</default>
-    </route>
-    <route id="w3com_save_row_index" path="/save-row-index" methods="POST">
-        <default key="_controller">w3com_hulk.controller.session_controller::saveRowIndex</default>
-    </route>
-    <route id="w3com_search_view" path="/search-view" methods="POST">
-        <default key="_controller">w3com_hulk.controller.search_view_controller::searchView</default>
-    </route>
-    <route id="w3com_update_project_entity" path="/update-view" methods="GET">
-        <default key="_controller">w3com_hulk.controller.update_project_entity_controller::updateView</default>
-    </route>
-    <route id="w3com_create_entity" path="/create-entity/{tableName}" methods="GET">
-        <default key="_controller">w3com_hulk.controller.update_project_entity_controller::createTable</default>
-    </route>
-    <route id="w3com_update_sap" path="/update-sap" methods="POST">
-        <default key="_controller">w3com_hulk.controller.update_sap_controller::updateSapLines</default>
-    </route>
-    <route id="w3com_update_sap_line" path="/update-sap-line" methods="POST">
-        <default key="_controller">w3com_hulk.controller.update_sap_controller::updateSapLine</default>
-    </route>
-    <route id="w3com_api_request" path="/api-request" methods="POST">
-        <default key="_controller">w3com_hulk.controller.api_request_controller::apiRequest</default>
-    </route>
-    <route id="w3com_display_form" path="/display-form/{filename}" methods="GET POST">
-        <default key="_controller">w3com_hulk.controller.display_form_controller::displayForm</default>
-    </route>
-    <route id="w3com_display_form_reload" path="/display-form-reload" methods="POST">
-        <default key="_controller">w3com_hulk.controller.display_form_controller::displayFormReload</default>
-    </route>
-    <route id="w3com_export_csv" path="/export-csv" methods="POST">
-        <default key="_controller">w3com_hulk.controller.export_csv_controller::exportCsv</default>
-    </route>
-    <route id="w3com_app" path="/app/{fileApp}" methods="GET POST">
-        <default key="_controller">w3com_hulk.controller.app_controller::runApp</default>
-    </route>
-    <route id="w3com_app_module" path="/app/{fileApp}/{screenName}" methods="GET POST">
-        <default key="_controller">w3com_hulk.controller.app_controller::runApp</default>
-    </route>
+<routes
+    xmlns="http://symfony.com/schema/routing"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd"
+>
     <route id="w3com_admin_login" path="/hulk/login" methods="GET POST">
         <default key="_controller">w3com_hulk.controller.admin_controller::login</default>
     </route>
@@ -57,5 +17,49 @@
     <route id="w3com_admin_displays" path="/hulk/admin/displays" methods="GET">
         <default key="_controller">w3com_hulk.controller.admin_controller::displays</default>
     </route>
-
+    <route id="w3com_api_request" path="/api-request" methods="POST">
+        <default key="_controller">w3com_hulk.controller.search_view_controller::searchView</default>
+    </route>
+    <route id="w3com_app" path="/app/{fileApp}" methods="GET POST">
+        <default key="_controller">w3com_hulk.controller.app_controller::runApp</default>
+    </route>
+    <route id="w3com_app_module" path="/app/{fileApp}/{screenName}" methods="GET POST">
+        <default key="_controller">w3com_hulk.controller.app_controller::runApp</default>
+    </route>
+    <route id="w3com_create_entity" path="/create-entity/{tableName}" methods="GET">
+        <default key="_controller">w3com_hulk.controller.update_project_entity_controller::createTable</default>
+    </route>
+    <route id="w3com_display" path="/display/{filename}" methods="GET POST">
+        <default key="_controller">w3com_hulk.controller.display_controller::display</default>
+    </route>
+    <route id="w3com_display_cache_clear" path="/hulk/display/cache-clear" methods="GET">
+        <default key="_controller">w3com_hulk.controller.display_controller::cacheClear</default>
+    </route>
+    <route id="w3com_display_form" path="/display-form/{filename}" methods="GET POST">
+        <default key="_controller">w3com_hulk.controller.display_form_controller::displayForm</default>
+    </route>
+    <route id="w3com_display_form_reload" path="/display-form-reload" methods="POST">
+        <default key="_controller">w3com_hulk.controller.display_form_controller::displayFormReload</default>
+    </route>
+    <route id="w3com_export_csv" path="/export-csv" methods="POST">
+        <default key="_controller">w3com_hulk.controller.export_csv_controller::exportCsv</default>
+    </route>
+    <route id="w3com_save_filters" path="/save-filters" methods="POST">
+        <default key="_controller">w3com_hulk.controller.session_controller::saveFilter</default>
+    </route>
+    <route id="w3com_save_row_index" path="/save-row-index" methods="POST">
+        <default key="_controller">w3com_hulk.controller.session_controller::saveRowIndex</default>
+    </route>
+    <route id="w3com_search_view" path="/search-view" methods="POST">
+        <default key="_controller">w3com_hulk.controller.api_request_controller::apiRequest</default>
+    </route>
+    <route id="w3com_update_project_entity" path="/update-view" methods="GET">
+        <default key="_controller">w3com_hulk.controller.update_project_entity_controller::updateView</default>
+    </route>
+    <route id="w3com_update_sap" path="/update-sap" methods="POST">
+        <default key="_controller">w3com_hulk.controller.update_sap_controller::updateSapLines</default>
+    </route>
+    <route id="w3com_update_sap_line" path="/update-sap-line" methods="POST">
+        <default key="_controller">w3com_hulk.controller.update_sap_controller::updateSapLine</default>
+    </route>
 </routes>
