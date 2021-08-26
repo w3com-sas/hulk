@@ -44,8 +44,8 @@ class CacheManager
     }
 
     /**
-     * For Some odd reasons, if the sub string which remove the first dot of the constant (which make it a little bit variable ...) ...
-     * ... the cache construct in this class doesn't get the cache to clear.
+     * For some odd reasons, if the sub string which remove the first dot from the DISPLAY_CACHE_DIRECTORY constant ...
+     * ... (which make it a little bit variable ...) isn't done, the cache constructed in this class doesn't get the cache to clear.
      */
     public function clearCache(): bool
     {

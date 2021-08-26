@@ -54,7 +54,7 @@ class ClearCacheCommand extends Command
             $returnValue = 1;
         }
 
-        if (!$deletedBoomCache) {
+        if ($deletedBoomCache === 1) {
             $returnValue = 1;
         }
 
