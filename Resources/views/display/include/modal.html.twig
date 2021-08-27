@@ -105,7 +105,8 @@
     {% if action.type in [
         constant('W3com\\HulkBundle\\Model\\GlobalAction::TYPE_CALL_FUNCTION'),
         constant('W3com\\HulkBundle\\Model\\GlobalAction::TYPE_API_CALL'),
-        constant('W3com\\HulkBundle\\Model\\GlobalAction::TYPE_RENDER_VIEW')
+        constant('W3com\\HulkBundle\\Model\\GlobalAction::TYPE_RENDER_VIEW'),
+        constant('W3com\\HulkBundle\\Model\\GlobalAction::TYPE_EXPORT_CSV')
     ] %}
         {% set id =
             (action.type == constant('W3com\\HulkBundle\\Model\\GlobalAction::TYPE_CALL_FUNCTION'))

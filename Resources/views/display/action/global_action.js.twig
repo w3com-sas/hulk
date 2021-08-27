@@ -56,30 +56,37 @@ $('{{ btnFormId }}').click(function () {
 {% if globalAction.type == 'export-csv' %}
 $('#{{ globalAction.type }}').click(function () {
     var data = table.rows('.selected').data().toArray();
-    var jsonData = Object.assign({}, data);
-    var filename = '{{ display.filename }}' + '.csv';
-    xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-        var a;
-        if (xhttp.readyState === 4 && xhttp.status === 200) {
-            // Trick for making downloadable link
-            a = document.createElement('a');
-            a.href = window.URL.createObjectURL(xhttp.response);
-            // Give filename you wish to download
-            a.download = filename;
-            a.style.display = 'none';
-            document.body.appendChild(a);
-            a.click();
-        }
-    };
+    if (data.length === 0){
+        var callFunction = new CallFunction('{{ globalAction.type }}{{ globalAction.index }}', '{{ globalAction.icon }}');
 
-    // Post data to URL which handles post request
-    xhttp.open("POST", '{{ path('w3com_export_csv', {filename : display.filename }) }}');
-    xhttp.setRequestHeader("Content-Type", "application/json");
-    xhttp.setRequestHeader("accept", "application/json");
-    // You should set responseType as blob for binary responses
-    xhttp.responseType = 'blob';
-    xhttp.send(JSON.stringify(jsonData));
+        callFunction.addLineResult('Veuillez sélectionner au moins une ligne.', 'danger')
+        callFunction.showModal('Export excel');
+    } else {
+        var jsonData = Object.assign({}, data);
+        var filename = '{{ display.filename }}' + '.csv';
+        xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            var a;
+            if (xhttp.readyState === 4 && xhttp.status === 200) {
+                // Trick for making downloadable link
+                a = document.createElement('a');
+                a.href = window.URL.createObjectURL(xhttp.response);
+                // Give filename you wish to download
+                a.download = filename;
+                a.style.display = 'none';
+                document.body.appendChild(a);
+                a.click();
+            }
+        };
+
+        // Post data to URL which handles post request
+        xhttp.open("POST", '{{ path('w3com_export_csv', {filename : display.filename }) }}');
+        xhttp.setRequestHeader("Content-Type", "application/json");
+        xhttp.setRequestHeader("accept", "application/json");
+        // You should set responseType as blob for binary responses
+        xhttp.responseType = 'blob';
+        xhttp.send(JSON.stringify(jsonData));
+    }
 });
 {% endif %}
 {% endfor %}
