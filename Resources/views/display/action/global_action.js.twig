@@ -61,6 +61,8 @@ $('#{{ globalAction.type }}').click(function () {
 
         callFunction.addLineResult('Veuillez sélectionner au moins une ligne.', 'danger')
         callFunction.showModal('Export excel');
+        callFunction.addValidateBtn();
+        callFunction.addReloadButton();
     } else {
         var jsonData = Object.assign({}, data);
         var filename = '{{ display.filename }}' + '.csv';
