@@ -78,9 +78,9 @@ class CsvManager
                     $line[$field] = array_key_exists($field, $dataLine) ? $dataLine[$field] : 'Champ inconnu';
                 }
             } else {
-                foreach ($dataLine as $fieldName => $value) {
-                    /** @var Column $column */
-                    foreach ($display->getColumns() as $column) {
+                /** @var Column $column */
+                foreach ($display->getColumns() as $column) {
+                    foreach ($dataLine as $fieldName => $value) {
                         if ($column->getFieldName() === $fieldName && Column::COL_TYPE_TEXT === $column->getType() && !$column->isHidden()) {
                             $line[$column->getLabel()] = $value;
                         }
