@@ -471,7 +471,7 @@ $(document).ready(function () {
     $('#dataTable tbody').on('click', 'tr', function () {
         var data = {};
         data.currentRoute = '{{ app.request.getRequestUri() }}';
-        data.scrollY = window.scrollY;
+        data.scrollY = document.getElementsByTagName('body')[0].scrollTop ?? 0;
         data.rowIndex = table.row(this).index();
         $.ajax({
             method: 'POST',
@@ -481,7 +481,7 @@ $(document).ready(function () {
     });
 
     {% if display.lastScrollY %}
-        window.scrollTo(0, {{ display.lastScrollY }});
+        document.getElementsByTagName('body')[0].scrollTop = {{ display.lastScrollY }};
     {% endif %}
 
     {% include '@W3comHulk/display/action/global_action.js.twig' %}
