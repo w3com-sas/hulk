@@ -471,7 +471,10 @@ $(document).ready(function () {
     $('#dataTable tbody').on('click', 'tr', function () {
         var data = {};
         data.currentRoute = '{{ app.request.getRequestUri() }}';
-        data.scrollY = document.getElementsByTagName('body')[0].scrollTop ?? 0;
+        data.scrollY = document.getElementsByTagName('body')[0].scrollTop
+        if (data.scrollY === null){
+            data.scrollY = 0;
+        }
         data.rowIndex = table.row(this).index();
         $.ajax({
             method: 'POST',
