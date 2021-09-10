@@ -471,7 +471,7 @@ $(document).ready(function () {
     $('#dataTable tbody').on('click', 'tr', function () {
         var data = {};
         data.currentRoute = '{{ app.request.getRequestUri() }}';
-        data.scrollY = document.getElementsByTagName('body')[0].scrollTop
+        data.scrollY = document.getElementById('main-container').scrollTop;
         if (data.scrollY === null){
             data.scrollY = 0;
         }
@@ -484,7 +484,7 @@ $(document).ready(function () {
     });
 
     {% if display.lastScrollY %}
-        document.getElementsByTagName('body')[0].scrollTop = {{ display.lastScrollY }};
+        document.getElementById('main-container').scrollTop = {{ display.lastScrollY }};
     {% endif %}
 
     {% include '@W3comHulk/display/action/global_action.js.twig' %}
