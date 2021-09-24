@@ -63,7 +63,7 @@ class Config
     private $targetData;
 
     /**
-     * @var string
+     * @var array
      */
     private $targetChoices;
 
@@ -212,7 +212,7 @@ class Config
         $this->targetDescription = $targetDescription;
     }
 
-    public function getTargetChoices(): ?string
+    public function getTargetChoices(): ?array
     {
         return $this->targetChoices;
     }
@@ -225,8 +225,8 @@ class Config
                 $targetData[explode('|', $choice)[0]] = explode('|', $choice)[1];
             }
             $targetChoices = $targetData;
+            $this->targetChoices = $targetChoices;
         }
-        $this->targetChoices = $targetChoices;
     }
 
     public function getTargetDataTypeEntity(): ?string
