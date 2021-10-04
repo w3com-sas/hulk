@@ -28,7 +28,7 @@ class ExportCsvController extends AbstractController
         $response = new Response(mb_convert_encoding( $this->csvManager->getCsv($data, $filename), 'Windows-1252', 'UTF-8'));
         $disposition = $response->headers->makeDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            $this->csvManager->getDisplayName().'.csv'
+            $filename.'.csv'
         );
 
         $response->headers->set('Content-Type', 'application/csv');
