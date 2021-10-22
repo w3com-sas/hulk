@@ -135,6 +135,7 @@ export const CallFunction = class {
             method: "POST",
             headers: {"Accept": "application/json"},
             body: JSON.stringify(data),
+            credential: 'same-origin',
         })
         .then(res => res.json())
         .then(res => {

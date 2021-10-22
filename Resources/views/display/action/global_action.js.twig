@@ -135,8 +135,17 @@ $('#btn{{ globalAction.type~globalAction.index }}').click(function () {
                 }
 
             },
-            error: function (rep) {
-                callFunction.addUnknowError();
+            error: function (rep, textStatus, errorThrown) {
+                var errMessage =  'Une erreur est survenue.';
+                if (textStatus) {
+                    errMessage += ' (Détail : '+textStatus;
+                    if (errorThrown) {
+                        errMessage += ' / '+errorThrown;
+                    }
+                    errMessage += ')'
+                }
+
+                callFunction.addLineResult(errMessage, 'danger')
             },
             complete: function () {
                 callFunction.stopLoading();
@@ -181,8 +190,17 @@ $('#btn{{ globalAction.type~globalAction.index }}').click(function () {
                 });
             }
         },
-        error: function () {
-            callFunction.addUnknowError();
+        error: function (rep, textStatus, errorThrown) {
+            var errMessage =  'Une erreur est survenue.';
+            if (textStatus) {
+                errMessage += ' (Détail : '+textStatus;
+                if (errorThrown) {
+                    errMessage += ' / '+errorThrown;
+                }
+                errMessage += ')'
+            }
+
+            callFunction.addLineResult(errMessage, 'danger')
         },
         complete: function () {
             callFunction.stopLoading();
