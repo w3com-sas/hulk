@@ -8,24 +8,24 @@ use W3com\HulkBundle\Model\Filter;
 
 class SingleFilterManager extends AbstractFilterManager
 {
-    public function manageSingleFilters(Display $dataTable)
+    public function manageSingleFilters(Display $dataTable): Display
     {
         $this->addValues($dataTable);
 
         return $dataTable;
     }
 
-    public function sortDateAsc($x, $y)
+    public function sortDateAsc($x, $y): int
     {
         return $this->sortDate($x, $y, 'asc');
     }
 
-    public function sortDateDesc($x, $y)
+    public function sortDateDesc($x, $y): int
     {
         return $this->sortDate($x, $y, 'desc');
     }
 
-    public function sortDate($x, $y, $order)
+    public function sortDate($x, $y, $order): int
     {
         $firstValue = 'asc' === $order ? 1 : -1;
         $secondValue = 'asc' === $order ? -1 : 1;
@@ -74,7 +74,7 @@ class SingleFilterManager extends AbstractFilterManager
                     }
 
                     if (isset($isDate)) {
-                        if (null !== $filter->getOrder() && Filter::ORDER_ASC === $filter->getOrder()) {
+                        if (Filter::ORDER_ASC === $filter->getOrder()) {
                             usort($values, [$this, 'sortDateAsc']);
                         } else {
                             usort($values, [$this, 'sortDateDesc']);
@@ -88,11 +88,13 @@ class SingleFilterManager extends AbstractFilterManager
         }
     }
 
-    private function formatValuesForChoices(array $values)
+    private function formatValuesForChoices(array $values): array
     {
         $fValues = [];
         foreach ($values as $value) {
-            $fValues[$value] = $value;
+            if (!empty($value)) {
+                $fValues[$value] = $value;
+            }
         }
 
         return $fValues;
