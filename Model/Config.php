@@ -25,11 +25,7 @@ class Config
     const FIELD_USER_CONFIRM = 'UserConfirm';
     const FIELD_UPDATE_SAP_INPUT_TYPE = 'InputType';
     const FIELD_UPDATE_SAP_FUNCTION_NAME = 'LocalFunctionName';
-
-    const TYPE_UPDATE_SAP_INPUT_TEXT = 'text';
-    const TYPE_UPDATE_SAP_INPUT_DATE = 'date';
     const TYPE_UPDATE_SAP_DEFAULT_FUNCTION = 'updateSapLine(this)';
-
     const FIELD_ADDITIONAL_PARAMETER = 'AdditionalParameter';
 
     /**
@@ -118,7 +114,6 @@ class Config
 
     public function __construct()
     {
-        $this->updateSapInputType = self::TYPE_UPDATE_SAP_INPUT_TEXT;
         $this->updateSapLocalFunctionName = self::TYPE_UPDATE_SAP_DEFAULT_FUNCTION;
     }
 
