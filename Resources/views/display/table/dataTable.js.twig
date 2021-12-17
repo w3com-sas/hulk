@@ -484,13 +484,13 @@ $(document).ready(function () {
         document.getElementById('main-container').scrollTop = {{ display.lastScrollY }};
     {% endif %}
 
-    handleDatePicker();
+    handleDatePicker('body');
 
     {% include '@W3comHulk/display/action/global_action.js.twig' %}
 })
 {% include '@W3comHulk/display/filter/save_filters.js.twig' %}
 
-const handleDatePicker = function(selector = 'body') {
+function handleDatePicker(selector) {
     $(document).find(selector).find('.datepicker-here').each(function() {
         var startValue = $(this).val();
 
@@ -513,7 +513,6 @@ const handleDatePicker = function(selector = 'body') {
                     $(inst.el).change();
                 }
             });
-
         } catch(error) {
             console.log(error)
         }
