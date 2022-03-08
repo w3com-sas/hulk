@@ -2,6 +2,7 @@
 
 namespace W3com\HulkBundle\Model;
 
+use Symfony\Component\HttpFoundation\ParameterBag;
 use W3com\BoomBundle\Generator\Model\Entity;
 use W3com\BoomBundle\Generator\Model\Property;
 
@@ -86,6 +87,8 @@ class Display
 
     /** @var array */
     private $displayNames = [];
+
+    private $getRequestParams = null;
 
     public function __construct()
     {
@@ -565,4 +568,24 @@ class Display
 
         return $columns;
     }
+
+    /**
+     * @return ParameterBag
+     */
+    public function getGetRequestParams(): ?ParameterBag
+    {
+        return $this->getRequestParams;
+    }
+
+    /**
+     * @param ParameterBag $getRequestParams
+     * @return Display
+     */
+    public function setGetRequestParams(ParameterBag $getRequestParams): Display
+    {
+        $this->getRequestParams = $getRequestParams;
+        return $this;
+    }
+
+
 }

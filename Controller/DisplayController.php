@@ -38,6 +38,15 @@ class DisplayController extends AbstractController
      */
     public function display($filename): Response
     {
+        $urlBack = $this->request->getCurrentRequest()->query->get('urlHistory');
+        $urlHistory = $urlBack;
+        if (!empty($urlHistory)){
+            $urlHistory .= '|';
+        }
+
+        $urlHistory .= $this->request->getCurrentRequest()->getRequestUri();
+        $this->request->getCurrentRequest()->query->set('urlHistory', $urlHistory);
+
         $display = $this->displayProvider->getDisplay(
             $filename,
             $this->request->getCurrentRequest()->query
@@ -46,6 +55,7 @@ class DisplayController extends AbstractController
         return $this->render('@W3comHulk/display/all.html.twig', [
             'display' => $display,
             'filename' => $filename,
+            'urlBack' => $urlBack,
         ]);
     }
 

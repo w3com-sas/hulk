@@ -66,10 +66,10 @@ class DisplayFormController extends AbstractController
         $form = $this->createForm(DisplayType::class, $display);
         $form->handleRequest($this->request->getCurrentRequest());
         $entityNameDisplay = '';
-
         if ($form->isSubmitted() && $form->isValid()) {
             $formData = $this->request->getCurrentRequest()->request->all();
             $routeParams = $this->urlManager->createRouteParams($formData, $display);
+            $routeParams['urlHistory'] = $this->request->getCurrentRequest()->getRequestUri();
 
             // Analyse the number of results and if it's not what expected
             // an error is threw and the redirection to display is not made

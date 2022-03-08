@@ -6,7 +6,7 @@
     {% endif %}
 {% endfor %}
 {% for param, value in app.request.query.all %}
-    {% if param not in ['username','companydb','slcontext'] %}
+    {% if param not in ['username','companydb','slcontext', 'urlHistory'] %}
         {% if param == 'SEARCH' %}
             <span class="badge badge-info">{{ value|explodeSpace }}</span>
         {% else %}

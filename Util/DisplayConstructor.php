@@ -251,6 +251,14 @@ class DisplayConstructor
                     foreach ($value as $fieldKey => $targetFieldKey) {
                         $action->addParam($fieldKey, $targetFieldKey);
                     }
+                    if (empty($this->display->getGetRequestParams())){
+                        break;
+                    }
+                    $urlHistory = $this->display->getGetRequestParams()->get('urlHistory');
+                    if (empty($urlHistory)){
+                        break;
+                    }
+                    $action->addParam('urlHistory', $urlHistory);
                     break;
                 case CellAction::FIELD_RENDER_TYPE:
                     $action->setRenderType($value);
