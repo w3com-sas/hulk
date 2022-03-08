@@ -111,6 +111,8 @@ class DisplayProvider
         $display = new Display();
         $display->setFilename($filename);
 
+        $display->setGetRequestParams($getRequestParams);
+
         if (!$this->cacheManager->isInCache($filename)) {
             $json = $this->jsonFinder->getOnlineJson($filename, $display);
         } else {
