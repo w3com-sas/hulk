@@ -349,7 +349,14 @@ class DisplayConstructor
                     } catch (Exception $e) {
                         $this->logger->warning($e->getMessage(), $e->getTrace());
                     }
-                    $newConfig->setUrl($value);
+                    $urlComplement = '';
+                    if (!empty($this->display->getGetRequestParams())){
+                        $urlHistory = $this->display->getGetRequestParams()->get('urlHistory');
+                        if (!empty($urlHistory)){
+                            $urlComplement = '?urlHistory=' . $urlHistory;
+                        }
+                    }
+                    $newConfig->setUrl($value . $urlComplement);
                     break;
                 case Config::FIELD_MESSAGE_CONFIRM:
                     $newConfig->setMessageConfirm($value);
