@@ -44,10 +44,10 @@ class DisplayController extends AbstractController
             $urlHistory .= '|';
         }
         $requestUri = $this->request->getCurrentRequest()->getRequestUri();
-        $requestUri = substr($requestUri, 0, strpos($requestUri, '&urlHistory'));
-
+        if (strpos($requestUri, '&urlHistory') !== false){
+            $requestUri = substr($requestUri, 0, strpos($requestUri, '&urlHistory'));
+        }
         $urlHistory .= $requestUri;
-
         $this->request->getCurrentRequest()->query->set('urlHistory', $urlHistory);
 
         $display = $this->displayProvider->getDisplay(
