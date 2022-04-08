@@ -166,6 +166,9 @@ class Column
     public function setHidden(bool $hidden): void
     {
         $this->hidden = $hidden;
+        if ($hidden){
+            $this->searchable = false;
+        }
     }
 
     public function isHidden(): ?bool
