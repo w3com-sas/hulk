@@ -35,15 +35,19 @@ class FilterSessionManager
 
         $sessionFilters = [];
         $formatedFilters = [];
+        $filterCount = 0;
 
         foreach ($filters as $filter => $value) {
             // Single filter
             if ('' !== $value && null !== $value) {
+                if (!in_array($filter, ['searchBar', 'targetColumn'])){
+                    $filterCount++;
+                }
                 // Multiple filter
                 if (is_array($value) && ('' != $value['min'] || '' != $value['max'])) {
                     $formatedFilters[$filter] = $value;
 
-                // Single
+                    // Single
                 } elseif (!is_array($value) && '' !== $value && null !== $value) {
                     $formatedFilters[$filter] = $value;
                 }
@@ -57,7 +61,7 @@ class FilterSessionManager
         }
         $this->session->set('filters', $sessionFilters);
 
-        return count($sessionFilters[$name]);
+        return $filterCount;
     }
 
     public function checkFiltersDefaultValue(Display $dataTable)
@@ -73,7 +77,9 @@ class FilterSessionManager
                         /** @var Filter $filter */
                         foreach ($dataTable->getFilters() as $filter) {
                             if ($filter->getFieldName() === $filterSessionName) {
-                                $dataTable->addSavedFilters();
+                                if (!in_array($filter->getFieldName(), ['searchBar', 'targetColumn'])){
+                                    $dataTable->addSavedFilters();
+                                }
                                 $filter->setDefaultValue($filterSessionValue);
                             }
                         }

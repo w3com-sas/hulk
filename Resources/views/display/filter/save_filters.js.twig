@@ -33,9 +33,19 @@ function saveFilters() {
             var startSubstr = countFilter.innerHTML.indexOf('(');
             var endSubstr = countFilter.innerHTML.indexOf(')');
             countFilter.innerHTML = countFilter.innerHTML.replace(countFilter.innerHTML.substr(startSubstr, endSubstr),
-                '(' + data.countFilters + ')')
+                '(' + data.countFilters + ')');
+            if (data.countFilters > 0) {
+                countFilter.querySelector('i').classList.remove('fal');
+                countFilter.querySelector('i').classList.add('fas');
+                countFilter.classList.remove('text-gray-1');
+                countFilter.classList.add('text-warning');
+            } else {
+                countFilter.querySelector('i').classList.remove('fas');
+                countFilter.querySelector('i').classList.add('fal');
+                countFilter.classList.remove('text-warning');
+                countFilter.classList.add('text-gray-1');
+            }
         }
-
     })
 }
 

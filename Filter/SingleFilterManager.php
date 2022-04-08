@@ -58,7 +58,6 @@ class SingleFilterManager extends AbstractFilterManager
                     }
 
                     $values = [];
-                    $values[''] = '';
                     foreach ($dataTable->getData() as $line) {
                         foreach ($line as $property => $value) {
                             if ($property == $filter->getFieldName()) {
@@ -82,7 +81,7 @@ class SingleFilterManager extends AbstractFilterManager
                         $values = $this->formatValuesForChoices($values);
                         unset($isDate);
                     }
-                    $filter->setValues($values);
+                    $filter->setValues(array_merge(['' => ''], $values));
                 }
             }
         }

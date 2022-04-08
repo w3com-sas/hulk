@@ -133,6 +133,9 @@ class Column
     public function setLabel(?string $label): void
     {
         $this->label = $label;
+        if (empty($label)){
+            $this->searchable = false;
+        }
     }
 
     public function getLabel(): ?string
@@ -183,6 +186,9 @@ class Column
     public function setType(string $type): void
     {
         $this->type = $type;
+        if ($type !== self::COL_TYPE_TEXT){
+            $this->searchable = false;
+        }
     }
 
     public function getType(): ?string
