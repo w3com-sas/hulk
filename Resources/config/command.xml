@@ -13,5 +13,9 @@
             <argument type="service" id="w3com_hulk.service.cache_manager"/>
             <tag name="console.command" command="hulk:clear"/>
         </service>
+        <service class="W3com\HulkBundle\Command\DisplayCachingCommand" id="w3com_hulk.command.display_caching_command" public="true">
+            <argument type="service" id="w3com_hulk.service.display_caching_manager"/>
+            <tag name="console.command" command="hulk:launch-display-caching"/>
+        </service>
     </services>
 </container>
