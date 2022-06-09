@@ -4,6 +4,7 @@ namespace W3com\HulkBundle\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use W3com\HulkBundle\Service\DisplayCachingManager;
 
