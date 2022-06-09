@@ -46,6 +46,9 @@
             <argument type="service" id="w3com_hulk.util.display_constructor"/>
             <argument>%hulk.config%</argument>
         </service>
+        <service class="W3com\HulkBundle\Service\DisplayCachingManager" id="w3com_hulk.service.display_caching_manager">
+            <argument type="service" id="W3com\BoomBundle\Service\BoomManager"/>
+        </service>
         <service class="W3com\HulkBundle\Service\DisplayPersister" id="w3com_hulk.service.display_persister">
             <argument type="service" id="W3com\BoomBundle\Service\BoomManager"/>
             <argument type="service" id="logger"/>
