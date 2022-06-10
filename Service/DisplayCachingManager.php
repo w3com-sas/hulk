@@ -3,6 +3,7 @@
 namespace W3com\HulkBundle\Service;
 
 use W3com\BoomBundle\Exception\EntityNotFoundException;
+use W3com\BoomBundle\Service\BoomManager;
 
 class DisplayCachingManager
 {
