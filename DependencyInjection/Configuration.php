@@ -30,6 +30,8 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('max_result_returned')
                     ->defaultValue('1000')
                 ->end()
+                ->scalarNode('hulk_list_caching_display')
+                ->end()
             ->end();
 
         return $treeBuilder;
