@@ -84,7 +84,7 @@ class SingleFilterManager extends AbstractFilterManager
                                     try{
                                         if($isDate){
                                             $dateTime = new DateTime($value);
-                                            $values[$value] = $dateTime->format('d/m/Y');
+                                            $values[$dateTime->format('d/m/Y')] = $value;
                                         } else {
                                             $values[$value] = $value;
                                         }
@@ -95,9 +95,9 @@ class SingleFilterManager extends AbstractFilterManager
                             }
                             if($isDate){
                                 if (Filter::ORDER_ASC === $filter->getOrder()) {
-                                    ksort($values);
+                                    asort($values);
                                 } else {
-                                    krsort($values);
+                                    arsort($values);
                                 }
                             }
 
