@@ -1,17 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <container
-    xmlns="http://symfony.com/schema/dic/services"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd"
+        xmlns="http://symfony.com/schema/dic/services"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd"
 >
     <services>
         <service class="W3com\HulkBundle\Column\ColumnManager" id="w3com_hulk.service.column_manager"/>
-        <service class="W3com\HulkBundle\Filter\FilterManager" id="w3com_hulk.service.filter_manager"/>
+        <service class="W3com\HulkBundle\Filter\FilterManager" id="w3com_hulk.service.filter_manager">
+            <argument type="service" id="w3com_hulk.filter.single_filter_manager"/>
+            <argument type="service" id="w3com_hulk.filter.multiple_filter_manager"/>
+        </service>
         <service class="W3com\HulkBundle\Filter\FilterSessionManager" id="w3com_hulk.filter.filter_session_manager">
             <argument type="service" id="session" />
             <argument type="service" id="request_stack"/>
         </service>
-        <service class="W3com\HulkBundle\Filter\SingleFilterManager" id="w3com_hulk.filter.single_filter_manager"/>
+        <service class="W3com\HulkBundle\Service\DisplayCachingManager" id="w3com_hulk.service.display_caching_manager">
+            <argument type="service" id="W3com\BoomBundle\Service\BoomManager"/>
+            <argument>%hulk.config%</argument>
+        </service>
+        <service class="W3com\HulkBundle\Filter\SingleFilterManager" id="w3com_hulk.filter.single_filter_manager">
+            <argument type="service" id="w3com_hulk.service.display_caching_manager"/>
+        </service>
         <service class="W3com\HulkBundle\Filter\MultipleFilterManager" id="w3com_hulk.filter.multiple_filter_manager"/>
         <service class="W3com\HulkBundle\Finder\JsonFinder" id="w3com_hulk.finder.json_finder">
             <argument type="service" id="W3com\BoomBundle\Service\BoomManager" />
@@ -29,6 +38,7 @@
         <service class="W3com\HulkBundle\Query\QueryManager" id="w3com_hulk.query.query_manager" public="true">
             <argument type="service" id="W3com\BoomBundle\Service\BoomManager"/>
             <argument type="service" id="W3com\BoomBundle\Service\BoomGenerator"/>
+            <argument type="service" id="w3com_hulk.service.display_caching_manager"/>
         </service>
         <service class="W3com\HulkBundle\Renderer\Renderer" id="w3com_hulk.renderer.renderer" public="true"/>
         <service class="W3com\HulkBundle\Service\ApiManager" id="w3com_hulk.service.api_manager">
@@ -44,10 +54,9 @@
             <argument type="service" id="W3com\BoomBundle\Service\BoomGenerator"/>
             <argument type="service" id="w3com_hulk.url.url_manager"/>
             <argument type="service" id="w3com_hulk.util.display_constructor"/>
+            <argument type="service" id="w3com_hulk.service.display_caching_manager"/>
+            <argument type="service" id="w3com_hulk.service.filter_manager"/>
             <argument>%hulk.config%</argument>
-        </service>
-        <service class="W3com\HulkBundle\Service\DisplayCachingManager" id="w3com_hulk.service.display_caching_manager">
-            <argument type="service" id="W3com\BoomBundle\Service\BoomManager"/>
         </service>
         <service class="W3com\HulkBundle\Service\DisplayPersister" id="w3com_hulk.service.display_persister">
             <argument type="service" id="W3com\BoomBundle\Service\BoomManager"/>
