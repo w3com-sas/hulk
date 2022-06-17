@@ -17,6 +17,7 @@ use W3com\HulkBundle\Model\Column;
 use W3com\HulkBundle\Model\Display;
 use W3com\HulkBundle\Model\Error;
 use W3com\HulkBundle\Model\Filter;
+use W3com\HulkBundle\Service\DisplayCachingManager;
 use W3com\HulkBundle\Url\UrlManager;
 
 class QueryManager
@@ -30,10 +31,18 @@ class QueryManager
     /*** @var BoomGenerator */
     private $generator;
 
-    public function __construct(BoomManager $boom, BoomGenerator $generator)
+    /** @var DisplayCachingManager */
+    private $displayCachingManager;
+
+    public function __construct(
+        BoomManager $boom,
+        BoomGenerator $generator,
+        DisplayCachingManager $displayCachingManager
+    )
     {
         $this->boom = $boom;
         $this->generator = $generator;
+        $this->displayCachingManager = $displayCachingManager;
     }
 
     /**
@@ -61,6 +70,10 @@ class QueryManager
         // Don't make request if no filter
         if ($display->isFilter && count($display->getFilters()) > 0) {
             $this->addSelectForFilters($display, $params);
+            // If caching is activated, we limit the query to only one line
+            if($this->displayCachingManager->cacheIsActivated($display->getFilename())){
+                $params->setTop(100);
+            }
             return $repo->findAll($params);
         } elseif ($display->isFilter && count($display->getFilters()) === 0) {
             return [];

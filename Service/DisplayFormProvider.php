@@ -70,16 +70,29 @@ class DisplayFormProvider
      */
     private $cacheManager;
 
-    public function __construct(BoomManager $boom, BoomGenerator $generator, UrlManager $urlManager, DisplayConstructor $constructor, $config)
+    /**
+     * @var DisplayCachingManager
+     */
+    private $displayCachingManager;
+
+    public function __construct(
+        BoomManager $boom,
+        BoomGenerator $generator,
+        UrlManager $urlManager,
+        DisplayConstructor $constructor,
+        DisplayCachingManager $displayCachingManager,
+        FilterManager $filterManager,
+        $config)
     {
         if (array_key_exists('max_result_returned', $config)) {
             $this->max_result_returned = $config['max_result_returned'];
         }
         $this->display = new Display();
+        $this->displayCachingManager = $displayCachingManager;
         $this->jsonFinder = new JsonFinder($boom, $config);
-        $this->queryManager = new QueryManager($boom, $generator);
+        $this->queryManager = new QueryManager($boom, $generator,$displayCachingManager);
         $this->displayConstructor = $constructor;
-        $this->filterManager = new FilterManager();
+        $this->filterManager = $filterManager;
         $this->dataTransformer = new DataTransformer($urlManager);
         $this->display->isFilter = true;
         $this->boom = $boom;
@@ -113,15 +126,20 @@ class DisplayFormProvider
         }
 
 
+
         $this->display->setFilename($filename);
         $this->displayConstructor->hydrate($this->display, $json);
+
+        // Retreiving all data.
+        // Here we analyse if caching is activated
         $data = $this->queryManager->createDataTableQuery($this->display, $getParamsRequest);
 
         if (!$this->display->getError()->isClassExist()) {
             return $this->display;
         }
-
+        // Hydrate all datas in display (useless in display form mode only for filter hydratation make after).
         $this->dataTransformer->addData($this->display, $data);
+        // Construct filter with all datas
         $this->filterManager->initFilters($this->display);
 
         return $this->display;
