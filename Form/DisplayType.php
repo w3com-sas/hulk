@@ -51,14 +51,27 @@ class DisplayType extends AbstractType
                     $form->add('_interval'.$filter->getFieldName(), DisplayMultipleType::class, [
                         'data' => $filter, 'filter_type' => Filter::TYPE_MULTIPLE, 'mapped' => false, ]);
                 } elseif (Filter::TYPE_SINGLE === $filter->getType()) {
-                    $form->add($filter->getFieldName(), ChoiceType::class, ['mapped' => false,
-                        'label' => $filter->getLabel(), 'choices' => $filter->getValues(), 'required' => false,
-                        'attr' => ['onchange' => 'reloadDisplayForm()'], ]);
+                    $options = [
+                        'mapped' => false,
+                        'label' => $filter->getLabel(),
+                        'choices' => $filter->getValues(),
+                        'required' => false,
+                    ];
+                    if(!$display->isCached()){
+                        $options['attr'] = [
+                            'onchange' => 'reloadDisplayForm()'
+                        ];
+                    }
+
+                    $form->add($filter->getFieldName(), ChoiceType::class,$options);
                 } elseif (Filter::TYPE_DATE === $filter->getType()) {
                     $form->add($filter->getFieldName(), DateType::class, [
                         'format' => 'd/m/Y',
-                        'label' => $filter->getLabel(), 'mapped' => false, 'widget' => 'single_text',
-                        'required' => false, 'html5' => false,
+                        'label' => $filter->getLabel(),
+                        'mapped' => false,
+                        'widget' => 'single_text',
+                        'required' => false,
+                        'html5' => false,
                     ]);
                 }
             }
