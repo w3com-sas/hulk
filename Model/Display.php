@@ -90,6 +90,8 @@ class Display
 
     private $getRequestParams = null;
 
+    private $isCached = false;
+
     public function __construct()
     {
         $this->error = new Error();
@@ -111,6 +113,16 @@ class Display
     public function getColumns(): array
     {
         return $this->columns;
+    }
+
+    public function setCachedMode($cacheMode)
+    {
+        $this->isCached = $cacheMode;
+    }
+
+    public function isCached()
+    {
+        return $this->isCached;
     }
 
     public function addFilter(Filter $filter)

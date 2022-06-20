@@ -65,10 +65,7 @@ class DisplayCachingManager
 
             foreach($structure as $columnName){
                 $nbDistinctValues = $this->buildColumn($repo, $displayName,$columnName);
-                dump($displayName.' - '.$columnName.' - '.$nbDistinctValues);
             }
-
-
         } catch(EntityNotFoundException $e){
             throw new \Exception('Entity not found '.$e->getMessage());
         } catch(\Exception $e){

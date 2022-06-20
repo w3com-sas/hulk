@@ -72,7 +72,8 @@ class QueryManager
             $this->addSelectForFilters($display, $params);
             // If caching is activated, we limit the query to only one line
             if($this->displayCachingManager->cacheIsActivated($display->getFilename())){
-                $params->setTop(100);
+                $display->setCachedMode(true);
+                $params->setTop(1);
             }
             return $repo->findAll($params);
         } elseif ($display->isFilter && count($display->getFilters()) === 0) {
