@@ -9,7 +9,7 @@ $('.single-filter .custom-select').on('change', function () {
     countSelectedRows(table.rows('.selected').data());
 
 });
-$('#searchBar').on('keyup change', function () {
+$('#searchBar').on('change', function () {
     var colIndex = $('#targetColumn').val();
     table.search('').columns().search('').draw();
     table.rows().deselect();
