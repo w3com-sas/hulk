@@ -65,7 +65,7 @@ $('#{{ globalAction.type }}').click(function () {
         callFunction.addReloadButton();
     } else {
         var jsonData = Object.assign({}, data);
-        var filename = '{{ display.filename }}' + '.csv';
+        var filename = '{{ display.filename }}' + '.xlsx';
         xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function () {
             var a;

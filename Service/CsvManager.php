@@ -2,6 +2,9 @@
 
 namespace W3com\HulkBundle\Service;
 
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Psr\Cache\InvalidArgumentException;
 use ReflectionException;
 use Symfony\Component\Serializer\Encoder\CsvEncoder;
@@ -13,10 +16,6 @@ use W3com\HulkBundle\Model\GlobalAction;
 
 class CsvManager
 {
-    /**
-     * @var Serializer
-     */
-    private $serializer;
 
     /**
      * @var DisplayProvider
@@ -36,7 +35,6 @@ class CsvManager
     public function __construct(DisplayProvider $displayProvider)
     {
         $this->displayProvider = $displayProvider;
-        $this->serializer = new Serializer([new ObjectNormalizer()], [new CsvEncoder()]);
         $this->cacheManager = new CacheManager();
     }
 
@@ -64,34 +62,63 @@ class CsvManager
 
         $display = $this->displayProvider->getConstructor()->hydrate($display, $file);
         $this->displayName = $display->getDisplayName();
-        $formattedData = [];
 
         // TODO : pour l'instant ne gère qu'un seul export csv. Si besoin de plusieurs passer la param index par exemple
         /** @var GlobalAction $globalAction */
         $globalAction = $display->getGlobalActionsByType('export-csv')[0];
 
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Feuille');
+        $headers = [];
+        $rowCounter = 2;
         foreach ($data as $dataLine) {
-            $line = [];
-
+            $columnCounter = 1;
             if (count($globalAction->getFields()) > 0) {
                 foreach ($globalAction->getFields() as $field) {
-                    $line[$field] = array_key_exists($field, $dataLine) ? $dataLine[$field] : 'Champ inconnu';
+                    $sheet->setCellValueByColumnAndRow(
+                        $columnCounter,
+                        $rowCounter,
+                        array_key_exists($field, $dataLine) ? $dataLine[$field] : 'Champ inconnu'
+                    );
+                    $headers[$columnCounter] = $field;
+                    $columnCounter++;
                 }
             } else {
                 /** @var Column $column */
                 foreach ($display->getColumns() as $column) {
                     foreach ($dataLine as $fieldName => $value) {
                         if ($column->getFieldName() === $fieldName && Column::COL_TYPE_TEXT === $column->getType() && !$column->isHidden()) {
-                            $line[$column->getLabel()] = $value;
+                            $sheet->setCellValueByColumnAndRow(
+                                $columnCounter,
+                                $rowCounter,
+                                $value
+                            );
+                            $headers[$columnCounter] = $column->getLabel();
                         }
                     }
+                    $columnCounter++;
                 }
             }
-
-            $formattedData[] = $line;
+            $rowCounter++;
+        }
+        foreach ($headers as $index=>$header){
+            $sheet->setCellValueByColumnAndRow(
+                $index,
+                1,
+                $header
+            );
         }
 
-        return $this->serializer->encode($formattedData, 'csv', [CsvEncoder::DELIMITER_KEY => ';']);
+        $sheet->getStyle('A1:'.Coordinate::stringFromColumnIndex($columnCounter - 1).(string) ($rowCounter - 1))
+            ->getAlignment()->setWrapText(true);
+        for ($iterator = 1; $iterator < $columnCounter; ++$iterator) {
+            $sheet->getColumnDimension(Coordinate::stringFromColumnIndex($iterator))->setAutoSize(true);
+        }
+        $writer = new Xlsx($spreadsheet);
+        ob_start();
+        $writer->save('php://output');
+        return ob_get_clean();
     }
 
     public function getDisplayName(): string

@@ -25,13 +25,14 @@ class ExportCsvController extends AbstractController
         $data = json_decode($this->request->getCurrentRequest()->getContent(), true);
         $filename = $this->request->getCurrentRequest()->query->get('filename');
 
-        $response = new Response(mb_convert_encoding( $this->csvManager->getCsv($data, $filename), 'Windows-1252', 'UTF-8'));
+        $response = new Response($this->csvManager->getCsv($data, $filename));
+
         $disposition = $response->headers->makeDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            $filename.'.csv'
+            $filename.'.xlsx'
         );
 
-        $response->headers->set('Content-Type', 'application/csv');
+        $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         $response->headers->set('Content-Disposition', $disposition);
 
         return $response;
