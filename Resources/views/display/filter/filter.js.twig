@@ -9,9 +9,10 @@ $('.single-filter .custom-select').on('change', function () {
     countSelectedRows(table.rows('.selected').data());
 
 });
+
 $('#searchBar').on('change', function () {
     var colIndex = $('#targetColumn').val();
-    table.search('').columns().search('').draw();
+    {#table.search('').columns().search('').draw();#}
     table.rows().deselect();
     var element = colIndex === 'all' ? table : table.column(colIndex);
     element
@@ -23,12 +24,18 @@ $('#searchBar').on('change', function () {
 
 $('#targetColumn').on('change', function () {
     var searchVal = $('#searchBar').val();
-    table.search('').columns().search('').draw();
     table.rows().deselect();
+    // Remove search from previously selected column or use search set in select fields
+    if (table.column(this.getAttribute('oldValue'))){
+        var oldSearchVal = $('.single-filter .custom-select[colindex="'+this.getAttribute('oldValue')+'"]').children("option:selected").val();
+        table.column(this.getAttribute('oldValue')).search(oldSearchVal);
+    }
+    // Set new search
     var element = this.value === 'all' ? table : table.column(this.value);
     element
         .search(searchVal)
         .draw();
+    this.setAttribute('oldValue', this.value);
     saveFilters();
     countSelectedRows(table.rows('.selected').data());
 });
