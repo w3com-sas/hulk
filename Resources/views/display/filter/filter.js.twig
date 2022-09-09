@@ -26,9 +26,13 @@ $('#targetColumn').on('change', function () {
     var searchVal = $('#searchBar').val();
     table.rows().deselect();
     // Remove search from previously selected column or use search set in select fields
-    if (table.column(this.getAttribute('oldValue'))){
+    if (this.getAttribute('oldValue') && table.column(this.getAttribute('oldValue'))){
+        table.column(this.getAttribute('oldValue')).search('');
+        // If search set on the same column from filters using select fields, keep it
         var oldSearchVal = $('.single-filter .custom-select[colindex="'+this.getAttribute('oldValue')+'"]').children("option:selected").val();
-        table.column(this.getAttribute('oldValue')).search(oldSearchVal);
+        if (oldSearchVal) {
+            table.column(this.getAttribute('oldValue')).search(oldSearchVal);
+        }
     }
     // Set new search
     var element = this.value === 'all' ? table : table.column(this.value);
