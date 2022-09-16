@@ -49,7 +49,7 @@
             return !moment(d, format, locale, true).isValid()
                 ? Infinity
                 : parseInt(moment(d, format, locale, true).format('x'), 10)
-            ;
+                ;
         };
     };
 }));
@@ -64,7 +64,7 @@ $(document).ready(function () {
         {
             'idLines': 'line{{ loop.index }}',
             {% for col, value in object %}
-                '{{ col }}': '{{ value }}',
+            '{{ col }}': '{{ value }}',
             {% endfor %}
         },
         {% endfor %}
@@ -93,327 +93,327 @@ $(document).ready(function () {
         data: data,
         columns: [
             {% for column in display.columns %}
-                {# Set dynamic icon #}
-                {% if column.active == 'Y' %}
-                    {% if column.type is same as (constant('W3com\\HulkBundle\\Model\\Column::COL_TYPE_TEXT')) or column.hidden %}
-                        {
-                            {% if column.width is not null %}
-                                width: "{{ column.width }}%",
-                            {% endif %}
-                            data: "{{ column.fieldName }}"
-                        },
-                    {% elseif column.type is same as (constant('W3com\\HulkBundle\\Model\\Column::COL_TYPE_ACTION')) %}
-                        {% if column.cellAction.functionName is same as (constant('W3com\\HulkBundle\\Model\\CellAction::FUNCTION_OPEN_FORM')) %}
-                            {
-                                {% if column.width is not null %}
-                                    width: "{{ column.width }}%",
-                                {% endif %}
-                                data: "{{ column.fieldName }}",
-                                render: function (data, type, row) {
-                                    var idTpl = '#' + '{{ column.cellAction.functionName }}{{ column.index }}';
-                                    var tpl = $(idTpl).html();
-
-                                    if (data === '') {
-                                        return null;
-                                    }
-
-                                    {% if column.cellAction.iconFieldName is not null %}
-                                        var icon = row.{{ column.cellAction.iconFieldName }};
-
-                                        return tpl.replace('[[icon]]', icon).replace('[[data]]', data);
-                                    {% else %}
-                                        return tpl.replace('[[data]]', data);
-                                    {% endif %}
-                                }
-                            },
-                        {% elseif
-                            column.cellAction.functionName is same as (constant('W3com\\HulkBundle\\Model\\Column::FUNCTION_NAME_DISPLAY_LINK'))
-                            or column.cellAction.functionName is same as (constant('W3com\\HulkBundle\\Model\\Column::FUNCTION_NAME_LINK'))
-                        %}
-                            {
-                                {% if column.width is not null %}
-                                    width: "{{ column.width }}%",
-                                {% endif %}
-                                data: "{{ column.cellAction.functionName }}{{ column.cellAction.targetEntity }}",
-                                render: function (data, type, row) {
-                                    if (data === '' || data === undefined || data === null) {
-                                        return null;
-                                    }
-
-                                    var idTpl = '#' + '{{ column.cellAction.functionName }}{{ column.cellAction.targetEntity }}';
-                                    var tpl = $(idTpl).html();
-
-                                    return tpl.replace('[[data]]', data);
-                                }
-                            },
-                        {% elseif column.cellAction.functionName is same as (constant('W3com\\HulkBundle\\Model\\Column::FUNCTION_NAME_DISPLAY_LINKS')) %}
-                            {
-                                {% if column.width is not null %}
-                                    width: "{{ column.width }}%",
-                                {% endif %}
-                                data: "{{ column.cellAction.functionName }}{{ column.cellAction.targetEntity }}",
-                                render: function (data, type, row) {
-                                    if (data === '' || data === undefined || data === null) {
-                                        return null;
-                                    }
-
-                                    var explodedLink = data.split('/');
-                                    var explodedGetParams = explodedLink[2].split('?');
-
-                                    explodedGetParams[0] = document.getElementById('dropDownMenu' + '{{ column.index }}').dataset.display;
-                                    explodedLink[2] = explodedGetParams.join('?');
-
-                                    var link = explodedLink.join('/');
-                                    var idTpl = '#' + '{{ column.cellAction.functionName }}{{ column.index }}';
-                                    var tpl = $(idTpl).html();
-
-                                    return tpl.replace('[[data]]', link);
-                                }
-                            },
-                        {% endif %}
-                    {% elseif column.type is same as (constant('W3com\\HulkBundle\\Model\\Column::COL_TYPE_CHECKBOX')) %}
-                        {
-                            data: 'idLines',
-                            render: function (data, type, row) {
-                                return $('#checkboxTpl').html().replace('idLine', data);
-                            }
-                        },
-                    {% elseif column.type is same as (constant('W3com\\HulkBundle\\Model\\Column::COL_TYPE_ICON')) %}
-                        {
-                            {% if column.width is not null %}
-                                width: "{{ column.width }}%",
-                            {% endif %}
-                            data: "{{ column.fieldName }}",
-                            render: function (data, type, row) {
-                                var tpl = $('#icon').html();
-                                if (data.split(' ').length === 1) {
-                                    data = 'fa fa-' + data;
-                                }
-                                return tpl.replace('[[data]]', data);
-                            }
-                        },
-                    {% elseif column.type is same as (constant('W3com\\HulkBundle\\Model\\Column::COL_TYPE_UNIVERSAL')) %}
-                        {
-                            {% if column.width is not null %}
-                                width: "{{ column.width }}%",
-                            {% endif %}
-                            data: null,
-                            render: function (data, type, row) {
-                                var iconRenderer;
-                                var tplIcon = $('#icon').html();
-                                if (row.hasOwnProperty('{{ column.iconFieldName }}') && (row.{{ column.iconFieldName }} !== '')) {
-                                    var prefixIcon;
-                                    if (row.{{ column.iconFieldName }}.split(' ').length === 1) {
-                                        prefixIcon = 'fa fa-';
-                                    }
-                                    iconRenderer = tplIcon.replace('[[data]]', prefixIcon + row.{{ column.iconFieldName }});
-                                } else {
-                                    iconRenderer = tplIcon.replace('[[data]]', '{{ column.cellAction.icon }}')
-                                }
-
-                                var labelRenderer = '';
-
-                                if (row.hasOwnProperty('{{ column.labelFieldName }}') && row.{{ column.labelFieldName }} !== '') {
-                                    var tplLabel = $('#labelRenderer').html();
-                                    labelRenderer = tplLabel.replace('[[data]]', row.{{ column.labelFieldName }});
-                                }
-
-                                {% if column.cellAction is defined %}
-                                    var tplAction = $('#action{{ column.cellAction.functionName }}{{ column.index }}').html();
-                                    tplAction = tplAction
-                                        .replace('[[globalRender]]', iconRenderer + labelRenderer)
-                                        .replace('[[row]]', JSON.stringify(row).replace(/"/g, '&quot;'))
-                                    ;
-                                {% if column.cellAction.renderType is defined and column.cellAction.renderType == 'dynamic' %}
-                                    tplAction = tplAction.replace('[[classRender]]', row.{{ column.cellAction.renderFieldName }})
-                                {% endif %}
-                                    return tplAction;
-                                {% else %}
-                                    return iconRenderer + labelRenderer;
-                                {% endif %}
-                            }
-                        },
-                    {% elseif column.type is same as (constant('W3com\\HulkBundle\\Model\\Column::COL_TYPE_CALL_FUNCTION')) %}
-                        {
-                            {% if column.width is not null %}
-                                width: "{{ column.width }}%",
-                            {% endif %}
-                            data: null,
-                            render: function (data, type, row) {
-                                var baseIcon = document.createElement('i');
-                                var baseBtn = document.createElement('button');
-                                var label =
-                                    (row.hasOwnProperty('{{ column.labelFieldName }}') && row['{{ column.labelFieldName }}'] !== '')
-                                        ? row['{{ column.labelFieldName }}']
-                                        : ''
-                                ;
-                                baseBtn.className =
-                                    (row.hasOwnProperty('{{ column.renderFieldName }}') && row['{{ column.renderFieldName }}'] !== '')
-                                        ? 'btn ' + row['{{ column.renderFieldName }}']
-                                        : ''
-                                ;
-                                baseBtn.className =
-                                    (baseBtn.className === '' && '{{ column.render }}' !== '')
-                                        ? '{{ column.render }}'
-                                        : baseBtn.className
-                                ;
-                                baseIcon.className =
-                                    (row.hasOwnProperty('{{ column.iconFieldName }}') && row['{{ column.iconFieldName }}'] !== '')
-                                        ? row['{{ column.iconFieldName }}']
-                                        : ''
-                                ;
-                                baseIcon.className =
-                                    (baseIcon.className === '' && '{{ column.icon }}' !== '')
-                                        ? '{{ column.icon }}'
-                                        : baseIcon.className
-                                ;
-                                baseBtn.innerHTML = baseIcon.outerHTML + label;
-
-                                return baseBtn.outerHTML;
-                            }
-                        },
-                    {% elseif column.type is same as (constant('W3com\\HulkBundle\\Model\\Column::COL_TYPE_UPDATE_SAP')) %}
-                        {
-                            data: '{{ column.fieldName }}',
-                            render: function (data, type, row) {
-                                {% if column.config.targetChoices is iterable %}
-                                    var choices = {{ column.config.targetChoices|json_encode|raw }};
-                                    var template =
-                                        '<select data-entity="{{ column.config.entity }}"'
-                                        + 'data-field-name="{{ column.fieldName }}"'
-                                        + 'data-key="' + row['{{ column.config.entityKey }}']
-                                        + '"class="form-control custom-select" onchange="updateSapLine(this)">'
-                                    ;
-                                    Object.keys(choices).forEach(function (key) {
-                                        if (data === choices[key]) {
-                                            template += '<option value="' + choices[key] + '" selected="selected">' + key + '</option>'
-                                        } else {
-                                            template += '<option value="' + choices[key] + '">' + key + '</option>'
-                                        }
-                                    })
-                                    template += '</select>'
-
-                                    return template;
-                                {% else %}
-                                    var updateSapInput = '<input class="form-control form-control-sm datepicker-here"'
-                                        + 'type="text"'
-                                        + 'value="' + data + '"'
-                                        + 'style="overflow: visible"'
-                                    ;
-
-                                    {% if column.config.entity %}
-                                        updateSapInput += 'data-entity="{{ column.config.entity }}"'
-                                    {% endif %}
-
-                                    {% if column.config.targetField %}
-                                        updateSapInput += 'data-field-name="{{ column.config.targetField ? column.config.targetField  : column.fieldName }}"'
-                                    {% endif %}
-
-                                    {% if column.config.entityKey %}
-                                        updateSapInput += 'data-key="' + row.{{ column.config.entityKey }} + '"'
-                                    {% endif %}
-
-                                    {% if column.config.updateSapLocalFunctionName is not same as (constant('W3com\\HulkBundle\\Model\\Config::TYPE_UPDATE_SAP_DEFAULT_FUNCTION')) %}
-                                        {# Parameters of the local called function are the row plus the input plus, if it is set, config.additionalParameter #}
-                                        {# The row is a Json object #}
-                                        {# The strigified row do not contain (") cause this (") break the way that the input is render in HTML #}
-                                        {# Force to make the following var because JSON.stringify(row) isn't supported by Chrome 47 #}
-                                        {# Moreover, String.protoype.replaceAll("'", "\'") isn't supported too, but the following var make this function useless #}
-                                        var arrayRow = [];
-
-                                        for (var i in row) {
-                                            if (row.hasOwnProperty(i)) {
-                                                arrayRow.push([i, row[i]]);
-                                            }
-                                        }
-
-                                        var stringifiedRow = arrayRow
-                                            .reduce((a, e) => {
-                                                if (typeof e[1] != 'function') {
-                                                    a += `'${e[0]}':'${e[1]}',`;
-                                                }
-                                                return a;
-                                            }, `'{`)
-                                            .slice(1, -2) + `'}`
-                                        ;
-
-                                        {% if column.config.additionalParameter is not same as (null) %}
-                                            updateSapInput += 'onchange="{{ column.config.updateSapLocalFunctionName }}(' + stringifiedRow + ',this, ' + {{ column.config.additionalParameter }} + ')"';
-                                        {% else %}
-                                            updateSapInput += 'onchange="{{ column.config.updateSapLocalFunctionName }}(' + stringifiedRow + ',this)"';
-                                        {% endif %}
-                                    {% else %}
-                                        updateSapInput += 'onchange="{{ column.config.updateSapLocalFunctionName }}"'
-                                    {% endif %}
-
-                                    updateSapInput += '/>'
-
-                                    return updateSapInput
-                                {% endif %}
-                            }
-                        },
-                    {% elseif column.type is same as (constant('W3com\\HulkBundle\\Model\\Column::COL_TYPE_RENDER_ELEMENT')) %}
-                    {
-                        data: '{{ column.fieldName }}',
-                        render: function (data, type, row) {
-                            var template = document.getElementById('{{ column.renderElement.elementId }}').innerHTML;
-                            var input = template.replace('[[data]]', data);
-                            return (row.hasOwnProperty('{{ column.renderFieldName }}') && row['{{ column.renderFieldName }}'] !== '')
-                                ? '<div class="' + row['{{ column.renderFieldName }}'] + '">' + input + '</div>'
-                                : input
-                                ;
-                        }
-                    },
-                    {% endif %}
+            {# Set dynamic icon #}
+            {% if column.active == 'Y' %}
+            {% if column.type is same as (constant('W3com\\HulkBundle\\Model\\Column::COL_TYPE_TEXT')) or column.hidden %}
+            {
+                {% if column.width is not null %}
+                width: "{{ column.width }}%",
                 {% endif %}
+                data: "{{ column.fieldName }}"
+            },
+            {% elseif column.type is same as (constant('W3com\\HulkBundle\\Model\\Column::COL_TYPE_ACTION')) %}
+            {% if column.cellAction.functionName is same as (constant('W3com\\HulkBundle\\Model\\CellAction::FUNCTION_OPEN_FORM')) %}
+            {
+                {% if column.width is not null %}
+                width: "{{ column.width }}%",
+                {% endif %}
+                data: "{{ column.fieldName }}",
+                render: function (data, type, row) {
+                    var idTpl = '#' + '{{ column.cellAction.functionName }}{{ column.index }}';
+                    var tpl = $(idTpl).html();
+
+                    if (data === '') {
+                        return null;
+                    }
+
+                    {% if column.cellAction.iconFieldName is not null %}
+                    var icon = row.{{ column.cellAction.iconFieldName }};
+
+                    return tpl.replace('[[icon]]', icon).replace('[[data]]', data);
+                    {% else %}
+                    return tpl.replace('[[data]]', data);
+                    {% endif %}
+                }
+            },
+            {% elseif
+                column.cellAction.functionName is same as (constant('W3com\\HulkBundle\\Model\\Column::FUNCTION_NAME_DISPLAY_LINK'))
+                or column.cellAction.functionName is same as (constant('W3com\\HulkBundle\\Model\\Column::FUNCTION_NAME_LINK'))
+            %}
+            {
+                {% if column.width is not null %}
+                width: "{{ column.width }}%",
+                {% endif %}
+                data: "{{ column.cellAction.functionName }}{{ column.cellAction.targetEntity }}",
+                render: function (data, type, row) {
+                    if (data === '' || data === undefined || data === null) {
+                        return null;
+                    }
+
+                    var idTpl = '#' + '{{ column.cellAction.functionName }}{{ column.cellAction.targetEntity }}';
+                    var tpl = $(idTpl).html();
+
+                    return tpl.replace('[[data]]', data);
+                }
+            },
+            {% elseif column.cellAction.functionName is same as (constant('W3com\\HulkBundle\\Model\\Column::FUNCTION_NAME_DISPLAY_LINKS')) %}
+            {
+                {% if column.width is not null %}
+                width: "{{ column.width }}%",
+                {% endif %}
+                data: "{{ column.cellAction.functionName }}{{ column.cellAction.targetEntity }}",
+                render: function (data, type, row) {
+                    if (data === '' || data === undefined || data === null) {
+                        return null;
+                    }
+
+                    var explodedLink = data.split('/');
+                    var explodedGetParams = explodedLink[2].split('?');
+
+                    explodedGetParams[0] = document.getElementById('dropDownMenu' + '{{ column.index }}').dataset.display;
+                    explodedLink[2] = explodedGetParams.join('?');
+
+                    var link = explodedLink.join('/');
+                    var idTpl = '#' + '{{ column.cellAction.functionName }}{{ column.index }}';
+                    var tpl = $(idTpl).html();
+
+                    return tpl.replace('[[data]]', link);
+                }
+            },
+            {% endif %}
+            {% elseif column.type is same as (constant('W3com\\HulkBundle\\Model\\Column::COL_TYPE_CHECKBOX')) %}
+            {
+                data: 'idLines',
+                render: function (data, type, row) {
+                    return $('#checkboxTpl').html().replace('idLine', data);
+                }
+            },
+            {% elseif column.type is same as (constant('W3com\\HulkBundle\\Model\\Column::COL_TYPE_ICON')) %}
+            {
+                {% if column.width is not null %}
+                width: "{{ column.width }}%",
+                {% endif %}
+                data: "{{ column.fieldName }}",
+                render: function (data, type, row) {
+                    var tpl = $('#icon').html();
+                    if (data.split(' ').length === 1) {
+                        data = 'fa fa-' + data;
+                    }
+                    return tpl.replace('[[data]]', data);
+                }
+            },
+            {% elseif column.type is same as (constant('W3com\\HulkBundle\\Model\\Column::COL_TYPE_UNIVERSAL')) %}
+            {
+                {% if column.width is not null %}
+                width: "{{ column.width }}%",
+                {% endif %}
+                data: null,
+                render: function (data, type, row) {
+                    var iconRenderer;
+                    var tplIcon = $('#icon').html();
+                    if (row.hasOwnProperty('{{ column.iconFieldName }}') && (row.{{ column.iconFieldName }} !== '')) {
+                        var prefixIcon;
+                        if (row.{{ column.iconFieldName }}.split(' ').length === 1) {
+                            prefixIcon = 'fa fa-';
+                        }
+                        iconRenderer = tplIcon.replace('[[data]]', prefixIcon + row.{{ column.iconFieldName }});
+                    } else {
+                        iconRenderer = tplIcon.replace('[[data]]', '{{ column.cellAction.icon }}')
+                    }
+
+                    var labelRenderer = '';
+
+                    if (row.hasOwnProperty('{{ column.labelFieldName }}') && row.{{ column.labelFieldName }} !== '') {
+                        var tplLabel = $('#labelRenderer').html();
+                        labelRenderer = tplLabel.replace('[[data]]', row.{{ column.labelFieldName }});
+                    }
+
+                    {% if column.cellAction is defined %}
+                    var tplAction = $('#action{{ column.cellAction.functionName }}{{ column.index }}').html();
+                    tplAction = tplAction
+                        .replace('[[globalRender]]', iconRenderer + labelRenderer)
+                        .replace('[[row]]', JSON.stringify(row).replace(/"/g, '&quot;'))
+                    ;
+                    {% if column.cellAction.renderType is defined and column.cellAction.renderType == 'dynamic' %}
+                    tplAction = tplAction.replace('[[classRender]]', row.{{ column.cellAction.renderFieldName }})
+                    {% endif %}
+                    return tplAction;
+                    {% else %}
+                    return iconRenderer + labelRenderer;
+                    {% endif %}
+                }
+            },
+            {% elseif column.type is same as (constant('W3com\\HulkBundle\\Model\\Column::COL_TYPE_CALL_FUNCTION')) %}
+            {
+                {% if column.width is not null %}
+                width: "{{ column.width }}%",
+                {% endif %}
+                data: null,
+                render: function (data, type, row) {
+                    var baseIcon = document.createElement('i');
+                    var baseBtn = document.createElement('button');
+                    var label =
+                        (row.hasOwnProperty('{{ column.labelFieldName }}') && row['{{ column.labelFieldName }}'] !== '')
+                            ? row['{{ column.labelFieldName }}']
+                            : ''
+                    ;
+                    baseBtn.className =
+                        (row.hasOwnProperty('{{ column.renderFieldName }}') && row['{{ column.renderFieldName }}'] !== '')
+                            ? 'btn ' + row['{{ column.renderFieldName }}']
+                            : ''
+                    ;
+                    baseBtn.className =
+                        (baseBtn.className === '' && '{{ column.render }}' !== '')
+                            ? '{{ column.render }}'
+                            : baseBtn.className
+                    ;
+                    baseIcon.className =
+                        (row.hasOwnProperty('{{ column.iconFieldName }}') && row['{{ column.iconFieldName }}'] !== '')
+                            ? row['{{ column.iconFieldName }}']
+                            : ''
+                    ;
+                    baseIcon.className =
+                        (baseIcon.className === '' && '{{ column.icon }}' !== '')
+                            ? '{{ column.icon }}'
+                            : baseIcon.className
+                    ;
+                    baseBtn.innerHTML = baseIcon.outerHTML + label;
+
+                    return baseBtn.outerHTML;
+                }
+            },
+            {% elseif column.type is same as (constant('W3com\\HulkBundle\\Model\\Column::COL_TYPE_UPDATE_SAP')) %}
+            {
+                data: '{{ column.fieldName }}',
+                render: function (data, type, row) {
+                    {% if column.config.targetChoices is iterable %}
+                    var choices = {{ column.config.targetChoices|json_encode|raw }};
+                    var template =
+                        '<select data-entity="{{ column.config.entity }}"'
+                        + 'data-field-name="{{ column.fieldName }}"'
+                        + 'data-key="' + row['{{ column.config.entityKey }}']
+                        + '"class="form-control custom-select" onchange="updateSapLine(this)">'
+                    ;
+                    Object.keys(choices).forEach(function (key) {
+                        if (data === choices[key]) {
+                            template += '<option value="' + choices[key] + '" selected="selected">' + key + '</option>'
+                        } else {
+                            template += '<option value="' + choices[key] + '">' + key + '</option>'
+                        }
+                    })
+                    template += '</select>'
+
+                    return template;
+                    {% else %}
+                    var updateSapInput = '<input class="form-control form-control-sm datepicker-here"'
+                        + 'type="text"'
+                        + 'value="' + data + '"'
+                        + 'style="overflow: visible"'
+                    ;
+
+                    {% if column.config.entity %}
+                    updateSapInput += 'data-entity="{{ column.config.entity }}"'
+                    {% endif %}
+
+                    {% if column.config.targetField %}
+                    updateSapInput += 'data-field-name="{{ column.config.targetField ? column.config.targetField  : column.fieldName }}"'
+                    {% endif %}
+
+                    {% if column.config.entityKey %}
+                    updateSapInput += 'data-key="' + row.{{ column.config.entityKey }} + '"'
+                    {% endif %}
+
+                    {% if column.config.updateSapLocalFunctionName is not same as (constant('W3com\\HulkBundle\\Model\\Config::TYPE_UPDATE_SAP_DEFAULT_FUNCTION')) %}
+                    {# Parameters of the local called function are the row plus the input plus, if it is set, config.additionalParameter #}
+                    {# The row is a Json object #}
+                    {# The strigified row do not contain (") cause this (") break the way that the input is render in HTML #}
+                    {# Force to make the following var because JSON.stringify(row) isn't supported by Chrome 47 #}
+                    {# Moreover, String.protoype.replaceAll("'", "\'") isn't supported too, but the following var make this function useless #}
+                    var arrayRow = [];
+
+                    for (var i in row) {
+                        if (row.hasOwnProperty(i)) {
+                            arrayRow.push([i, row[i]]);
+                        }
+                    }
+
+                    var stringifiedRow = arrayRow
+                        .reduce((a, e) => {
+                            if (typeof e[1] != 'function') {
+                                a += `'${e[0]}':'${e[1]}',`;
+                            }
+                            return a;
+                        }, `'{`)
+                        .slice(1, -2) + `'}`
+                    ;
+
+                    {% if column.config.additionalParameter is not same as (null) %}
+                    updateSapInput += 'onchange="{{ column.config.updateSapLocalFunctionName }}(' + stringifiedRow + ',this, ' + {{ column.config.additionalParameter }} + ')"';
+                    {% else %}
+                    updateSapInput += 'onchange="{{ column.config.updateSapLocalFunctionName }}(' + stringifiedRow + ',this)"';
+                    {% endif %}
+                    {% else %}
+                    updateSapInput += 'onchange="{{ column.config.updateSapLocalFunctionName }}"'
+                    {% endif %}
+
+                    updateSapInput += '/>'
+
+                    return updateSapInput
+                    {% endif %}
+                }
+            },
+            {% elseif column.type is same as (constant('W3com\\HulkBundle\\Model\\Column::COL_TYPE_RENDER_ELEMENT')) %}
+            {
+                data: '{{ column.fieldName }}',
+                render: function (data, type, row) {
+                    var template = document.getElementById('{{ column.renderElement.elementId }}').innerHTML;
+                    var input = template.replace('[[data]]', data);
+                    return (row.hasOwnProperty('{{ column.renderFieldName }}') && row['{{ column.renderFieldName }}'] !== '')
+                        ? '<div class="' + row['{{ column.renderFieldName }}'] + '">' + input + '</div>'
+                        : input
+                        ;
+                }
+            },
+            {% endif %}
+            {% endif %}
             {% endfor %}
         ],
         colReorder: false,
         order: [],
         columnDefs: [
             {% for column in display.columns %}
-                {% if column.type is same as (constant('W3com\\HulkBundle\\Model\\Column::COL_TYPE_CHECKBOX')) %}
-                    {
-                        "targets": [ {{ column.index }} ],
-                        "orderable": false
-                    },
-                {% elseif column.hidden %}
-                    {
-                        "targets": [ {{ column.index }} ],
-                        "visible": false,
-                        "searchable": true,
-                        "orderable": false
-                    },
-                {% elseif column.orderable %}
-                    {
-                        "targets": [ {{ column.index }} ],
-                        "visible": true,
-                        "searchable": true,
-                        "orderable": true
-                    },
-                {% elseif column.width is not null %}
-                    {
-                        "target": [ {{ column.index }} ],
-                        "visible": true,
-                        "searchable": true,
-                        "width": {{ column.width }}
-                    },
-                {% else %}
-                    {
-                        "targets": [ {{ column.index }} ],
-                        "visible": true,
-                        "searchable": true,
-                        "orderable": false
-                    },
-                {% endif %}
-                {targets: 'no-sort', orderable: false},
+            {% if column.type is same as (constant('W3com\\HulkBundle\\Model\\Column::COL_TYPE_CHECKBOX')) %}
+            {
+                "targets": [ {{ column.index }} ],
+                "orderable": false
+            },
+            {% elseif column.hidden %}
+            {
+                "targets": [ {{ column.index }} ],
+                "visible": false,
+                "searchable": true,
+                "orderable": false
+            },
+            {% elseif column.orderable %}
+            {
+                "targets": [ {{ column.index }} ],
+                "visible": true,
+                "searchable": true,
+                "orderable": true
+            },
+            {% elseif column.width is not null %}
+            {
+                "target": [ {{ column.index }} ],
+                "visible": true,
+                "searchable": true,
+                "width": {{ column.width }}
+            },
+            {% else %}
+            {
+                "targets": [ {{ column.index }} ],
+                "visible": true,
+                "searchable": true,
+                "orderable": false
+            },
+            {% endif %}
+            {targets: 'no-sort', orderable: false},
             {% endfor %}
         ],
         createdRow: function (row, data, dataIndex) {
             {% if display.lastRowIndex %}
-                if (dataIndex === {{ display.lastRowIndex }}) {
-                    $(row).addClass('highlighting');
-                }
+            if (dataIndex === {{ display.lastRowIndex }}) {
+                $(row).addClass('highlighting');
+            }
             {% endif %}
             if (data.hasOwnProperty('RowClassHtml')) {
                 $(row).addClass(data['RowClassHtml']);
@@ -465,7 +465,7 @@ $(document).ready(function () {
         countSelectedRows(table.rows('.selected').data());
     });
 
-    $('#dataTable tbody').on('click', 'tr', function () {
+    $('#dataTable').on('click', 'tr', function () {
         var data = {};
         data.currentRoute = '{{ app.request.getRequestUri() }}';
         data.scrollY = document.getElementById('main-container').scrollTop;
@@ -473,6 +473,7 @@ $(document).ready(function () {
             data.scrollY = 0;
         }
         data.rowIndex = table.row(this).index();
+        data.order = JSON.stringify($('#dataTable').DataTable().order());
         $.ajax({
             method: 'POST',
             data: data,
@@ -481,8 +482,11 @@ $(document).ready(function () {
     });
 
     {% if display.lastScrollY %}
-        document.getElementById('main-container').scrollTop = {{ display.lastScrollY }};
+    document.getElementById('main-container').scrollTop = {{ display.lastScrollY }};
     {% endif %}
+    {% if display.order %}
+    $('#dataTable').DataTable().order(JSON.parse('{{ display.order }}')).draw();
+    {% endif %}AD
 
     handleDatePicker('body');
 

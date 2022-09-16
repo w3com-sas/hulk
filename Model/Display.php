@@ -88,6 +88,9 @@ class Display
     /** @var array */
     private $displayNames = [];
 
+    /** @var string */
+    private $order = '';
+
     private $getRequestParams = null;
 
     private $isCached = false;
@@ -538,6 +541,25 @@ class Display
     {
         $this->lastScrollY = $lastScrollY;
     }
+
+    /**
+     * @return string
+     */
+    public function getOrder(): string
+    {
+        return $this->order;
+    }
+
+    /**
+     * @param string $order
+     * @return Display
+     */
+    public function setOrder(string $order): Display
+    {
+        $this->order = $order;
+        return $this;
+    }
+
 
     /**
      * @return int

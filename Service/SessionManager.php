@@ -29,18 +29,21 @@ class SessionManager
         $scrollY = $this->request->getCurrentRequest()->request->get('scrollY');
         $row = $this->request->getCurrentRequest()->request->get('rowIndex');
         $name = $this->request->getCurrentRequest()->request->get('currentRoute');
+        $order = $this->request->getCurrentRequest()->request->get('order');
 
         if ($this->session->has('rows')) {
             $oldRows = $this->session->get('rows');
             $oldRows[$name] = [
                 'scrollY' => $scrollY,
                 'index' => $row,
+                'order' => $order,
             ];
             $this->session->set('rows', $oldRows);
         } else {
             $this->session->set('rows', [$name => [
                 'scrollY' => $scrollY,
                 'index' => $row,
+                'order' => $order,
             ]]);
         }
     }
@@ -52,6 +55,7 @@ class SessionManager
                 if ($display === $this->concernedPage) {
                     $dataTable->setLastScrollY($row['scrollY']);
                     $dataTable->setLastRowIndex($row['index']);
+                    $dataTable->setOrder($row['order']);
                     break;
                 }
             }
