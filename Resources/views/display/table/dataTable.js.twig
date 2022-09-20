@@ -474,6 +474,9 @@ $(document).ready(function () {
         }
         data.rowIndex = table.row(this).index();
         data.order = JSON.stringify($('#dataTable').DataTable().order());
+        if (data.order === null){
+            data.order = [];
+        }
         $.ajax({
             method: 'POST',
             data: data,
