@@ -53,9 +53,9 @@ class SessionManager
         if ($this->session->has('rows')) {
             foreach ($this->session->get('rows') as $display => $row) {
                 if ($display === $this->concernedPage) {
-                    $dataTable->setLastScrollY($row['scrollY']);
-                    $dataTable->setLastRowIndex($row['index']);
-                    $dataTable->setOrder($row['order']);
+                    $dataTable->setLastScrollY($row['scrollY'] ?? 0);
+                    $dataTable->setLastRowIndex($row['index'] ?? 0);
+                    $dataTable->setOrder($row['order'] ?? []);
                     break;
                 }
             }
