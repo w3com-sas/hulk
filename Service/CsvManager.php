@@ -111,7 +111,7 @@ class CsvManager
         }
 
         $sheet->getStyle('A1:'.Coordinate::stringFromColumnIndex($columnCounter - 1).(string) ($rowCounter - 1))
-            ->getAlignment()->setWrapText(true);
+            ->getAlignment()->setWrapText(false);
         for ($iterator = 1; $iterator < $columnCounter; ++$iterator) {
             $sheet->getColumnDimension(Coordinate::stringFromColumnIndex($iterator))->setAutoSize(true);
         }
