@@ -55,6 +55,14 @@ class PersistenceController extends AbstractController
         $affectedField = $this->request->request->get('affectedField');
         $affectedValue = $this->request->request->get('affectedValue');
 
+        $regexp = "/^(0[1-9]|[1-2][0-9]|3[0-1])\/(0[1-9]|1[0-2])\/[0-9]{4}$/";
+        if(preg_match($regexp, $affectedValue)) {
+            $date = \DateTime::createFromFormat('d/m/Y', $affectedValue);
+            if ($date) {
+                $affectedValue = $date->format('Y-m-d');
+            }
+        }
+        
         try {
             $this->displayPersister->updateSapLine($entityName, $displayEntityKey, $affectedField, $affectedValue);
         } catch (Exception $exception) {
